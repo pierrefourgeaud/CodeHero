@@ -15,9 +15,15 @@ set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/out/lib CACHE PATH "Si
 set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/out/lib CACHE PATH "Single directory for all executables.")
 
 # ---------- Useful variables ----------
-set (SRCS_PATH ${PROJECT_SOURCE_DIR}/src)
-set (VENDORS_PATH ${PROJECT_PATH_DIR}/vendor)
+set (SRCS_PATH ${PROJECT_SOURCE_DIR}/codehero)
+set (VENDORS_PATH ${PROJECT_SOURCE_DIR}/vendor)
 # set (DEPENDENCIES_PATH ${PROJECT_SOURCE_DIR}/Dependencies)
+
+##### Options overview #####
+message ("*** Configure options:")
+message ("VENDORS_PATH: " ${VENDORS_PATH})
+message ("")
+#####
 
 # ---------- GLFW ----------
 option (GLFW_BUILD_DOCS OFF)
@@ -37,8 +43,8 @@ set (SOURCES
 
 include_directories (
   ${SRCS_PATH}
-  ${VENDORS_PATH}/glad/include
-  ${VENDORS_PATH}/glfw/include
+  ${VENDORS_PATH}/glad/include/
+  ${VENDORS_PATH}/glfw/include/
 )
 
 # ---------- Executables -----------

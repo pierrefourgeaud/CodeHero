@@ -22,7 +22,7 @@ def main():
 def list_files(directories, filters):
   matches = []
   for directory in directories:
-    for root, _, filenames, in os.walk(os.path.join('src', directory)):
+    for root, _, filenames, in os.walk(os.path.join('codehero', directory)):
       for f in filters:
         for filename in fnmatch.filter(filenames, f):
           matches.append(os.path.join(root, filename))

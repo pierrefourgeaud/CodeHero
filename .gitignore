@@ -1,5 +1,6 @@
 *.pyc
 *~
 .DS_Store
+.vscode/
 build/
 out/
