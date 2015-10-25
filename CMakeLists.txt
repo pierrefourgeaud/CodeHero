@@ -16,17 +16,36 @@ set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/out/lib CACHE PATH "Si
 
 # ---------- Useful variables ----------
 set (SRCS_PATH ${PROJECT_SOURCE_DIR}/src)
+set (VENDORS_PATH ${PROJECT_PATH_DIR}/vendor)
 # set (DEPENDENCIES_PATH ${PROJECT_SOURCE_DIR}/Dependencies)
 
-set(SOURCES
+# ---------- GLFW ----------
+option (GLFW_BUILD_DOCS OFF)
+option (GLFW_BUILD_EXAMPLES OFF)
+option (GLFW_BUILD_TESTS OFF)
+add_subdirectory (vendor/glfw)
+
+# ---------- Sources ----------
+file (GLOB VENDORS_SOURCES ${VENDORS_PATH}/glad/src/glad.c)
+
+source_group ("Vendors" FILES ${VENDORS_SOURCES})
+
+set (SOURCES
+  ${VENDORS_SOURCES}
   ${SRCS_PATH}/main.cpp
 )
 
-set(INCLUDES
-)
-
-include_directories(
+include_directories (
   ${SRCS_PATH}
+  ${VENDORS_PATH}/glad/include
+  ${VENDORS_PATH}/glfw/include
 )
 
-add_executable(CodeHero ${INCLUDES} ${SOURCES})
+# ---------- Executables -----------
+
+add_definitions (-DGLFW_INCLUDE_NONE
+                 -DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
+
+add_executable (CodeHero ${INCLUDES} ${SOURCES})
+
+target_link_libraries (${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
