@@ -9,9 +9,10 @@ namespace CodeHero {
 
 enum Error {
     OK,
-    FAILED // Generic error
+    FAILED,  // Generic error
+    ERR_CANT_CREATE
 };
 
-} // namespace CodeHero
+}  // namespace CodeHero
 
 #endif  // CODEHERO_CORE_ERRORS_H_

@@ -39,10 +39,13 @@ source_group ("Vendors" FILES ${VENDORS_SOURCES})
 set (SOURCES
   ${VENDORS_SOURCES}
   ${SRCS_PATH}/main.cpp
+  ${SRCS_PATH}/main/main.cpp
+  ${SRCS_PATH}/core/logging/Logger.cpp
 )
 
 include_directories (
-  ${SRCS_PATH}
+  ${SRCS_PATH}/core
+  ${SRCS_PATH}/main
   ${VENDORS_PATH}/glad/include/
   ${VENDORS_PATH}/glfw/include/
 )

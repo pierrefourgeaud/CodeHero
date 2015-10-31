@@ -31,7 +31,8 @@ def list_files(directories, filters):
 
 def call_cpplint(files):
   cpplint = os.path.join(SOURCE_ROOT, 'vendor', 'cpplint.py')
-  execute([sys.executable, cpplint] + files)
+  options = ['--linelength=120']
+  execute([sys.executable, cpplint] + options + files)
 
 
 if __name__ == '__main__':
