@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 
+#include "../typedefs.h"
 #include "../utils.h"
 #include "./iloglistener.h"
 
@@ -100,9 +101,7 @@ public:
 
 protected:
     std::ostringstream m_Os;
-
-private:
-    ELogLevel m_Level;
+    ELogLevel          m_Level;
 
     // TODO(pierrefourgeaud): Convert to C++11
     // Prevent against copy
@@ -117,7 +116,7 @@ private:
 #include <windows.h>
 
 inline std::string NowTime() {
-    const int MAX_LEN = 200;
+    const int32 MAX_LEN = 200;
     char buffer[MAX_LEN];
     if (GetTimeFormatA(LOCALE_USER_DEFAULT, 0, 0, "HH':'mm':'ss", buffer, MAX_LEN) == 0) {
         return "Error in NowTime()";
@@ -125,7 +124,7 @@ inline std::string NowTime() {
 
     char result[100] = {0};
     static DWORD first = GetTickCount();
-    std::snprintf(result, sizeof(result), "%s.%03ld", buffer, static_cast<long>(GetTickCount() - first) % 1000);
+    std::snprintf(result, sizeof(result), "%s.%03d", buffer, static_cast<int32>(GetTickCount() - first) % 1000);
     return result;
 }
 
@@ -142,7 +141,7 @@ inline std::string NowTime() {
     struct timeval tv;
     gettimeofday(&tv, 0);
     char result[100] = {0};
-    std::snprintf(result, sizeof(result), "%s.%03ld", buffer, static_cast<long>(tv.tv_usec) / 1000);
+    std::snprintf(result, sizeof(result), "%s.%03d", buffer, static_cast<int32>(tv.tv_usec) / 1000);
     return result;
 }
 

@@ -22,12 +22,14 @@ public:
 
     Error Start();
     Error Run();
+
 private:
     void _Initialize();
     void _Cleanup();
 
     GLFWwindow* m_pWindow = nullptr;
     ILogListener* m_pFileLogger = nullptr;
+    ILogListener* m_pBufferLogger = nullptr;
 };
 
 }  // namespace CodeHero

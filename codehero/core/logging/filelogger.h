@@ -65,9 +65,10 @@ public:
 private:
     std::string m_FileName;
     std::string m_Path;
-    bool        m_IsCreated;
 
     std::ofstream m_File;
+
+    bool        m_IsCreated;
 
     void _OpenFile() {
         m_File.open(m_Path + m_FileName);
