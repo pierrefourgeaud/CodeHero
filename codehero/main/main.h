@@ -5,6 +5,7 @@
 #ifndef CODEHERO_MAIN_MAIN_H_
 #define CODEHERO_MAIN_MAIN_H_
 
+#include "../core/typedefs.h"
 #include "../core/errors.h"
 
 // Forward declaration
@@ -26,6 +27,8 @@ public:
 private:
     void _Initialize();
     void _Cleanup();
+
+    static void _HandleKey(GLFWwindow* iWindow, int32 iKey, int32 iScancode, int32 iAction, int32 iMode);
 
     GLFWwindow* m_pWindow = nullptr;
     ILogListener* m_pFileLogger = nullptr;
