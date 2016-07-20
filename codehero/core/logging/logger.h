@@ -124,7 +124,7 @@ inline std::string NowTime() {
 
     char result[100] = {0};
     static DWORD first = GetTickCount();
-    std::snprintf(result, sizeof(result), "%s.%03d", buffer, static_cast<int32>(GetTickCount() - first) % 1000);
+    std::snprintf(result, sizeof(result), "%s.%03d", buffer, static_cast<int32_t>(GetTickCount() - first) % 1000);
     return result;
 }
 
@@ -141,7 +141,7 @@ inline std::string NowTime() {
     struct timeval tv;
     gettimeofday(&tv, 0);
     char result[100] = {0};
-    std::snprintf(result, sizeof(result), "%s.%03d", buffer, static_cast<int32>(tv.tv_usec) / 1000);
+    std::snprintf(result, sizeof(result), "%s.%03d", buffer, static_cast<int32_t>(tv.tv_usec) / 1000);
     return result;
 }
 

@@ -5,8 +5,9 @@
 #ifndef CODEHERO_MAIN_MAIN_H_
 #define CODEHERO_MAIN_MAIN_H_
 
-#include "../core/typedefs.h"
-#include "../core/errors.h"
+#include <memory>
+#include "./core/typedefs.h"
+#include "./core/errors.h"
 
 // Forward declaration
 class GLFWwindow;
@@ -15,6 +16,8 @@ namespace CodeHero {
 
 // Forward declaration
 class ILogListener;
+
+class ImageLoader;
 
 class Main {
 public:
@@ -28,11 +31,16 @@ private:
     void _Initialize();
     void _Cleanup();
 
-    static void _HandleKey(GLFWwindow* iWindow, int32 iKey, int32 iScancode, int32 iAction, int32 iMode);
+    void _LoadDrivers();
+    void _UnloadDrivers();
+
+    static void _HandleKey(GLFWwindow* iWindow, int32_t iKey, int32_t iScancode, int32_t iAction, int32_t iMode);
 
     GLFWwindow* m_pWindow = nullptr;
-    ILogListener* m_pFileLogger = nullptr;
-    ILogListener* m_pBufferLogger = nullptr;
+    std::unique_ptr<ILogListener> m_pFileLogger;
+    std::unique_ptr<ILogListener> m_pBufferLogger;
+
+    ImageLoader& m_ImageLoader;
 };
 
 }  // namespace CodeHero

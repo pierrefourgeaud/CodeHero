@@ -10,7 +10,13 @@ namespace CodeHero {
 enum Error {
     OK,
     FAILED,  // Generic error
-    ERR_CANT_CREATE
+    ERR_INVALID_PARAMETER,
+    ERR_CANT_CREATE,
+    ERR_FILE_NOT_FOUND,
+    ERR_NO_FILE_OPENED,
+    ERR_FILE_EOF,
+    ERR_IMAGE_FORMAT_UNRECOGNIZED,
+    ERR_IMAGE_INVALID
 };
 
 }  // namespace CodeHero
