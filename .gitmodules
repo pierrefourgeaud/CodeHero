@@ -9,3 +9,6 @@
 	path = vendor/stb
 	url = https://github.com/nothings/stb.git
 	branch = master
+[submodule "vendor/simplelogger"]
+	path = vendor/simplelogger
+	url = https://github.com/pierrefourgeaud/SimpleLogger

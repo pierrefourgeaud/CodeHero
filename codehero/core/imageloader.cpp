@@ -5,7 +5,7 @@
 #include "./imageloader.h"
 #include "./imagecodec.h"
 #include "./fileaccess.h"
-#include "./logging/logger.h"
+#include <logger.h>
 
 namespace CodeHero {
 

@@ -45,12 +45,19 @@ set (SOURCES
   ${SRCS_PATH}/main.cpp
   ${SRCS_PATH}/main/main.cpp
   ${SRCS_PATH}/core/shader.cpp
-  ${SRCS_PATH}/core/logging/Logger.cpp
   ${SRCS_PATH}/core/fileaccess.cpp
   ${SRCS_PATH}/core/image.cpp
   ${SRCS_PATH}/core/imagecodec.cpp
   ${SRCS_PATH}/core/imageloader.cpp
-
+  # Graphics
+  ${SRCS_PATH}/core/rendersystem.cpp
+  ${SRCS_PATH}/core/renderwindow.cpp
+  ${SRCS_PATH}/core/texturemanager.cpp
+  ${SRCS_PATH}/core/texture.cpp
+  ${SRCS_PATH}/rendersystems/GL/rendersystemGL.cpp
+  ${SRCS_PATH}/rendersystems/GL/renderwindowGL.cpp
+  ${SRCS_PATH}/rendersystems/GL/texturemanagerGL.cpp
+  ${SRCS_PATH}/rendersystems/GL/textureGL.cpp
 )
 
 set (HEADERS
@@ -59,14 +66,25 @@ set (HEADERS
     ${SRCS_PATH}/core/typedefs.h
     ${SRCS_PATH}/core/utils.h
     ${SRCS_PATH}/core/shader.h
-    ${SRCS_PATH}/core/logging/bufferlogger.h
-    ${SRCS_PATH}/core/logging/filelogger.h
-    ${SRCS_PATH}/core/logging/iloglistener.h
-    ${SRCS_PATH}/core/logging/Logger.h
     ${SRCS_PATH}/core/fileaccess.h
     ${SRCS_PATH}/core/image.h
     ${SRCS_PATH}/core/imagecodec.h
     ${SRCS_PATH}/core/imageloader.h
+    # Graphics
+    ${SRCS_PATH}/core/rendersystem.h
+    ${SRCS_PATH}/core/renderwindow.h
+    ${SRCS_PATH}/core/texturemanager.h
+    ${SRCS_PATH}/core/texture.h
+    ${SRCS_PATH}/rendersystems/GL/rendersystemGL.h
+    ${SRCS_PATH}/rendersystems/GL/renderwindowGL.h
+    ${SRCS_PATH}/rendersystems/GL/texturemanagerGL.h
+    ${SRCS_PATH}/rendersystems/GL/textureGL.h
+    # Logger
+    ${VENDORS_PATH}/simplelogger/includes/bufferlogger.h
+    ${VENDORS_PATH}/simplelogger/includes/consolelogger.h
+    ${VENDORS_PATH}/simplelogger/includes/filelogger.h
+    ${VENDORS_PATH}/simplelogger/includes/iloglistener.h
+    ${VENDORS_PATH}/simplelogger/includes/logger.h
 )
 
 include_directories (
@@ -75,6 +93,7 @@ include_directories (
   ${VENDORS_PATH}/glfw/include/
   ${VENDORS_PATH}/stb/
   ${VENDORS_PATH}/libpng/
+  ${VENDORS_PATH}/simplelogger/includes
 )
 
 # ---------- Drivers -----------
@@ -90,7 +109,7 @@ if (${_CODEHERO_DRIVER_PNG})
     )
 
     add_definitions (-DDRIVER_PNG)
-    set (ADDITIONAL_LIBRARIES ${ADDITIONAL_LIBRARIES} png)
+    set (ADDITIONAL_LIBRARIES ${ADDITIONAL_LIBRARIES} png16)
 endif()
 
 # ---------- Executables -----------

@@ -2,17 +2,21 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
+// TODO(pierre) to remove
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include "./main.h"
-#include "./core/logging/logger.h"
-#include "./core/logging/filelogger.h"
-#include "./core/logging/bufferlogger.h"
+#include <logger.h>
+#include <filelogger.h>
+#include <consolelogger.h>
 
 #include "./core/shader.h"
 #include "./core/imageloader.h"
 #include "./core/image.h"
+
+#include "./core/renderwindow.h"
+#include "./rendersystems/GL/rendersystemGL.h"
 
 #ifdef DRIVER_PNG
 # include "./drivers/png/imagecodec_png.h"
@@ -32,25 +36,16 @@ Main::~Main() {
 Error Main::Start() {
     LOGD2 << "[>] Main::Start()" << std::endl;
 
-    m_pWindow = glfwCreateWindow(800, 600, "CodeHero", nullptr, nullptr);
+    m_pRS.reset(new RenderSystemGL);
+    Error error = m_pRS->Initialize();
 
-    // Check for Valid Context
-    if (m_pWindow == nullptr) {
-        return Error::ERR_CANT_CREATE;
+    if (!error) {
+        m_pMainWindow.reset(m_pRS->CreateWindow());
     }
-
-    glfwMakeContextCurrent(m_pWindow);
-    gladLoadGL();
-
-    LOGI << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
-
-    glViewport(0, 0, 800, 600);
-
-    glfwSetKeyCallback(m_pWindow, Main::_HandleKey);
 
     LOGD2 << "[<] Main::Start()" << std::endl;
 
-    return Error::OK;
+    return error;
 }
 
 Error Main::Run() {
@@ -105,8 +100,6 @@ Error Main::Run() {
 
     glBindVertexArray(0); // Unbind VAO
 
-
-
     // Load and create a texture
     GLuint texture1;
     GLuint texture2;
@@ -144,12 +137,10 @@ Error Main::Run() {
     glGenerateMipmap(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    while (!glfwWindowShouldClose(m_pWindow)) {
+    while (!m_pMainWindow->ShouldClose()) {
         glfwPollEvents();
 
-        // Background Fill Color
-        glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        m_pRS->ClearFrameBuffer();
 
         // TODO TUTO
         // Draw the triangle
@@ -168,15 +159,7 @@ Error Main::Run() {
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
 
-        // Swap the screen buffers
-        glfwSwapBuffers(m_pWindow);
-
-        if (m_pBufferLogger) {
-            std::string str = static_cast<BufferLogger*>(m_pBufferLogger.get())->GetBuffer();
-            if (!str.empty()) {
-                std::cout << str << std::endl;
-            }
-        }
+        m_pMainWindow->SwapBuffers();
     }
 
     // TODO TUTO
@@ -189,30 +172,22 @@ Error Main::Run() {
 }
 
 void Main::_Initialize() {
-    Logger::ReportingLevel() = ELogLevel::Debug2;
+    SimpleLogger::ReportingLevel() = ELogLevel::Debug2;
 
     m_pFileLogger.reset(new FileLogger());
-    Logger::AddListener(m_pFileLogger.get());
+    SimpleLogger::AddListener(m_pFileLogger.get());
 
-    m_pBufferLogger.reset(new BufferLogger());
-    Logger::AddListener(m_pBufferLogger.get());
+    m_pConsoleLogger.reset(new ConsoleLogger());
+    SimpleLogger::AddListener(m_pConsoleLogger.get());
 
     LOGD2 << "[>] Main::_Initialize()" << std::endl;
-    glfwInit();
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     _LoadDrivers();
     LOGD2 << "[<] Main::_Initialize()" << std::endl;
 }
 
 void Main::_Cleanup() {
-    glfwTerminate();
+    m_pRS->Cleanup();
 
     _UnloadDrivers();
 }
@@ -229,12 +204,6 @@ void Main::_UnloadDrivers() {
     LOGI << "Unloading drivers..." << std::endl;
     m_ImageLoader.ClearCodecs();
     LOGI << "Drivers unloaded..." << std::endl;
-}
-
-void Main::_HandleKey(GLFWwindow* iWindow, int32_t iKey, int32_t iScancode, int32_t iAction, int32_t iMode) {
-    if (iKey == GLFW_KEY_ESCAPE && iAction == GLFW_PRESS) {
-        glfwSetWindowShouldClose(iWindow, GL_TRUE);
-    }
 }
 
 }  // namespace CodeHero

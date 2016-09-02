@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 #include "./core/fileaccess.h"
-#include "./core/logging/logger.h"
+#include <logger.h>
 
 namespace CodeHero {
 

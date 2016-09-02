@@ -10,7 +10,7 @@
 #include <stdio.h>
 
 #include "./shader.h"
-#include "./logging/logger.h"
+#include <logger.h>
 
 using namespace std;
 

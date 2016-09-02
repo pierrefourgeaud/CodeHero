@@ -10,13 +10,13 @@
 #include "./core/errors.h"
 
 // Forward declaration
-class GLFWwindow;
+class ILogListener;
 
 namespace CodeHero {
 
 // Forward declaration
-class ILogListener;
-
+class RenderSystem;
+class RenderWindow;
 class ImageLoader;
 
 class Main {
@@ -34,11 +34,11 @@ private:
     void _LoadDrivers();
     void _UnloadDrivers();
 
-    static void _HandleKey(GLFWwindow* iWindow, int32_t iKey, int32_t iScancode, int32_t iAction, int32_t iMode);
-
-    GLFWwindow* m_pWindow = nullptr;
     std::unique_ptr<ILogListener> m_pFileLogger;
-    std::unique_ptr<ILogListener> m_pBufferLogger;
+    std::unique_ptr<ILogListener> m_pConsoleLogger;
+
+    std::unique_ptr<RenderSystem> m_pRS;
+    std::unique_ptr<RenderWindow> m_pMainWindow;
 
     ImageLoader& m_ImageLoader;
 };
