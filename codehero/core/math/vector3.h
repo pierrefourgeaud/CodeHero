@@ -2,8 +2,8 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
-#ifndef CODEHERO_MATH_VECTOR3_H_
-#define CODEHERO_MATH_VECTOR3_H_
+#ifndef CODEHERO_CORE_MATH_VECTOR3_H_
+#define CODEHERO_CORE_MATH_VECTOR3_H_
 
 namespace CodeHero {
 
@@ -37,4 +37,4 @@ private:
 
 } // namespace CodeHero
 
-#endif // CODEHERO_MATH_VECTOR3_H_
+#endif // CODEHERO_CORE_MATH_VECTOR3_H_
