@@ -20,6 +20,7 @@ Error RenderWindowGL::Create(int iWidth, int iHeight) {
 
     gladLoadGL();
 
+    glfwGetFramebufferSize(m_pWindow, &iWidth, &iHeight);
     glViewport(0, 0, iWidth, iHeight);
 
     glfwSetKeyCallback(m_pWindow, RenderWindowGL::_HandleKey);
