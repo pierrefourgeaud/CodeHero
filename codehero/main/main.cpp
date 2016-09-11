@@ -4,6 +4,8 @@
 
 // TODO(pierre) to remove
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <chrono>
 
 #include "./main.h"
 #include <logger.h>
@@ -17,6 +19,9 @@
 #include "./core/renderwindow.h"
 #include "./rendersystems/GL/rendersystemGL.h"
 #include "./rendersystems/GL/textureGL.h"
+
+#include "./core/math/vector3.h"
+#include "./core/math/matrix4.h"
 
 #ifdef DRIVER_PNG
 # include "./drivers/png/imagecodec_png.h"
@@ -55,9 +60,12 @@ Error Main::Run() {
 
     // Build and compile our shader program
     Shader ourShader;
-    ourShader.Attach("./codehero/shaders/shader_basic_texture_1.vert")
-             .Attach("./codehero/shaders/shader_basic_texture_1.frag")
+    ourShader.Attach("./codehero/shaders/shader_basic_trans.vert")
+             .Attach("./codehero/shaders/shader_basic_trans.frag")
              .Link();
+
+    Vector3 vec(0, 0, 0);
+    vec.Length();
 
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat vertices[] = {
@@ -104,6 +112,8 @@ Error Main::Run() {
     Texture* texture2 = new TextureGL;
     texture2->Load("/Users/pierrefourgeaud/Documents/awesomeface.png");
 
+    auto start = std::chrono::system_clock::now();
+
     while (!m_pMainWindow->ShouldClose()) {
         m_pRS->PollEvents();
 
@@ -120,6 +130,25 @@ Error Main::Run() {
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, static_cast<TextureGL*>(texture2)->GetGLID());
         glUniform1i(glGetUniformLocation(ourShader.Get(), "ourTexture2"), 1);
+
+        auto end = std::chrono::system_clock::now();
+
+        auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        float tr;
+        if (diff.count() < 2500) {
+            tr = -1.0f + (float)diff.count() / 1250.0f;
+        } else if (diff.count() < 5000) {
+            tr = 1.0f - ((float)diff.count() - 2500.0f) / 1250.0f;
+        } else {
+            start = end;
+        }
+
+        Matrix4 transform;
+        transform.Translate({tr, -tr, 0.0f});
+        transform.Rotate((GLfloat)glfwGetTime() * 50.0f, {0.0f, 0.0f, 1.0f});
+
+        GLint transformLoc = glGetUniformLocation(ourShader.Get(), "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, transform.GetPtr());
 
         // Draw container
         glBindVertexArray(VAO);
