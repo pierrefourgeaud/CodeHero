@@ -23,6 +23,10 @@ Error RenderSystemGL::Initialize() {
     return Error::OK;
 }
 
+void RenderSystemGL::PollEvents() {
+    glfwPollEvents();
+}
+
 Error RenderSystemGL::Cleanup() {
     glfwTerminate();
     return Error::OK;
@@ -30,7 +34,7 @@ Error RenderSystemGL::Cleanup() {
 
 RenderWindow* RenderSystemGL::CreateWindow() {
     RenderWindow* win = new RenderWindowGL();
-    if (win->Create(1024, 800) != Error::OK) {
+    if (win->Create(800, 600) != Error::OK) {
         delete win;
         win = nullptr;
     }

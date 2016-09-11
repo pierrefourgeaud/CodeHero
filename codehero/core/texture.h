@@ -5,19 +5,27 @@
 #ifndef CODEHERO_CORE_TEXTURE_H_
 #define CODEHERO_CORE_TEXTURE_H_
 
+#include <glad/glad.h>
+#include "./core/image.h"
+
 namespace CodeHero {
 
 class Texture {
 public:
     Texture();
-    ~Texture();
+    virtual ~Texture();
 
     void Use();
+    bool Load(const Image& iImage);
+    bool Load(const char* iImage);
 
-    GLuint Get() const { return m_TextureID; }
+protected:
+    virtual void _CreateImpl() = 0;
+
+    Image& _GetRawImage() { return m_Image; }
 
 private:
-    GLuint m_TextureID;
+    Image m_Image;
 };
 
 }  // namespace CodeHero

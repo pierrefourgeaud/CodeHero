@@ -19,6 +19,7 @@ public:
     virtual ~RenderSystemGL() {}
 
     Error Initialize() override;
+    void PollEvents() override;
     Error Cleanup() override;
 
     RenderWindow* CreateWindow() override;

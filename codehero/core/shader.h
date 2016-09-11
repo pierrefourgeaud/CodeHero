@@ -14,6 +14,7 @@ class Shader {
 public:
     Shader();
     ~Shader();
+
     Shader& Attach(const std::string& iFilename);
     Shader& Link();
 

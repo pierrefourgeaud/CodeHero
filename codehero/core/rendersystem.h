@@ -18,6 +18,7 @@ public:
     virtual ~RenderSystem() {}
 
     virtual Error Initialize() = 0;
+    virtual void PollEvents() = 0;
     virtual Error Cleanup() = 0;
 
     virtual RenderWindow* CreateWindow() = 0;

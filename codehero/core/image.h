@@ -35,6 +35,7 @@ public:
 
     uint32_t GetWidth() const { return m_Width; }
     uint32_t GetHeight() const { return m_Height; }
+    Format GetFormat() const { return m_Fmt; }
 
     static int GetComponentsFromFormat(Format iFmt);
 
