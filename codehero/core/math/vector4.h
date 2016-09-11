@@ -11,6 +11,7 @@ class Vector4 {
 public:
     Vector4() {}
     Vector4(float iX, float iY, float iZ, float iW);
+    Vector4(const float iVec[4]);
 
     ~Vector4() {}
 
@@ -21,6 +22,10 @@ public:
 
     // operators
     bool operator==(const Vector4& iRhs) const;
+    Vector4 operator+(const Vector4& iVec) const;
+    Vector4& operator+=(const Vector4& iVec);
+    Vector4 operator*(const float iScalar) const;
+    Vector4& operator*=(const float iScalar);
 
 private:
     float m_Vec[4] = {0};

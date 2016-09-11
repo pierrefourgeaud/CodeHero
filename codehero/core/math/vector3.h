@@ -30,10 +30,16 @@ public:
 
     // operators
     bool operator==(const Vector3& iRhs) const;
+    Vector3 operator*(const float iScalar) const;
+    Vector3& operator*=(const float iScalar);
 
 private:
     float m_Vec[3] = {0};
 };
+
+static Vector3 operator*(float iScalar, const Vector3& iVec) {
+    return Vector3(iVec) *= iScalar;
+}
 
 } // namespace CodeHero
 

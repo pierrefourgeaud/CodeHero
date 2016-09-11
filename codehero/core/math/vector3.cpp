@@ -50,4 +50,15 @@ bool Vector3::operator==(const Vector3& iRhs) const {
            FloatEqu(z(), iRhs.z());
 }
 
+Vector3 Vector3::operator*(const float iScalar) const {
+    return Vector3(*this) * iScalar;
+}
+
+Vector3& Vector3::operator*=(const float iScalar) {
+    m_Vec[0] *= iScalar;
+    m_Vec[1] *= iScalar;
+    m_Vec[2] *= iScalar;
+    return *this;
+}
+
 } // namespace CodeHero

@@ -5,9 +5,21 @@
 #ifndef CODEHERO_MATH_UTILS_H
 #define CODEHERO_MATH_UTILS_H
 
+#include <limits>
+
 namespace CodeHero {
 
-static bool FloatEqu(float iLhs, float iRhs, float iEps = 1e-6) {
+static const double PI = 3.14159265358979323846264338327950288;
+
+static float Epsilon() {
+    return std::numeric_limits<float>::epsilon();
+}
+
+static float DegToRad(float iDeg) {
+    return iDeg * (static_cast<float>(PI) / 180.0f);
+}
+
+static bool FloatEqu(float iLhs, float iRhs, float iEps = Epsilon()) {
     float delta = iRhs - iLhs;
     if (delta < 0.0) {
         return delta >= -iEps;
