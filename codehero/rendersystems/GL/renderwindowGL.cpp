@@ -23,6 +23,9 @@ Error RenderWindowGL::Create(int iWidth, int iHeight) {
     glfwGetFramebufferSize(m_pWindow, &iWidth, &iHeight);
     glViewport(0, 0, iWidth, iHeight);
 
+    // Setup OpenGL options
+    glEnable(GL_DEPTH_TEST);
+
     glfwSetKeyCallback(m_pWindow, RenderWindowGL::_HandleKey);
 
     return Error::OK;

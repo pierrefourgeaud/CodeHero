@@ -5,6 +5,9 @@
 #ifndef CODEHERO_CORE_MATH_MATRIX4_H_
 #define CODEHERO_CORE_MATH_MATRIX4_H_
 
+#include <math.h>
+#include "./core/math/utils.h"
+
 namespace CodeHero {
 
 // Forward declaration
@@ -50,6 +53,33 @@ private:
     };
 
     float _DotWithIndex(int iX, int iY, const Matrix4& iMat) const;
+};
+
+// TODO(pierre)
+// Should we be careful about the division by 0 here ? I guess so...
+class OrthoMatrix : public Matrix4 {
+public:
+    OrthoMatrix(float iLeft, float iRight, float iBottom, float iTop, float iNear, float iFar)
+        : Matrix4(
+        2.0f / (iRight - iLeft), 0.0f                   , 0.0f                  , -(iRight + iLeft) / (iRight - iLeft),
+        0.0f                   , 2.0f / (iTop - iBottom), 0.0f                  , -(iTop + iBottom) / (iTop - iBottom),
+        0.0f                   , 0.0f                   , -2.0f / (iFar - iNear), -(iFar + iNear) / (iFar - iNear),
+        0.0f                   , 0.0f                   , -1.0f / (iFar - iNear), 0.0f
+    ) {}
+};
+
+
+// TODO(pierre) FOV should probably be in Radian
+// DegToRad(iFov)
+class PerspectiveMatrix : public Matrix4 {
+public:
+    PerspectiveMatrix(float iFov, float iAspect, float iNear, float iFar)
+        : Matrix4(
+        1.0f / (iAspect * tanf(iFov / 2.0f)), 0.0f                 , 0.0f                            , 0.0f,
+        0.0f                            , 1.0f / tanf(iFov / 2.0f), 0.0f                            , 0.0f,
+        0.0f                            , 0.0f                 , -(iFar + iNear) / (iFar - iNear), -1.0f,
+        0.0f                            , 0.0f                 , -(2.0f * iFar * iNear) / (iFar - iNear)                 , 0.0f
+    ) {}
 };
 
 } // namespace CodeHero

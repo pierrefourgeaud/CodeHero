@@ -2,11 +2,9 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
-#include <math.h>
 #include "./core/math/matrix4.h"
 #include "./core/math/vector3.h"
 #include "./core/math/vector4.h"
-#include "./core/math/utils.h"
 #include "./core/assert.h"
 
 namespace CodeHero {
