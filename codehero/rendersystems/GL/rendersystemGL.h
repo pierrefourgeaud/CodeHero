@@ -13,6 +13,7 @@ namespace CodeHero {
 // Forward declaration
 class TextureManager;
 class RenderWindow;
+class Texture;
 
 class RenderSystemGL : public RenderSystem {
 public:
@@ -22,9 +23,12 @@ public:
     void PollEvents() override;
     Error Cleanup() override;
 
-    RenderWindow* CreateWindow() override;
-
     void ClearFrameBuffer() override;
+
+    // Factory
+    RenderWindow* CreateWindow() final override;
+    Texture* CreateTexture() final override;
+    Shader* CreateShader() final override;
 };
 
 } // namespace CodeHero

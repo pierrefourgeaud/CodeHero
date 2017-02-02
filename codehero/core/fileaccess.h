@@ -32,10 +32,12 @@ public:
     bool IsEOF() const;
 
     Error SeekTop();
-    Error Seek(int32_t iPosition);
+    Error Seek(int64_t iPosition);
     Error SeekEnd();
 
     bool IsOpen() const;
+
+    int64_t GetSize();
 
     // Statics
     static bool Exists(const std::string& iFilename);
@@ -44,6 +46,8 @@ private:
     FILE* m_pFile = nullptr;
     std::string m_Name;
     Error m_LastError = OK;
+
+    int64_t m_Size = -1;
 
     void _CheckErrors();
 };

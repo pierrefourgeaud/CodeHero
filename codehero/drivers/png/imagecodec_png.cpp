@@ -24,7 +24,8 @@ static void PngReadFunction(png_structp iPng, png_bytep iData, png_size_t iLengt
     f->Read(iData, iLength);
 }
 
-ImageCodecPNG::ImageCodecPNG() {
+ImageCodecPNG::ImageCodecPNG()
+    : ImageCodec() {
     _AddExtension("png");
 }
 
@@ -82,15 +83,15 @@ Error ImageCodecPNG::LoadImage(FileAccess& iF, Image& oImage) {
 
     Image::Format fmt;
     switch (color) {
-    case PNG_COLOR_TYPE_GRAY:       fmt = Image::IFMT_GRAYSCALE; break;
-    case PNG_COLOR_TYPE_GRAY_ALPHA: fmt = Image::IFMT_GRAYSCALE_ALPHA; break;
+    case PNG_COLOR_TYPE_GRAY:       fmt = Image::IFMT_Grayscale; break;
+    case PNG_COLOR_TYPE_GRAY_ALPHA: fmt = Image::IFMT_GrayscaleAlpha; break;
     case PNG_COLOR_TYPE_RGB:        fmt = Image::IFMT_RGB; break;
     case PNG_COLOR_TYPE_RGB_ALPHA:  fmt = Image::IFMT_RGBA; break;
     case PNG_COLOR_TYPE_PALETTE: {
         int ntrans = 0;
         png_get_tRNS(png, info, nullptr, &ntrans, nullptr);
 
-        fmt = ntrans > 0 ? Image::IFMT_INDEXED_ALPHA : Image::IFMT_INDEXED;
+        fmt = ntrans > 0 ? Image::IFMT_IndexedAlpha : Image::IFMT_Indexed;
         palette_components = ntrans > 0 ? 4 : 3;
 
         png_colorp colors;

@@ -6,9 +6,10 @@
 #include <GLFW/glfw3.h>
 
 #include <logger.h>
-#include "./rendersystems/GL/rendersystemGL.h"
-#include "./rendersystems/GL/renderwindowGL.h"
-#include "./rendersystems/GL/texturemanagerGL.h"
+#include "rendersystems/GL/rendersystemGL.h"
+#include "rendersystems/GL/renderwindowGL.h"
+#include "rendersystems/GL/shaderGL.h"
+#include "rendersystems/GL/textureGL.h"
 
 namespace CodeHero {
 
@@ -32,6 +33,13 @@ Error RenderSystemGL::Cleanup() {
     return Error::OK;
 }
 
+void RenderSystemGL::ClearFrameBuffer() {
+    // Background Fill Color
+    glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+// Factory
 RenderWindow* RenderSystemGL::CreateWindow() {
     RenderWindow* win = new RenderWindowGL();
     if (win->Create(800, 600) != Error::OK) {
@@ -44,10 +52,12 @@ RenderWindow* RenderSystemGL::CreateWindow() {
     return win;
 }
 
-void RenderSystemGL::ClearFrameBuffer() {
-    // Background Fill Color
-    glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+Texture* RenderSystemGL::CreateTexture() {
+    return new TextureGL;
+}
+
+Shader* RenderSystemGL::CreateShader() {
+    return new ShaderGL(*this);
 }
 
 } // CodeHero

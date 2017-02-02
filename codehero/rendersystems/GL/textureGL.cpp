@@ -8,9 +8,9 @@ TextureGL::TextureGL() {}
 
 TextureGL::~TextureGL() {}
 
-void TextureGL::_CreateImpl() {
-    glGenTextures(1, &m_Id);
-    glBindTexture(GL_TEXTURE_2D, m_Id);
+bool TextureGL::_CreateImpl() {
+    glGenTextures(1, &_GetGPUObjectHandle()->intHandle);
+    glBindTexture(GL_TEXTURE_2D, GetGPUObject().intHandle);
     // Set our texture parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -25,6 +25,8 @@ void TextureGL::_CreateImpl() {
                  enumColorFormat, GL_UNSIGNED_BYTE, _GetRawImage().GetRawData());
     glGenerateMipmap(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, 0);
+
+    return true;
 }
 
 GLenum TextureGL::_GetGLFormat(const Image::Format iFormat) {

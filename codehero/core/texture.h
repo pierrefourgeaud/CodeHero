@@ -6,11 +6,12 @@
 #define CODEHERO_CORE_TEXTURE_H_
 
 #include <glad/glad.h>
-#include "./core/image.h"
+#include "core/gpuobject.h"
+#include "core/image.h"
 
 namespace CodeHero {
 
-class Texture {
+class Texture : public GPUObject {
 public:
     Texture();
     virtual ~Texture();
@@ -20,7 +21,7 @@ public:
     bool Load(const char* iImage);
 
 protected:
-    virtual void _CreateImpl() = 0;
+    virtual bool _CreateImpl() = 0;
 
     Image& _GetRawImage() { return m_Image; }
 

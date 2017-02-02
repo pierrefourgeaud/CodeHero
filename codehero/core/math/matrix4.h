@@ -66,6 +66,14 @@ public:
         0.0f                   , 0.0f                   , -2.0f / (iFar - iNear), -(iFar + iNear) / (iFar - iNear),
         0.0f                   , 0.0f                   , -1.0f / (iFar - iNear), 0.0f
     ) {}
+
+    OrthoMatrix(float iLeft, float iRight, float iBottom, float iTop)
+        : Matrix4(
+        2.0f / (iRight - iLeft)             , 0.0f                                , 0.0f  , 0.0f,
+        0.0f                                , 2.0f / (iTop - iBottom)             , 0.0f  , 0.0f,
+        0.0f                                , 0.0f                                , -1.0f , 0.0f,
+        -(iRight + iLeft) / (iRight - iLeft), -(iTop + iBottom) / (iTop - iBottom), 0.0f  , 1.0f
+    ) {}
 };
 
 
@@ -75,10 +83,10 @@ class PerspectiveMatrix : public Matrix4 {
 public:
     PerspectiveMatrix(float iFov, float iAspect, float iNear, float iFar)
         : Matrix4(
-        1.0f / (iAspect * tanf(iFov / 2.0f)), 0.0f                 , 0.0f                            , 0.0f,
-        0.0f                            , 1.0f / tanf(iFov / 2.0f), 0.0f                            , 0.0f,
-        0.0f                            , 0.0f                 , -(iFar + iNear) / (iFar - iNear), -1.0f,
-        0.0f                            , 0.0f                 , -(2.0f * iFar * iNear) / (iFar - iNear)                 , 0.0f
+        1.0f / (iAspect * tanf(iFov / 2.0f)), 0.0f                    , 0.0f                                   , 0.0f,
+        0.0f                                , 1.0f / tanf(iFov / 2.0f), 0.0f                                   , 0.0f,
+        0.0f                                , 0.0f                    , -(iFar + iNear) / (iFar - iNear)       , -1.0f,
+        0.0f                                , 0.0f                    , -(2.0f * iFar * iNear) / (iFar - iNear), 0.0f
     ) {}
 };
 

@@ -22,6 +22,8 @@ class ImageLoader
 
 public:
     virtual ~ImageLoader();
+    ImageLoader(const ImageLoader&) = delete;
+    ImageLoader& operator=(const ImageLoader&) = delete;
 
     Error LoadImage(const std::string& iFilePath, Image& oImage);
     bool  AddCodec(ImageCodec* iCodec);

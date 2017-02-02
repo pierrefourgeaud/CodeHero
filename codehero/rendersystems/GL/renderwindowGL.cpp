@@ -25,6 +25,9 @@ Error RenderWindowGL::Create(int iWidth, int iHeight) {
 
     // Setup OpenGL options
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glfwSetKeyCallback(m_pWindow, RenderWindowGL::_HandleKey);
 
@@ -41,6 +44,8 @@ void RenderWindowGL::SwapBuffers() {
 
 // static
 void RenderWindowGL::_HandleKey(GLFWwindow* iWindow, int32_t iKey, int32_t iScancode, int32_t iAction, int32_t iMode) {
+    (void)iScancode;
+    (void)iMode;
     if (iKey == GLFW_KEY_ESCAPE && iAction == GLFW_PRESS) {
         glfwSetWindowShouldClose(iWindow, GL_TRUE);
     }

@@ -70,7 +70,7 @@ Error FileAccess::SeekTop() {
     return OK;
 }
 
-Error FileAccess::Seek(int32_t iPosition) {
+Error FileAccess::Seek(int64_t iPosition) {
     if (!IsOpen()) { return ERR_NO_FILE_OPENED; }
 
     if (std::fseek(m_pFile, iPosition, SEEK_SET) != 0) {
@@ -88,6 +88,17 @@ Error FileAccess::SeekEnd() {
     }
 
     return OK;
+}
+
+int64_t FileAccess::GetSize() {
+    if (m_Size < 0) {
+        int64_t pos = std::ftell(m_pFile);
+        SeekEnd();
+        m_Size = std::ftell(m_pFile);
+        Seek(pos);
+    }
+
+    return m_Size;
 }
 
 bool FileAccess::IsOpen() const {

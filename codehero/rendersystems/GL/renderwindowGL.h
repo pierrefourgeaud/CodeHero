@@ -9,7 +9,7 @@
 #include "./core/renderwindow.h"
 
 // Forward declaration
-class GLFWwindow;
+struct GLFWwindow;
 
 namespace CodeHero {
 

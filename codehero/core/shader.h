@@ -5,29 +5,26 @@
 #ifndef CODEHERO_CORE_SHADER_H_
 #define CODEHERO_CORE_SHADER_H_
 
-#include <glad/glad.h>
 #include <string>
+#include "core/gpuobject.h"
 
 namespace CodeHero {
 
-class Shader {
+// Forward declaration
+class RenderSystem;
+
+class Shader : public GPUObject {
 public:
-    Shader();
-    ~Shader();
+    Shader(RenderSystem& iRenderSystem) : m_rRenderSystem(iRenderSystem) {}
+    virtual ~Shader() {}
 
-    Shader& Attach(const std::string& iFilename);
-    Shader& Link();
+    virtual Shader& Attach(const std::string& iFilename) = 0;
+    virtual Shader& Link() = 0;
 
-    void Use();
+    virtual void Use() = 0;
 
-    GLuint Get() const { return m_Program; }
-
-private:
-    GLuint m_Program;
-
-    std::string _GetShader(const std::string& iShaderPath);
-    GLuint _CreateShader(const std::string& iCode);
-    bool _CompileShader(GLuint iShader, const std::string& iShaderCode);
+protected:
+    RenderSystem& m_rRenderSystem;
 };
 
 }  // namespace CodeHero

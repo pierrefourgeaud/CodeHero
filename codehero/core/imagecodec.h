@@ -17,7 +17,10 @@ class FileAccess;
 
 class ImageCodec {
 public:
+    ImageCodec() {}
     virtual ~ImageCodec() {}
+    ImageCodec(const ImageCodec&) = delete;
+    ImageCodec& operator=(const ImageCodec&) = delete;
 
     bool RecognizeExt(const std::string& iFilePath);
     virtual Error LoadImage(FileAccess& iF, Image& oImage) = 0;

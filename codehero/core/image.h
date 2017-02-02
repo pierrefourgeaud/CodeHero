@@ -6,7 +6,7 @@
 #define CODEHERO_CORE_IMAGE_H_
 
 #include <vector>
-#include "./core/typedefs.h"
+#include "core/typedefs.h"
 
 namespace CodeHero {
 
@@ -15,14 +15,14 @@ using ImageData = std::vector<uint8_t>;
 class Image {
 public:
     enum Format {
-        IFMT_GRAYSCALE, // one byte per pixel, 0-255
-        IFMT_INTENSITY, // one byte per pixel, 0-255
-        IFMT_GRAYSCALE_ALPHA, // two bytes per pixel, 0-255. alpha 0-255
+        IFMT_Grayscale, // one byte per pixel, 0-255
+        IFMT_Intensity, // one byte per pixel, 0-255
+        IFMT_GrayscaleAlpha, // two bytes per pixel, 0-255. alpha 0-255
         IFMT_RGB, // one byte R, one byte G, one byte B
         IFMT_RGBA, // one byte R, one byte G, one byte B, one byte A
-        IFMT_INDEXED, // index byte 0-256, and after image end, 256*3 bytes of palette
-        IFMT_INDEXED_ALPHA, // index byte 0-256, and after image end, 256*4 bytes of palette (alpha)
-        IFMT_MAX
+        IFMT_Indexed, // index byte 0-256, and after image end, 256*3 bytes of palette
+        IFMT_IndexedAlpha, // index byte 0-256, and after image end, 256*4 bytes of palette (alpha)
+        IFMT_Max
     };
 
     // Create an empty image
@@ -31,11 +31,13 @@ public:
     // Create image with data
     Image(uint32_t iWidth, uint32_t iHeight, const ImageData& iData, Format iFmt);
 
+    void Create(uint32_t iWidth, uint32_t iHeight, Format iFmt = IFMT_Indexed);
     void Create(uint32_t iWidth, uint32_t iHeight, const ImageData& iData, Format iFmt);
 
     uint32_t GetWidth() const { return m_Width; }
     uint32_t GetHeight() const { return m_Height; }
     Format GetFormat() const { return m_Fmt; }
+    uint32_t GetSize() const { return GetWidth() * GetHeight() * GetComponentsFromFormat(GetFormat()); }
 
     static int GetComponentsFromFormat(Format iFmt);
 

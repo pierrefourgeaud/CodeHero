@@ -6,7 +6,7 @@
 #define CODEHERO_RENDERSYSTEMS_GL_TEXTUREGL_H_
 
 #include <glad/glad.h>
-#include "./core/texture.h"
+#include "core/texture.h"
 
 namespace CodeHero {
 
@@ -15,14 +15,10 @@ public:
     TextureGL();
     ~TextureGL();
 
-    GLuint GetGLID() const { return m_Id; }
-
 protected:
-    void _CreateImpl() override;
+    bool _CreateImpl() override;
 
 private:
-    GLuint m_Id;
-
     GLenum _GetGLFormat(const Image::Format iFormat);
 };
 

@@ -33,6 +33,8 @@ public:
     Vector3 operator*(const float iScalar) const;
     Vector3& operator*=(const float iScalar);
 
+    const float* GetPtr() const { return m_Vec; }
+
 private:
     float m_Vec[3] = {0};
 };

@@ -9,6 +9,20 @@ else (${MSVC})
         set (CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
 endif (${MSVC})
 
+# ---------- Build type flags ----------
+if (BUILD_DEBUG)
+    add_definitions (-DBUILD_DEBUG)
+    set (CMAKE_BUILD_TYPE Debug)
+    if (APPLE)
+        set(CMAKE_MACOSX_RPATH 1)
+    endif ()
+else ()
+    set (CMAKE_BUILD_TYPE RelWithDebInfo)
+    if (APPLE)
+        set(CMAKE_MACOSX_RPATH 0)
+    endif ()
+endif ()
+
 # ---------- Setup the executable output directory ----------
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/out/bin CACHE PATH "Single directory for all executables.")
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/out/lib CACHE PATH "Single directory for all executables.")
@@ -44,19 +58,23 @@ set (SOURCES
      ${VENDORS_SOURCES}
      ${SRCS_PATH}/main.cpp
      ${SRCS_PATH}/main/main.cpp
-     ${SRCS_PATH}/core/shader.cpp
      ${SRCS_PATH}/core/fileaccess.cpp
+     ${SRCS_PATH}/core/filesystem.cpp
      ${SRCS_PATH}/core/image.cpp
      ${SRCS_PATH}/core/imagecodec.cpp
      ${SRCS_PATH}/core/imageloader.cpp
      ${SRCS_PATH}/core/math/vector3.cpp
      ${SRCS_PATH}/core/math/vector4.cpp
      ${SRCS_PATH}/core/math/matrix4.cpp
+     ${SRCS_PATH}/ui/font.cpp
+     ${SRCS_PATH}/ui/fontface.cpp
+     ${SRCS_PATH}/ui/fontface_freetype.cpp
      # Graphics
      ${SRCS_PATH}/core/rendersystem.cpp
      ${SRCS_PATH}/core/renderwindow.cpp
      ${SRCS_PATH}/core/texturemanager.cpp
      ${SRCS_PATH}/core/texture.cpp
+     ${SRCS_PATH}/rendersystems/GL/shaderGL.cpp
      ${SRCS_PATH}/rendersystems/GL/rendersystemGL.cpp
      ${SRCS_PATH}/rendersystems/GL/renderwindowGL.cpp
      ${SRCS_PATH}/rendersystems/GL/texturemanagerGL.cpp
@@ -71,18 +89,24 @@ set (HEADERS
      ${SRCS_PATH}/core/utils.h
      ${SRCS_PATH}/core/shader.h
      ${SRCS_PATH}/core/fileaccess.h
+     ${SRCS_PATH}/core/filesystem.h
+     ${SRCS_PATH}/core/gpuobject.h
      ${SRCS_PATH}/core/image.h
      ${SRCS_PATH}/core/imagecodec.h
      ${SRCS_PATH}/core/imageloader.h
      ${SRCS_PATH}/core/math/vector3.h
      ${SRCS_PATH}/core/math/matrix4.h
      ${SRCS_PATH}/core/math/utils.h
+     ${SRCS_PATH}/ui/font.h
+     ${SRCS_PATH}/ui/fontface.h
+     ${SRCS_PATH}/ui/fontface_freetype.h
      # Graphics
      ${SRCS_PATH}/core/rendersystem.h
      ${SRCS_PATH}/core/renderwindow.h
      ${SRCS_PATH}/core/texturemanager.h
      ${SRCS_PATH}/core/texture.h
      ${SRCS_PATH}/rendersystems/GL/rendersystemGL.h
+     ${SRCS_PATH}/rendersystems/GL/shaderGL.h
      ${SRCS_PATH}/rendersystems/GL/renderwindowGL.h
      ${SRCS_PATH}/rendersystems/GL/texturemanagerGL.h
      ${SRCS_PATH}/rendersystems/GL/textureGL.h
@@ -101,6 +125,7 @@ include_directories (
   ${VENDORS_PATH}/stb/
   ${VENDORS_PATH}/libpng/
   ${VENDORS_PATH}/simplelogger/includes
+  ${VENDORS_PATH}/FreeType271/include
 )
 
 # ---------- Drivers -----------
@@ -118,6 +143,15 @@ if (${_CODEHERO_DRIVER_PNG})
     add_definitions (-DDRIVER_PNG)
     set (ADDITIONAL_LIBRARIES ${ADDITIONAL_LIBRARIES} png16)
 endif()
+
+# TODO(pierre) FreeType2 as a drive
+add_subdirectory (${VENDORS_PATH}/FreeType271)
+set (ADDITIONAL_LIBRARIES ${ADDITIONAL_LIBRARIES} freetype)
+
+# ---------- Flags ----------
+set (COMMON_RELEASE_FLAGS "-fPIC -g -O3 -fstack-protector -fvisibility=hidden -W -Wall -Wno-missing-braces -Wno-unused-function -Wpointer-arith -Wformat -Wreturn-type -Wsign-compare -Wmultichar -Wformat-nonliteral -Winit-self -Wuninitialized -Wno-deprecated -Wformat-security -Werror")
+set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${COMMON_RELEASE_FLAGS}")
+set (CMAKE_CXX_FLAGS_RELWITHDEBINFO  "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} ${COMMON_RELEASE_FLAGS}")
 
 # ---------- Executables -----------
 

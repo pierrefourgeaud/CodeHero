@@ -5,13 +5,16 @@
 #ifndef CODEHERO_CORE_RENDERSYSTEM_H_
 #define CODEHERO_CORE_RENDERSYSTEM_H_
 
-#include "./core/errors.h"
+#include <memory>
+#include "core/errors.h"
 
 namespace CodeHero {
 
 // Forward declaration
 class TextureManager;
 class RenderWindow;
+class Shader;
+class Texture;
 
 class RenderSystem {
 public:
@@ -21,15 +24,22 @@ public:
     virtual void PollEvents() = 0;
     virtual Error Cleanup() = 0;
 
-    virtual RenderWindow* CreateWindow() = 0;
-
     virtual void ClearFrameBuffer() = 0;
+
+    void SetShaderProgramInUse(Shader* iShader) { m_pShaderProgramInUse = iShader; }
+
+    // Factory
+    virtual RenderWindow* CreateWindow() = 0;
+    virtual Texture* CreateTexture() = 0;
+    virtual Shader* CreateShader() = 0;
 
 protected:
     void _SetTextureManager(TextureManager* iTextureManager) { m_pTextureManager = iTextureManager; }
 
 private:
     TextureManager* m_pTextureManager = nullptr;
+
+    Shader* m_pShaderProgramInUse = nullptr;
 };
 
 } // namespace CodeHero

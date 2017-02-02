@@ -13,6 +13,13 @@ Image::Image(uint32_t iWidth, uint32_t iHeight, const ImageData& iData, Image::F
     Create(iWidth, iHeight, iData, iFmt);
 }
 
+void Image::Create(uint32_t iWidth, uint32_t iHeight, Image::Format iFmt /*= IFMT_Indexed */) {
+    m_Width = iWidth;
+    m_Height = iHeight;
+    m_Fmt = iFmt;
+    m_Data.resize(m_Width * m_Height, 0);
+}
+
 void Image::Create(uint32_t iWidth, uint32_t iHeight, const ImageData& iData, Image::Format iFmt) {
     m_Width = iWidth;
     m_Height = iHeight;
@@ -23,11 +30,11 @@ void Image::Create(uint32_t iWidth, uint32_t iHeight, const ImageData& iData, Im
 // statics
 int Image::GetComponentsFromFormat(Image::Format iFmt) {
     switch (iFmt) {
-    case IFMT_GRAYSCALE:
-    case IFMT_INDEXED_ALPHA:
-    case IFMT_INDEXED:
+    case IFMT_Grayscale:
+    case IFMT_IndexedAlpha:
+    case IFMT_Indexed:
         return 1;
-    case IFMT_GRAYSCALE_ALPHA:
+    case IFMT_GrayscaleAlpha:
         return 2;
     case IFMT_RGB:
         return 3;

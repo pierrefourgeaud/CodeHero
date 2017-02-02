@@ -16,14 +16,14 @@ void Texture::Use() {}
 bool Texture::Load(const Image& iImage) {
     m_Image = iImage;
 
-    _CreateImpl();
+    return _CreateImpl();
 }
 
 bool Texture::Load(const char* iImage) {
     ImageLoader* imageLoader = ImageLoader::GetInstance();
     imageLoader->LoadImage(iImage, m_Image);
 
-    _CreateImpl();
+    return _CreateImpl();
 }
 
 } // namespace CodeHero
