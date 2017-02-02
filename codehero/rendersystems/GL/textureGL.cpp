@@ -31,6 +31,7 @@ bool TextureGL::_CreateImpl() {
 
 GLenum TextureGL::_GetGLFormat(const Image::Format iFormat) {
     switch (iFormat) {
+    case Image::Format::IFMT_Grayscale: return GL_RED;
     case Image::Format::IFMT_RGB: return GL_RGB;
     case Image::Format::IFMT_RGBA: return GL_RGBA;
     default:

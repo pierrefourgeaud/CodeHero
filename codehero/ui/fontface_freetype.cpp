@@ -5,6 +5,7 @@
 #include "ui/fontface_freetype.h"
 #include "ui/font.h"
 #include "core/image.h"
+#include "core/rendersystem.h"
 #include <cstdint>
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -28,7 +29,7 @@ void FontFaceFreeType::_Load() {
     }
 
     FT_Face face;
-    if (FT_New_Memory_Face(library, _GetFont().GetBuffer().get(), _GetFont().GetBufferSize(), 0, &face)) {
+    if (FT_New_Memory_Face(library, m_rFont.GetBuffer().get(), m_rFont.GetBufferSize(), 0, &face)) {
         LOGE << "FontFaceFreeType: Failed to load the font" << std::endl;
         goto done_library;
     }
@@ -60,21 +61,24 @@ void FontFaceFreeType::_Load() {
                 continue;
             }
 
-//            FT_GlyphSlot slot = face->glyph;
             FontFaceGlyph fontGlyph;
             if (!FT_Load_Char(face, charCode, FT_LOAD_RENDER)) {
                 fontGlyph.width = face->glyph->bitmap.width;
                 fontGlyph.height = face->glyph->bitmap.rows;
+                fontGlyph.left = face->glyph->bitmap_left;
+                fontGlyph.top = face->glyph->bitmap_top;
                 fontGlyph.advanceX = face->glyph->advance.x;
 
                 Image image;
                 image.Create(fontGlyph.width, fontGlyph.height);
                 uint8_t* dest = image.GetRawData();
                 memcpy(dest, face->glyph->bitmap.buffer, image.GetSize());
-//                fontGlyph.texture.reset(new Texture())
+                Texture* t = m_rFont.GetRenderSystem().CreateTexture();
+                t->Load(image);
+                fontGlyph.texture.reset(t);
+                m_Glyphs[charCode] = std::move(fontGlyph);
             }
         }
-
     }
 
 done:

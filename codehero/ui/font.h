@@ -13,6 +13,7 @@ namespace CodeHero {
 
 // Forward declaration
 class FontFace;
+class RenderSystem;
 
 enum class FontType : int32_t {
     FT_FreeType,
@@ -22,7 +23,7 @@ enum class FontType : int32_t {
 
 class Font {
 public:
-    Font(const std::string& iName);
+    Font(RenderSystem& iRenderSystem, const std::string& iName);
     ~Font() {}
 
     std::shared_ptr<FontFace> GetFace(uint32_t iSize);
@@ -30,7 +31,10 @@ public:
     std::shared_ptr<uint8_t> GetBuffer() const { return m_pFont; }
     int64_t GetBufferSize() const { return m_FontSize; }
 
+    RenderSystem& GetRenderSystem() { return m_rRenderSystem; }
+
 private:
+    RenderSystem& m_rRenderSystem;
     std::string m_Name;
     std::shared_ptr<uint8_t> m_pFont;
     int64_t m_FontSize;

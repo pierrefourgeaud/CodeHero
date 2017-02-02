@@ -13,7 +13,7 @@ Image::Image(uint32_t iWidth, uint32_t iHeight, const ImageData& iData, Image::F
     Create(iWidth, iHeight, iData, iFmt);
 }
 
-void Image::Create(uint32_t iWidth, uint32_t iHeight, Image::Format iFmt /*= IFMT_Indexed */) {
+void Image::Create(uint32_t iWidth, uint32_t iHeight, Image::Format iFmt /*= IFMT_Grayscale */) {
     m_Width = iWidth;
     m_Height = iHeight;
     m_Fmt = iFmt;

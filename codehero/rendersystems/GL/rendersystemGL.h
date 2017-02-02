@@ -25,6 +25,9 @@ public:
 
     void ClearFrameBuffer() override;
 
+    void SetShaderParameter(const std::string& iParam, const Vector3& iVec) final override;
+    void SetShaderParameter(const std::string& iParam, const Matrix4& iMat) final override;
+
     // Factory
     RenderWindow* CreateWindow() final override;
     Texture* CreateTexture() final override;

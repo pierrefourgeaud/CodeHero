@@ -18,7 +18,9 @@ class Font;
 struct FontFaceGlyph {
     uint32_t width;
     uint32_t height;
-    uint8_t advanceX;
+    int32_t left;
+    int32_t top;
+    uint32_t advanceX;
     std::unique_ptr<Texture> texture;
 };
 
@@ -27,12 +29,11 @@ public:
     FontFace(Font& iFont);
     virtual ~FontFace() {}
 
-protected:
-    Font& _GetFont() const { return m_rFont; }
+    FontFaceGlyph& GetGlyph(char iC);
 
-private:
+protected:
     Font& m_rFont;
-    std::map<unsigned char, FontFaceGlyph> m_Glyphs;
+    std::map<uint32_t, FontFaceGlyph> m_Glyphs;
 };
 
 } // namespace CodeHero

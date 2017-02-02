@@ -11,8 +11,9 @@
 
 namespace CodeHero {
 
-Font::Font(const std::string& iName)
-    : m_Name(iName) {}
+Font::Font(RenderSystem& iRenderSystem, const std::string& iName)
+    : m_rRenderSystem(iRenderSystem)
+    , m_Name(iName) {}
 
 std::shared_ptr<FontFace> Font::GetFace(uint32_t iSize) {
     _Load();
@@ -34,7 +35,7 @@ std::shared_ptr<FontFace> Font::GetFace(uint32_t iSize) {
 }
 
 void Font::_Load() {
-    if (m_pFont == nullptr) {
+    if (m_pFont != nullptr) {
         return;
     }
 

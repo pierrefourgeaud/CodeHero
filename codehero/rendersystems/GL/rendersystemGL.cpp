@@ -6,6 +6,8 @@
 #include <GLFW/glfw3.h>
 
 #include <logger.h>
+#include "core/math/matrix4.h"
+#include "core/math/vector3.h"
 #include "rendersystems/GL/rendersystemGL.h"
 #include "rendersystems/GL/renderwindowGL.h"
 #include "rendersystems/GL/shaderGL.h"
@@ -37,6 +39,39 @@ void RenderSystemGL::ClearFrameBuffer() {
     // Background Fill Color
     glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Vector3& iVec) {
+    if (GetShaderProgramInUse()) {
+        ShaderGL* shader = static_cast<ShaderGL*>(GetShaderProgramInUse());
+        if (shader->HasParameter(iParam)) {
+            const ShaderParameter& info = shader->GetParameter(iParam);
+
+            switch (info.type) {
+            case GL_FLOAT:
+                glUniform1fv(info.location, 1, iVec.GetPtr());
+                break;
+            case GL_FLOAT_VEC2:
+                glUniform2fv(info.location, 1, iVec.GetPtr());
+                break;
+            case GL_FLOAT_VEC3:
+                glUniform3fv(info.location, 1, iVec.GetPtr());
+                break;
+            default: break;
+            }
+        }
+    }
+}
+
+void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Matrix4& iMat) {
+    if (GetShaderProgramInUse()) {
+        ShaderGL* shader = static_cast<ShaderGL*>(GetShaderProgramInUse());
+        if (shader->HasParameter(iParam)) {
+            const ShaderParameter& info = shader->GetParameter(iParam);
+
+            glUniformMatrix4fv(info.location, 1, GL_FALSE, iMat.GetPtr());
+        }
+    }
 }
 
 // Factory

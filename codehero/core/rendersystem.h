@@ -15,6 +15,8 @@ class TextureManager;
 class RenderWindow;
 class Shader;
 class Texture;
+class Matrix4;
+class Vector3;
 
 class RenderSystem {
 public:
@@ -27,6 +29,10 @@ public:
     virtual void ClearFrameBuffer() = 0;
 
     void SetShaderProgramInUse(Shader* iShader) { m_pShaderProgramInUse = iShader; }
+    Shader* GetShaderProgramInUse() const { return m_pShaderProgramInUse; }
+
+    virtual void SetShaderParameter(const std::string& iParam, const Vector3& iVec) = 0;
+    virtual void SetShaderParameter(const std::string& iParam, const Matrix4& iMat) = 0;
 
     // Factory
     virtual RenderWindow* CreateWindow() = 0;

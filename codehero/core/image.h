@@ -31,7 +31,7 @@ public:
     // Create image with data
     Image(uint32_t iWidth, uint32_t iHeight, const ImageData& iData, Format iFmt);
 
-    void Create(uint32_t iWidth, uint32_t iHeight, Format iFmt = IFMT_Indexed);
+    void Create(uint32_t iWidth, uint32_t iHeight, Format iFmt = IFMT_Grayscale);
     void Create(uint32_t iWidth, uint32_t iHeight, const ImageData& iData, Format iFmt);
 
     uint32_t GetWidth() const { return m_Width; }
