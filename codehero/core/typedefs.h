@@ -5,10 +5,10 @@
 #ifndef CODEHERO_CORE_TYPEDEFS_H_
 #define CODEHERO_CORE_TYPEDEFS_H_
 
-namespace CodeHero {
-
 #include <cstdint>
 #include <memory>
+
+namespace CodeHero {
 
 template<typename T>
 std::shared_ptr<T> MakeSharedArray(uint64_t size)

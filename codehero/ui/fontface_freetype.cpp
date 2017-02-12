@@ -5,7 +5,7 @@
 #include "ui/fontface_freetype.h"
 #include "ui/font.h"
 #include "core/image.h"
-#include "core/rendersystem.h"
+#include "graphics/rendersystem.h"
 #include <cstdint>
 #include <ft2build.h>
 #include FT_FREETYPE_H

@@ -8,10 +8,12 @@
 #include <logger.h>
 #include "core/math/matrix4.h"
 #include "core/math/vector3.h"
+#include "graphics/viewport.h"
 #include "rendersystems/GL/rendersystemGL.h"
 #include "rendersystems/GL/renderwindowGL.h"
 #include "rendersystems/GL/shaderGL.h"
 #include "rendersystems/GL/textureGL.h"
+#include "rendersystems/GL/vertexbufferGL.h"
 
 namespace CodeHero {
 
@@ -74,9 +76,51 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Matrix4
     }
 }
 
+void RenderSystemGL::SetVertexBuffer(const VertexBuffer& iBuffer) {
+    SetVBO(iBuffer);
+
+    uint32_t vertexSize = iBuffer.GetVertexSize();
+
+    for (uint32_t i = 0; i < VertexBuffer::EL_Max; ++i) {
+        uint32_t bit = 1 << i;
+        if (iBuffer.IsBitActive(bit)) {
+            LOGI << "glVertexAttribPointer " << i << ", "
+                                             << VertexBufferGL::ElementComponents[i] << ", "
+                                             << VertexBufferGL::ElementType[i] << ", GL_FALSE, "
+                                             << vertexSize << ", "
+                                             << iBuffer.GetElementOffset(i) << std::endl;
+            glVertexAttribPointer(
+                i,
+                VertexBufferGL::ElementComponents[i],
+                VertexBufferGL::ElementType[i],
+                GL_FALSE, // ?
+                vertexSize,
+                reinterpret_cast<GLvoid*>(iBuffer.GetElementOffset(i)));
+            glEnableVertexAttribArray(i);
+        }
+    }
+}
+
+void RenderSystemGL::SetVBO(const VertexBuffer& iBuffer) {
+    if (m_BoundVBO != iBuffer.GetGPUObject().intHandle) {
+        glBindBuffer(GL_ARRAY_BUFFER, iBuffer.GetGPUObject().intHandle);
+        m_BoundVBO = iBuffer.GetGPUObject().intHandle;
+    }
+}
+
+void RenderSystemGL::SetViewport(Viewport* iViewport) {
+    RenderSystem::SetViewport(iViewport);
+
+    Vector2 scalling = GetPixelScalling();
+    glViewport(iViewport->x() * scalling.x(),
+               iViewport->y() * scalling.y(),
+               iViewport->width() * scalling.x(),
+               iViewport->height() * scalling.y());
+}
+
 // Factory
 RenderWindow* RenderSystemGL::CreateWindow() {
-    RenderWindow* win = new RenderWindowGL();
+    RenderWindow* win = new RenderWindowGL(*this);
     if (win->Create(800, 600) != Error::OK) {
         delete win;
         win = nullptr;
@@ -93,6 +137,10 @@ Texture* RenderSystemGL::CreateTexture() {
 
 Shader* RenderSystemGL::CreateShader() {
     return new ShaderGL(*this);
+}
+
+VertexBuffer* RenderSystemGL::CreateVertexBuffer() {
+    return new VertexBufferGL;
 }
 
 } // CodeHero

@@ -16,12 +16,15 @@
 #include "./core/imageloader.h"
 #include "./core/image.h"
 
-#include "./core/renderwindow.h"
-#include "./rendersystems/GL/rendersystemGL.h"
-#include "./rendersystems/GL/textureGL.h"
+#include "graphics/renderwindow.h"
+#include "graphics/viewport.h"
+#include "rendersystems/GL/rendersystemGL.h"
+#include "rendersystems/GL/textureGL.h"
 
 #include "./core/math/vector3.h"
 #include "./core/math/matrix4.h"
+
+#include "graphics/vertexbuffer.h"
 
 #include "ui/font.h"
 #include "ui/fontface.h"
@@ -50,6 +53,9 @@ Error Main::Start() {
     if (!error) {
         m_pMainWindow.reset(m_pRS->CreateWindow());
     }
+
+    Viewport* viewport = new Viewport(0, 0, 800, 600);
+    m_pRS->SetViewport(viewport);
 
     LOGD2 << "[<] Main::Start()" << std::endl;
 
@@ -120,22 +126,14 @@ Error Main::Run() {
         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
 
-    GLuint VBO, VAO;//, EBO;
+    GLuint VAO;//, EBO;
     glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
     // Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
     glBindVertexArray(VAO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
-    glEnableVertexAttribArray(0);
-
-    // TexCoord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(2);
+    VertexBuffer* buffer = m_pRS->CreateVertexBuffer();
+    buffer->SetData(vertices, 36, VertexBuffer::MASK_Position | VertexBuffer::MASK_TexCoord);
+    m_pRS->SetVertexBuffer(*buffer);
 
     glBindVertexArray(0); // Unbind VAO
 
@@ -146,12 +144,15 @@ Error Main::Run() {
     GLuint VAO2, VBO2;
     // Configure VAO/VBO for texture quads
     glGenVertexArrays(1, &VAO2);
-    glGenBuffers(1, &VBO2);
     glBindVertexArray(VAO2);
+    // VertexBuffer* buffer2 = m_pRS->CreateVertexBuffer();
+    // buffer2->SetData(nullptr, 6, true);
+    glGenBuffers(1, &VBO2);
     glBindBuffer(GL_ARRAY_BUFFER, VBO2);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
@@ -174,19 +175,30 @@ Error Main::Run() {
         { 1.5f,  0.2f, -1.5f},
         {-1.3f,  1.0f, -1.5f}
     };
+    double lastTime = glfwGetTime();
+    int nbFrames = 0;
+    int fps = 0.0;
+    // double mspf = 0.0;
 
     while (!m_pMainWindow->ShouldClose()) {
         m_pRS->PollEvents();
 
         m_pRS->ClearFrameBuffer();
+        double currentTime = glfwGetTime();
+        nbFrames++;
+        if (currentTime - lastTime >= 1.0){ // If last prinf() was more than 1 sec ago
+            // printf and reset timer
+            fps = nbFrames;
+            printf("%f ms/frame\n", 1000.0/double(nbFrames));
+            nbFrames = 0;
+            lastTime += 1.0;
+        }
 
-//        RenderText(VAO2, VBO2, Characters, *textShader, "This is sample text", 10.0f, 565.0f, 1.0f, {0.5, 0.8f, 0.2f});
-//        RenderText(VAO2, VBO2, Characters, *textShader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, {0.3, 0.7f, 0.9f});
         // ###################################################
         float scale = 1.0f;
         float x = 10.0f;
         float y = 565.0f;
-        std::string text("This is sample text");
+        std::string text("FPS: " + std::to_string(fps));
         Vector3 color(0.5, 0.8f, 0.2f);
         textShader->Use();
         m_pRS->SetShaderParameter("textColor", color);
@@ -199,13 +211,13 @@ Error Main::Run() {
         {
             FontFaceGlyph& ch = fa->GetGlyph(*c);
 
-            GLfloat xpos = x + ch.left * scale;
-            GLfloat ypos = y - (ch.height - ch.top) * scale;
+            float xpos = x + ch.left * scale;
+            float ypos = y - (ch.height - ch.top) * scale;
 
-            GLfloat w = ch.width * scale;
-            GLfloat h = ch.height * scale;
+            float w = ch.width * scale;
+            float h = ch.height * scale;
             // Update VBO for each character
-            GLfloat vertices[6][4] = {
+            float vertices[6][4] = {
                 { xpos,     ypos + h,   0.0, 0.0 },
                 { xpos,     ypos,       0.0, 1.0 },
                 { xpos + w, ypos,       1.0, 1.0 },
@@ -252,7 +264,7 @@ Error Main::Run() {
 
         // Draw container
         glBindVertexArray(VAO);
-        for(GLuint i = 0; i < 10; ++i) {
+        for (GLuint i = 0; i < 10; ++i) {
             Matrix4 model;
             model.Translate(cubePositions[i]);
             model.Rotate(glfwGetTime() * 20.0f * i, {1.0f, 0.3f, 0.5f});
@@ -261,7 +273,6 @@ Error Main::Run() {
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
         glBindVertexArray(0);
-
 
         m_pMainWindow->SwapBuffers();
     }
@@ -302,7 +313,7 @@ void Main::_LoadDrivers() {
     LOGI << "Loading drivers..." << std::endl;
 #ifdef DRIVER_PNG
     m_ImageLoader.AddCodec(new ImageCodecPNG());
-#endif  // DRIVER_PNG
+#endif // DRIVER_PNG
     LOGI << "Drivers loaded..." << std::endl;
 }
 
@@ -312,4 +323,4 @@ void Main::_UnloadDrivers() {
     LOGI << "Drivers unloaded..." << std::endl;
 }
 
-}  // namespace CodeHero
+} // namespace CodeHero

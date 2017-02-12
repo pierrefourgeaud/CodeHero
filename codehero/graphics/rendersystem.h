@@ -7,6 +7,7 @@
 
 #include <memory>
 #include "core/errors.h"
+#include "core/math/vector2.h"
 
 namespace CodeHero {
 
@@ -17,6 +18,8 @@ class Shader;
 class Texture;
 class Matrix4;
 class Vector3;
+class VertexBuffer;
+class Viewport;
 
 class RenderSystem {
 public:
@@ -33,19 +36,36 @@ public:
 
     virtual void SetShaderParameter(const std::string& iParam, const Vector3& iVec) = 0;
     virtual void SetShaderParameter(const std::string& iParam, const Matrix4& iMat) = 0;
+    virtual void SetVertexBuffer(const VertexBuffer& iBuffer) = 0;
+    virtual void SetViewport(Viewport* iViewport) { m_pActiveViewport = iViewport; };
+
+    virtual void SetVBO(const VertexBuffer& iBuffer) = 0;
+
+    void SetPixelScalling(float iHorizontal, float iVertical) {
+        m_PixelScalling.SetX(iHorizontal);
+        m_PixelScalling.SetY(iVertical);
+    }
+
+    Vector2 GetPixelScalling() const { return m_PixelScalling; }
 
     // Factory
     virtual RenderWindow* CreateWindow() = 0;
     virtual Texture* CreateTexture() = 0;
     virtual Shader* CreateShader() = 0;
+    virtual VertexBuffer* CreateVertexBuffer() = 0;
 
 protected:
     void _SetTextureManager(TextureManager* iTextureManager) { m_pTextureManager = iTextureManager; }
+
+    uint32_t m_BoundVBO = 0;
 
 private:
     TextureManager* m_pTextureManager = nullptr;
 
     Shader* m_pShaderProgramInUse = nullptr;
+    Viewport* m_pActiveViewport = nullptr;
+    
+    Vector2 m_PixelScalling{1.0f, 1.0f};
 };
 
 } // namespace CodeHero

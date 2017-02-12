@@ -10,7 +10,7 @@
 
 #include <stdio.h>
 
-#include "core/rendersystem.h"
+#include "graphics/rendersystem.h"
 #include "rendersystems/GL/shaderGL.h"
 #include <logger.h>
 

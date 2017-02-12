@@ -14,7 +14,7 @@ class GPUObject {
     };
 
 public:
-    Object GetGPUObject() { return m_Object; }
+    Object GetGPUObject() const { return m_Object; }
 
 protected:
     void _SetGPUObject(unsigned int iObject) { m_Object = {iObject}; }

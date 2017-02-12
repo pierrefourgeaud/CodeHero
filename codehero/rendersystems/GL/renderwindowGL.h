@@ -5,8 +5,8 @@
 #ifndef CODEHERO_RENDERSYSTEMS_GL_RENDERWINDOWGL_H_
 #define CODEHERO_RENDERSYSTEMS_GL_RENDERWINDOWGL_H_
 
-#include "./core/errors.h"
-#include "./core/renderwindow.h"
+#include "core/errors.h"
+#include "graphics/renderwindow.h"
 
 // Forward declaration
 struct GLFWwindow;
@@ -15,10 +15,10 @@ namespace CodeHero {
 
 class RenderWindowGL : public RenderWindow {
 public:
-    RenderWindowGL();
+    explicit RenderWindowGL(RenderSystem& iRenderSystem);
     virtual ~RenderWindowGL() {}
 
-    Error Create(int iWidth, int iHeight) override;
+    Error Create(const int iWidth, const int iHeight) override;
 
     bool ShouldClose() const override;
 

@@ -33,7 +33,7 @@ Error FileAccess::Open(const std::string& iFilename, Flags iFlags) {
 }
 
 void FileAccess::Close() {
-    if (IsOpen()) { return; }
+    if (!IsOpen()) { return; }
 
     LOGD2 << "[FileAccess::Close]: Closing " << m_Name << "." << std::endl;
 

@@ -8,3 +8,5 @@ out/
 log.txt
 CMakeLists.txt.user
 cmake-build-debug
+tags
+.vim-template*

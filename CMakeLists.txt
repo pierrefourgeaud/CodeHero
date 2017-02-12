@@ -63,6 +63,7 @@ set (SOURCES
      ${SRCS_PATH}/core/image.cpp
      ${SRCS_PATH}/core/imagecodec.cpp
      ${SRCS_PATH}/core/imageloader.cpp
+     ${SRCS_PATH}/core/math/vector2.cpp
      ${SRCS_PATH}/core/math/vector3.cpp
      ${SRCS_PATH}/core/math/vector4.cpp
      ${SRCS_PATH}/core/math/matrix4.cpp
@@ -70,15 +71,17 @@ set (SOURCES
      ${SRCS_PATH}/ui/fontface.cpp
      ${SRCS_PATH}/ui/fontface_freetype.cpp
      # Graphics
-     ${SRCS_PATH}/core/rendersystem.cpp
-     ${SRCS_PATH}/core/renderwindow.cpp
+     ${SRCS_PATH}/graphics/rendersystem.cpp
+     ${SRCS_PATH}/graphics/renderwindow.cpp
      ${SRCS_PATH}/core/texturemanager.cpp
      ${SRCS_PATH}/core/texture.cpp
+     ${SRCS_PATH}/graphics/viewport.cpp
      ${SRCS_PATH}/rendersystems/GL/shaderGL.cpp
      ${SRCS_PATH}/rendersystems/GL/rendersystemGL.cpp
      ${SRCS_PATH}/rendersystems/GL/renderwindowGL.cpp
      ${SRCS_PATH}/rendersystems/GL/texturemanagerGL.cpp
      ${SRCS_PATH}/rendersystems/GL/textureGL.cpp
+     ${SRCS_PATH}/rendersystems/GL/vertexbufferGL.cpp
 )
 
 set (HEADERS
@@ -94,6 +97,7 @@ set (HEADERS
      ${SRCS_PATH}/core/image.h
      ${SRCS_PATH}/core/imagecodec.h
      ${SRCS_PATH}/core/imageloader.h
+     ${SRCS_PATH}/core/math/vector2.h
      ${SRCS_PATH}/core/math/vector3.h
      ${SRCS_PATH}/core/math/matrix4.h
      ${SRCS_PATH}/core/math/utils.h
@@ -101,15 +105,18 @@ set (HEADERS
      ${SRCS_PATH}/ui/fontface.h
      ${SRCS_PATH}/ui/fontface_freetype.h
      # Graphics
-     ${SRCS_PATH}/core/rendersystem.h
-     ${SRCS_PATH}/core/renderwindow.h
+     ${SRCS_PATH}/graphics/rendersystem.h
+     ${SRCS_PATH}/graphics/renderwindow.h
      ${SRCS_PATH}/core/texturemanager.h
      ${SRCS_PATH}/core/texture.h
+     ${SRCS_PATH}/graphics/vertexbuffer.h
+     ${SRCS_PATH}/graphics/viewport.h
      ${SRCS_PATH}/rendersystems/GL/rendersystemGL.h
      ${SRCS_PATH}/rendersystems/GL/shaderGL.h
      ${SRCS_PATH}/rendersystems/GL/renderwindowGL.h
      ${SRCS_PATH}/rendersystems/GL/texturemanagerGL.h
      ${SRCS_PATH}/rendersystems/GL/textureGL.h
+     ${SRCS_PATH}/rendersystems/GL/vertexbufferGL.h
      # Logger
      ${VENDORS_PATH}/simplelogger/includes/bufferlogger.h
      ${VENDORS_PATH}/simplelogger/includes/consolelogger.h

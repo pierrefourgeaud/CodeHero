@@ -1,14 +1,16 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "./rendersystems/GL/renderwindowGL.h"
+#include "rendersystems/GL/renderwindowGL.h"
+#include "graphics/rendersystem.h"
 
 namespace CodeHero {
 
-RenderWindowGL::RenderWindowGL() {
+RenderWindowGL::RenderWindowGL(RenderSystem& iRenderSystem)
+    : RenderWindow(iRenderSystem) {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 }
 
-Error RenderWindowGL::Create(int iWidth, int iHeight) {
+Error RenderWindowGL::Create(const int iWidth, const int iHeight) {
     m_pWindow = glfwCreateWindow(iWidth, iHeight, "CodeHero", nullptr, nullptr);
 
     // Check for Valid Context
@@ -20,8 +22,11 @@ Error RenderWindowGL::Create(int iWidth, int iHeight) {
 
     gladLoadGL();
 
-    glfwGetFramebufferSize(m_pWindow, &iWidth, &iHeight);
-    glViewport(0, 0, iWidth, iHeight);
+    int width = iWidth;
+    int height = iHeight;
+    glfwGetFramebufferSize(m_pWindow, &width, &height);
+    m_rRenderSystem.SetPixelScalling(
+            (float)width / (float)iWidth, (float)height / (float)iHeight);
 
     // Setup OpenGL options
     glEnable(GL_DEPTH_TEST);

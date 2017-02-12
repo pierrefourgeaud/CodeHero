@@ -5,15 +5,16 @@
 #ifndef CODEHERO_RENDERSYSTEMS_GL_RENDERSYSTEMGL_H_
 #define CODEHERO_RENDERSYSTEMS_GL_RENDERSYSTEMGL_H_
 
-#include "./core/errors.h"
-#include "./core/rendersystem.h"
+#include "core/errors.h"
+#include "graphics/rendersystem.h"
 
 namespace CodeHero {
 
 // Forward declaration
-class TextureManager;
 class RenderWindow;
 class Texture;
+class TextureManager;
+class VertexBuffer;
 
 class RenderSystemGL : public RenderSystem {
 public:
@@ -27,11 +28,16 @@ public:
 
     void SetShaderParameter(const std::string& iParam, const Vector3& iVec) final override;
     void SetShaderParameter(const std::string& iParam, const Matrix4& iMat) final override;
+    void SetVertexBuffer(const VertexBuffer& iBuffer) final override;
+    void SetViewport(Viewport* iViewport) final override;
+
+    void SetVBO(const VertexBuffer& iBuffer) final override;
 
     // Factory
     RenderWindow* CreateWindow() final override;
     Texture* CreateTexture() final override;
     Shader* CreateShader() final override;
+    VertexBuffer* CreateVertexBuffer() final override;
 };
 
 } // namespace CodeHero

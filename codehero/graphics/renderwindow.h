@@ -5,12 +5,16 @@
 #ifndef CODEHERO_CORE_RENDERWINDOW_H_
 #define CODEHERO_CORE_RENDERWINDOW_H_
 
-#include "./core/errors.h"
+#include "core/errors.h"
 
 namespace CodeHero {
 
+// Forward declaration
+class RenderSystem;
+
 class RenderWindow {
 public:
+    explicit RenderWindow(RenderSystem& iRenderSystem) : m_rRenderSystem(iRenderSystem) {}
     virtual ~RenderWindow() {}
 
     virtual Error Create(int iWidth, int iHeight) = 0;
@@ -19,7 +23,8 @@ public:
 
     virtual void SwapBuffers() = 0;
 
-private:
+protected:
+    RenderSystem& m_rRenderSystem;
 };
 
 } // namespace CodeHero
