@@ -6,6 +6,7 @@
 #define CODEHERO_CORE_RENDERSYSTEM_H_
 
 #include <memory>
+#include <vector>
 #include "core/errors.h"
 #include "core/math/vector2.h"
 
@@ -34,6 +35,8 @@ public:
     void SetShaderProgramInUse(Shader* iShader) { m_pShaderProgramInUse = iShader; }
     Shader* GetShaderProgramInUse() const { return m_pShaderProgramInUse; }
 
+    void RegisterViewport(Viewport* iViewport);
+
     virtual void SetShaderParameter(const std::string& iParam, const Vector3& iVec) = 0;
     virtual void SetShaderParameter(const std::string& iParam, const Matrix4& iMat) = 0;
     virtual void SetVertexBuffer(const VertexBuffer& iBuffer) = 0;
@@ -47,6 +50,8 @@ public:
     }
 
     Vector2 GetPixelScalling() const { return m_PixelScalling; }
+
+    void Render();
 
     // Factory
     virtual RenderWindow* CreateWindow() = 0;
@@ -64,6 +69,8 @@ private:
 
     Shader* m_pShaderProgramInUse = nullptr;
     Viewport* m_pActiveViewport = nullptr;
+
+    std::vector<Viewport*> m_RegisteredViewports;
     
     Vector2 m_PixelScalling{1.0f, 1.0f};
 };

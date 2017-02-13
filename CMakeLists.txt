@@ -71,8 +71,13 @@ set (SOURCES
      ${SRCS_PATH}/ui/fontface.cpp
      ${SRCS_PATH}/ui/fontface_freetype.cpp
      # Graphics
+     ${SRCS_PATH}/graphics/camera.cpp
+     ${SRCS_PATH}/graphics/component.cpp
+     ${SRCS_PATH}/graphics/light.cpp
+     ${SRCS_PATH}/graphics/node.cpp
      ${SRCS_PATH}/graphics/rendersystem.cpp
      ${SRCS_PATH}/graphics/renderwindow.cpp
+     ${SRCS_PATH}/graphics/scene.cpp
      ${SRCS_PATH}/core/texturemanager.cpp
      ${SRCS_PATH}/core/texture.cpp
      ${SRCS_PATH}/graphics/viewport.cpp
@@ -105,8 +110,13 @@ set (HEADERS
      ${SRCS_PATH}/ui/fontface.h
      ${SRCS_PATH}/ui/fontface_freetype.h
      # Graphics
+     ${SRCS_PATH}/graphics/camera.h
+     ${SRCS_PATH}/graphics/component.h
+     ${SRCS_PATH}/graphics/light.h
+     ${SRCS_PATH}/graphics/node.h
      ${SRCS_PATH}/graphics/rendersystem.h
      ${SRCS_PATH}/graphics/renderwindow.h
+     ${SRCS_PATH}/graphics/scene.h
      ${SRCS_PATH}/core/texturemanager.h
      ${SRCS_PATH}/core/texture.h
      ${SRCS_PATH}/graphics/vertexbuffer.h

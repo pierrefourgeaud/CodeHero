@@ -20,7 +20,7 @@ float Vector3::Length() const {
                  (z() * z()));
 }
 
-void Vector3::Normalize() {
+Vector3& Vector3::Normalize() {
     float l = Length();
 
     if (l == 0) {
@@ -30,6 +30,7 @@ void Vector3::Normalize() {
         m_Vec[1] /= l;
         m_Vec[2] /= l;
     }
+    return *this;
 }
 
 Vector3 Vector3::Cross(const Vector3& iVector) const {
@@ -48,6 +49,14 @@ bool Vector3::operator==(const Vector3& iRhs) const {
     return FloatEqu(x(), iRhs.x()) &&
            FloatEqu(y(), iRhs.y()) &&
            FloatEqu(z(), iRhs.z());
+}
+
+Vector3 Vector3::operator-(const Vector3& iRhs) const {
+    return {
+        x() - iRhs.x(),
+        y() - iRhs.y(),
+        z() - iRhs.z()
+    };
 }
 
 Vector3 Vector3::operator*(const float iScalar) const {

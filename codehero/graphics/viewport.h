@@ -10,6 +10,10 @@
 
 namespace CodeHero {
 
+// Forward declarations
+class Camera;
+class Scene;
+
 class Viewport {
 public:
     Viewport(uint32_t iX, uint32_t iY, uint32_t iWidth, uint32_t iHeight);
@@ -23,9 +27,15 @@ public:
     uint32_t width() const { return m_Dimension.x(); }
     uint32_t height() const { return m_Dimension.y(); }
 
+    void SetCamera(Camera* iCamera) { m_pCamera = iCamera; }
+    void SetScene(Scene* iScene) { m_pScene = iScene; }
+
 private:
     IntVector2 m_Position;
     IntVector2 m_Dimension;
+
+    Scene* m_pScene;
+    Camera* m_pCamera;
 };
 
 } // namespace CodeHero

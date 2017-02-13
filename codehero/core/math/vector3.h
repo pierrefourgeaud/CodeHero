@@ -22,7 +22,7 @@ public:
 
     float Length() const;
 
-    void Normalize();
+    Vector3& Normalize();
 
     Vector3 Cross(const Vector3& iVector) const;
 
@@ -30,6 +30,7 @@ public:
 
     // operators
     bool operator==(const Vector3& iRhs) const;
+    Vector3 operator-(const Vector3& iRhs) const;
     Vector3 operator*(const float iScalar) const;
     Vector3& operator*=(const float iScalar);
 

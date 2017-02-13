@@ -55,7 +55,7 @@ void VertexBufferGL::_UpdateSizeImpl() {
     for (uint8_t i = 0; i < VertexBuffer::EL_Max; ++i) {
         if (m_Masks & (1 << i)) {
             m_ElementOffset[i] = offset;
-	        offset += ElementSize[i];
+            offset += ElementSize[i];
         }
     }
     m_VertexSize = offset;

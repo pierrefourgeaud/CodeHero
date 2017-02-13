@@ -18,6 +18,7 @@
 
 #include "graphics/renderwindow.h"
 #include "graphics/viewport.h"
+#include "graphics/camera.h"
 #include "rendersystems/GL/rendersystemGL.h"
 #include "rendersystems/GL/textureGL.h"
 
@@ -53,9 +54,6 @@ Error Main::Start() {
     if (!error) {
         m_pMainWindow.reset(m_pRS->CreateWindow());
     }
-
-    Viewport* viewport = new Viewport(0, 0, 800, 600);
-    m_pRS->SetViewport(viewport);
 
     LOGD2 << "[<] Main::Start()" << std::endl;
 
@@ -141,19 +139,13 @@ Error Main::Run() {
     Font f(*m_pRS, "./resources/fonts/Roboto-Regular.ttf");
     std::shared_ptr<FontFace> fa = f.GetFace(24);
 
-    GLuint VAO2, VBO2;
+    GLuint VAO2;//, VBO2;
     // Configure VAO/VBO for texture quads
     glGenVertexArrays(1, &VAO2);
     glBindVertexArray(VAO2);
-    // VertexBuffer* buffer2 = m_pRS->CreateVertexBuffer();
-    // buffer2->SetData(nullptr, 6, true);
-    glGenBuffers(1, &VBO2);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO2);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    VertexBuffer* buffer2 = m_pRS->CreateVertexBuffer();
+    buffer2->SetData(nullptr, 6, VertexBuffer::MASK_Position | VertexBuffer::MASK_TexCoord, true);
+    m_pRS->SetVertexBuffer(*buffer2);
     glBindVertexArray(0);
 
     // Load and create a texture
@@ -179,6 +171,13 @@ Error Main::Run() {
     int nbFrames = 0;
     int fps = 0.0;
     // double mspf = 0.0;
+    Viewport* viewportMain = new Viewport(0, 0, 600, 600);
+    Viewport* viewportTopRight = new Viewport(600, 400, 200, 200);
+    Viewport* viewportMiddleRight = new Viewport(600, 200, 200, 200);
+    Viewport* viewportBottomRight = new Viewport(600, 0, 200, 200);
+
+    
+    Camera camera({0.0f, 0.0f, 3.0f}, {0.0f, 0.0f, 0.0f});
 
     while (!m_pMainWindow->ShouldClose()) {
         m_pRS->PollEvents();
@@ -217,22 +216,20 @@ Error Main::Run() {
             float w = ch.width * scale;
             float h = ch.height * scale;
             // Update VBO for each character
-            float vertices[6][4] = {
-                { xpos,     ypos + h,   0.0, 0.0 },
-                { xpos,     ypos,       0.0, 1.0 },
-                { xpos + w, ypos,       1.0, 1.0 },
+            float vertices[6][5] = {
+                { xpos,     ypos + h, 0.0, 0.0, 0.0 },
+                { xpos,     ypos,     0.0, 0.0, 1.0 },
+                { xpos + w, ypos,     0.0, 1.0, 1.0 },
 
-                { xpos,     ypos + h,   0.0, 0.0 },
-                { xpos + w, ypos,       1.0, 1.0 },
-                { xpos + w, ypos + h,   1.0, 0.0 }
+                { xpos,     ypos + h, 0.0, 0.0, 0.0 },
+                { xpos + w, ypos,     0.0, 1.0, 1.0 },
+                { xpos + w, ypos + h, 0.0, 1.0, 0.0 }
             };
             // Render glyph texture over quad
             glBindTexture(GL_TEXTURE_2D, ch.texture->GetGPUObject().intHandle);
-            // Update content of VBO memory
-            glBindBuffer(GL_ARRAY_BUFFER, VBO2);
-            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // Be sure to use glBufferSubData and not glBufferData
+            m_pRS->SetVertexBuffer(*buffer2);
+            buffer2->SetSubData(vertices, 0, 6);
 
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
             // Render quad
             glDrawArrays(GL_TRIANGLES, 0, 6);
             // Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
@@ -254,12 +251,16 @@ Error Main::Run() {
         glBindTexture(GL_TEXTURE_2D, texture2->GetGPUObject().intHandle);
         glUniform1i(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "ourTexture2"), 1);
 
-        Matrix4 view;
-        view.Translate({0.0f, 0.0f, -3.0f});
+        //Matrix4 view;
+        //view.Translate({0.0f, 0.0f, -3.0f});
+        GLfloat radius = 10.0f;
+        GLfloat camX = sin(glfwGetTime()) * radius;
+        GLfloat camZ = cos(glfwGetTime()) * radius;
+        camera.SetPosition({camX, 0.0f, camZ});
 
         PerspectiveMatrix projection(45.0f, 800 / 600, 0.1f, 100.0f);
 
-        m_pRS->SetShaderParameter("view", view);
+        m_pRS->SetShaderParameter("view", camera.GetView());
         m_pRS->SetShaderParameter("projection", projection);
 
         // Draw container
@@ -270,6 +271,13 @@ Error Main::Run() {
             model.Rotate(glfwGetTime() * 20.0f * i, {1.0f, 0.3f, 0.5f});
 
             m_pRS->SetShaderParameter("model", model);
+            m_pRS->SetViewport(viewportMiddleRight);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+            m_pRS->SetViewport(viewportBottomRight);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+            m_pRS->SetViewport(viewportTopRight);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+            m_pRS->SetViewport(viewportMain);
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
         glBindVertexArray(0);

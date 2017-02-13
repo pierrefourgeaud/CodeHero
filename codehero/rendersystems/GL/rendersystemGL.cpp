@@ -84,11 +84,6 @@ void RenderSystemGL::SetVertexBuffer(const VertexBuffer& iBuffer) {
     for (uint32_t i = 0; i < VertexBuffer::EL_Max; ++i) {
         uint32_t bit = 1 << i;
         if (iBuffer.IsBitActive(bit)) {
-            LOGI << "glVertexAttribPointer " << i << ", "
-                                             << VertexBufferGL::ElementComponents[i] << ", "
-                                             << VertexBufferGL::ElementType[i] << ", GL_FALSE, "
-                                             << vertexSize << ", "
-                                             << iBuffer.GetElementOffset(i) << std::endl;
             glVertexAttribPointer(
                 i,
                 VertexBufferGL::ElementComponents[i],
