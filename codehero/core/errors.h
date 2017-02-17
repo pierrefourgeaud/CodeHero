@@ -16,7 +16,8 @@ enum Error {
     ERR_NO_FILE_OPENED,
     ERR_FILE_EOF,
     ERR_IMAGE_FORMAT_UNRECOGNIZED,
-    ERR_IMAGE_INVALID
+    ERR_IMAGE_INVALID,
+    ERR_PARSING_FAILED
 };
 
 }  // namespace CodeHero

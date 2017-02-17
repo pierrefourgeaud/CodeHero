@@ -4,12 +4,10 @@
 
 #include <exception>
 #include <string>
-#include <iostream>
-#include <fstream>
-#include <sstream>
 
 #include <stdio.h>
 
+#include "core/fileaccess.h"
 #include "graphics/rendersystem.h"
 #include "rendersystems/GL/shaderGL.h"
 #include <logger.h>
@@ -32,7 +30,13 @@ Shader& ShaderGL::Attach(const string& iFilename) {
 
     GLuint shader = _CreateShader(iFilename);
 
-    bool status = _CompileShader(shader, shaderCode);
+    std::string finalCode;
+    if (_ReplaceIncludes(iFilename, shaderCode, finalCode) != Error::OK) {
+        LOGE << "Shader compile error: Failed to replace #includes." << std::endl;
+        return *this;
+    }
+
+    bool status = _CompileShader(shader, finalCode);
 
     if (status) {
         glAttachShader(GetGPUObject().intHandle, shader);
@@ -78,15 +82,14 @@ const ShaderParameter& ShaderGL::GetParameter(const std::string& iParamName) {
 }
 
 string ShaderGL::_GetShader(const string& iShaderPath) {
-    ifstream shaderFile;
+    // TODO(pierre) Implement error checking here
+    FileAccess file;
+    file.Open(iShaderPath, FileAccess::READ);
 
-    shaderFile.open(iShaderPath);
+    std::string content = file.ReadAll();
+    file.Close();
 
-    stringstream shaderStream;
-    shaderStream << shaderFile.rdbuf();
-    shaderFile.close();
-
-    return shaderStream.str();
+    return std::move(content);
 }
 
 GLuint ShaderGL::_CreateShader(const string& iFilename) {
@@ -137,6 +140,49 @@ void ShaderGL::_ParseParameters() {
         int location = glGetUniformLocation(GetGPUObject().intHandle, uniformName);
         m_Parameters[uniformName] = {location, type};
     }
+}
+
+Error ShaderGL::_ReplaceIncludes(const std::string& iParentFile, const std::string& iShaderCode, std::string& oCode) {
+    std::string::size_type posInclude = iShaderCode.find("#include ");
+    oCode += iShaderCode.substr(0, posInclude);
+    while (posInclude != std::string::npos) {
+        std::string::size_type startPos = iShaderCode.find("\"", posInclude);
+        if (startPos == std::string::npos) {
+            LOGE << "Shader replace include failed: Missing opening '\"'." << std::endl;
+            return Error::ERR_PARSING_FAILED;
+        }
+
+        std::string::size_type endPos = iShaderCode.find("\"", startPos + 1);
+        if (endPos == std::string::npos) {
+            LOGE << "Shader replace include failed: Missing closing '\"'." << std::endl;
+            return Error::ERR_PARSING_FAILED;
+        }
+        
+        startPos++;
+        std::string filename = iShaderCode.substr(startPos, endPos - startPos);
+        std::string filePath = iParentFile.substr(0, iParentFile.rfind("/"));
+        if (filePath == iParentFile) {
+            filePath = "";
+        }
+        filePath += "/" + filename;
+        FileAccess file;
+        if (file.Open(filePath, FileAccess::READ) != Error::OK) {
+            // TODO(pierre) return proper error
+            LOGE << "Shader replace include failed: '" << filePath << "' not found'." << std::endl;
+            return Error::ERR_FILE_NOT_FOUND;
+        }
+        std::string content = file.ReadAll();
+        file.Close();
+        // Recurse to do the same operation in the included file.
+        Error err;
+        if ((err = _ReplaceIncludes(filePath, content, oCode)) != Error::OK) {
+            return err;
+        }
+        posInclude = iShaderCode.find("#include ", endPos);
+        oCode += iShaderCode.substr(endPos + 1, posInclude);
+    }
+
+    return Error::OK;
 }
 
 }  // namespace CodeHero

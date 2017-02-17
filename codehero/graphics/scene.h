@@ -7,12 +7,16 @@
 
 namespace CodeHero {
 
+// Forward declaration
+class Camera;
+class Node;
+
 class Scene {
 public:
     Scene();
     ~Scene();
 
-    void Render();
+    void Render(Camera* iCamera);
 
 private:
     Node* m_pRootNode;

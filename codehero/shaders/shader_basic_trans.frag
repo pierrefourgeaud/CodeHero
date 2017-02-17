@@ -1,4 +1,7 @@
 #version 330 core
+
+#include "lighting.frag"
+
 in vec3 ourColor;
 in vec2 TexCoord;
 
@@ -10,6 +13,9 @@ uniform sampler2D ourTexture2;
 
 void main()
 {
-	// Linearly interpolate between both textures (second texture is only slightly combined)
-	color = mix( texture(ourTexture1, TexCoord).rgba, texture(ourTexture2, TexCoord).rgba, vec4(texture(ourTexture2, TexCoord)).a * 0.4);
+    // Linearly interpolate between both textures (second texture is only slightly combined)
+    color = mix(
+                texture(ourTexture1, TexCoord).rgba,
+                texture(ourTexture2, TexCoord).rgba,
+                vec4(texture(ourTexture2, TexCoord)).a * 0.4);
 }

@@ -23,9 +23,19 @@ public:
     }
 
     void AddComponent(Component* iComponent);
+    const std::vector<Component*>& GetComponents() const { return m_Components; }
+
+    Node* CreateChild() {
+        Node* node = new Node;
+        m_Children.push_back(node);
+        return node;
+    }
+
+    const std::vector<Node*>& GetChildren() const { return m_Children; }
 
 private:
     std::vector<Component*> m_Components;
+    std::vector<Node*> m_Children;
 };
 
 } // namespace CodeHero

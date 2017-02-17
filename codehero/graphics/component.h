@@ -9,8 +9,19 @@ namespace CodeHero {
 
 class Component {
 public:
+    enum DrawableType {
+        DT_Light,
+        DT_Geometry
+    };
+
+    explicit Component(DrawableType iType)
+        : m_Type(iType) {}
+    virtual ~Component() {}
+
+    DrawableType GetDrawableType() const { return m_Type; }
 
 private:
+    DrawableType m_Type;
 };
 
 } // namespace CodeHero

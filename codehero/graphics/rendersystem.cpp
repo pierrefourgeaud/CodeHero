@@ -11,15 +11,15 @@ void RenderSystem::RegisterViewport(Viewport* iViewport) {
     m_RegisteredViewports.push_back(iViewport);
 }
 
-void Render() {
+void RenderSystem::Render() {
     if (!m_pActiveViewport && m_RegisteredViewports.empty()) {
         LOGW << "RenderSystem: There is no viewport to render to." << std::endl;
         return;
     }
 
     if (!m_RegisteredViewports.empty()) {
-        size_t length = m_RegisteredViewports.length();
-        for (size_t i = 0; i < length; ++i) {
+        size_t size = m_RegisteredViewports.size();
+        for (size_t i = 0; i < size; ++i) {
             SetViewport(m_RegisteredViewports[i]);
         }
         return;

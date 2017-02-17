@@ -59,6 +59,14 @@ uint8_t FileAccess::Read8() {
     return byte;
 }
 
+std::string FileAccess::ReadAll() {
+    size_t size = GetSize();
+
+    std::string out(size, '\0');
+    Read((uint8_t*)&out[0], size);
+    return std::move(out);
+}
+
 bool FileAccess::IsEOF() const {
     return IsOpen() && feof(m_pFile);
 }
@@ -90,9 +98,9 @@ Error FileAccess::SeekEnd() {
     return OK;
 }
 
-int64_t FileAccess::GetSize() {
+int32_t FileAccess::GetSize() {
     if (m_Size < 0) {
-        int64_t pos = std::ftell(m_pFile);
+        int32_t pos = std::ftell(m_pFile);
         SeekEnd();
         m_Size = std::ftell(m_pFile);
         Seek(pos);

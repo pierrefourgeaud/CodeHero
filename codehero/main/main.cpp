@@ -67,8 +67,8 @@ Error Main::Run() {
 
     // Build and compile our shader program
     Shader* ourShader = m_pRS->CreateShader();
-    ourShader->Attach("./codehero/shaders/cs_basic.vert")
-             .Attach("./codehero/shaders/shader_basic_trans.frag")
+    ourShader->Attach("./codehero/shaders/textured.vert")
+             .Attach("./codehero/shaders/textured.frag")
              .Link();
 
     Shader* textShader = m_pRS->CreateShader();
@@ -81,47 +81,48 @@ Error Main::Run() {
 
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat vertices[] = {
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-        0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+        // Positions          // Normals           // Texture Coords
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
 
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
 
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
 
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
     };
 
     GLuint VAO;//, EBO;
@@ -130,7 +131,7 @@ Error Main::Run() {
     glBindVertexArray(VAO);
 
     VertexBuffer* buffer = m_pRS->CreateVertexBuffer();
-    buffer->SetData(vertices, 36, VertexBuffer::MASK_Position | VertexBuffer::MASK_TexCoord);
+    buffer->SetData(vertices, 36, VertexBuffer::MASK_Position | VertexBuffer::MASK_Normal | VertexBuffer::MASK_TexCoord);
     m_pRS->SetVertexBuffer(*buffer);
 
     glBindVertexArray(0); // Unbind VAO
@@ -150,10 +151,10 @@ Error Main::Run() {
 
     // Load and create a texture
     Texture* texture1 = m_pRS->CreateTexture();
-    texture1->Load("/Users/pierrefourgeaud/Documents/container.png");
+    texture1->Load("./resources/images/container2.png");
 
     Texture* texture2 = m_pRS->CreateTexture();
-    texture2->Load("/Users/pierrefourgeaud/Documents/awesomeface.png");
+    texture2->Load("./resources/images/container2_specular.png");
 
     Vector3 cubePositions[] = {
         { 0.0f,  0.0f,  0.0f},
@@ -176,8 +177,14 @@ Error Main::Run() {
     Viewport* viewportMiddleRight = new Viewport(600, 200, 200, 200);
     Viewport* viewportBottomRight = new Viewport(600, 0, 200, 200);
 
-    
-    Camera camera({0.0f, 0.0f, 3.0f}, {0.0f, 0.0f, 0.0f});
+    Vector3 pointLightPositions[] = {
+        { 0.7f,  0.2f,  2.0f},
+        { 2.3f, -3.3f, -4.0f},
+        {-4.0f,  2.0f, -12.0f},
+        { 0.0f,  0.0f, -3.0f}
+    };
+
+    Camera camera({0.0f, 2.2f, 3.5f}, {0.0f, 1.0f, 0.0f});
 
     while (!m_pMainWindow->ShouldClose()) {
         m_pRS->PollEvents();
@@ -188,7 +195,7 @@ Error Main::Run() {
         if (currentTime - lastTime >= 1.0){ // If last prinf() was more than 1 sec ago
             // printf and reset timer
             fps = nbFrames;
-            printf("%f ms/frame\n", 1000.0/double(nbFrames));
+            // printf("%f ms/frame\n", 1000.0/double(nbFrames));
             nbFrames = 0;
             lastTime += 1.0;
         }
@@ -246,17 +253,50 @@ Error Main::Run() {
         // Bind Textures using texture units
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1->GetGPUObject().intHandle);
-        glUniform1i(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "ourTexture1"), 0);
+        glUniform1i(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "material.diffuse"), 0);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2->GetGPUObject().intHandle);
-        glUniform1i(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "ourTexture2"), 1);
+        glUniform1i(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "material.specular"), 1);
 
-        //Matrix4 view;
-        //view.Translate({0.0f, 0.0f, -3.0f});
-        GLfloat radius = 10.0f;
-        GLfloat camX = sin(glfwGetTime()) * radius;
-        GLfloat camZ = cos(glfwGetTime()) * radius;
-        camera.SetPosition({camX, 0.0f, camZ});
+        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "material.shininess"), 32.0f);
+
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "dirLight[0].direction"), -0.2f, -1.0f, -0.3f);
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "dirLight[0].ambient"), 0.05f, 0.05f, 0.05f);
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "dirLight[0].diffuse"), 0.4f, 0.4f, 0.4f);
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "dirLight[0].specular"), 0.5f, 0.5f, 0.5f);
+        // Point light 1
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].position"), 0.7f, 0.2f, 2.0f);
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].ambient"), 0.05f, 0.05f, 0.05f);
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].diffuse"), 0.8f, 0.8f, 0.8f);
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].specular"), 1.0f, 1.0f, 1.0f);
+        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].constant"), 1.0f);
+        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].linear"), 0.09);
+        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].quadratic"), 0.032);
+
+        // Point light 2
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[1].position"), pointLightPositions[1].x(), pointLightPositions[1].y(), pointLightPositions[1].z());
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[1].ambient"), 0.05f, 0.05f, 0.05f);
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[1].diffuse"), 0.8f, 0.8f, 0.8f);
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[1].specular"), 1.0f, 1.0f, 1.0f);
+        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[1].constant"), 1.0f);
+        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[1].linear"), 0.09);
+        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[1].quadratic"), 0.032);
+        // Point light 3
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[2].position"), pointLightPositions[2].x(), pointLightPositions[2].y(), pointLightPositions[2].z());
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[2].ambient"), 0.05f, 0.05f, 0.05f);
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[2].diffuse"), 0.8f, 0.8f, 0.8f);
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[2].specular"), 1.0f, 1.0f, 1.0f);
+        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[2].constant"), 1.0f);
+        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[2].linear"), 0.09);
+        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[2].quadratic"), 0.032);
+        // Point light 4
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[3].position"), pointLightPositions[3].x(), pointLightPositions[3].y(), pointLightPositions[3].z());
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[3].ambient"), 0.05f, 0.05f, 0.05f);
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[3].diffuse"), 0.8f, 0.8f, 0.8f);
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[3].specular"), 1.0f, 1.0f, 1.0f);
+        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[3].constant"), 1.0f);
+        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[3].linear"), 0.09);
+        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[3].quadratic"), 0.032);
 
         PerspectiveMatrix projection(45.0f, 800 / 600, 0.1f, 100.0f);
 
@@ -284,13 +324,6 @@ Error Main::Run() {
 
         m_pMainWindow->SwapBuffers();
     }
-
-    // TODO TUTO
-//    glDeleteVertexArrays(1, &VAO);
-//    glDeleteBuffers(1, &VBO);
-//    glDeleteBuffers(1, &EBO);
-
-//    delete ourShader;
 
     LOGD2 << "[<] Main::Run()" << std::endl;
     return Error::OK;

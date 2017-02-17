@@ -8,6 +8,7 @@
 #include <glad/glad.h>
 #include <unordered_map>
 #include "core/shader.h"
+#include "core/errors.h"
 
 namespace CodeHero {
 
@@ -34,6 +35,8 @@ private:
     GLuint _CreateShader(const std::string& iCode);
     bool _CompileShader(GLuint iShader, const std::string& iShaderCode);
     void _ParseParameters();
+
+    Error _ReplaceIncludes(const std::string& iParentFile, const std::string& iSourceCode, std::string& oCode);
 
     std::unordered_map<std::string, ShaderParameter> m_Parameters;
 };

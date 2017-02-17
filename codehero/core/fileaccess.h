@@ -28,6 +28,7 @@ public:
 
     int Read(uint8_t* oData, int iLength);
     uint8_t Read8();
+    std::string ReadAll();
 
     bool IsEOF() const;
 
@@ -37,7 +38,7 @@ public:
 
     bool IsOpen() const;
 
-    int64_t GetSize();
+    int32_t GetSize();
 
     // Statics
     static bool Exists(const std::string& iFilename);
@@ -47,7 +48,7 @@ private:
     std::string m_Name;
     Error m_LastError = OK;
 
-    int64_t m_Size = -1;
+    int32_t m_Size = -1;
 
     void _CheckErrors();
 };
