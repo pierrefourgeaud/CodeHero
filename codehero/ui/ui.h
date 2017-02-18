@@ -21,14 +21,16 @@ public:
 
     void Update();
     void Render();
-    void AddChild();
+    void AddChild(std::shared_ptr<UIElement> iElement);
 
 private:
     std::shared_ptr<RenderSystem> m_pRS;
 
-    UIElement m_RootElement;
+    std::shared_ptr<UIElement> m_RootElement;
     // Batches to render
     std::vector<UIBatch> m_Batches;
+
+    void _GetBatches(std::shared_ptr<UIElement> iElement);
 };
 
 } // namespace CodeHero

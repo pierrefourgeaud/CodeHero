@@ -5,6 +5,8 @@
 #ifndef CODEHERO_UI_UIBATCH_H_
 #define CODEHERO_UI_UIBATCH_H_
 
+#include <memory>
+
 namespace CodeHero {
 
 class Texture;
@@ -13,12 +15,18 @@ class VertexBuffer;
 class UIBatch {
 public:
     void SetTexture(std::shared_ptr<Texture> iTexture);
-    void SetVertexBuffer();
+    void SetVertexBuffer(std::shared_ptr<VertexBuffer> iVertexBuffer, uint32_t iStart = 0, uint32_t iCount = 0);
 
     std::shared_ptr<Texture> GetTexture() const { return m_pTexture; }
+    std::shared_ptr<VertexBuffer> GetVertexBuffer() const { return m_pVertexBuffer; }
+    uint32_t GetStart() const { return m_Start; }
+    uint32_t GetCount() const { return m_Count; }
 
 private:
     std::shared_ptr<Texture> m_pTexture;
+    std::shared_ptr<VertexBuffer> m_pVertexBuffer;
+    uint32_t m_Start = 0;
+    uint32_t m_Count = 0;
 };
 
 } // namespace CodeHero

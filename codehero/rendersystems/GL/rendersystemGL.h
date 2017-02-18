@@ -29,9 +29,12 @@ public:
     void SetShaderParameter(const std::string& iParam, const Vector3& iVec) final override;
     void SetShaderParameter(const std::string& iParam, const Matrix4& iMat) final override;
     void SetVertexBuffer(const VertexBuffer& iBuffer) final override;
+    void SetTexture(uint32_t iIndex, const Texture& iTexture) final override;
     void SetViewport(Viewport* iViewport) final override;
 
     void SetVBO(const VertexBuffer& iBuffer) final override;
+
+    void Draw(PrimitiveType iType, uint32_t iStart, uint32_t iCount) final override;
 
     // Factory
     RenderWindow* CreateWindow() final override;

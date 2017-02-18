@@ -73,6 +73,7 @@ set (SOURCES
      ${SRCS_PATH}/ui/fontface_freetype.cpp
      ${SRCS_PATH}/ui/text.cpp
      ${SRCS_PATH}/ui/ui.cpp
+     ${SRCS_PATH}/ui/uibatch.cpp
      ${SRCS_PATH}/ui/uielement.cpp
      # Graphics
      ${SRCS_PATH}/graphics/camera.cpp
@@ -117,6 +118,7 @@ set (HEADERS
      ${SRCS_PATH}/ui/fontface_freetype.h
      ${SRCS_PATH}/ui/text.h
      ${SRCS_PATH}/ui/ui.h
+     ${SRCS_PATH}/ui/uibatch.h
      ${SRCS_PATH}/ui/uielement.h
      # Graphics
      ${SRCS_PATH}/graphics/camera.h

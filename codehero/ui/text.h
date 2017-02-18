@@ -8,6 +8,7 @@
 #include "ui/uielement.h"
 #include <memory>
 #include <string>
+#include <graphics/rendersystem.h>
 
 namespace CodeHero {
 
@@ -17,6 +18,8 @@ class UIBatch;
 
 class Text : public UIElement {
 public:
+    explicit Text(std::shared_ptr<RenderSystem> iRS);
+
     void SetFont(const std::string& iFontName);
     void SetFont(std::shared_ptr<Font> iFont);
     void SetSize(uint32_t iSize);

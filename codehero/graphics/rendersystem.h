@@ -22,6 +22,17 @@ class Vector3;
 class VertexBuffer;
 class Viewport;
 
+enum PrimitiveType {
+    PT_Points = 0,
+    PT_Lines,
+    PT_LineLoop,
+    PT_LineStrip,
+    PT_Triangles,
+    PT_TriangleStrip,
+    PT_TriangleFan,
+    PT_Quads
+};
+
 class RenderSystem {
 public:
     virtual ~RenderSystem() {}
@@ -40,6 +51,7 @@ public:
     virtual void SetShaderParameter(const std::string& iParam, const Vector3& iVec) = 0;
     virtual void SetShaderParameter(const std::string& iParam, const Matrix4& iMat) = 0;
     virtual void SetVertexBuffer(const VertexBuffer& iBuffer) = 0;
+    virtual void SetTexture(uint32_t iIndex, const Texture& iTexture) = 0;
     virtual void SetViewport(Viewport* iViewport) { m_pActiveViewport = iViewport; };
 
     virtual void SetVBO(const VertexBuffer& iBuffer) = 0;
@@ -50,6 +62,8 @@ public:
     }
 
     Vector2 GetPixelScalling() const { return m_PixelScalling; }
+
+    virtual void Draw(PrimitiveType iType, uint32_t iStart, uint32_t iCount) = 0;
 
     void Render();
 

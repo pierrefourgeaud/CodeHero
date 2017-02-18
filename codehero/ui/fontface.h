@@ -21,7 +21,7 @@ struct FontFaceGlyph {
     int32_t left;
     int32_t top;
     uint32_t advanceX;
-    std::unique_ptr<Texture> texture;
+    std::shared_ptr<Texture> texture;
 };
 
 class FontFace {

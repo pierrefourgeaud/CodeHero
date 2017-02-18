@@ -96,6 +96,11 @@ void RenderSystemGL::SetVertexBuffer(const VertexBuffer& iBuffer) {
     }
 }
 
+void RenderSystemGL::SetTexture(uint32_t iIndex, const Texture& iTexture) {
+    glActiveTexture(GL_TEXTURE0 + iIndex);
+    glBindTexture(GL_TEXTURE_2D, iTexture.GetGPUObject().intHandle);
+}
+
 void RenderSystemGL::SetVBO(const VertexBuffer& iBuffer) {
     if (m_BoundVBO != iBuffer.GetGPUObject().intHandle) {
         glBindBuffer(GL_ARRAY_BUFFER, iBuffer.GetGPUObject().intHandle);
@@ -111,6 +116,10 @@ void RenderSystemGL::SetViewport(Viewport* iViewport) {
                iViewport->y() * scalling.y(),
                iViewport->width() * scalling.x(),
                iViewport->height() * scalling.y());
+}
+
+void RenderSystemGL::Draw(PrimitiveType iType, uint32_t iStart, uint32_t iCount) {
+    glDrawArrays(iType, iStart, iCount);
 }
 
 // Factory

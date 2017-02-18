@@ -20,7 +20,9 @@
 #include "graphics/viewport.h"
 #include "graphics/camera.h"
 
+#include "ui/font.h"
 #include "ui/ui.h"
+#include "ui/text.h"
 
 #include "rendersystems/GL/rendersystemGL.h"
 #include "rendersystems/GL/textureGL.h"
@@ -29,9 +31,6 @@
 #include "./core/math/matrix4.h"
 
 #include "graphics/vertexbuffer.h"
-
-#include "ui/font.h"
-#include "ui/fontface.h"
 
 #ifdef DRIVER_PNG
 # include "./drivers/png/imagecodec_png.h"
@@ -66,7 +65,15 @@ Error Main::Start() {
 Error Main::Run() {
     LOGD2 << "[>] Main::Run()" << std::endl;
 
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    std::shared_ptr<Font> f(new Font(*m_pRS, "./resources/fonts/Roboto-Regular.ttf"));
     UI ui(m_pRS);
+    std::shared_ptr<Text> t(new Text(m_pRS));
+    t->SetPosition(10.0f, 565.0f);
+    t->SetFont(f);
+    t->SetSize(24);
+
+    ui.AddChild(t);
 
     // Build and compile our shader program
     Shader* ourShader = m_pRS->CreateShader();
@@ -132,14 +139,6 @@ Error Main::Run() {
     buffer->SetData(vertices, 36, VertexBuffer::MASK_Position | VertexBuffer::MASK_Normal | VertexBuffer::MASK_TexCoord);
     buffer->Unuse();
 
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    Font f(*m_pRS, "./resources/fonts/Roboto-Regular.ttf");
-    std::shared_ptr<FontFace> fa = f.GetFace(24);
-
-    VertexBuffer* buffer2 = m_pRS->CreateVertexBuffer();
-    buffer2->SetData(nullptr, 6, VertexBuffer::MASK_Position | VertexBuffer::MASK_TexCoord, true);
-    buffer2->Unuse();
-
     // Load and create a texture
     Texture* texture1 = m_pRS->CreateTexture();
     texture1->Load("./resources/images/container2.png");
@@ -191,50 +190,12 @@ Error Main::Run() {
             lastTime += 1.0;
         }
 
-        // ###################################################
-        float scale = 1.0f;
-        float x = 10.0f;
-        float y = 565.0f;
-        std::string text("FPS: " + std::to_string(fps));
+        t->SetText("FPS: " + std::to_string(fps));
         Vector3 color(0.5, 0.8f, 0.2f);
         textShader->Use();
         m_pRS->SetShaderParameter("textColor", color);
-        glActiveTexture(GL_TEXTURE0);
-        buffer2->Use();
-
-        // Iterate through all characters
-        std::string::const_iterator c;
-        for (c = text.begin(); c != text.end(); c++)
-        {
-            FontFaceGlyph& ch = fa->GetGlyph(*c);
-
-            float xpos = x + ch.left * scale;
-            float ypos = y - (ch.height - ch.top) * scale;
-
-            float w = ch.width * scale;
-            float h = ch.height * scale;
-            // Update VBO for each character
-            float vertices[6][5] = {
-                { xpos,     ypos + h, 0.0, 0.0, 0.0 },
-                { xpos,     ypos,     0.0, 0.0, 1.0 },
-                { xpos + w, ypos,     0.0, 1.0, 1.0 },
-
-                { xpos,     ypos + h, 0.0, 0.0, 0.0 },
-                { xpos + w, ypos,     0.0, 1.0, 1.0 },
-                { xpos + w, ypos + h, 0.0, 1.0, 0.0 }
-            };
-            // Render glyph texture over quad
-            glBindTexture(GL_TEXTURE_2D, ch.texture->GetGPUObject().intHandle);
-            buffer2->SetSubData(vertices, 0, 6);
-
-            // Render quad
-            glDrawArrays(GL_TRIANGLES, 0, 6);
-            // Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-            x += (ch.advanceX >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
-        }
-        buffer2->Unuse();
-        glBindTexture(GL_TEXTURE_2D, 0);
-        // ###################################################
+        ui.Update();
+        ui.Render();
 
         // Draw the triangle
         ourShader->Use();

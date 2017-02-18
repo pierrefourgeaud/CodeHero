@@ -6,23 +6,35 @@
 #define CODEHERO_UI_UIELEMENT_H_ 
 
 #include <vector>
+#include "core/math/vector2.h"
 #include "ui/uibatch.h"
 
 namespace CodeHero {
 
+// Forward declaration
+class RenderSystem;
+
 class UIElement {
 public:
+    explicit UIElement(std::shared_ptr<RenderSystem> iRS);
     virtual ~UIElement() {}
-    void AddChild();
+    void AddChild(std::shared_ptr<UIElement> iElement);
 
     virtual void GetBatches(std::vector<UIBatch>& oBatches) {
         (void)oBatches;
     }
 
-    std::vector<UIElement*>& GetChildren() { return m_Elements; }
+    const std::vector<std::shared_ptr<UIElement>>& GetChildren() { return m_Elements; }
+
+    void SetPosition(const Vector2& iPos);
+    void SetPosition(float iWidth, float iHeight);
+
+protected:
+    std::shared_ptr<RenderSystem> m_pRS;
+    Vector2 m_Position;
 
 private:
-    std::vector<UIElement*> m_Elements;
+    std::vector<std::shared_ptr<UIElement>> m_Elements;
 };
 
 } // namespace CodeHero
