@@ -19,6 +19,9 @@
 #include "graphics/renderwindow.h"
 #include "graphics/viewport.h"
 #include "graphics/camera.h"
+
+#include "ui/ui.h"
+
 #include "rendersystems/GL/rendersystemGL.h"
 #include "rendersystems/GL/textureGL.h"
 
@@ -63,7 +66,7 @@ Error Main::Start() {
 Error Main::Run() {
     LOGD2 << "[>] Main::Run()" << std::endl;
 
-    // TODO TUTO
+    UI ui(m_pRS);
 
     // Build and compile our shader program
     Shader* ourShader = m_pRS->CreateShader();
@@ -76,7 +79,7 @@ Error Main::Run() {
               .Attach("./codehero/shaders/text_basic.frag")
               .Link();
     textShader->Use();
-    OrthoMatrix ortho(0, 800, 0, 600);
+    OrthoMatrix ortho(0, 600, 0, 600);
     m_pRS->SetShaderParameter("projection", ortho);
 
     // Set up vertex data (and buffer(s)) and attribute pointers
@@ -125,29 +128,17 @@ Error Main::Run() {
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
     };
 
-    GLuint VAO;//, EBO;
-    glGenVertexArrays(1, &VAO);
-    // Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
-    glBindVertexArray(VAO);
-
     VertexBuffer* buffer = m_pRS->CreateVertexBuffer();
     buffer->SetData(vertices, 36, VertexBuffer::MASK_Position | VertexBuffer::MASK_Normal | VertexBuffer::MASK_TexCoord);
-    m_pRS->SetVertexBuffer(*buffer);
-
-    glBindVertexArray(0); // Unbind VAO
+    buffer->Unuse();
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     Font f(*m_pRS, "./resources/fonts/Roboto-Regular.ttf");
     std::shared_ptr<FontFace> fa = f.GetFace(24);
 
-    GLuint VAO2;//, VBO2;
-    // Configure VAO/VBO for texture quads
-    glGenVertexArrays(1, &VAO2);
-    glBindVertexArray(VAO2);
     VertexBuffer* buffer2 = m_pRS->CreateVertexBuffer();
     buffer2->SetData(nullptr, 6, VertexBuffer::MASK_Position | VertexBuffer::MASK_TexCoord, true);
-    m_pRS->SetVertexBuffer(*buffer2);
-    glBindVertexArray(0);
+    buffer2->Unuse();
 
     // Load and create a texture
     Texture* texture1 = m_pRS->CreateTexture();
@@ -209,7 +200,7 @@ Error Main::Run() {
         textShader->Use();
         m_pRS->SetShaderParameter("textColor", color);
         glActiveTexture(GL_TEXTURE0);
-        glBindVertexArray(VAO2);
+        buffer2->Use();
 
         // Iterate through all characters
         std::string::const_iterator c;
@@ -234,7 +225,6 @@ Error Main::Run() {
             };
             // Render glyph texture over quad
             glBindTexture(GL_TEXTURE_2D, ch.texture->GetGPUObject().intHandle);
-            m_pRS->SetVertexBuffer(*buffer2);
             buffer2->SetSubData(vertices, 0, 6);
 
             // Render quad
@@ -242,11 +232,10 @@ Error Main::Run() {
             // Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
             x += (ch.advanceX >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
         }
-        glBindVertexArray(0);
+        buffer2->Unuse();
         glBindTexture(GL_TEXTURE_2D, 0);
         // ###################################################
 
-        // TODO(pierre) TUTO
         // Draw the triangle
         ourShader->Use();
 
@@ -304,7 +293,7 @@ Error Main::Run() {
         m_pRS->SetShaderParameter("projection", projection);
 
         // Draw container
-        glBindVertexArray(VAO);
+        buffer->Use();
         for (GLuint i = 0; i < 10; ++i) {
             Matrix4 model;
             model.Translate(cubePositions[i]);
@@ -320,7 +309,7 @@ Error Main::Run() {
             m_pRS->SetViewport(viewportMain);
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
-        glBindVertexArray(0);
+        buffer->Unuse();
 
         m_pMainWindow->SwapBuffers();
     }

@@ -37,7 +37,7 @@ private:
     std::unique_ptr<ILogListener> m_pFileLogger;
     std::unique_ptr<ILogListener> m_pConsoleLogger;
 
-    std::unique_ptr<RenderSystem> m_pRS;
+    std::shared_ptr<RenderSystem> m_pRS;
     std::unique_ptr<RenderWindow> m_pMainWindow;
 
     ImageLoader& m_ImageLoader;

@@ -6,8 +6,12 @@
 #define CODEHERO_RENDERSYSTEMS_GL_VERTEXBUFFERGL_H_
 
 #include "graphics/vertexbuffer.h"
+#include <memory>
 
 namespace CodeHero {
+
+// Forward declaration
+class VertexAttribBindingGL;
 
 class VertexBufferGL : public VertexBuffer {
 public:
@@ -18,10 +22,16 @@ public:
     static const uint32_t ElementType[];
     static const uint32_t ElementComponents[];
 
+    void Use() override;
+    void Unuse() override;
+
 protected:
     void _SetDataImpl() final override;
     void _SetSubDataImpl(uint32_t iStart, uint32_t iSize, const void* iData) final override;
     void _UpdateSizeImpl() final override;
+
+private:
+    std::unique_ptr<VertexAttribBindingGL> m_pVAO;
 };
 
 }  // namespace CodeHero

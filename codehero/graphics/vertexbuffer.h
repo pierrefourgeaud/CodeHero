@@ -61,6 +61,10 @@ public:
 
     bool IsBitActive(uint32_t iBit) const { return m_Masks & iBit; }
 
+    // Comment in the GL implementation
+    virtual void Use() {};
+    virtual void Unuse() {};
+
     uint32_t GetVertexSize() const { return m_VertexSize; }
     uint32_t GetElementOffset(uint32_t iElem) const { return m_ElementOffset[iElem]; }
 

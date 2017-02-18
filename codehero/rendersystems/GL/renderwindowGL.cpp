@@ -19,6 +19,7 @@ Error RenderWindowGL::Create(const int iWidth, const int iHeight) {
     }
 
     glfwMakeContextCurrent(m_pWindow);
+    glfwSwapInterval(0);
 
     gladLoadGL();
 

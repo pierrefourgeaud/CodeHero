@@ -67,9 +67,13 @@ set (SOURCES
      ${SRCS_PATH}/core/math/vector3.cpp
      ${SRCS_PATH}/core/math/vector4.cpp
      ${SRCS_PATH}/core/math/matrix4.cpp
+     # UI
      ${SRCS_PATH}/ui/font.cpp
      ${SRCS_PATH}/ui/fontface.cpp
      ${SRCS_PATH}/ui/fontface_freetype.cpp
+     ${SRCS_PATH}/ui/text.cpp
+     ${SRCS_PATH}/ui/ui.cpp
+     ${SRCS_PATH}/ui/uielement.cpp
      # Graphics
      ${SRCS_PATH}/graphics/camera.cpp
      ${SRCS_PATH}/graphics/component.cpp
@@ -86,6 +90,7 @@ set (SOURCES
      ${SRCS_PATH}/rendersystems/GL/renderwindowGL.cpp
      ${SRCS_PATH}/rendersystems/GL/texturemanagerGL.cpp
      ${SRCS_PATH}/rendersystems/GL/textureGL.cpp
+     ${SRCS_PATH}/rendersystems/GL/vertexattribbinding.cpp
      ${SRCS_PATH}/rendersystems/GL/vertexbufferGL.cpp
 )
 
@@ -106,9 +111,13 @@ set (HEADERS
      ${SRCS_PATH}/core/math/vector3.h
      ${SRCS_PATH}/core/math/matrix4.h
      ${SRCS_PATH}/core/math/utils.h
+     # UI
      ${SRCS_PATH}/ui/font.h
      ${SRCS_PATH}/ui/fontface.h
      ${SRCS_PATH}/ui/fontface_freetype.h
+     ${SRCS_PATH}/ui/text.h
+     ${SRCS_PATH}/ui/ui.h
+     ${SRCS_PATH}/ui/uielement.h
      # Graphics
      ${SRCS_PATH}/graphics/camera.h
      ${SRCS_PATH}/graphics/component.h
@@ -126,6 +135,7 @@ set (HEADERS
      ${SRCS_PATH}/rendersystems/GL/renderwindowGL.h
      ${SRCS_PATH}/rendersystems/GL/texturemanagerGL.h
      ${SRCS_PATH}/rendersystems/GL/textureGL.h
+     ${SRCS_PATH}/rendersystems/GL/vertexattribbinding.h
      ${SRCS_PATH}/rendersystems/GL/vertexbufferGL.h
      # Logger
      ${VENDORS_PATH}/simplelogger/includes/bufferlogger.h
