@@ -12,3 +12,6 @@
 [submodule "vendor/simplelogger"]
 	path = vendor/simplelogger
 	url = https://github.com/pierrefourgeaud/SimpleLogger
+[submodule "vendor/assimp"]
+	path = vendor/assimp
+	url = https://github.com/assimp/assimp.git
