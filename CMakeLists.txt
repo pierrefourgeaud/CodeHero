@@ -35,6 +35,8 @@ set (VENDORS_PATH ${PROJECT_SOURCE_DIR}/vendor)
 
 # ---------- Options ----------
 option (_CODEHERO_DRIVER_PNG "Enable PNG driver" ON)
+option (_CODEHERO_DRIVER_FREETYPE "Enable FreeType driver" ON)
+option (_CODEHERO_DRIVER_ASSIMP "Enable Assimp driver" ON)
 
 ##### Options overview #####
 message ("*** Configure options:")
@@ -154,7 +156,6 @@ include_directories (
   ${VENDORS_PATH}/stb/
   ${VENDORS_PATH}/libpng/
   ${VENDORS_PATH}/simplelogger/includes
-  ${VENDORS_PATH}/FreeType271/include
 )
 
 # ---------- Drivers -----------
@@ -173,9 +174,16 @@ if (${_CODEHERO_DRIVER_PNG})
     set (ADDITIONAL_LIBRARIES ${ADDITIONAL_LIBRARIES} png16)
 endif()
 
-# TODO(pierre) FreeType2 as a drive
-add_subdirectory (${VENDORS_PATH}/FreeType271)
-set (ADDITIONAL_LIBRARIES ${ADDITIONAL_LIBRARIES} freetype)
+if (${_CODEHERO_DRIVER_FREETYPE})
+    include_directories(${VENDORS_PATH}/freetype/include)
+    add_subdirectory (${VENDORS_PATH}/freetype)
+    set (ADDITIONAL_LIBRARIES ${ADDITIONAL_LIBRARIES} freetype)
+endif ()
+
+if (${_CODEHERO_DRIVER_ASSIMP})
+    add_subdirectory (${VENDORS_PATH}/assimp)
+    set (ADDITIONAL_LIBRARIES ${ADDITIONAL_LIBRARIES} assimp)
+endif ()
 
 # ---------- Flags ----------
 set (COMMON_RELEASE_FLAGS "-fPIC -g -O3 -fstack-protector -fvisibility=hidden -W -Wall -Wno-missing-braces -Wno-unused-function -Wpointer-arith -Wformat -Wreturn-type -Wsign-compare -Wmultichar -Wformat-nonliteral -Winit-self -Wuninitialized -Wno-deprecated -Wformat-security -Werror")
