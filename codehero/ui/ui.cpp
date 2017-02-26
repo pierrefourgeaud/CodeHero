@@ -4,14 +4,15 @@
 
 #include "ui/ui.h"
 #include <queue>
+#include "core/enginecontext.h"
 #include "graphics/rendersystem.h"
 #include "graphics/vertexbuffer.h"
 
 namespace CodeHero {
 
-UI::UI(std::shared_ptr<RenderSystem> iRS)
-    : m_pRS(iRS)
-    , m_RootElement(new UIElement(m_pRS)) {}
+UI::UI(std::shared_ptr<EngineContext>& iContext)
+    : m_pContext(iContext)
+    , m_RootElement(new UIElement(iContext)) {}
 
 void UI::Update() {
     m_Batches.clear();
@@ -19,12 +20,13 @@ void UI::Update() {
 }
 
 void UI::Render() {
+    RenderSystem* rs = m_pContext->GetSubsystem<RenderSystem>();
     size_t size = m_Batches.size();
     for (size_t i = 0; i < size; ++i) {
         UIBatch& batch = m_Batches[i];
         batch.GetVertexBuffer()->Use();
-        m_pRS->SetTexture(0, *batch.GetTexture());
-        m_pRS->Draw(PT_Triangles, batch.GetStart(), batch.GetCount());
+        rs->SetTexture(0, *batch.GetTexture());
+        rs->Draw(PT_Triangles, batch.GetStart(), batch.GetCount());
         batch.GetVertexBuffer()->Unuse();
     }
 }

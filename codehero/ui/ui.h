@@ -12,19 +12,19 @@
 namespace CodeHero {
 
 // Forward declaration
-class RenderSystem;
+class EngineContext;
 class UIBatch;
 
 class UI {
 public:
-    explicit UI(std::shared_ptr<RenderSystem> iRS);
+    explicit UI(std::shared_ptr<EngineContext>& iContext);
 
     void Update();
     void Render();
     void AddChild(std::shared_ptr<UIElement> iElement);
 
 private:
-    std::shared_ptr<RenderSystem> m_pRS;
+    std::shared_ptr<EngineContext> m_pContext;
 
     std::shared_ptr<UIElement> m_RootElement;
     // Batches to render

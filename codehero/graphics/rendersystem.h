@@ -9,6 +9,7 @@
 #include <vector>
 #include "core/errors.h"
 #include "core/math/vector2.h"
+#include "core/system.h"
 
 namespace CodeHero {
 
@@ -33,14 +34,15 @@ enum PrimitiveType {
     PT_Quads
 };
 
-class RenderSystem {
+class RenderSystem : public System {
 public:
+    OBJECT(RenderSystem)
+
+    RenderSystem(std::shared_ptr<EngineContext>& iContext)
+        : System(iContext) {}
     virtual ~RenderSystem() {}
 
-    virtual Error Initialize() = 0;
     virtual void PollEvents() = 0;
-    virtual Error Cleanup() = 0;
-
     virtual void ClearFrameBuffer() = 0;
 
     void SetShaderProgramInUse(Shader* iShader) { m_pShaderProgramInUse = iShader; }

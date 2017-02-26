@@ -12,11 +12,11 @@
 namespace CodeHero {
 
 // Forward declaration
-class RenderSystem;
+class EngineContext;
 
 class UIElement {
 public:
-    explicit UIElement(std::shared_ptr<RenderSystem> iRS);
+    explicit UIElement(std::shared_ptr<EngineContext>& iContext);
     virtual ~UIElement() {}
     void AddChild(std::shared_ptr<UIElement> iElement);
 
@@ -30,7 +30,7 @@ public:
     void SetPosition(float iWidth, float iHeight);
 
 protected:
-    std::shared_ptr<RenderSystem> m_pRS;
+    std::shared_ptr<EngineContext> m_pContext;
     Vector2 m_Position;
 
 private:

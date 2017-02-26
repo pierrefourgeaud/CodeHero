@@ -60,11 +60,10 @@ set (SOURCES
      ${VENDORS_SOURCES}
      ${SRCS_PATH}/main.cpp
      ${SRCS_PATH}/main/main.cpp
+     ${SRCS_PATH}/core/enginecontext.cpp
      ${SRCS_PATH}/core/fileaccess.cpp
      ${SRCS_PATH}/core/filesystem.cpp
      ${SRCS_PATH}/core/image.cpp
-     ${SRCS_PATH}/core/imagecodec.cpp
-     ${SRCS_PATH}/core/imageloader.cpp
      ${SRCS_PATH}/core/math/vector2.cpp
      ${SRCS_PATH}/core/math/vector3.cpp
      ${SRCS_PATH}/core/math/vector4.cpp
@@ -100,7 +99,10 @@ set (SOURCES
 set (HEADERS
      ${SRCS_PATH}/main/main.h
      ${SRCS_PATH}/core/assert.h
+     ${SRCS_PATH}/core/enginecontext.h
      ${SRCS_PATH}/core/errors.h
+     ${SRCS_PATH}/core/object.h
+     ${SRCS_PATH}/core/system.h
      ${SRCS_PATH}/core/typedefs.h
      ${SRCS_PATH}/core/utils.h
      ${SRCS_PATH}/core/shader.h
@@ -108,12 +110,12 @@ set (HEADERS
      ${SRCS_PATH}/core/filesystem.h
      ${SRCS_PATH}/core/gpuobject.h
      ${SRCS_PATH}/core/image.h
-     ${SRCS_PATH}/core/imagecodec.h
-     ${SRCS_PATH}/core/imageloader.h
      ${SRCS_PATH}/core/math/vector2.h
      ${SRCS_PATH}/core/math/vector3.h
      ${SRCS_PATH}/core/math/matrix4.h
      ${SRCS_PATH}/core/math/utils.h
+     ${SRCS_PATH}/core/resourcecodec.h
+     ${SRCS_PATH}/core/resourceloader.h
      # UI
      ${SRCS_PATH}/ui/font.h
      ${SRCS_PATH}/ui/fontface.h
@@ -153,8 +155,6 @@ include_directories (
   ${SRCS_PATH}
   ${VENDORS_PATH}/glad/include/
   ${VENDORS_PATH}/glfw/include/
-  ${VENDORS_PATH}/stb/
-  ${VENDORS_PATH}/libpng/
   ${VENDORS_PATH}/simplelogger/includes
 )
 
@@ -162,6 +162,7 @@ include_directories (
 # TODO(pierre) export that to function
 if (${_CODEHERO_DRIVER_PNG})
     add_subdirectory (${VENDORS_PATH}/libpng)
+    include_directories (${VENDORS_PATH}/libpng/)
     set (SOURCES ${SOURCES}
         ${SRCS_PATH}/drivers/png/imagecodec_png.cpp
     )
@@ -182,6 +183,15 @@ endif ()
 
 if (${_CODEHERO_DRIVER_ASSIMP})
     add_subdirectory (${VENDORS_PATH}/assimp)
+    set (SOURCES ${SOURCES}
+         ${SRCS_PATH}/drivers/assimp/modelcodec_assimp.cpp
+    )
+
+    set (HEADERS ${HEADERS}
+         ${SRCS_PATH}/drivers/assimp/modelcodec_assimp.h
+    )
+
+    add_definitions (-DDRIVER_ASSIMP)
     set (ADDITIONAL_LIBRARIES ${ADDITIONAL_LIBRARIES} assimp)
 endif ()
 

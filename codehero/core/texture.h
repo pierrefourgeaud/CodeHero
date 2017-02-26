@@ -6,14 +6,18 @@
 #define CODEHERO_CORE_TEXTURE_H_
 
 #include <glad/glad.h>
+#include <memory>
 #include "core/gpuobject.h"
 #include "core/image.h"
 
 namespace CodeHero {
 
+// Forward declaration
+class EngineContext;
+
 class Texture : public GPUObject {
 public:
-    Texture();
+    Texture(std::shared_ptr<EngineContext>& iContext);
     virtual ~Texture();
 
     void Use();
@@ -26,6 +30,7 @@ protected:
     Image& _GetRawImage() { return m_Image; }
 
 private:
+    std::shared_ptr<EngineContext> m_pContext;
     Image m_Image;
 };
 

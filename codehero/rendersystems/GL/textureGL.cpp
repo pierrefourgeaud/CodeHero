@@ -4,7 +4,8 @@
 
 namespace CodeHero {
 
-TextureGL::TextureGL() {}
+TextureGL::TextureGL(std::shared_ptr<EngineContext>& iContext)
+    : Texture(iContext) {}
 
 TextureGL::~TextureGL() {}
 

@@ -24,14 +24,13 @@ static void PngReadFunction(png_structp iPng, png_bytep iData, png_size_t iLengt
     f->Read(iData, iLength);
 }
 
-ImageCodecPNG::ImageCodecPNG()
-    : ImageCodec() {
+ImageCodecPNG::ImageCodecPNG() {
     _AddExtension("png");
 }
 
 ImageCodecPNG::~ImageCodecPNG() {}
 
-Error ImageCodecPNG::LoadImage(FileAccess& iF, Image& oImage) {
+Error ImageCodecPNG::Load(FileAccess& iF, Image& oImage) {
     png_structp png;
     png_infop info;
 

@@ -5,6 +5,7 @@
 #include "ui/fontface_freetype.h"
 #include "ui/font.h"
 #include "core/image.h"
+#include "core/enginecontext.h"
 #include "graphics/rendersystem.h"
 #include <cstdint>
 #include <ft2build.h>
@@ -69,11 +70,11 @@ void FontFaceFreeType::_Load() {
                 fontGlyph.top = face->glyph->bitmap_top;
                 fontGlyph.advanceX = face->glyph->advance.x;
 
-                Image image;
+                Image image(m_rFont.GetContext());
                 image.Create(fontGlyph.width, fontGlyph.height);
                 uint8_t* dest = image.GetRawData();
                 memcpy(dest, face->glyph->bitmap.buffer, image.GetSize());
-                Texture* t = m_rFont.GetRenderSystem().CreateTexture();
+                Texture* t = m_rFont.GetContext()->GetSubsystem<RenderSystem>()->CreateTexture();
                 t->Load(image);
                 fontGlyph.texture.reset(t);
                 m_Glyphs[charCode] = std::move(fontGlyph);

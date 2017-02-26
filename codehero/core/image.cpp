@@ -7,11 +7,7 @@
 
 namespace CodeHero {
 
-Image::Image() {}
-
-Image::Image(uint32_t iWidth, uint32_t iHeight, const ImageData& iData, Image::Format iFmt) {
-    Create(iWidth, iHeight, iData, iFmt);
-}
+Image::Image(const std::shared_ptr<EngineContext>& iContext) : Object(iContext) {}
 
 void Image::Create(uint32_t iWidth, uint32_t iHeight, Image::Format iFmt /*= IFMT_Grayscale */) {
     m_Width = iWidth;

@@ -6,11 +6,13 @@
 #include "graphics/vertexbuffer.h"
 #include "ui/font.h"
 #include "ui/fontface.h"
+#include "core/enginecontext.h"
+#include "graphics/rendersystem.h"
 
 namespace CodeHero {
 
-Text::Text(std::shared_ptr<RenderSystem> iRS)
-    : UIElement(iRS) {}
+Text::Text(std::shared_ptr<EngineContext>& iContext)
+    : UIElement(iContext) {}
 
 void Text::SetFont(const std::string& iFontName) {
     (void)iFontName;
@@ -32,7 +34,7 @@ void Text::GetBatches(std::vector<UIBatch>& oBatches) {
     if (!m_Text.empty() && m_pFont.get() && m_Size != 0) {
         std::shared_ptr<FontFace> fa = m_pFont->GetFace(24);
         std::string::size_type size = m_Text.size();
-        std::shared_ptr<VertexBuffer> buffer(m_pRS->CreateVertexBuffer());
+        std::shared_ptr<VertexBuffer> buffer(m_pContext->GetSubsystem<RenderSystem>()->CreateVertexBuffer());
         buffer->SetData(nullptr, 6 * size, VertexBuffer::MASK_Position | VertexBuffer::MASK_TexCoord, true);
         float x = m_Position.x();
         for (std::string::size_type i = 0; i < size; ++i) {

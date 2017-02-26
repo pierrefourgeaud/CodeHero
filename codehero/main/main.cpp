@@ -7,14 +7,16 @@
 #include <GLFW/glfw3.h>
 #include <chrono>
 
-#include "./main.h"
+#include "main/main.h"
 #include <logger.h>
 #include <filelogger.h>
 #include <consolelogger.h>
 
-#include "./core/shader.h"
-#include "./core/imageloader.h"
-#include "./core/image.h"
+#include "core/enginecontext.h"
+
+#include "core/shader.h"
+#include "core/resourceloader.h"
+#include "core/image.h"
 
 #include "graphics/renderwindow.h"
 #include "graphics/viewport.h"
@@ -27,8 +29,8 @@
 #include "rendersystems/GL/rendersystemGL.h"
 #include "rendersystems/GL/textureGL.h"
 
-#include "./core/math/vector3.h"
-#include "./core/math/matrix4.h"
+#include "core/math/vector3.h"
+#include "core/math/matrix4.h"
 
 #include "graphics/vertexbuffer.h"
 
@@ -38,8 +40,7 @@
 
 namespace CodeHero {
 
-Main::Main()
-    : m_ImageLoader(*ImageLoader::GetInstance()) {
+Main::Main() {
     _Initialize();
 }
 
@@ -50,11 +51,22 @@ Main::~Main() {
 Error Main::Start() {
     LOGD2 << "[>] Main::Start()" << std::endl;
 
-    m_pRS.reset(new RenderSystemGL);
-    Error error = m_pRS->Initialize();
+    // Create the context that will be the base of everything coming after
+    m_pContext = std::shared_ptr<EngineContext>(new EngineContext);
+
+    //m_pImageLoader = std::shared_ptr<ResourceLoader<Image>>(new ResourceLoader<Image>);
+    ResourceLoader<Image>* rlImage = new ResourceLoader<Image>(m_pContext);
+    rlImage->Initialize();
+    m_pContext->RegisterSubsystem(rlImage);
+
+    // m_pRS.reset(new RenderSystemGL);
+    RenderSystem* rs = new RenderSystemGL(m_pContext);
+    Error error = rs->Initialize();
+    m_pContext->RegisterSubsystem(rs);
 
     if (!error) {
-        m_pMainWindow.reset(m_pRS->CreateWindow());
+        _LoadDrivers();
+        m_pMainWindow.reset(rs->CreateWindow());
     }
 
     LOGD2 << "[<] Main::Start()" << std::endl;
@@ -65,10 +77,11 @@ Error Main::Start() {
 Error Main::Run() {
     LOGD2 << "[>] Main::Run()" << std::endl;
 
+    RenderSystem* rs = m_pContext->GetSubsystem<RenderSystem>();
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    std::shared_ptr<Font> f(new Font(*m_pRS, "./resources/fonts/Roboto-Regular.ttf"));
-    UI ui(m_pRS);
-    std::shared_ptr<Text> t(new Text(m_pRS));
+    std::shared_ptr<Font> f(new Font(m_pContext, "./resources/fonts/Roboto-Regular.ttf"));
+    UI ui(m_pContext);
+    std::shared_ptr<Text> t(new Text(m_pContext));
     t->SetPosition(10.0f, 565.0f);
     t->SetFont(f);
     t->SetSize(24);
@@ -76,18 +89,18 @@ Error Main::Run() {
     ui.AddChild(t);
 
     // Build and compile our shader program
-    Shader* ourShader = m_pRS->CreateShader();
+    Shader* ourShader = rs->CreateShader();
     ourShader->Attach("./codehero/shaders/textured.vert")
              .Attach("./codehero/shaders/textured.frag")
              .Link();
 
-    Shader* textShader = m_pRS->CreateShader();
+    Shader* textShader = rs->CreateShader();
     textShader->Attach("./codehero/shaders/text_basic.vert")
               .Attach("./codehero/shaders/text_basic.frag")
               .Link();
     textShader->Use();
     OrthoMatrix ortho(0, 600, 0, 600);
-    m_pRS->SetShaderParameter("projection", ortho);
+    rs->SetShaderParameter("projection", ortho);
 
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat vertices[] = {
@@ -135,15 +148,15 @@ Error Main::Run() {
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
     };
 
-    VertexBuffer* buffer = m_pRS->CreateVertexBuffer();
+    VertexBuffer* buffer = rs->CreateVertexBuffer();
     buffer->SetData(vertices, 36, VertexBuffer::MASK_Position | VertexBuffer::MASK_Normal | VertexBuffer::MASK_TexCoord);
     buffer->Unuse();
 
     // Load and create a texture
-    Texture* texture1 = m_pRS->CreateTexture();
+    Texture* texture1 = rs->CreateTexture();
     texture1->Load("./resources/images/container2.png");
 
-    Texture* texture2 = m_pRS->CreateTexture();
+    Texture* texture2 = rs->CreateTexture();
     texture2->Load("./resources/images/container2_specular.png");
 
     Vector3 cubePositions[] = {
@@ -177,9 +190,9 @@ Error Main::Run() {
     Camera camera({0.0f, 2.2f, 3.5f}, {0.0f, 1.0f, 0.0f});
 
     while (!m_pMainWindow->ShouldClose()) {
-        m_pRS->PollEvents();
+        rs->PollEvents();
 
-        m_pRS->ClearFrameBuffer();
+        rs->ClearFrameBuffer();
         double currentTime = glfwGetTime();
         nbFrames++;
         if (currentTime - lastTime >= 1.0){ // If last prinf() was more than 1 sec ago
@@ -193,7 +206,7 @@ Error Main::Run() {
         t->SetText("FPS: " + std::to_string(fps));
         Vector3 color(0.5, 0.8f, 0.2f);
         textShader->Use();
-        m_pRS->SetShaderParameter("textColor", color);
+        rs->SetShaderParameter("textColor", color);
         ui.Update();
         ui.Render();
 
@@ -250,8 +263,8 @@ Error Main::Run() {
 
         PerspectiveMatrix projection(45.0f, 800 / 600, 0.1f, 100.0f);
 
-        m_pRS->SetShaderParameter("view", camera.GetView());
-        m_pRS->SetShaderParameter("projection", projection);
+        rs->SetShaderParameter("view", camera.GetView());
+        rs->SetShaderParameter("projection", projection);
 
         // Draw container
         buffer->Use();
@@ -260,14 +273,14 @@ Error Main::Run() {
             model.Translate(cubePositions[i]);
             model.Rotate(glfwGetTime() * 20.0f * i, {1.0f, 0.3f, 0.5f});
 
-            m_pRS->SetShaderParameter("model", model);
-            m_pRS->SetViewport(viewportMiddleRight);
+            rs->SetShaderParameter("model", model);
+            rs->SetViewport(viewportMiddleRight);
             glDrawArrays(GL_TRIANGLES, 0, 36);
-            m_pRS->SetViewport(viewportBottomRight);
+            rs->SetViewport(viewportBottomRight);
             glDrawArrays(GL_TRIANGLES, 0, 36);
-            m_pRS->SetViewport(viewportTopRight);
+            rs->SetViewport(viewportTopRight);
             glDrawArrays(GL_TRIANGLES, 0, 36);
-            m_pRS->SetViewport(viewportMain);
+            rs->SetViewport(viewportMain);
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
         buffer->Unuse();
@@ -288,14 +301,11 @@ void Main::_Initialize() {
     m_pConsoleLogger.reset(new ConsoleLogger());
     SimpleLogger::AddListener(m_pConsoleLogger.get());
 
-    LOGD2 << "[>] Main::_Initialize()" << std::endl;
-
-    _LoadDrivers();
-    LOGD2 << "[<] Main::_Initialize()" << std::endl;
+    LOGD2 << "[=] Main::_Initialize()" << std::endl;
 }
 
 void Main::_Cleanup() {
-    m_pRS->Cleanup();
+    m_pContext->GetSubsystem<RenderSystem>()->Cleanup();
 
     _UnloadDrivers();
 }
@@ -303,14 +313,14 @@ void Main::_Cleanup() {
 void Main::_LoadDrivers() {
     LOGI << "Loading drivers..." << std::endl;
 #ifdef DRIVER_PNG
-    m_ImageLoader.AddCodec(new ImageCodecPNG());
+    m_pContext->GetSubsystem<ResourceLoader<Image>>()->AddCodec(new ImageCodecPNG());
 #endif // DRIVER_PNG
     LOGI << "Drivers loaded..." << std::endl;
 }
 
 void Main::_UnloadDrivers() {
     LOGI << "Unloading drivers..." << std::endl;
-    m_ImageLoader.ClearCodecs();
+    m_pContext->GetSubsystem<ResourceLoader<Image>>()->ClearCodecs();
     LOGI << "Drivers unloaded..." << std::endl;
 }
 

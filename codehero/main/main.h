@@ -6,8 +6,8 @@
 #define CODEHERO_MAIN_MAIN_H_
 
 #include <memory>
-#include "./core/typedefs.h"
-#include "./core/errors.h"
+#include "core/typedefs.h"
+#include "core/errors.h"
 
 // Forward declaration
 class ILogListener;
@@ -15,9 +15,10 @@ class ILogListener;
 namespace CodeHero {
 
 // Forward declaration
-class RenderSystem;
+class EngineContext;
 class RenderWindow;
-class ImageLoader;
+//template <class T> class ResourceLoader;
+//class Image;
 
 class Main {
 public:
@@ -37,10 +38,11 @@ private:
     std::unique_ptr<ILogListener> m_pFileLogger;
     std::unique_ptr<ILogListener> m_pConsoleLogger;
 
-    std::shared_ptr<RenderSystem> m_pRS;
+    std::shared_ptr<EngineContext> m_pContext;
+
     std::unique_ptr<RenderWindow> m_pMainWindow;
 
-    ImageLoader& m_ImageLoader;
+    //std::shared_ptr<ResourceLoader<Image>> m_pImageLoader;
 };
 
 }  // namespace CodeHero

@@ -6,14 +6,17 @@
 #define CODEHERO_CORE_IMAGE_H_
 
 #include <vector>
+#include "core/object.h"
 #include "core/typedefs.h"
 
 namespace CodeHero {
 
 using ImageData = std::vector<uint8_t>;
 
-class Image {
+class Image : public Object {
 public:
+    OBJECT(Image)
+
     enum Format {
         IFMT_Grayscale, // one byte per pixel, 0-255
         IFMT_Intensity, // one byte per pixel, 0-255
@@ -26,10 +29,7 @@ public:
     };
 
     // Create an empty image
-    Image();
-
-    // Create image with data
-    Image(uint32_t iWidth, uint32_t iHeight, const ImageData& iData, Format iFmt);
+    explicit Image(const std::shared_ptr<EngineContext>& iContext);
 
     void Create(uint32_t iWidth, uint32_t iHeight, Format iFmt = IFMT_Grayscale);
     void Create(uint32_t iWidth, uint32_t iHeight, const ImageData& iData, Format iFmt);

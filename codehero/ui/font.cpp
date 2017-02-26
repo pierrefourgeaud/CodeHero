@@ -11,8 +11,8 @@
 
 namespace CodeHero {
 
-Font::Font(RenderSystem& iRenderSystem, const std::string& iName)
-    : m_rRenderSystem(iRenderSystem)
+Font::Font(std::shared_ptr<EngineContext>& iContext, const std::string& iName)
+    : m_pContext(iContext)
     , m_Name(iName) {}
 
 std::shared_ptr<FontFace> Font::GetFace(uint32_t iSize) {

@@ -18,6 +18,7 @@ class VertexBuffer;
 
 class RenderSystemGL : public RenderSystem {
 public:
+    RenderSystemGL(std::shared_ptr<EngineContext>& iContext);
     virtual ~RenderSystemGL() {}
 
     Error Initialize() override;

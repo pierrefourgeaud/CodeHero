@@ -5,20 +5,20 @@
 #ifndef CODEHERO_DRIVERS_PNG_IMAGECODEC_PNG_H_
 #define CODEHERO_DRIVERS_PNG_IMAGECODEC_PNG_H_
 
-#include "./core/errors.h"
-#include "./core/imagecodec.h"
+#include "core/errors.h"
+#include "core/resourcecodec.h"
 
 namespace CodeHero {
 
 class Image;
 class FileAccess;
 
-class ImageCodecPNG : public ImageCodec {
+class ImageCodecPNG : public ResourceCodec<Image> {
 public:
     ImageCodecPNG();
     ~ImageCodecPNG();
 
-    Error LoadImage(FileAccess& iF, Image& oImage) override;
+    Error Load(FileAccess& iF, Image& oImage) override;
 private:
 };
 

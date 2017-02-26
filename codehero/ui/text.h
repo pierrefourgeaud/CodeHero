@@ -8,17 +8,17 @@
 #include "ui/uielement.h"
 #include <memory>
 #include <string>
-#include <graphics/rendersystem.h>
 
 namespace CodeHero {
 
 // Forward declaration
+class EngineContext;
 class Font;
 class UIBatch;
 
 class Text : public UIElement {
 public:
-    explicit Text(std::shared_ptr<RenderSystem> iRS);
+    explicit Text(std::shared_ptr<EngineContext>& iContext);
 
     void SetFont(const std::string& iFontName);
     void SetFont(std::shared_ptr<Font> iFont);

@@ -6,8 +6,8 @@
 
 namespace CodeHero {
 
-UIElement::UIElement(std::shared_ptr<RenderSystem> iRS)
-    : m_pRS(iRS) {}
+UIElement::UIElement(std::shared_ptr<EngineContext>& iContext)
+    : m_pContext(iContext) {}
 
 void UIElement::AddChild(std::shared_ptr<UIElement> iElement) {
     m_Elements.push_back(iElement);

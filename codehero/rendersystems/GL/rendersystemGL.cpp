@@ -17,6 +17,9 @@
 
 namespace CodeHero {
 
+RenderSystemGL::RenderSystemGL(std::shared_ptr<EngineContext>& iContext)
+    : RenderSystem(iContext) {}
+
 Error RenderSystemGL::Initialize() {
     glfwInit();
 
@@ -136,7 +139,7 @@ RenderWindow* RenderSystemGL::CreateWindow() {
 }
 
 Texture* RenderSystemGL::CreateTexture() {
-    return new TextureGL;
+    return new TextureGL(m_pContext);
 }
 
 Shader* RenderSystemGL::CreateShader() {
