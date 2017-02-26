@@ -13,6 +13,8 @@ namespace CodeHero {
 class System : public Object {
 public:
     System(std::shared_ptr<EngineContext>& iContext) : Object(iContext) {}
+    virtual ~System() {}
+
     virtual Error Initialize() = 0;
     virtual Error Cleanup() = 0;
 private:

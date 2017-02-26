@@ -35,8 +35,12 @@
 #include "graphics/vertexbuffer.h"
 
 #ifdef DRIVER_PNG
-# include "./drivers/png/imagecodec_png.h"
-#endif  // DRIVER_PNG
+# include "drivers/png/imagecodec_png.h"
+#endif // DRIVER_PNG
+
+#ifdef DRIVER_ASSIMP
+# include "drivers/assimp/modelcodec_assimp.h"
+#endif // DRIVER_ASSIMP
 
 namespace CodeHero {
 
@@ -54,10 +58,13 @@ Error Main::Start() {
     // Create the context that will be the base of everything coming after
     m_pContext = std::shared_ptr<EngineContext>(new EngineContext);
 
-    //m_pImageLoader = std::shared_ptr<ResourceLoader<Image>>(new ResourceLoader<Image>);
     ResourceLoader<Image>* rlImage = new ResourceLoader<Image>(m_pContext);
     rlImage->Initialize();
     m_pContext->RegisterSubsystem(rlImage);
+
+    ResourceLoader<Model>* rlModel = new ResourceLoader<Model>(m_pContext);
+    rlModel->Initialize();
+    m_pContext->RegisterSubsystem(rlModel);
 
     // m_pRS.reset(new RenderSystemGL);
     RenderSystem* rs = new RenderSystemGL(m_pContext);
@@ -315,12 +322,17 @@ void Main::_LoadDrivers() {
 #ifdef DRIVER_PNG
     m_pContext->GetSubsystem<ResourceLoader<Image>>()->AddCodec(new ImageCodecPNG());
 #endif // DRIVER_PNG
+
+#ifdef DRIVER_ASSIMP
+    m_pContext->GetSubsystem<ResourceLoader<Model>>()->AddCodec(new ModelCodecAssimp());
+#endif // DRIVER_ASSIMP
     LOGI << "Drivers loaded..." << std::endl;
 }
 
 void Main::_UnloadDrivers() {
     LOGI << "Unloading drivers..." << std::endl;
     m_pContext->GetSubsystem<ResourceLoader<Image>>()->ClearCodecs();
+    m_pContext->GetSubsystem<ResourceLoader<Model>>()->ClearCodecs();
     LOGI << "Drivers unloaded..." << std::endl;
 }
 

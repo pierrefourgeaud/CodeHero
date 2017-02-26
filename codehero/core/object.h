@@ -15,6 +15,8 @@ class EngineContext;
 
 class Object {
 public:
+    virtual ~Object() {}
+
     Object(const std::shared_ptr<EngineContext>& iContext) : m_pContext(iContext) {}
     virtual const std::string GetTypeName() = 0;
 
