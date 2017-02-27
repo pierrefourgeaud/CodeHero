@@ -20,6 +20,7 @@ class Shader;
 class Texture;
 class Matrix4;
 class Vector3;
+class IndexBuffer;
 class VertexBuffer;
 class Viewport;
 
@@ -74,6 +75,7 @@ public:
     virtual Texture* CreateTexture() = 0;
     virtual Shader* CreateShader() = 0;
     virtual VertexBuffer* CreateVertexBuffer() = 0;
+    virtual IndexBuffer* CreateIndexBuffer() = 0;
 
 protected:
     void _SetTextureManager(TextureManager* iTextureManager) { m_pTextureManager = iTextureManager; }

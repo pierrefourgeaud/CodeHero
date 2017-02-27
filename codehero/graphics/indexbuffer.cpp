@@ -6,8 +6,7 @@
 
 namespace CodeHero {
 
-void IndexBuffer::SetData(const void* iData, uint32_t iIndexCount, uint32_t iIndexSize, bool iIsDynamic = false) {
-    m_IndexCount = iIndexCount;
+void IndexBuffer::SetData(const void* iData, uint32_t iIndexSize, bool iIsDynamic/* = false*/) {
     m_IndexSize = iIndexSize;
     m_IsDynamic = iIsDynamic;
 

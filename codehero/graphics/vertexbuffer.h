@@ -19,14 +19,18 @@ public:
         EL_Normal,
         EL_Color,
         EL_TexCoord,
+        EL_Tangent,
+        EL_Bitangent,
         EL_Max
     };
 
     enum : uint32_t {
-        MASK_Position = 0x1,
-        MASK_Normal = 0x2,
-        MASK_Color = 0x4,
-        MASK_TexCoord = 0x8
+        MASK_Position = 1 << 0,
+        MASK_Normal = 1 << 1,
+        MASK_Color = 1 << 2,
+        MASK_TexCoord = 1 << 3,
+        MASK_Tangent = 1 << 4,
+        MASK_Bitangent = 1 << 5
     };
 
     VertexBuffer(bool iIsDynamic = false) : m_IsDynamic(iIsDynamic) {}
@@ -67,6 +71,8 @@ public:
 
     uint32_t GetVertexSize() const { return m_VertexSize; }
     uint32_t GetElementOffset(uint32_t iElem) const { return m_ElementOffset[iElem]; }
+
+    virtual uint32_t GetComponentsNumber() const = 0;
 
 protected:
     uint32_t m_VertexCount = 0;

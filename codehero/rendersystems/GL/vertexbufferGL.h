@@ -25,6 +25,8 @@ public:
     void Use() override;
     void Unuse() override;
 
+    uint32_t GetComponentsNumber() const override;
+
 protected:
     void _SetDataImpl() final override;
     void _SetSubDataImpl(uint32_t iStart, uint32_t iSize, const void* iData) final override;

@@ -15,7 +15,9 @@ class FileAccess;
 
 class ImageCodecPNG : public ResourceCodec<Image> {
 public:
-    ImageCodecPNG();
+    OBJECT(ImageCodePNG)
+
+    ImageCodecPNG(const std::shared_ptr<EngineContext>& iContext);
     ~ImageCodecPNG();
 
     Error Load(FileAccess& iF, Image& oImage) override;

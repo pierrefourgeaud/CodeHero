@@ -24,7 +24,8 @@ static void PngReadFunction(png_structp iPng, png_bytep iData, png_size_t iLengt
     f->Read(iData, iLength);
 }
 
-ImageCodecPNG::ImageCodecPNG() {
+ImageCodecPNG::ImageCodecPNG(const std::shared_ptr<EngineContext>& iContext)
+    : ResourceCodec<Image>(iContext) {
     _AddExtension("png");
 }
 

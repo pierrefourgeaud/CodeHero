@@ -15,6 +15,7 @@ class RenderWindow;
 class Texture;
 class TextureManager;
 class VertexBuffer;
+class IndexBuffer;
 
 class RenderSystemGL : public RenderSystem {
 public:
@@ -42,6 +43,7 @@ public:
     Texture* CreateTexture() final override;
     Shader* CreateShader() final override;
     VertexBuffer* CreateVertexBuffer() final override;
+    IndexBuffer* CreateIndexBuffer() final override;
 };
 
 } // namespace CodeHero

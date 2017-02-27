@@ -41,6 +41,7 @@ option (_CODEHERO_DRIVER_ASSIMP "Enable Assimp driver" ON)
 ##### Options overview #####
 message ("*** Configure options:")
 message ("DRIVER_PNG: " ${_CODEHERO_DRIVER_PNG})
+message ("DRIVER_ASSIMP: " ${_CODEHERO_DRIVER_ASSIMP})
 message ("VENDORS_PATH: " ${VENDORS_PATH})
 message ("")
 #####
@@ -81,6 +82,8 @@ set (SOURCES
      ${SRCS_PATH}/graphics/component.cpp
      ${SRCS_PATH}/graphics/indexbuffer.cpp
      ${SRCS_PATH}/graphics/light.cpp
+     ${SRCS_PATH}/graphics/mesh.cpp
+     ${SRCS_PATH}/graphics/model.cpp
      ${SRCS_PATH}/graphics/node.cpp
      ${SRCS_PATH}/graphics/rendersystem.cpp
      ${SRCS_PATH}/graphics/renderwindow.cpp
@@ -131,6 +134,8 @@ set (HEADERS
      ${SRCS_PATH}/graphics/component.h
      ${SRCS_PATH}/graphics/indexbuffer.h
      ${SRCS_PATH}/graphics/light.h
+     ${SRCS_PATH}/graphics/mesh.h
+     ${SRCS_PATH}/graphics/model.h
      ${SRCS_PATH}/graphics/node.h
      ${SRCS_PATH}/graphics/rendersystem.h
      ${SRCS_PATH}/graphics/renderwindow.h
@@ -165,6 +170,7 @@ include_directories (
 # ---------- Drivers -----------
 # TODO(pierre) export that to function
 if (${_CODEHERO_DRIVER_PNG})
+    set (PNG_TESTS OFF)
     add_subdirectory (${VENDORS_PATH}/libpng)
     include_directories (${VENDORS_PATH}/libpng/)
     set (SOURCES ${SOURCES}
@@ -186,7 +192,9 @@ if (${_CODEHERO_DRIVER_FREETYPE})
 endif ()
 
 if (${_CODEHERO_DRIVER_ASSIMP})
+    set (ASSIMP_BUILD_TESTS OFF)
     add_subdirectory (${VENDORS_PATH}/assimp)
+    include_directories (${VENDORS_PATH}/assimp/include)
     set (SOURCES ${SOURCES}
          ${SRCS_PATH}/drivers/assimp/modelcodec_assimp.cpp
     )

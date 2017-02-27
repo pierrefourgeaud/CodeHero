@@ -8,14 +8,22 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "graphics/model.h"
+#include "core/enginecontext.h"
+#include "core/fileaccess.h"
+#include "core/texture.h"
 #include "core/math/vector2.h"
 #include "core/math/vector3.h"
+#include "graphics/rendersystem.h"
+#include "graphics/mesh.h"
+#include "graphics/indexbuffer.h"
+#include "graphics/vertexbuffer.h"
 
 namespace CodeHero {
 
-ModelCodecAssimp::ModelCodecAssimp() {
-    std::vector<string> ext{"3ds", "blend", "dae", "xml", "fbx", "obj", "raw", "mdl"};
-    for (auto e& : ext) {
+ModelCodecAssimp::ModelCodecAssimp(const std::shared_ptr<EngineContext>& iContext)
+    : ResourceCodec<Model>(iContext) {
+    std::vector<std::string> ext{"3ds", "blend", "dae", "xml", "fbx", "obj", "raw", "mdl"};
+    for (auto& e : ext) {
         _AddExtension(e);
     }
 }
@@ -23,81 +31,114 @@ ModelCodecAssimp::ModelCodecAssimp() {
 Error ModelCodecAssimp::Load(FileAccess& iF, Model& oModel) {
     Assimp::Importer import;
     std::string buffer = iF.ReadAll();
-    const aiScene* scene = import.ReadFileFromMemory(buffer.data(), aiProcess_Triangulate | aiProcess_FlipUVs);
+    const aiScene* scene = import.ReadFileFromMemory(buffer.data(), buffer.size(), aiProcess_Triangulate | aiProcess_FlipUVs);
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         LOGE << "ModelCodecAssimp: " << import.GetErrorString() << std::endl;
-        return Failed;
+        return FAILED;
     }
     //this->directory = path.substr(0, path.find_last_of('/'));
 
-    _ProcessNode(scene->mRootNode, scene);
+    _ProcessNode(scene->mRootNode, scene, oModel);
+    return OK;
 }
 
-void ModelCodecAssimp::_ProcessNode() {
+void ModelCodecAssimp::_ProcessNode(aiNode* iNode, const aiScene* iScene, Model& oModel) {
     // Process all the node's meshes (if any)
-    for (uint32_t i = 0; i < node->mNumMeshes; ++i) {
-        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        this->meshes.push_back(this->processMesh(mesh, scene));
+    for (uint32_t i = 0; i < iNode->mNumMeshes; ++i) {
+        aiMesh* mesh = iScene->mMeshes[iNode->mMeshes[i]];
+        oModel.AddMesh(_ProcessMesh(mesh, iScene));
     }
 
     // Then do the same for each of its children
-    for (uint32_t i = 0; i < node->mNumChildren; ++i) {
-        this->processNode(node->mChildren[i], scene);
+    for (uint32_t i = 0; i < iNode->mNumChildren; ++i) {
+        _ProcessNode(iNode->mChildren[i], iScene, oModel);
     }
 }
 
-void ModelCodecAssimp::_ProcessMesh() {
-    vector<Vertex> vertices;
-    vector<GLuint> indices;
-    vector<Texture> textures;
+std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh, const aiScene* iScene) {
+    std::shared_ptr<Mesh> mesh(new Mesh);
 
-    for (uint32_t i = 0; i < mesh->mNumVertices; ++i) {
-        Vertex vertex;
-        vertex.Position = {mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z};
-        vertex.Normal = {mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z};
-        // Texture Coordinates
-        if (mesh->mTextureCoords[0]) {
-            vertex.TexCoords = {mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y};
-        } else {
-            vertex.TexCoords = {0.0f, 0.0f};
-        }
-        vertex.Tangent = {mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z};
-        vertex.Bitangent = {mesh->mBitangents[i].x, mesh->mBitangents[i].y, mesh->mBitangents[i].z};
-        vertices.push_back(vertex);
+    std::shared_ptr<VertexBuffer> vertex(m_pContext->GetSubsystem<RenderSystem>()->CreateVertexBuffer());
+    // Set data first with nullptr in order to get the size of a vertex calculated from the mask
+    uint32_t mask = VertexBuffer::MASK_Position;
+    if (iMesh->mNormals) {
+        mask |= VertexBuffer::MASK_Normal;
     }
+    if (iMesh->mTextureCoords[0]) {
+        mask |= VertexBuffer::MASK_TexCoord;
+    }
+    if (iMesh->mTangents) {
+        mask |= VertexBuffer::MASK_Tangent;
+    }
+    if (iMesh->mBitangents) {
+        mask |= VertexBuffer::MASK_Bitangent;
+    }
+    vertex->SetData(nullptr, iMesh->mNumVertices, mask, true);
+    size_t vertexSize = vertex->GetComponentsNumber();
+    std::vector<float> vertexData(iMesh->mNumVertices * vertexSize);
+    size_t dest = 0;
+    for (uint32_t i = 0; i < iMesh->mNumVertices; ++i) {
+        vertexData[dest++] = iMesh->mVertices[i].x;
+        vertexData[dest++] = iMesh->mVertices[i].y;
+        vertexData[dest++] = iMesh->mVertices[i].z;
+        if (vertex->IsBitActive(VertexBuffer::MASK_Normal)) {
+            vertexData[dest++] = iMesh->mNormals[i].x;
+            vertexData[dest++] = iMesh->mNormals[i].y;
+            vertexData[dest++] = iMesh->mNormals[i].z;
+        }
+        if (vertex->IsBitActive(VertexBuffer::MASK_TexCoord)) {
+            vertexData[dest++] = iMesh->mTextureCoords[0][i].x;
+            vertexData[dest++] = iMesh->mTextureCoords[0][i].y;
+        }
+        if (vertex->IsBitActive(VertexBuffer::MASK_Tangent)) {
+            vertexData[dest++] = iMesh->mTangents[i].x;
+            vertexData[dest++] = iMesh->mTangents[i].y;
+            vertexData[dest++] = iMesh->mTangents[i].z;
+        }
+        if (vertex->IsBitActive(VertexBuffer::MASK_Bitangent)) {
+            vertexData[dest++] = iMesh->mBitangents[i].x;
+            vertexData[dest++] = iMesh->mBitangents[i].y;
+            vertexData[dest++] = iMesh->mBitangents[i].z;
+        }
+    }
+    vertex->SetSubData(&vertexData[0], 0, iMesh->mNumVertices);
     // Process indices
-    for (uint32_t i = 0; i < mesh->mNumFaces; ++i) {
-        aiFace face = mesh->mFaces[i];
+    std::vector<uint32_t> indices;
+    for (uint32_t i = 0; i < iMesh->mNumFaces; ++i) {
+        aiFace face = iMesh->mFaces[i];
         // Retrieve all indices of the face and store them in the indices vector
         for (uint32_t j = 0; j < face.mNumIndices; ++j) {
             indices.push_back(face.mIndices[j]);
         }
     }
+    std::shared_ptr<IndexBuffer> indexBuffer(m_pContext->GetSubsystem<RenderSystem>()->CreateIndexBuffer());
+    indexBuffer->SetData(&indices[0], indices.size());
     // Process material
-    if (mesh->mMaterialIndex >= 0) {
-        aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-        vector<Texture> diffuseMaps = _LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-        textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-        vector<Texture> specularMaps = _LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-        textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-    }
+    // It seems that condition is not needed. I am removing it. We can add it back if I am wrong
+    // if (iMesh->mMaterialIndex >= 0) {
+    aiMaterial* material = iScene->mMaterials[iMesh->mMaterialIndex];
+    std::vector<std::shared_ptr<Texture>> textures = _LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+    std::vector<std::shared_ptr<Texture>> specularMaps = _LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+    textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+    // }
 
-    return Mesh(vertices, indices, textures);
+    //return Mesh(vertices, indices, textures);
+    return std::move(mesh);
 }
 
-vector<Texture> ModelCodecAssimp::_LoadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName) {
-    vector<Texture> textures;
-    for (uint32_t i = 0; i < mat->GetTextureCount(type); ++i) {
+std::vector<std::shared_ptr<Texture>> ModelCodecAssimp::_LoadMaterialTextures(aiMaterial* iMat, uint32_t iType, const std::string& iTypeName) {
+    (void)iTypeName;
+    std::vector<std::shared_ptr<Texture>> textures;
+    RenderSystem* rs = m_pContext->GetSubsystem<RenderSystem>();
+    for (uint32_t i = 0; i < iMat->GetTextureCount(static_cast<aiTextureType>(iType)); ++i) {
         aiString str;
-        mat->GetTexture(type, i, &str);
-        Texture texture;
-        texture.id = TextureFromFile(str.C_Str(), this->directory);
-        texture.type = typeName;
-        texture.path = str;
-        textures.push_back(texture);
+        iMat->GetTexture(static_cast<aiTextureType>(iType), i, &str);
+        Texture* texture = rs->CreateTexture();
+        texture->Load(str.C_Str());
+        textures.emplace_back(texture);
     }
-    return textures;
+    return std::move(textures);
 }
 
 } // namespace CodeHero

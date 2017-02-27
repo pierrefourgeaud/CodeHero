@@ -12,21 +12,27 @@ const uint8_t VertexBufferGL::ElementSize[] = {
     3 * sizeof(GL_FLOAT), // Position
     3 * sizeof(GL_FLOAT), // Normal
     4 * sizeof(GL_UNSIGNED_BYTE), // Color
-    2 * sizeof(GL_FLOAT) // TexCoord
+    2 * sizeof(GL_FLOAT), // TexCoord,
+    3 * sizeof(GL_FLOAT), // Tangent
+    3 * sizeof(GL_FLOAT) // Bitangent
 };
 
 const uint32_t VertexBufferGL::ElementType[] = {
     GL_FLOAT, // Position
     GL_FLOAT, // Normal
     GL_UNSIGNED_BYTE, // Color
-    GL_FLOAT // TexCoord
+    GL_FLOAT, // TexCoord
+    GL_FLOAT, // Tangent
+    GL_FLOAT // Bitangent
 };
 
 const uint32_t VertexBufferGL::ElementComponents[] = {
     3, // Position
     3, // Normal
     4, // Color
-    2, // TexCoord
+    2, // TexCoord,
+    3, // Tangent
+    3 // Bitangent
 };
 
 VertexBufferGL::VertexBufferGL()
@@ -48,6 +54,16 @@ void VertexBufferGL::Use() {
 // Same same
 void VertexBufferGL::Unuse() {
     m_pVAO->Unbind();
+}
+
+uint32_t VertexBufferGL::GetComponentsNumber() const {
+    uint32_t components = 0;
+    for (uint8_t i = 0; i < VertexBuffer::EL_Max; ++i) {
+        if (m_Masks & (1 << i)) {
+            components += ElementComponents[i];
+        }
+    }
+    return components;
 }
 
 void VertexBufferGL::_SetDataImpl() {

@@ -9,6 +9,7 @@
 #include <vector>
 #include "core/errors.h"
 #include "core/utils.h"
+#include "core/object.h"
 
 namespace CodeHero {
 
@@ -16,9 +17,9 @@ namespace CodeHero {
 class FileAccess;
 
 template <class T>
-class ResourceCodec {
+class ResourceCodec : public Object {
 public:
-    ResourceCodec() {}
+    ResourceCodec(const std::shared_ptr<EngineContext>& iContext) : Object(iContext) {}
     virtual ~ResourceCodec() {}
     ResourceCodec(const ResourceCodec&) = delete;
     ResourceCodec& operator=(const ResourceCodec&) = delete;

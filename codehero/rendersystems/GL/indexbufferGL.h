@@ -18,7 +18,7 @@ public:
     void Unuse() override;
 
 protected:
-    void _SetDataImpl(const void* iData);
+    void _SetDataImpl(const void* iData) override;
 };
 
 } // namespace CodeHero

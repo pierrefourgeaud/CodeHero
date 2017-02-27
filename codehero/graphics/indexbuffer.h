@@ -6,21 +6,21 @@
 #define CODEHERO_GRAPHICS_INDEXBUFFER_H_
 
 #include "core/gpuobject.h"
+#include "core/typedefs.h"
 
 namespace CodeHero {
 
 class IndexBuffer : public GPUObject {
 public:
-    explicit IndexBuffer(bool iIsDynamic) : m_IsDynamic(iIsDynamic) {}
+    explicit IndexBuffer(bool iIsDynamic = false) : m_IsDynamic(iIsDynamic) {}
     virtual ~IndexBuffer() {}
 
     virtual void Use() {}
     virtual void Unuse() {}
 
-    virtual void SetData(const void* iData, uint32_t iIndexCount, uint32_t iIndexSize, bool iIsDynamic = false);
+    virtual void SetData(const void* iData, uint32_t iIndexSize, bool iIsDynamic = false);
 
 protected:
-    uint32_t m_IndexCount = 0;
     uint32_t m_IndexSize = 0;
     bool m_IsDynamic = false;
 

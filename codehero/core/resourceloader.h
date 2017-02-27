@@ -30,8 +30,8 @@ public:
     ResourceLoader(const ResourceLoader&) = delete;
     ResourceLoader& operator=(const ResourceLoader&) = delete;
 
-    Error Initialize() { return OK; }
-    Error Cleanup() { return OK; }
+    Error Initialize() override { return OK; }
+    Error Cleanup() override { return OK; }
 
     Error Load(const std::string& iFilePath, T& oResource) {
         FileAccess f;

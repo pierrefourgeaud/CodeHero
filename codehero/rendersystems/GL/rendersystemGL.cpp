@@ -13,6 +13,7 @@
 #include "rendersystems/GL/renderwindowGL.h"
 #include "rendersystems/GL/shaderGL.h"
 #include "rendersystems/GL/textureGL.h"
+#include "rendersystems/GL/indexbufferGL.h"
 #include "rendersystems/GL/vertexbufferGL.h"
 
 namespace CodeHero {
@@ -148,6 +149,10 @@ Shader* RenderSystemGL::CreateShader() {
 
 VertexBuffer* RenderSystemGL::CreateVertexBuffer() {
     return new VertexBufferGL;
+}
+
+IndexBuffer* RenderSystemGL::CreateIndexBuffer() {
+    return new IndexBufferGL;
 }
 
 } // CodeHero

@@ -21,6 +21,7 @@
 #include "graphics/renderwindow.h"
 #include "graphics/viewport.h"
 #include "graphics/camera.h"
+#include "graphics/model.h"
 
 #include "ui/font.h"
 #include "ui/ui.h"
@@ -165,6 +166,9 @@ Error Main::Run() {
 
     Texture* texture2 = rs->CreateTexture();
     texture2->Load("./resources/images/container2_specular.png");
+
+    Model mdl(m_pContext);
+    m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/nanosuit/nanosuit.obj", mdl);
 
     Vector3 cubePositions[] = {
         { 0.0f,  0.0f,  0.0f},
@@ -320,11 +324,11 @@ void Main::_Cleanup() {
 void Main::_LoadDrivers() {
     LOGI << "Loading drivers..." << std::endl;
 #ifdef DRIVER_PNG
-    m_pContext->GetSubsystem<ResourceLoader<Image>>()->AddCodec(new ImageCodecPNG());
+    m_pContext->GetSubsystem<ResourceLoader<Image>>()->AddCodec(new ImageCodecPNG(m_pContext));
 #endif // DRIVER_PNG
 
 #ifdef DRIVER_ASSIMP
-    m_pContext->GetSubsystem<ResourceLoader<Model>>()->AddCodec(new ModelCodecAssimp());
+    m_pContext->GetSubsystem<ResourceLoader<Model>>()->AddCodec(new ModelCodecAssimp(m_pContext));
 #endif // DRIVER_ASSIMP
     LOGI << "Drivers loaded..." << std::endl;
 }

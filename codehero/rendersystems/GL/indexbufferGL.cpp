@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "rendersystems/GL/indexbufferGL.h"
+#include <glad/glad.h>
 
 namespace CodeHero {
 
@@ -27,7 +28,7 @@ void IndexBufferGL::_SetDataImpl(const void* iData) {
 
     glBufferData(
             GL_ELEMENT_ARRAY_BUFFER,
-            m_IndexCount * m_IndexSize,
+            m_IndexSize,
             iData,
             m_IsDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
 }

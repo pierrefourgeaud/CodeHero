@@ -27,11 +27,11 @@ protected:
 } // namespace CodeHero
 
 #define OBJECT(className) \
-    const std::string GetTypeName() { return #className; } \
+    const std::string GetTypeName() override { return #className; } \
     static const std::string GetTypeNameStatic() { return #className; }
 
 #define OBJECT_TEMPLATE(className, T) \
-    const std::string GetTypeName() { return #className + T::GetTypeNameStatic(); } \
+    const std::string GetTypeName() override { return #className + T::GetTypeNameStatic(); } \
     static const std::string GetTypeNameStatic() { return #className + T::GetTypeNameStatic(); }
 
 #endif // CODEHERO_CORE_OBJECT_H_
