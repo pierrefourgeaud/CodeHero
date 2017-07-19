@@ -52,6 +52,18 @@ option (GLFW_BUILD_EXAMPLES OFF)
 option (GLFW_BUILD_TESTS OFF)
 add_subdirectory (${VENDORS_PATH}/glfw)
 
+
+# Should this be optional ?
+# For now we want other libs to use our zlib
+# Used by libpng and assimp
+set (ZLIB_FOUND 1)
+set (ZLIB_LIBRARY zlibstatic)
+set (ZLIB_LIBRARIES zlibstatic)
+set (ZLIB_INCLUDE_DIR ${VENDORS_PATH}/zlib)
+add_subdirectory (${VENDORS_PATH}/zlib)
+include_directories (${VENDORS_PATH}/zlib ${CMAKE_CURRENT_BINARY_DIR}/vendor/zlib)
+set (SKIP_INSTALL_ALL ON)
+
 # ---------- Sources ----------
 file (GLOB VENDORS_SOURCES ${VENDORS_PATH}/glad/src/glad.c)
 
@@ -170,7 +182,7 @@ include_directories (
 # ---------- Drivers -----------
 # TODO(pierre) export that to function
 if (${_CODEHERO_DRIVER_PNG})
-    set (PNG_TESTS OFF)
+    set (PNG_TESTS OFF CACHE BOOL "" FORCE)
     add_subdirectory (${VENDORS_PATH}/libpng)
     include_directories (${VENDORS_PATH}/libpng/)
     set (SOURCES ${SOURCES}
@@ -192,7 +204,8 @@ if (${_CODEHERO_DRIVER_FREETYPE})
 endif ()
 
 if (${_CODEHERO_DRIVER_ASSIMP})
-    set (ASSIMP_BUILD_TESTS OFF)
+    set (ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    set (ASSIMP_BUILD_SAMPLES OFF CACHE BOOL "" FORCE)
     add_subdirectory (${VENDORS_PATH}/assimp)
     include_directories (${VENDORS_PATH}/assimp/include)
     set (SOURCES ${SOURCES}
