@@ -239,14 +239,13 @@ Error Main::Run() {
         glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "dirLight[0].diffuse"), 0.4f, 0.4f, 0.4f);
         glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "dirLight[0].specular"), 0.5f, 0.5f, 0.5f);
         // Point light 1
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].position"), 0.7f, 0.2f, 2.0f);
+        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].position"), pointLightPositions[0].x(), pointLightPositions[0].y(), pointLightPositions[0].z());
         glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].ambient"), 0.05f, 0.05f, 0.05f);
         glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].diffuse"), 0.8f, 0.8f, 0.8f);
         glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].specular"), 1.0f, 1.0f, 1.0f);
         glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].constant"), 1.0f);
         glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].linear"), 0.09);
         glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].quadratic"), 0.032);
-
         // Point light 2
         glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[1].position"), pointLightPositions[1].x(), pointLightPositions[1].y(), pointLightPositions[1].z());
         glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[1].ambient"), 0.05f, 0.05f, 0.05f);
