@@ -71,6 +71,9 @@ public:
     void Render();
 
     // Factory
+#ifdef WIN32
+#undef CreateWindow
+#endif
     virtual RenderWindow* CreateWindow() = 0;
     virtual Texture* CreateTexture() = 0;
     virtual Shader* CreateShader() = 0;
