@@ -17,11 +17,14 @@ void main()
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
 
-    vec3 result;
-    for(int i = 0; i < NB_DIRECTIONAL_LIGHTS; i++)
-      result += CalcDirLight(dirLights[i], norm, viewDir);
-    for(int i = 0; i < NB_POINT_LIGHTS; i++)
+    vec3 result = vec3(0.0, 0.0, 0.0);
+    for (int i = 0; i < NB_DIRECTIONAL_LIGHTS; i++) {
+        result += CalcDirLight(dirLights[i], norm, viewDir);
+    }
+
+    for (int i = 0; i < NB_POINT_LIGHTS; i++) {
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+    }
     // result += CalcSpotLight(spotLight, norm, FragPos, viewDir);
 
     color = vec4(result, 1.0);
