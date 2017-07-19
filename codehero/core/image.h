@@ -41,7 +41,7 @@ public:
 
     static int GetComponentsFromFormat(Format iFmt);
 
-    uint8_t* GetRawData() { return &m_Data[0]; }
+    uint8_t* GetRawData() { return m_Data.empty() ? nullptr : &m_Data[0]; }
 
 private:
     ImageData m_Data;
