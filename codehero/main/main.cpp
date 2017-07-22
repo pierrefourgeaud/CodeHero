@@ -99,7 +99,10 @@ Error Main::Run() {
     // Build and compile our shader program
     Shader* ourShader = rs->CreateShader();
     ourShader->Attach("./codehero/shaders/textured.vert")
-             .Attach("./codehero/shaders/textured.frag")
+             .Attach("./codehero/shaders/textured.frag", {
+                 {"NB_DIRECTIONAL_LIGHTS", "1"},
+                 {"NB_POINT_LIGHTS", "4"},
+             })
              .Link();
 
     Shader* textShader = rs->CreateShader();

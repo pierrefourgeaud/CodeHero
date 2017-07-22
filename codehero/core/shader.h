@@ -6,6 +6,7 @@
 #define CODEHERO_CORE_SHADER_H_
 
 #include <string>
+#include <unordered_map>
 #include "core/gpuobject.h"
 
 namespace CodeHero {
@@ -18,7 +19,7 @@ public:
     Shader(RenderSystem& iRenderSystem) : m_rRenderSystem(iRenderSystem) {}
     virtual ~Shader() {}
 
-    virtual Shader& Attach(const std::string& iFilename) = 0;
+    virtual Shader& Attach(const std::string& iFilename, const std::unordered_map<std::string, std::string>& iDefines = {}) = 0;
     virtual Shader& Link() = 0;
 
     virtual void Use() = 0;

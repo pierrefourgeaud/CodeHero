@@ -38,8 +38,12 @@ struct PointLight {
 };
 
 uniform vec3 viewPos;
+#if defined(NB_DIRECTIONAL_LIGHTS) && NB_DIRECTIONAL_LIGHTS > 0
 uniform DirLight dirLights[NB_DIRECTIONAL_LIGHTS];
+#endif
+#if defined(NB_POINT_LIGHTS) && NB_POINT_LIGHTS > 0
 uniform PointLight pointLights[NB_POINT_LIGHTS];
+#endif
 uniform Material material;
 
 // Calculates the color when using a directional light.

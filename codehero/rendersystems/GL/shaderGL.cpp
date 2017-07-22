@@ -8,6 +8,7 @@
 #include <stdio.h>
 
 #include "core/fileaccess.h"
+#include "core/utils.h"
 #include "graphics/rendersystem.h"
 #include "rendersystems/GL/shaderGL.h"
 #include <logger.h>
@@ -25,10 +26,15 @@ ShaderGL::~ShaderGL() {
     glDeleteProgram(GetGPUObject().intHandle);
 }
 
-Shader& ShaderGL::Attach(const string& iFilename) {
+Shader& ShaderGL::Attach(const string& iFilename, const std::unordered_map<std::string, std::string>& iDefines/* = {}*/) {
     std::string shaderCode = _GetShader(iFilename);
 
     GLuint shader = _CreateShader(iFilename);
+
+    if (_AddDefines(shaderCode, iDefines) != Error::OK) {
+        LOGE << "Shader compile error: Failed to add the defines to shader." << std::endl;
+        return *this;
+    }
 
     std::string finalCode;
     if (_ReplaceIncludes(iFilename, shaderCode, finalCode) != Error::OK) {
@@ -140,6 +146,38 @@ void ShaderGL::_ParseParameters() {
         int location = glGetUniformLocation(GetGPUObject().intHandle, uniformName);
         m_Parameters[uniformName] = {location, type};
     }
+}
+
+// The defines shall be placed as early as possible (in case of early use) but must be placed
+// after the `#version ...` statement
+// To achieve that, we split the shader per line and pass all empty lines and the line with #version.
+Error ShaderGL::_AddDefines(std::string& ioCode, const std::unordered_map<std::string, std::string>& iDefines) {
+    if (!iDefines.empty()) {
+        // Split the lines by '\n'
+        std::vector<std::string> sources = Split(ioCode, '\n');
+
+        // Search for the first position to add the defines
+        size_t sizeSources = sources.size();
+        size_t i;
+        for (i = 0; i < sizeSources; ++i) {
+            Trim(sources[i]);
+            if (!sources[i].empty() && !StartsWith(sources[i], "#version ")) {
+                break;
+            }
+        }
+
+        // Add the defines
+        std::string defines;
+        for (const auto& el : iDefines) {
+            defines += "#define " + el.first + ' ' + el.second + '\n';
+        }
+        sources.insert(sources.begin() + i, defines);
+
+        // Put everything back together
+        ioCode = Join(sources, '\n');
+    }
+
+    return Error::OK;
 }
 
 Error ShaderGL::_ReplaceIncludes(const std::string& iParentFile, const std::string& iShaderCode, std::string& oCode) {
