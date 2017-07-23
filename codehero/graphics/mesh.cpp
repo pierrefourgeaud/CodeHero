@@ -12,11 +12,15 @@ Mesh::Mesh() {}
 Mesh::~Mesh() {}
 
 void Mesh::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& iBuffer) {
-    m_Vertices.push_back(iBuffer);
+    m_Vertices = iBuffer;
 }
 
 void Mesh::AddIndexBuffer(const std::shared_ptr<IndexBuffer>& iBuffer) {
-    m_Indices.push_back(iBuffer);
+    m_Indices = iBuffer;
+}
+
+void Mesh::SetTextures(const TextureUnitsMaps& iTextures) {
+    m_Textures = iTextures;
 }
 
 

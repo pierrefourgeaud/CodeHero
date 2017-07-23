@@ -23,6 +23,7 @@
 #include "graphics/camera.h"
 #include "graphics/light.h"
 #include "graphics/model.h"
+#include "graphics/mesh.h"
 
 #include "ui/font.h"
 #include "ui/ui.h"
@@ -34,6 +35,7 @@
 #include "core/math/vector3.h"
 #include "core/math/matrix4.h"
 
+#include "graphics/indexbuffer.h"
 #include "graphics/vertexbuffer.h"
 
 #ifdef DRIVER_PNG
@@ -258,16 +260,6 @@ Error Main::Run() {
         // Draw the triangle
         crateShader->Use();
 
-        // Bind Textures using texture units
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture1->GetGPUObject().intHandle);
-        glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.diffuse"), 0);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texture2->GetGPUObject().intHandle);
-        glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.specular"), 1);
-
-        glUniform1f(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.shininess"), 32.0f);
-
         rs->SetShaderParameter("dirLight[0].direction", dirLights[0].GetDirection());
         rs->SetShaderParameter("dirLight[0].base.ambientIntensity", dirLights[0].GetAmbientIntensity());
         rs->SetShaderParameter("dirLight[0].base.diffuseIntensity", dirLights[0].GetDiffuseIntensity());
@@ -292,6 +284,43 @@ Error Main::Run() {
 
         rs->SetShaderParameter("view", camera.GetView());
         rs->SetShaderParameter("projection", projection);
+
+        // TODO(pierre) This code is plain ugly. The idea is to demonstrate the loading and displaying of a model.
+        // We should split that code properly with scene node, model, mesh, materials.
+        // Please do not take that for production code.
+        Matrix4 mod;
+        mod.Translate({ 1.0f,  -12.0f, -10.0f});
+        rs->SetShaderParameter("model", mod);
+        size_t s = mdl.m_Meshes.size();
+        for (int i = 0; i < s; ++i) {
+            size_t tSize = mdl.m_Meshes[i]->GetTextures().at("texture_diffuse").size();
+            uint32_t j = 0;
+            for (j = 0; j < tSize; ++j) {
+                glActiveTexture(GL_TEXTURE0 + j);
+                glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.diffuse"), j);
+                glBindTexture(GL_TEXTURE_2D, mdl.m_Meshes[i]->GetTextures().at("texture_diffuse")[j]->GetGPUObject().intHandle);
+            }
+            tSize = mdl.m_Meshes[i]->GetTextures().at("texture_specular").size();
+            for (uint32_t k = 0; k < tSize; ++k) {
+                glActiveTexture(GL_TEXTURE0 + j + k);
+                glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.specular"), j + k);
+                glBindTexture(GL_TEXTURE_2D, mdl.m_Meshes[i]->GetTextures().at("texture_specular")[k]->GetGPUObject().intHandle);
+            }
+
+            mdl.m_Meshes[i]->GetVertices()->Use();
+
+            glDrawArrays(GL_TRIANGLES, 0, mdl.m_Meshes[i]->GetIndices()->GetSize());
+        }
+
+        // Bind Textures using texture units
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture1->GetGPUObject().intHandle);
+        glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.diffuse"), 0);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture2->GetGPUObject().intHandle);
+        glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.specular"), 1);
+
+        glUniform1f(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.shininess"), 32.0f);
 
         // Draw container
         buffer->Use();

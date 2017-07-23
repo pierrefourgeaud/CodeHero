@@ -20,6 +20,8 @@ public:
 
     virtual void SetData(const void* iData, uint32_t iIndexSize, bool iIsDynamic = false);
 
+    uint32_t GetSize() const { return m_IndexSize; }
+
 protected:
     uint32_t m_IndexSize = 0;
     bool m_IsDynamic = false;

@@ -14,6 +14,7 @@ struct aiMesh;
 struct aiNode;
 struct aiScene;
 struct aiMaterial;
+enum aiTextureType;
 
 namespace CodeHero {
 
@@ -32,7 +33,9 @@ public:
 private:
     void _ProcessNode(aiNode* iNode, const aiScene* iScene, Model& oModel);
     std::shared_ptr<Mesh> _ProcessMesh(aiMesh* iMesh, const aiScene* iScene);
-    std::vector<std::shared_ptr<Texture>> _LoadMaterialTextures(aiMaterial* iMat, uint32_t iType, const std::string& iTypeName);
+    std::vector<std::shared_ptr<Texture>> _LoadMaterialTextures(aiMaterial* iMat, aiTextureType iType);
+
+    std::string m_ModelDirectory;
 };
 
 } // namespace CodeHero

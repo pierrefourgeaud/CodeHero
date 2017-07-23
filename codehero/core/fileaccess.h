@@ -40,6 +40,9 @@ public:
 
     int32_t GetSize();
 
+    // TODO(pierre) We should split the name of the file and the rest (directory)
+    std::string GetName() const { return m_Name; }
+
     // Statics
     static bool Exists(const std::string& iFilename);
 

@@ -21,7 +21,7 @@ public:
 
     void AddMesh(const std::shared_ptr<Mesh>& iMesh);
 
-private:
+// private:
     std::vector<std::shared_ptr<Mesh>> m_Meshes;
 };
 

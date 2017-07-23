@@ -22,7 +22,7 @@ namespace CodeHero {
 
 ModelCodecAssimp::ModelCodecAssimp(const std::shared_ptr<EngineContext>& iContext)
     : ResourceCodec<Model>(iContext) {
-    std::vector<std::string> ext{"3ds", "blend", "dae", "xml", "fbx", "obj", "raw", "mdl"};
+    std::vector<std::string> ext{"3ds", "blend", "dae", "xml", "fbx", "obj", "raw", "mdl", "mtl"};
     for (auto& e : ext) {
         _AddExtension(e);
     }
@@ -31,13 +31,14 @@ ModelCodecAssimp::ModelCodecAssimp(const std::shared_ptr<EngineContext>& iContex
 Error ModelCodecAssimp::Load(FileAccess& iF, Model& oModel) {
     Assimp::Importer import;
     std::string buffer = iF.ReadAll();
-    const aiScene* scene = import.ReadFileFromMemory(buffer.data(), buffer.size(), aiProcess_Triangulate | aiProcess_FlipUVs);
+    //const aiScene* scene = import.ReadFileFromMemory(buffer.data(), buffer.size(), aiProcess_Triangulate | aiProcess_FlipUVs);
+    const aiScene* scene = import.ReadFile(iF.GetName(), aiProcess_Triangulate | aiProcess_FlipUVs);
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         LOGE << "ModelCodecAssimp: " << import.GetErrorString() << std::endl;
         return FAILED;
     }
-    //this->directory = path.substr(0, path.find_last_of('/'));
+    m_ModelDirectory = iF.GetName().substr(0, iF.GetName().find_last_of('/'));
 
     _ProcessNode(scene->mRootNode, scene, oModel);
     return OK;
@@ -118,24 +119,29 @@ std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh, const aiScen
     // It seems that condition is not needed. I am removing it. We can add it back if I am wrong
     // if (iMesh->mMaterialIndex >= 0) {
     aiMaterial* material = iScene->mMaterials[iMesh->mMaterialIndex];
-    std::vector<std::shared_ptr<Texture>> textures = _LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-    std::vector<std::shared_ptr<Texture>> specularMaps = _LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-    textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+    std::unordered_map<std::string, std::vector<std::shared_ptr<Texture>>> t;
+    auto textures = _LoadMaterialTextures(material, aiTextureType_DIFFUSE);
+    auto specularMaps = _LoadMaterialTextures(material, aiTextureType_SPECULAR);
+    t["texture_diffuse"] = textures;
+    t["texture_specular"] = specularMaps;
     // }
+
+    mesh->AddVertexBuffer(vertex);
+    mesh->AddIndexBuffer(indexBuffer);
+    mesh->SetTextures(t);
 
     //return Mesh(vertices, indices, textures);
     return std::move(mesh);
 }
 
-std::vector<std::shared_ptr<Texture>> ModelCodecAssimp::_LoadMaterialTextures(aiMaterial* iMat, uint32_t iType, const std::string& iTypeName) {
-    (void)iTypeName;
+std::vector<std::shared_ptr<Texture>> ModelCodecAssimp::_LoadMaterialTextures(aiMaterial* iMat, aiTextureType iType) {
     std::vector<std::shared_ptr<Texture>> textures;
     RenderSystem* rs = m_pContext->GetSubsystem<RenderSystem>();
-    for (uint32_t i = 0; i < iMat->GetTextureCount(static_cast<aiTextureType>(iType)); ++i) {
+    for (uint32_t i = 0; i < iMat->GetTextureCount(iType); ++i) {
         aiString str;
         iMat->GetTexture(static_cast<aiTextureType>(iType), i, &str);
         Texture* texture = rs->CreateTexture();
-        texture->Load(str.C_Str());
+        texture->Load((m_ModelDirectory + "/" + str.C_Str()).c_str());
         textures.emplace_back(texture);
     }
     return std::move(textures);
