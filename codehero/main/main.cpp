@@ -269,9 +269,9 @@ Error Main::Run() {
         glUniform1f(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.shininess"), 32.0f);
 
         rs->SetShaderParameter("dirLight[0].direction", dirLights[0].GetDirection());
-        rs->SetShaderParameter("dirLight[0].ambientIntensity", dirLights[0].GetAmbientIntensity());
-        rs->SetShaderParameter("dirLight[0].diffuseIntensity", dirLights[0].GetDiffuseIntensity());
-        rs->SetShaderParameter("dirLight[0].specularIntensity", dirLights[0].GetSpecularIntensity());
+        rs->SetShaderParameter("dirLight[0].base.ambientIntensity", dirLights[0].GetAmbientIntensity());
+        rs->SetShaderParameter("dirLight[0].base.diffuseIntensity", dirLights[0].GetDiffuseIntensity());
+        rs->SetShaderParameter("dirLight[0].base.specularIntensity", dirLights[0].GetSpecularIntensity());
 
         // TODO(pierre) This should be optimized somehow
         //              The FPS is droping - One of the main reason is the string concatenation (urgghhh ugly)
@@ -280,9 +280,9 @@ Error Main::Run() {
         for (size_t i = 0; i < pLights; ++i) {
             std::string base = "pointLights[" + std::to_string(i) + "].";
             rs->SetShaderParameter(base + "position", pointLights[i].GetPosition());
-            rs->SetShaderParameter(base + "ambientIntensity", pointLights[i].GetAmbientIntensity());
-            rs->SetShaderParameter(base + "diffuseIntensity", pointLights[i].GetDiffuseIntensity());
-            rs->SetShaderParameter(base + "specularIntensity", pointLights[i].GetSpecularIntensity());
+            rs->SetShaderParameter(base + "base.ambientIntensity", pointLights[i].GetAmbientIntensity());
+            rs->SetShaderParameter(base + "base.diffuseIntensity", pointLights[i].GetDiffuseIntensity());
+            rs->SetShaderParameter(base + "base.specularIntensity", pointLights[i].GetSpecularIntensity());
             rs->SetShaderParameter(base + "constant", pointLights[i].GetConstant());
             rs->SetShaderParameter(base + "linear", pointLights[i].GetLinear());
             rs->SetShaderParameter(base + "quadratic", pointLights[i].GetQuadratic());
