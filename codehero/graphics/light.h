@@ -6,6 +6,7 @@
 #define CODEHERO_GRAPHICS_LIGHT_H_ 
 
 #include "graphics/component.h"
+#include "core/math/vector3.h"
 
 namespace CodeHero {
 
@@ -22,7 +23,46 @@ public:
         T_Spot
     };
 
+    Light(Type iType);
+    virtual ~Light() {}
+
+    // Getter/Setter
+    Light& SetDirection(const Vector3& iDirection);
+    const Vector3& GetDirection() const;
+    Light& SetPosition(const Vector3& iPosition);
+    const Vector3& GetPosition() const;
+
+    Light& SetAmbientIntensity(float iIntensity);
+    float GetAmbientIntensity() const;
+    Light& SetDiffuseIntensity(float iIntensity);
+    float GetDiffuseIntensity() const;
+    Light& SetSpecularIntensity(float iIntensity);
+    float GetSpecularIntensity() const;
+
+    Light& SetLinear(float iLinear);
+    float GetLinear() const;
+    Light& SetConstant(float iConstant);
+    float GetConstant() const;
+    Light& SetQuadratic(float iQuadratic);
+    float GetQuadratic() const;
+    // End Getter/Setter
+
 private:
+    Type m_LightType;
+
+    // Directional lights only
+    Vector3 m_Direction;
+
+    Vector3 m_Position;
+
+    float m_AmbientIntensity;
+    float m_DiffuseIntensity;
+    float m_SpecularIntensity;
+
+    // Attenuation
+    float m_Linear;
+    float m_Constant;
+    float m_Quadratic;
 };
 
 } // namespace CodeHero

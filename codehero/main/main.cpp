@@ -21,6 +21,7 @@
 #include "graphics/renderwindow.h"
 #include "graphics/viewport.h"
 #include "graphics/camera.h"
+#include "graphics/light.h"
 #include "graphics/model.h"
 
 #include "ui/font.h"
@@ -96,12 +97,49 @@ Error Main::Run() {
 
     ui.AddChild(t);
 
+    // Create scene lights
+    std::vector<Light> dirLights;
+    dirLights.push_back(Light(Light::Type::T_Directional).SetDirection({-0.2f, -1.0f, -0.3f})
+                                                         .SetAmbientIntensity(0.05f)
+                                                         .SetDiffuseIntensity(0.4f)
+                                                         .SetSpecularIntensity(0.5f));
+
+    std::vector<Light> pointLights;
+    pointLights.push_back(Light(Light::Type::T_Point).SetPosition({0.7f, 0.2f, 2.0f})
+                                                     .SetAmbientIntensity(0.05f)
+                                                     .SetDiffuseIntensity(0.8f)
+                                                     .SetSpecularIntensity(1.0f)
+                                                     .SetConstant(1.0f)
+                                                     .SetLinear(0.09f)
+                                                     .SetQuadratic(0.032f));
+    pointLights.push_back(Light(Light::Type::T_Point).SetPosition({2.3f, -3.3f, -4.0f})
+                                                     .SetAmbientIntensity(0.05f)
+                                                     .SetDiffuseIntensity(0.8f)
+                                                     .SetSpecularIntensity(1.0f)
+                                                     .SetConstant(1.0f)
+                                                     .SetLinear(0.09f)
+                                                     .SetQuadratic(0.032f));
+    pointLights.push_back(Light(Light::Type::T_Point).SetPosition({-4.0f, 2.0f, -12.0f})
+                                                     .SetAmbientIntensity(0.05f)
+                                                     .SetDiffuseIntensity(0.8f)
+                                                     .SetSpecularIntensity(1.0f)
+                                                     .SetConstant(1.0f)
+                                                     .SetLinear(0.09f)
+                                                     .SetQuadratic(0.032f));
+    pointLights.push_back(Light(Light::Type::T_Point).SetPosition({0.0f, 0.0f, -3.0f})
+                                                     .SetAmbientIntensity(0.05f)
+                                                     .SetDiffuseIntensity(0.8f)
+                                                     .SetSpecularIntensity(1.0f)
+                                                     .SetConstant(1.0f)
+                                                     .SetLinear(0.09f)
+                                                     .SetQuadratic(0.032f));
+
     // Build and compile our shader program
-    Shader* ourShader = rs->CreateShader();
-    ourShader->Attach("./codehero/shaders/textured.vert")
+    Shader* crateShader = rs->CreateShader();
+    crateShader->Attach("./codehero/shaders/textured.vert")
              .Attach("./codehero/shaders/textured.frag", {
-                 {"NB_DIRECTIONAL_LIGHTS", "1"},
-                 {"NB_POINT_LIGHTS", "4"},
+                 {"NB_DIRECTIONAL_LIGHTS", std::to_string(dirLights.size())},
+                 {"NB_POINT_LIGHTS", std::to_string(pointLights.size())},
              })
              .Link();
 
@@ -194,13 +232,6 @@ Error Main::Run() {
     Viewport* viewportMiddleRight = new Viewport(600, 200, 200, 200);
     Viewport* viewportBottomRight = new Viewport(600, 0, 200, 200);
 
-    Vector3 pointLightPositions[] = {
-        { 0.7f,  0.2f,  2.0f},
-        { 2.3f, -3.3f, -4.0f},
-        {-4.0f,  2.0f, -12.0f},
-        { 0.0f,  0.0f, -3.0f}
-    };
-
     Camera camera({0.0f, 2.2f, 3.5f}, {0.0f, 1.0f, 0.0f});
 
     while (!m_pMainWindow->ShouldClose()) {
@@ -225,54 +256,37 @@ Error Main::Run() {
         ui.Render();
 
         // Draw the triangle
-        ourShader->Use();
+        crateShader->Use();
 
         // Bind Textures using texture units
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1->GetGPUObject().intHandle);
-        glUniform1i(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "material.diffuse"), 0);
+        glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.diffuse"), 0);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2->GetGPUObject().intHandle);
-        glUniform1i(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "material.specular"), 1);
+        glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.specular"), 1);
 
-        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "material.shininess"), 32.0f);
+        glUniform1f(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.shininess"), 32.0f);
 
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "dirLight[0].direction"), -0.2f, -1.0f, -0.3f);
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "dirLight[0].ambient"), 0.05f, 0.05f, 0.05f);
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "dirLight[0].diffuse"), 0.4f, 0.4f, 0.4f);
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "dirLight[0].specular"), 0.5f, 0.5f, 0.5f);
-        // Point light 1
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].position"), pointLightPositions[0].x(), pointLightPositions[0].y(), pointLightPositions[0].z());
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].ambient"), 0.05f, 0.05f, 0.05f);
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].diffuse"), 0.8f, 0.8f, 0.8f);
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].specular"), 1.0f, 1.0f, 1.0f);
-        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].constant"), 1.0f);
-        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].linear"), 0.09);
-        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[0].quadratic"), 0.032);
-        // Point light 2
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[1].position"), pointLightPositions[1].x(), pointLightPositions[1].y(), pointLightPositions[1].z());
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[1].ambient"), 0.05f, 0.05f, 0.05f);
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[1].diffuse"), 0.8f, 0.8f, 0.8f);
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[1].specular"), 1.0f, 1.0f, 1.0f);
-        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[1].constant"), 1.0f);
-        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[1].linear"), 0.09);
-        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[1].quadratic"), 0.032);
-        // Point light 3
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[2].position"), pointLightPositions[2].x(), pointLightPositions[2].y(), pointLightPositions[2].z());
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[2].ambient"), 0.05f, 0.05f, 0.05f);
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[2].diffuse"), 0.8f, 0.8f, 0.8f);
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[2].specular"), 1.0f, 1.0f, 1.0f);
-        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[2].constant"), 1.0f);
-        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[2].linear"), 0.09);
-        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[2].quadratic"), 0.032);
-        // Point light 4
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[3].position"), pointLightPositions[3].x(), pointLightPositions[3].y(), pointLightPositions[3].z());
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[3].ambient"), 0.05f, 0.05f, 0.05f);
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[3].diffuse"), 0.8f, 0.8f, 0.8f);
-        glUniform3f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[3].specular"), 1.0f, 1.0f, 1.0f);
-        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[3].constant"), 1.0f);
-        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[3].linear"), 0.09);
-        glUniform1f(glGetUniformLocation(ourShader->GetGPUObject().intHandle, "pointLights[3].quadratic"), 0.032);
+        rs->SetShaderParameter("dirLight[0].direction", dirLights[0].GetDirection());
+        rs->SetShaderParameter("dirLight[0].ambientIntensity", dirLights[0].GetAmbientIntensity());
+        rs->SetShaderParameter("dirLight[0].diffuseIntensity", dirLights[0].GetDiffuseIntensity());
+        rs->SetShaderParameter("dirLight[0].specularIntensity", dirLights[0].GetSpecularIntensity());
+
+        // TODO(pierre) This should be optimized somehow
+        //              The FPS is droping - One of the main reason is the string concatenation (urgghhh ugly)
+        //              I am leaving as is for now, I am still building the proper rendering pipeline, this will change
+        size_t pLights = pointLights.size();
+        for (size_t i = 0; i < pLights; ++i) {
+            std::string base = "pointLights[" + std::to_string(i) + "].";
+            rs->SetShaderParameter(base + "position", pointLights[i].GetPosition());
+            rs->SetShaderParameter(base + "ambientIntensity", pointLights[i].GetAmbientIntensity());
+            rs->SetShaderParameter(base + "diffuseIntensity", pointLights[i].GetDiffuseIntensity());
+            rs->SetShaderParameter(base + "specularIntensity", pointLights[i].GetSpecularIntensity());
+            rs->SetShaderParameter(base + "constant", pointLights[i].GetConstant());
+            rs->SetShaderParameter(base + "linear", pointLights[i].GetLinear());
+            rs->SetShaderParameter(base + "quadratic", pointLights[i].GetQuadratic());
+        }
 
         PerspectiveMatrix projection(45.0f, 800 / 600, 0.1f, 100.0f);
 
