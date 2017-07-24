@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.9)
 
 project (CodeHero)
 
@@ -219,6 +219,10 @@ if (${_CODEHERO_DRIVER_ASSIMP})
     add_definitions (-DDRIVER_ASSIMP)
     set (ADDITIONAL_LIBRARIES ${ADDITIONAL_LIBRARIES} assimp)
 endif ()
+
+# Source groups
+source_group (TREE ${PROJECT_SOURCE_DIR} FILES ${HEADERS} ${SOURCES})
+# -
 
 # ---------- Flags ----------
 set (COMMON_RELEASE_FLAGS "-fPIC -g -O3 -fstack-protector -fvisibility=hidden -W -Wall -Wno-missing-braces -Wno-unused-function -Wpointer-arith -Wformat -Wreturn-type -Wsign-compare -Wmultichar -Wformat-nonliteral -Winit-self -Wuninitialized -Wno-deprecated -Wformat-security -Werror")
