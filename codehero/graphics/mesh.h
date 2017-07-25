@@ -21,7 +21,7 @@ using TextureUnitsMaps = std::unordered_map<std::string, std::vector<std::shared
 class Mesh {
 public:
     Mesh();
-    ~Mesh();
+    virtual ~Mesh();
 
     void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& iBuffer);
     void AddIndexBuffer(const std::shared_ptr<IndexBuffer>& iBuffer);
