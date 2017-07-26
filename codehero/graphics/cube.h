@@ -6,6 +6,7 @@
 #define CODEHERO_GRAPHICS_CUBE_H_ 
 
 #include "graphics/mesh.h"
+#include "core/math/vector3.h"
 
 namespace CodeHero {
 
