@@ -309,7 +309,7 @@ Error Main::Run() {
 
             mdl.m_Meshes[i]->GetVertices()->Use();
 
-            glDrawArrays(GL_TRIANGLES, 0, mdl.m_Meshes[i]->GetIndices()->GetSize());
+            glDrawElements(GL_TRIANGLES, mdl.m_Meshes[i]->GetIndices()->GetSize(), GL_UNSIGNED_INT, 0);
         }
 
         // Bind Textures using texture units
@@ -331,13 +331,13 @@ Error Main::Run() {
 
             rs->SetShaderParameter("model", model);
             rs->SetViewport(viewportMiddleRight);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
+            rs->Draw(PT_Triangles, 0, 36);
             rs->SetViewport(viewportBottomRight);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
+            rs->Draw(PT_Triangles, 0, 36);
             rs->SetViewport(viewportTopRight);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
+            rs->Draw(PT_Triangles, 0, 36);
             rs->SetViewport(viewportMain);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
+            rs->Draw(PT_Triangles, 0, 36);
         }
         buffer->Unuse();
 
