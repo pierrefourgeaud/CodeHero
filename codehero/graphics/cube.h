@@ -6,13 +6,13 @@
 #define CODEHERO_GRAPHICS_CUBE_H_ 
 
 #include "graphics/mesh.h"
-#include "core/math/vector3.h"
+#include "core/enginecontext.h"
 
 namespace CodeHero {
 
 class Cube : public Mesh{
 public:
-    Cube(const Vector3& iPosition, float iSize);
+    Cube(const std::shared_ptr<EngineContext>& iContext);
     ~Cube();
 
 private:
