@@ -6,8 +6,8 @@
 
 namespace CodeHero {
 
-Light::Light(Type iType)
-    : Component(Component::DrawableType::DT_Light)
+Light::Light(const std::shared_ptr<EngineContext>& iContext, Type iType)
+    : Drawable(iContext, Drawable::DrawableType::DT_Light)
     , m_LightType(iType) {}
 
 Light& Light::SetDirection(const Vector3& iDirection) {

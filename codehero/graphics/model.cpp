@@ -7,7 +7,7 @@
 namespace CodeHero {
 
 Model::Model(const std::shared_ptr<EngineContext>& iContext)
-    : Object(iContext) {}
+    : Drawable(iContext, Drawable::DrawableType::DT_Geometry) {}
 
 Model::~Model() {}
 

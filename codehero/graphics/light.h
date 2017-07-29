@@ -23,7 +23,9 @@ public:
         T_Spot
     };
 
-    Light(Type iType);
+    OBJECT(Light)
+
+    Light(const std::shared_ptr<EngineContext>& iContext, Type iType);
     virtual ~Light() {}
 
     // Getter/Setter
