@@ -2,21 +2,24 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
-#ifndef CODEHERO_GRAPHICS_COMPONENT_H_
-#define CODEHERO_GRAPHICS_COMPONENT_H_ 
+#ifndef CODEHERO_GRAPHICS_DRAWABLE_H_
+#define CODEHERO_GRAPHICS_DRAWABLE_H_ 
+
+#include "core/object.h"
 
 namespace CodeHero {
 
-class Component {
+class Drawable : public Object {
 public:
     enum DrawableType {
         DT_Light,
         DT_Geometry
     };
 
-    explicit Component(DrawableType iType)
-        : m_Type(iType) {}
-    virtual ~Component() {}
+    Drawable(const std::shared_ptr<EngineContext>& iContext, DrawableType iType)
+        : Object(iContext)
+        , m_Type(iType) {}
+    virtual ~Drawable() {}
 
     DrawableType GetDrawableType() const { return m_Type; }
 
@@ -26,4 +29,4 @@ private:
 
 } // namespace CodeHero
 
-#endif // CODEHERO_GRAPHICS_COMPONENT_H_
+#endif // CODEHERO_GRAPHICS_DRAWABLE_H_

@@ -5,7 +5,7 @@
 #ifndef CODEHERO_GRAPHICS_LIGHT_H_
 #define CODEHERO_GRAPHICS_LIGHT_H_ 
 
-#include "graphics/component.h"
+#include "graphics/drawable.h"
 #include "core/math/vector3.h"
 
 namespace CodeHero {
@@ -15,7 +15,7 @@ namespace CodeHero {
 // - Ambiance lighting
 // - Diffuse lighting
 // - Specular lighting
-class Light : public Component {
+class Light : public Drawable {
 public:
     enum Type {
         T_Point,

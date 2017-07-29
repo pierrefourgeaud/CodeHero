@@ -91,8 +91,9 @@ set (SOURCES
      ${SRCS_PATH}/ui/uielement.cpp
      # Graphics
      ${SRCS_PATH}/graphics/camera.cpp
-     ${SRCS_PATH}/graphics/component.cpp
+     ${SRCS_PATH}/graphics/drawable.cpp
      ${SRCS_PATH}/graphics/cube.cpp
+     ${SRCS_PATH}/graphics/drawable.cpp
      ${SRCS_PATH}/graphics/indexbuffer.cpp
      ${SRCS_PATH}/graphics/light.cpp
      ${SRCS_PATH}/graphics/mesh.cpp
@@ -144,8 +145,9 @@ set (HEADERS
      ${SRCS_PATH}/ui/uielement.h
      # Graphics
      ${SRCS_PATH}/graphics/camera.h
-     ${SRCS_PATH}/graphics/component.h
+     ${SRCS_PATH}/graphics/drawable.h
      ${SRCS_PATH}/graphics/cube.h
+     ${SRCS_PATH}/graphics/drawable.h
      ${SRCS_PATH}/graphics/indexbuffer.h
      ${SRCS_PATH}/graphics/light.h
      ${SRCS_PATH}/graphics/mesh.h

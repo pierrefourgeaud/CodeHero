@@ -10,20 +10,20 @@
 namespace CodeHero {
 
 // Forward declaration
-class Component;
+class Drawable;
 
 class Node {
 public:
 
     template <class T>
-    Component* CreateComponent() {
-        Component* newComponent = new T;
-        AddComponent(newComponent);
+    Drawable* CreateDrawable() {
+        Drawable* newComponent = new T;
+        AddDrawable(newComponent);
         return newComponent;
     }
 
-    void AddComponent(Component* iComponent);
-    const std::vector<Component*>& GetComponents() const { return m_Components; }
+    void AddDrawable(Drawable* iComponent);
+    const std::vector<Drawable*>& GetComponents() const { return m_Drawables; }
 
     Node* CreateChild() {
         Node* node = new Node;
@@ -34,7 +34,7 @@ public:
     const std::vector<Node*>& GetChildren() const { return m_Children; }
 
 private:
-    std::vector<Component*> m_Components;
+    std::vector<Drawable*> m_Drawables;
     std::vector<Node*> m_Children;
 };
 

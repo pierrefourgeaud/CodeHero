@@ -7,15 +7,17 @@
 
 #include <vector>
 #include "core/object.h"
+#include "graphics/drawable.h"
 
 namespace CodeHero {
 
 // Forward declaration
 class Mesh;
 
-class Model : public Object {
+class Model : public Drawable {
 public:
     OBJECT(Model)
+
     explicit Model(const std::shared_ptr<EngineContext>& iContext);
     virtual ~Model();
 

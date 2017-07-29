@@ -6,8 +6,8 @@
 
 namespace CodeHero {
 
-void Node::AddComponent(Component* iComponent) {
-    m_Components.push_back(iComponent);
+void Node::AddDrawable(Drawable* iDrawable) {
+    m_Drawables.push_back(iDrawable);
 }
 
 } // namespace CodeHero
