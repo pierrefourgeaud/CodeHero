@@ -27,15 +27,15 @@ public:
     uint32_t width() const { return m_Dimension.x(); }
     uint32_t height() const { return m_Dimension.y(); }
 
-    void SetCamera(Camera* iCamera) { m_pCamera = iCamera; }
-    void SetScene(Scene* iScene) { m_pScene = iScene; }
+    void SetCamera(std::shared_ptr<Camera> iCamera) { m_pCamera = iCamera; }
+    void SetScene(std::shared_ptr<Scene> iScene) { m_pScene = iScene; }
 
 private:
     IntVector2 m_Position;
     IntVector2 m_Dimension;
 
-    Scene* m_pScene;
-    Camera* m_pCamera;
+    std::shared_ptr<Scene> m_pScene;
+    std::shared_ptr<Camera> m_pCamera;
 };
 
 } // namespace CodeHero

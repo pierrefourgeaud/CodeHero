@@ -47,6 +47,9 @@
 # include "drivers/assimp/modelcodec_assimp.h"
 #endif // DRIVER_ASSIMP
 
+const uint32_t g_Width = 1920;
+const uint32_t g_Height = 1440;
+
 namespace CodeHero {
 
 Main::Main() {
@@ -78,7 +81,7 @@ Error Main::Start() {
 
     if (!error) {
         _LoadDrivers();
-        m_pMainWindow.reset(rs->CreateWindow());
+        m_pMainWindow.reset(rs->CreateWindow(g_Width, g_Height));
     }
 
     LOGD2 << "[<] Main::Start()" << std::endl;
@@ -94,9 +97,9 @@ Error Main::Run() {
     std::shared_ptr<Font> f(new Font(m_pContext, "./resources/fonts/Roboto-Regular.ttf"));
     UI ui(m_pContext);
     std::shared_ptr<Text> t(new Text(m_pContext));
-    t->SetPosition(10.0f, 565.0f);
+    t->SetPosition(10.0f, g_Height * 0.95);
     t->SetFont(f);
-    t->SetSize(24);
+    t->SetSize(38);
 
     ui.AddChild(t);
 
@@ -151,7 +154,7 @@ Error Main::Run() {
               .Attach("./codehero/shaders/text_basic.frag")
               .Link();
     textShader->Use();
-    OrthoMatrix ortho(0, 600, 0, 600);
+    OrthoMatrix ortho(0, g_Width * 0.75, 0, g_Width * 0.75);
     rs->SetShaderParameter("projection", ortho);
 
     // Set up vertex data (and buffer(s)) and attribute pointers
@@ -233,11 +236,11 @@ Error Main::Run() {
     Scene scene;
     Node* node = scene.CreateChild();
     node->AddDrawable(&mdl);
-    // double mspf = 0.0;
-    Viewport* viewportMain = new Viewport(0, 0, 600, 600);
-    Viewport* viewportTopRight = new Viewport(600, 400, 200, 200);
-    Viewport* viewportMiddleRight = new Viewport(600, 200, 200, 200);
-    Viewport* viewportBottomRight = new Viewport(600, 0, 200, 200);
+    std::vector<std::shared_ptr<Viewport>> viewports;
+    viewports.push_back(std::make_shared<Viewport>(0, 0, g_Width * 0.75, g_Height));
+    for (size_t i = 0; i < 3; ++i) {
+        viewports.push_back(std::make_shared<Viewport>(g_Width * 0.75, (i * g_Height / 3), g_Width / 4, g_Height / 3));
+    }
 
     Camera camera({0.0f, 2.2f, 3.5f}, {0.0f, 1.0f, 0.0f});
 
@@ -285,7 +288,7 @@ Error Main::Run() {
             rs->SetShaderParameter(base + "quadratic", pointLights[i].GetQuadratic());
         }
 
-        PerspectiveMatrix projection(45.0f, 800 / 600, 0.1f, 100.0f);
+        PerspectiveMatrix projection(45.0f, g_Width / g_Height, 0.1f, 100.0f);
 
         rs->SetShaderParameter("view", camera.GetView());
         rs->SetShaderParameter("projection", projection);
@@ -335,14 +338,10 @@ Error Main::Run() {
             model.Rotate(glfwGetTime() * 20.0f * i, {1.0f, 0.3f, 0.5f});
 
             rs->SetShaderParameter("model", model);
-            rs->SetViewport(viewportMiddleRight);
-            rs->Draw(PT_Triangles, 0, 36);
-            rs->SetViewport(viewportBottomRight);
-            rs->Draw(PT_Triangles, 0, 36);
-            rs->SetViewport(viewportTopRight);
-            rs->Draw(PT_Triangles, 0, 36);
-            rs->SetViewport(viewportMain);
-            rs->Draw(PT_Triangles, 0, 36);
+            for (size_t i = viewports.size(); i > 0; --i) {
+                rs->SetViewport(viewports[i - 1].get());
+                rs->Draw(PT_Triangles, 0, 36);
+            }
         }
         buffer->Unuse();
 

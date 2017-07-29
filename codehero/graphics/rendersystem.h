@@ -75,7 +75,7 @@ public:
 #ifdef WIN32
 #undef CreateWindow
 #endif
-    virtual RenderWindow* CreateWindow() = 0;
+    virtual RenderWindow* CreateWindow(uint32_t iWidth, uint32_t iHeight) = 0;
     virtual Texture* CreateTexture() = 0;
     virtual Shader* CreateShader() = 0;
     virtual VertexBuffer* CreateVertexBuffer() = 0;

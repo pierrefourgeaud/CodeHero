@@ -32,7 +32,7 @@ void Text::SetText(const std::string& iText) {
 
 void Text::GetBatches(std::vector<UIBatch>& oBatches) {
     if (!m_Text.empty() && m_pFont.get() && m_Size != 0) {
-        std::shared_ptr<FontFace> fa = m_pFont->GetFace(24);
+        std::shared_ptr<FontFace> fa = m_pFont->GetFace(m_Size);
         std::string::size_type size = m_Text.size();
         std::shared_ptr<VertexBuffer> buffer(m_pContext->GetSubsystem<RenderSystem>()->CreateVertexBuffer());
         buffer->SetData(nullptr, 6 * size, VertexBuffer::MASK_Position | VertexBuffer::MASK_TexCoord, true);

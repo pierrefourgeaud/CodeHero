@@ -138,9 +138,9 @@ void RenderSystemGL::Draw(PrimitiveType iType, uint32_t iStart, uint32_t iCount)
 }
 
 // Factory
-RenderWindow* RenderSystemGL::CreateWindow() {
+RenderWindow* RenderSystemGL::CreateWindow(uint32_t iWidth, uint32_t iHeight) {
     RenderWindow* win = new RenderWindowGL(*this);
-    if (win->Create(800, 600) != Error::OK) {
+    if (win->Create(iWidth, iHeight) != Error::OK) {
         delete win;
         win = nullptr;
     }

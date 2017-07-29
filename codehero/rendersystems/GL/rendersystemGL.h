@@ -40,7 +40,7 @@ public:
     void Draw(PrimitiveType iType, uint32_t iStart, uint32_t iCount) final override;
 
     // Factory
-    RenderWindow* CreateWindow() final override;
+    RenderWindow* CreateWindow(uint32_t iWidth, uint32_t iHeight) final override;
     Texture* CreateTexture() final override;
     Shader* CreateShader() final override;
     VertexBuffer* CreateVertexBuffer() final override;
