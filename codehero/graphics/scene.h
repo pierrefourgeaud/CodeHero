@@ -5,13 +5,17 @@
 #ifndef CODEHERO_GRAPHICS_SCENE_H_
 #define CODEHERO_GRAPHICS_SCENE_H_ 
 
+#include "graphics/node.h"
+
 namespace CodeHero {
 
 // Forward declaration
 class Camera;
-class Node;
 
-class Scene {
+// Scene is simply a rootNode.
+// It will inerit everything everything for the node
+// But with extra properties
+class Scene : public Node {
 public:
     Scene();
     ~Scene();
@@ -19,7 +23,6 @@ public:
     void Render(Camera* iCamera);
 
 private:
-    Node* m_pRootNode;
 };
 
 } // namespace CodeHero

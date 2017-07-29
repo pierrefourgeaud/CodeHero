@@ -24,6 +24,7 @@
 #include "graphics/light.h"
 #include "graphics/model.h"
 #include "graphics/mesh.h"
+#include "graphics/scene.h"
 
 #include "ui/font.h"
 #include "ui/ui.h"
@@ -101,40 +102,40 @@ Error Main::Run() {
 
     // Create scene lights
     std::vector<Light> dirLights;
-    dirLights.push_back(Light(Light::Type::T_Directional).SetDirection({-0.2f, -1.0f, -0.3f})
-                                                         .SetAmbientIntensity(0.05f)
-                                                         .SetDiffuseIntensity(0.4f)
-                                                         .SetSpecularIntensity(0.5f));
+    dirLights.push_back(Light(m_pContext, Light::Type::T_Directional).SetDirection({-0.2f, -1.0f, -0.3f})
+                                                                     .SetAmbientIntensity(0.05f)
+                                                                     .SetDiffuseIntensity(0.4f)
+                                                                     .SetSpecularIntensity(0.5f));
 
     std::vector<Light> pointLights;
-    pointLights.push_back(Light(Light::Type::T_Point).SetPosition({0.7f, 0.2f, 2.0f})
-                                                     .SetAmbientIntensity(0.05f)
-                                                     .SetDiffuseIntensity(0.8f)
-                                                     .SetSpecularIntensity(1.0f)
-                                                     .SetConstant(1.0f)
-                                                     .SetLinear(0.09f)
-                                                     .SetQuadratic(0.032f));
-    pointLights.push_back(Light(Light::Type::T_Point).SetPosition({2.3f, -3.3f, -4.0f})
-                                                     .SetAmbientIntensity(0.05f)
-                                                     .SetDiffuseIntensity(0.8f)
-                                                     .SetSpecularIntensity(1.0f)
-                                                     .SetConstant(1.0f)
-                                                     .SetLinear(0.09f)
-                                                     .SetQuadratic(0.032f));
-    pointLights.push_back(Light(Light::Type::T_Point).SetPosition({-4.0f, 2.0f, -12.0f})
-                                                     .SetAmbientIntensity(0.05f)
-                                                     .SetDiffuseIntensity(0.8f)
-                                                     .SetSpecularIntensity(1.0f)
-                                                     .SetConstant(1.0f)
-                                                     .SetLinear(0.09f)
-                                                     .SetQuadratic(0.032f));
-    pointLights.push_back(Light(Light::Type::T_Point).SetPosition({0.0f, 0.0f, -3.0f})
-                                                     .SetAmbientIntensity(0.05f)
-                                                     .SetDiffuseIntensity(0.8f)
-                                                     .SetSpecularIntensity(1.0f)
-                                                     .SetConstant(1.0f)
-                                                     .SetLinear(0.09f)
-                                                     .SetQuadratic(0.032f));
+    pointLights.push_back(Light(m_pContext, Light::Type::T_Point).SetPosition({0.7f, 0.2f, 2.0f})
+                                                                 .SetAmbientIntensity(0.05f)
+                                                                 .SetDiffuseIntensity(0.8f)
+                                                                 .SetSpecularIntensity(1.0f)
+                                                                 .SetConstant(1.0f)
+                                                                 .SetLinear(0.09f)
+                                                                 .SetQuadratic(0.032f));
+    pointLights.push_back(Light(m_pContext, Light::Type::T_Point).SetPosition({2.3f, -3.3f, -4.0f})
+                                                                 .SetAmbientIntensity(0.05f)
+                                                                 .SetDiffuseIntensity(0.8f)
+                                                                 .SetSpecularIntensity(1.0f)
+                                                                 .SetConstant(1.0f)
+                                                                 .SetLinear(0.09f)
+                                                                 .SetQuadratic(0.032f));
+    pointLights.push_back(Light(m_pContext, Light::Type::T_Point).SetPosition({-4.0f, 2.0f, -12.0f})
+                                                                 .SetAmbientIntensity(0.05f)
+                                                                 .SetDiffuseIntensity(0.8f)
+                                                                 .SetSpecularIntensity(1.0f)
+                                                                 .SetConstant(1.0f)
+                                                                 .SetLinear(0.09f)
+                                                                 .SetQuadratic(0.032f));
+    pointLights.push_back(Light(m_pContext, Light::Type::T_Point).SetPosition({0.0f, 0.0f, -3.0f})
+                                                                 .SetAmbientIntensity(0.05f)
+                                                                 .SetDiffuseIntensity(0.8f)
+                                                                 .SetSpecularIntensity(1.0f)
+                                                                 .SetConstant(1.0f)
+                                                                 .SetLinear(0.09f)
+                                                                 .SetQuadratic(0.032f));
 
     // Build and compile our shader program
     Shader* crateShader = rs->CreateShader();
@@ -228,6 +229,10 @@ Error Main::Run() {
     double lastTime = glfwGetTime();
     int nbFrames = 0;
     int fps = 0.0;
+
+    Scene scene;
+    Node* node = scene.CreateChild();
+    node->AddDrawable(&mdl);
     // double mspf = 0.0;
     Viewport* viewportMain = new Viewport(0, 0, 600, 600);
     Viewport* viewportTopRight = new Viewport(600, 400, 200, 200);

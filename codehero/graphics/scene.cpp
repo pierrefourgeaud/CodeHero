@@ -9,8 +9,7 @@
 
 namespace CodeHero {
 
-Scene::Scene()
-    : m_pRootNode(new Node) {}
+Scene::Scene() {}
 
 Scene::~Scene() {}
 
