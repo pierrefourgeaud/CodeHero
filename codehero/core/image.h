@@ -25,6 +25,9 @@ public:
         IFMT_RGBA, // one byte R, one byte G, one byte B, one byte A
         IFMT_Indexed, // index byte 0-256, and after image end, 256*3 bytes of palette
         IFMT_IndexedAlpha, // index byte 0-256, and after image end, 256*4 bytes of palette (alpha)
+        IFMT_DXT1,
+        IFMT_DXT3,
+        IFMT_DXT5,
         IFMT_Max
     };
 
@@ -37,7 +40,7 @@ public:
     uint32_t GetWidth() const { return m_Width; }
     uint32_t GetHeight() const { return m_Height; }
     Format GetFormat() const { return m_Fmt; }
-    uint32_t GetSize() const { return GetWidth() * GetHeight() * GetComponentsFromFormat(GetFormat()); }
+    uint32_t GetSize() const { return m_Data.size(); }
 
     static int GetComponentsFromFormat(Format iFmt);
 

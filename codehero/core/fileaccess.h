@@ -28,6 +28,8 @@ public:
 
     int Read(uint8_t* oData, int iLength);
     uint8_t Read8();
+    uint16_t Read16();
+    uint32_t Read32();
     std::string ReadAll();
 
     bool IsEOF() const;

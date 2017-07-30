@@ -59,6 +59,32 @@ uint8_t FileAccess::Read8() {
     return byte;
 }
 
+uint16_t FileAccess::Read16() {
+    uint16_t res = 0;
+
+    uint8_t a = Read8();
+    uint8_t b = Read8();
+
+    res = b;
+    res <<= 8;
+    res |= a;
+
+    return res;
+}
+
+uint32_t FileAccess::Read32() {
+    uint32_t res = 0;
+
+    uint16_t a = Read16();
+    uint16_t b = Read16();
+
+    res = b;
+    res <<= 16;
+    res |= a;
+
+    return res;
+}
+
 std::string FileAccess::ReadAll() {
     size_t size = GetSize();
 

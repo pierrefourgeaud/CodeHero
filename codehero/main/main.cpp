@@ -45,6 +45,10 @@
 # include "drivers/png/imagecodec_png.h"
 #endif // DRIVER_PNG
 
+#ifdef DRIVER_DDS
+# include "drivers/dds/imagecodec_dds.h"
+#endif // DRIVER_DDS
+
 #ifdef DRIVER_ASSIMP
 # include "drivers/assimp/modelcodec_assimp.h"
 #endif // DRIVER_ASSIMP
@@ -95,7 +99,6 @@ Error Main::Run() {
     LOGD2 << "[>] Main::Run()" << std::endl;
 
     RenderSystem* rs = m_pContext->GetSubsystem<RenderSystem>();
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     std::shared_ptr<Font> f(new Font(m_pContext, "./resources/fonts/Roboto-Regular.ttf"));
     UI ui(m_pContext);
     std::shared_ptr<Text> t(new Text(m_pContext));
@@ -165,6 +168,12 @@ Error Main::Run() {
 
     Texture* texture2 = rs->CreateTexture();
     texture2->Load("./resources/images/container2_specular.png");
+
+    // Floor texture
+    Texture* floorDiffuse = rs->CreateTexture();
+    floorDiffuse->Load("./resources/images/StoneDiffuse.dds");
+    Texture* floorSpecular = rs->CreateTexture();
+    floorSpecular->Load("./resources/images/StoneNormal.dds");
 
     Model mdl(m_pContext);
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/nanosuit/nanosuit.obj", mdl);
@@ -304,6 +313,17 @@ Error Main::Run() {
             }
         }
         cube.GetVertices()->Unuse();
+
+        // Bind Textures using texture units
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, floorDiffuse->GetGPUObject().intHandle);
+        glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.diffuse"), 0);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, floorSpecular->GetGPUObject().intHandle);
+        glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.specular"), 1);
+
+        glUniform1f(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.shininess"), 32.0f);
+
         plane.GetVertices()->Use();
         rs->SetShaderParameter("model", modelFloor);
         for (size_t i = viewports.size(); i > 0; --i) {
@@ -342,6 +362,10 @@ void Main::_LoadDrivers() {
 #ifdef DRIVER_PNG
     m_pContext->GetSubsystem<ResourceLoader<Image>>()->AddCodec(new ImageCodecPNG(m_pContext));
 #endif // DRIVER_PNG
+
+#ifdef DRIVER_DDS
+    m_pContext->GetSubsystem<ResourceLoader<Image>>()->AddCodec(new ImageCodecDDS(m_pContext));
+#endif // DRIVER_DDS
 
 #ifdef DRIVER_ASSIMP
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->AddCodec(new ModelCodecAssimp(m_pContext));

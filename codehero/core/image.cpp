@@ -32,8 +32,11 @@ int Image::GetComponentsFromFormat(Image::Format iFmt) {
         return 1;
     case IFMT_GrayscaleAlpha:
         return 2;
+    case IFMT_DXT1:
     case IFMT_RGB:
         return 3;
+    case IFMT_DXT3:
+    case IFMT_DXT5:
     case IFMT_RGBA:
         return 4;
     default:
