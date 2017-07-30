@@ -99,6 +99,7 @@ set (SOURCES
      ${SRCS_PATH}/graphics/mesh.cpp
      ${SRCS_PATH}/graphics/model.cpp
      ${SRCS_PATH}/graphics/node.cpp
+     ${SRCS_PATH}/graphics/plane.cpp
      ${SRCS_PATH}/graphics/rendersystem.cpp
      ${SRCS_PATH}/graphics/renderwindow.cpp
      ${SRCS_PATH}/graphics/scene.cpp
@@ -153,6 +154,7 @@ set (HEADERS
      ${SRCS_PATH}/graphics/mesh.h
      ${SRCS_PATH}/graphics/model.h
      ${SRCS_PATH}/graphics/node.h
+     ${SRCS_PATH}/graphics/plane.h
      ${SRCS_PATH}/graphics/rendersystem.h
      ${SRCS_PATH}/graphics/renderwindow.h
      ${SRCS_PATH}/graphics/scene.h
