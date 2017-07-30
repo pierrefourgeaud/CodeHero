@@ -70,6 +70,18 @@ void Matrix4::Rotate(float iAngle, const Vector3& iVector) {
     m[2][0] = z.x(); m[2][1] = z.y(); m[2][2] = z.z(); m[2][3] = z.w();
 }
 
+void Matrix4::Scale(float iScale) {
+    m[0][0] *= iScale;
+    m[1][1] *= iScale;
+    m[2][2] *= iScale;
+}
+
+void Matrix4::Scale(const Vector3& iScale) {
+    m[0][0] *= iScale.x();
+    m[1][1] *= iScale.y();
+    m[2][2] *= iScale.z();
+}
+
 Matrix4 Matrix4::operator*(const Matrix4& iValue) const {
     Matrix4 mat;
 

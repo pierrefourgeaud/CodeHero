@@ -38,6 +38,8 @@ public:
     // Should we also do it with Vector3 ? Or maybe implicit conversion ?
     void Translate(const Vector3& iTrans);
     void Rotate(float iAngle, const Vector3& iAxis);
+    void Scale(float iScale);
+    void Scale(const Vector3& iScale);
 
     Matrix4 operator*(const Matrix4& iValue) const;
     Vector4 operator*(const Vector4& iVector) const;
