@@ -26,6 +26,7 @@
 #include "graphics/mesh.h"
 #include "graphics/scene.h"
 #include "graphics/cube.h"
+#include "graphics/plane.h"
 
 #include "ui/font.h"
 #include "ui/ui.h"
@@ -107,8 +108,8 @@ Error Main::Run() {
     // Create scene lights
     std::vector<Light> dirLights;
     dirLights.push_back(Light(m_pContext, Light::Type::T_Directional).SetDirection({-0.2f, -1.0f, -0.3f})
-                                                                     .SetAmbientIntensity(0.05f)
-                                                                     .SetDiffuseIntensity(0.4f)
+                                                                     .SetAmbientIntensity(0.45f)
+                                                                     .SetDiffuseIntensity(0.8f)
                                                                      .SetSpecularIntensity(0.5f));
 
     std::vector<Light> pointLights;
@@ -117,29 +118,29 @@ Error Main::Run() {
                                                                  .SetDiffuseIntensity(0.8f)
                                                                  .SetSpecularIntensity(1.0f)
                                                                  .SetConstant(1.0f)
-                                                                 .SetLinear(0.09f)
-                                                                 .SetQuadratic(0.032f));
+                                                                 .SetLinear(0.007f)
+                                                                 .SetQuadratic(0.0002f));
     pointLights.push_back(Light(m_pContext, Light::Type::T_Point).SetPosition({2.3f, -3.3f, -4.0f})
                                                                  .SetAmbientIntensity(0.05f)
                                                                  .SetDiffuseIntensity(0.8f)
                                                                  .SetSpecularIntensity(1.0f)
                                                                  .SetConstant(1.0f)
-                                                                 .SetLinear(0.09f)
-                                                                 .SetQuadratic(0.032f));
+                                                                 .SetLinear(0.007f)
+                                                                 .SetQuadratic(0.0002f));
     pointLights.push_back(Light(m_pContext, Light::Type::T_Point).SetPosition({-4.0f, 2.0f, -12.0f})
                                                                  .SetAmbientIntensity(0.05f)
                                                                  .SetDiffuseIntensity(0.8f)
                                                                  .SetSpecularIntensity(1.0f)
                                                                  .SetConstant(1.0f)
-                                                                 .SetLinear(0.09f)
-                                                                 .SetQuadratic(0.032f));
+                                                                 .SetLinear(0.007f)
+                                                                 .SetQuadratic(0.0002f));
     pointLights.push_back(Light(m_pContext, Light::Type::T_Point).SetPosition({0.0f, 0.0f, -3.0f})
                                                                  .SetAmbientIntensity(0.05f)
                                                                  .SetDiffuseIntensity(0.8f)
                                                                  .SetSpecularIntensity(1.0f)
                                                                  .SetConstant(1.0f)
-                                                                 .SetLinear(0.09f)
-                                                                 .SetQuadratic(0.032f));
+                                                                 .SetLinear(0.007f)
+                                                                 .SetQuadratic(0.0002f));
 
     // Build and compile our shader program
     Shader* crateShader = rs->CreateShader();
@@ -169,6 +170,7 @@ Error Main::Run() {
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/nanosuit/nanosuit.obj", mdl);
 
     Cube cube(m_pContext);
+    Plane plane(m_pContext);
 
     Vector3 cubePositions[] = {
         { 0.0f,  0.0f,  0.0f},
@@ -195,7 +197,12 @@ Error Main::Run() {
         viewports.push_back(std::make_shared<Viewport>(g_Width * 0.75, (i * g_Height / 3), g_Width / 4, g_Height / 3));
     }
 
-    Camera camera({0.0f, 2.2f, 3.5f}, {0.0f, 1.0f, 0.0f});
+    Camera camera({0.0f, 3.2f, 6.5f}, {0.0f, 1.0f, 0.0f});
+
+    Matrix4 modelFloor;
+    modelFloor.Scale({ 100.0f, 1.0f, 100.0f });
+    modelFloor.Translate({ 0, -40.0f, 0 });
+    modelFloor.Rotate(45.0f, { 1.0f, 0.0f, 0.0f });
 
     while (!m_pMainWindow->ShouldClose()) {
         rs->PollEvents();
@@ -297,6 +304,13 @@ Error Main::Run() {
             }
         }
         cube.GetVertices()->Unuse();
+        plane.GetVertices()->Use();
+        rs->SetShaderParameter("model", modelFloor);
+        for (size_t i = viewports.size(); i > 0; --i) {
+            rs->SetViewport(viewports[i - 1].get());
+            rs->Draw(PT_Triangles, 0, 6);
+        }
+        plane.GetVertices()->Use();
 
         m_pMainWindow->SwapBuffers();
     }
