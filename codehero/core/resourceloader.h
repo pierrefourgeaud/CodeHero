@@ -54,7 +54,7 @@ public:
             }
         }
 
-        LOGE << "ResourceLoader: File not found." << std::endl;
+        LOGE << "ResourceLoader: File extension not recognized." << std::endl;
         return ERR_IMAGE_FORMAT_UNRECOGNIZED;
     }
 
