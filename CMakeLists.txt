@@ -35,6 +35,7 @@ set (VENDORS_PATH ${PROJECT_SOURCE_DIR}/vendor)
 
 # ---------- Options ----------
 option (_CODEHERO_DRIVER_PNG "Enable PNG driver" ON)
+option (_CODEHERO_DRIVER_JPG "Enable JPG driver" ON)
 option (_CODEHERO_DRIVER_DDS "Enable DDS driver" ON)
 option (_CODEHERO_DRIVER_FREETYPE "Enable FreeType driver" ON)
 option (_CODEHERO_DRIVER_ASSIMP "Enable Assimp driver" ON)
@@ -42,6 +43,7 @@ option (_CODEHERO_DRIVER_ASSIMP "Enable Assimp driver" ON)
 ##### Options overview #####
 message ("*** Configure options:")
 message ("DRIVER_PNG: " ${_CODEHERO_DRIVER_PNG})
+message ("DRIVER_JPG: " ${_CODEHERO_DRIVER_JPG})
 message ("DRIVER_DDS: " ${_CODEHERO_DRIVER_DDS})
 message ("DRIVER_ASSIMP: " ${_CODEHERO_DRIVER_ASSIMP})
 message ("DRIVER_FREETYPE: " ${_CODEHERO_DRIVER_FREETYPE})
@@ -203,6 +205,21 @@ if (${_CODEHERO_DRIVER_PNG})
 
     add_definitions (-DDRIVER_PNG)
     set (ADDITIONAL_LIBRARIES ${ADDITIONAL_LIBRARIES} png16)
+endif()
+
+if (${_CODEHERO_DRIVER_JPG})
+    include_directories (${VENDORS_PATH}/jpeg-compressor/)
+    set (SOURCES ${SOURCES}
+        ${VENDORS_PATH}/jpeg-compressor/jpgd.cpp
+        ${SRCS_PATH}/drivers/jpg/imagecodec_jpg.cpp
+    )
+
+    set (HEADERS ${HEADERS}
+        ${VENDORS_PATH}/jpeg-compressor/jpgd.h
+        ${SRCS_PATH}/drivers/jpg/imagecodec_jpg.h
+    )
+
+    add_definitions (-DDRIVER_JPG)
 endif()
 
 if (${_CODEHERO_DRIVER_DDS})

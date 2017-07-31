@@ -18,6 +18,7 @@ public:
     OBJECT(Image)
 
     enum Format {
+        IFMT_Luminance, // one byte
         IFMT_Grayscale, // one byte per pixel, 0-255
         IFMT_Intensity, // one byte per pixel, 0-255
         IFMT_GrayscaleAlpha, // two bytes per pixel, 0-255. alpha 0-255

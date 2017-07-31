@@ -45,6 +45,10 @@
 # include "drivers/png/imagecodec_png.h"
 #endif // DRIVER_PNG
 
+#ifdef DRIVER_JPG
+# include "drivers/jpg/imagecodec_jpg.h"
+#endif // DRIVER_JPG
+
 #ifdef DRIVER_DDS
 # include "drivers/dds/imagecodec_dds.h"
 #endif // DRIVER_DDS
@@ -171,9 +175,9 @@ Error Main::Run() {
 
     // Floor texture
     Texture* floorDiffuse = rs->CreateTexture();
-    floorDiffuse->Load("./resources/images/StoneDiffuse.dds");
-    Texture* floorSpecular = rs->CreateTexture();
-    floorSpecular->Load("./resources/images/StoneNormal.dds");
+    floorDiffuse->Load("./resources/images/marble.jpg");
+    // Texture* floorSpecular = rs->CreateTexture();
+    // floorSpecular->Load("./resources/images/StoneNormal.dds");
 
     Model mdl(m_pContext);
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/nanosuit/nanosuit.obj", mdl);
@@ -318,9 +322,9 @@ Error Main::Run() {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, floorDiffuse->GetGPUObject().intHandle);
         glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.diffuse"), 0);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, floorSpecular->GetGPUObject().intHandle);
-        glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.specular"), 1);
+        // glActiveTexture(GL_TEXTURE1);
+        // glBindTexture(GL_TEXTURE_2D, floorSpecular->GetGPUObject().intHandle);
+        // glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.specular"), 1);
 
         glUniform1f(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.shininess"), 32.0f);
 
@@ -362,6 +366,10 @@ void Main::_LoadDrivers() {
 #ifdef DRIVER_PNG
     m_pContext->GetSubsystem<ResourceLoader<Image>>()->AddCodec(new ImageCodecPNG(m_pContext));
 #endif // DRIVER_PNG
+
+#ifdef DRIVER_JPG
+    m_pContext->GetSubsystem<ResourceLoader<Image>>()->AddCodec(new ImageCodecJPG(m_pContext));
+#endif // DRIVER_JPG
 
 #ifdef DRIVER_DDS
     m_pContext->GetSubsystem<ResourceLoader<Image>>()->AddCodec(new ImageCodecDDS(m_pContext));
