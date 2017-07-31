@@ -51,6 +51,7 @@ public:
 
     void RegisterViewport(Viewport* iViewport);
 
+    virtual void SetShaderParameter(const std::string& iParam, int32_t iValue) = 0;
     virtual void SetShaderParameter(const std::string& iParam, float iValue) = 0;
     virtual void SetShaderParameter(const std::string& iParam, const Vector3& iVec) = 0;
     virtual void SetShaderParameter(const std::string& iParam, const Matrix4& iMat) = 0;

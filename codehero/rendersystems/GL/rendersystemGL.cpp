@@ -47,13 +47,24 @@ void RenderSystemGL::ClearFrameBuffer() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+void RenderSystemGL::SetShaderParameter(const std::string& iParam, int32_t iValue) {
+    if (GetShaderProgramInUse()) {
+        ShaderGL* shader = static_cast<ShaderGL*>(GetShaderProgramInUse());
+        if (shader->HasParameter(iParam)) {
+            const ShaderParameter& info = shader->GetParameter(iParam);
+
+            glUniform1i(info.location, iValue);
+        }
+    }
+}
+
 void RenderSystemGL::SetShaderParameter(const std::string& iParam, float iValue) {
     if (GetShaderProgramInUse()) {
         ShaderGL* shader = static_cast<ShaderGL*>(GetShaderProgramInUse());
         if (shader->HasParameter(iParam)) {
             const ShaderParameter& info = shader->GetParameter(iParam);
 
-            glUniform1fv(info.location, 1, &iValue);
+            glUniform1f(info.location, iValue);
         }
     }
 }

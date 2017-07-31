@@ -275,16 +275,18 @@ Error Main::Run() {
         size_t s = mdl.m_Meshes.size();
         for (int i = 0; i < s; ++i) {
             size_t tSize = mdl.m_Meshes[i]->GetTextures().at("texture_diffuse").size();
-            uint32_t j = 0;
+            size_t j = 0;
             for (j = 0; j < tSize; ++j) {
                 mdl.m_Meshes[i]->GetTextures().at("texture_diffuse")[j]->Bind(j);
-                glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.diffuse"), j);
+                rs->SetShaderParameter("material.diffuse", (int32_t)j);
             }
             tSize = mdl.m_Meshes[i]->GetTextures().at("texture_specular").size();
-            for (uint32_t k = 0; k < tSize; ++k) {
+            for (size_t k = 0; k < tSize; ++k) {
                 mdl.m_Meshes[i]->GetTextures().at("texture_specular")[k]->Bind(j + k);
-                glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.specular"), j + k);
+                rs->SetShaderParameter("material.specular", (int32_t)(j + k));
             }
+
+            rs->SetShaderParameter("material.shininess", 32.0f);
 
             mdl.m_Meshes[i]->GetVertices()->Use();
 
@@ -293,11 +295,11 @@ Error Main::Run() {
 
         // Bind Textures using texture units
         texture1->Bind(0);
-        glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.diffuse"), 0);
+        rs->SetShaderParameter("material.diffuse", 0);
         texture2->Bind(1);
-        glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.specular"), 1);
+        rs->SetShaderParameter("material.specular", 1);
 
-        glUniform1f(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.shininess"), 32.0f);
+        rs->SetShaderParameter("material.shininess", 32.0f);
 
         // Draw container
         cube.GetVertices()->Use();
@@ -316,11 +318,11 @@ Error Main::Run() {
 
         // Bind Textures using texture units
         floorDiffuse->Bind(0);
-        glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.diffuse"), 0);
+        rs->SetShaderParameter("material.diffuse", 0);
         floorSpecular->Bind(1);
-        glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.specular"), 1);
+        rs->SetShaderParameter("material.specular", 1);
 
-        glUniform1f(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.shininess"), 32.0f);
+        rs->SetShaderParameter("material.shininess", 32.0f);
 
         plane.GetVertices()->Use();
         rs->SetShaderParameter("model", modelFloor);
