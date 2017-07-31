@@ -2,9 +2,6 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
-// TODO(pierre) to remove
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <chrono>
 
 #include "main/main.h"
@@ -197,7 +194,8 @@ Error Main::Run() {
         { 1.5f,  0.2f, -1.5f},
         {-1.3f,  1.0f, -1.5f}
     };
-    double lastTime = glfwGetTime();
+
+    auto lastTime = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now());
     int nbFrames = 0;
     int fps = 0.0;
 
@@ -217,18 +215,20 @@ Error Main::Run() {
     modelFloor.Translate({ 0, -40.0f, 0 });
     modelFloor.Rotate(45.0f, { 1.0f, 0.0f, 0.0f });
 
+    auto cubeVertices = cube.GetVertices();
+    auto planeVertices = plane.GetVertices();
+
     while (!m_pMainWindow->ShouldClose()) {
         rs->PollEvents();
 
         rs->ClearFrameBuffer();
-        double currentTime = glfwGetTime();
+        auto now = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now());
+        auto currentTime = now.time_since_epoch();
         nbFrames++;
-        if (currentTime - lastTime >= 1.0){ // If last prinf() was more than 1 sec ago
-            // printf and reset timer
+        if ((now - lastTime).count() >= 1000) {
             fps = nbFrames;
-            // printf("%f ms/frame\n", 1000.0/double(nbFrames));
             nbFrames = 0;
-            lastTime += 1.0;
+            lastTime = now;
         }
 
         t->SetText("FPS: " + std::to_string(fps));
@@ -290,7 +290,7 @@ Error Main::Run() {
 
             mdl.m_Meshes[i]->GetVertices()->Use();
 
-            glDrawElements(GL_TRIANGLES, mdl.m_Meshes[i]->GetIndices()->GetSize(), GL_UNSIGNED_INT, 0);
+            rs->Draw(PT_Triangles, mdl.m_Meshes[i]->GetIndices()->GetSize());
         }
 
         // Bind Textures using texture units
@@ -301,20 +301,22 @@ Error Main::Run() {
 
         rs->SetShaderParameter("material.shininess", 32.0f);
 
+        float duration = currentTime.count() / 1000.0f;
+
         // Draw container
-        cube.GetVertices()->Use();
-        for (GLuint i = 0; i < 10; ++i) {
+        cubeVertices->Use();
+        for (uint32_t i = 0; i < 10; ++i) {
             Matrix4 model;
             model.Translate(cubePositions[i]);
-            model.Rotate(glfwGetTime() * 20.0f * i, {1.0f, 0.3f, 0.5f});
+            model.Rotate(duration * 20.0f * i, {1.0f, 0.3f, 0.5f});
 
             rs->SetShaderParameter("model", model);
             for (size_t i = viewports.size(); i > 0; --i) {
                 rs->SetViewport(viewports[i - 1].get());
-                rs->Draw(PT_Triangles, 0, 36);
+                rs->Draw(PT_Triangles, 0, cubeVertices->GetVertexCount());
             }
         }
-        cube.GetVertices()->Unuse();
+        cubeVertices->Unuse();
 
         // Bind Textures using texture units
         floorDiffuse->Bind(0);
@@ -324,13 +326,13 @@ Error Main::Run() {
 
         rs->SetShaderParameter("material.shininess", 32.0f);
 
-        plane.GetVertices()->Use();
+        planeVertices->Use();
         rs->SetShaderParameter("model", modelFloor);
         for (size_t i = viewports.size(); i > 0; --i) {
             rs->SetViewport(viewports[i - 1].get());
             rs->Draw(PT_Triangles, 0, 6);
         }
-        plane.GetVertices()->Use();
+        planeVertices->Unuse();
 
         m_pMainWindow->SwapBuffers();
     }

@@ -70,6 +70,7 @@ public:
     virtual void Unuse() {};
 
     uint32_t GetVertexSize() const { return m_VertexSize; }
+    uint32_t GetVertexCount() const { return m_VertexCount; }
     uint32_t GetElementOffset(uint32_t iElem) const { return m_ElementOffset[iElem]; }
 
     virtual uint32_t GetComponentsNumber() const = 0;

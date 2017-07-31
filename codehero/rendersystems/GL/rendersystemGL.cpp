@@ -144,8 +144,12 @@ void RenderSystemGL::SetViewport(Viewport* iViewport) {
                iViewport->height() * scalling.y());
 }
 
-void RenderSystemGL::Draw(PrimitiveType iType, uint32_t iStart, uint32_t iCount) {
-    glDrawArrays(iType, iStart, iCount);
+void RenderSystemGL::Draw(PrimitiveType iType, uint32_t iVertexStart, uint32_t iVertexCount) {
+    glDrawArrays(iType, iVertexStart, iVertexCount);
+}
+
+void RenderSystemGL::Draw(PrimitiveType iType, uint32_t iIndexCount) {
+    glDrawElements(iType, iIndexCount, GL_UNSIGNED_INT, 0);
 }
 
 // Factory

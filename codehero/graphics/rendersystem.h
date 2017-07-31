@@ -68,7 +68,10 @@ public:
 
     Vector2 GetPixelScalling() const { return m_PixelScalling; }
 
-    virtual void Draw(PrimitiveType iType, uint32_t iStart, uint32_t iCount) = 0;
+    virtual void Draw(PrimitiveType iType, uint32_t iVertexStart, uint32_t iVertexCount) = 0;
+    // TODO(pierre) We might need to use indexStart at one point, in that case a good solution with the
+    // overloading will have to be found.
+    virtual void Draw(PrimitiveType iType, uint32_t iIndexCount) = 0;
 
     void Render();
 

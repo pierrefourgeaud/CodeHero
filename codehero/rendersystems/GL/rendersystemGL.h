@@ -38,7 +38,8 @@ public:
 
     void SetVBO(const VertexBuffer& iBuffer) final override;
 
-    void Draw(PrimitiveType iType, uint32_t iStart, uint32_t iCount) final override;
+    void Draw(PrimitiveType iType, uint32_t iVertexStart, uint32_t iVertexCount) final override;
+    void Draw(PrimitiveType iType, uint32_t iIndexCount) final override;
 
     // Factory
     RenderWindow* CreateWindow(uint32_t iWidth, uint32_t iHeight) final override;
