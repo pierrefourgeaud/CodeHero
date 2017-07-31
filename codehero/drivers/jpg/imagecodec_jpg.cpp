@@ -4,6 +4,7 @@
 
 #include <jpgd.h>
 #include "imagecodec_jpg.h"
+#include <vector>
 #include "core/image.h"
 #include "core/fileaccess.h"
 #include <logger.h>
@@ -12,8 +13,10 @@ namespace CodeHero {
 
 ImageCodecJPG::ImageCodecJPG(const std::shared_ptr<EngineContext>& iContext)
     : ResourceCodec<Image>(iContext) {
-    _AddExtension("jpg");
-    _AddExtension("jpeg");
+    std::vector<std::string> ext{"jpg", "JPG", "jpeg", "JPEG"};
+    for (auto& e : ext) {
+        _AddExtension(e);
+    }
 }
 
 ImageCodecJPG::~ImageCodecJPG() {}

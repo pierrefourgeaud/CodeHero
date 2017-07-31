@@ -3,9 +3,10 @@
 // found in the LICENSE file.
 
 #include <png.h>
-#include "./imagecodec_png.h"
-#include "./core/image.h"
-#include "./core/fileaccess.h"
+#include "imagecodec_png.h"
+#include <vector>
+#include "core/image.h"
+#include "core/fileaccess.h"
 #include <logger.h>
 
 namespace CodeHero {
@@ -26,7 +27,10 @@ static void PngReadFunction(png_structp iPng, png_bytep iData, png_size_t iLengt
 
 ImageCodecPNG::ImageCodecPNG(const std::shared_ptr<EngineContext>& iContext)
     : ResourceCodec<Image>(iContext) {
-    _AddExtension("png");
+    std::vector<std::string> ext{"png", "PNG"};
+    for (auto& e : ext) {
+        _AddExtension(e);
+    }
 }
 
 ImageCodecPNG::~ImageCodecPNG() {}
