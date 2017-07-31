@@ -14,8 +14,6 @@ Texture::Texture(std::shared_ptr<EngineContext>& iContext)
 
 Texture::~Texture() {}
 
-void Texture::Use() {}
-
 bool Texture::Load(const Image& iImage) {
     m_Image = iImage;
 

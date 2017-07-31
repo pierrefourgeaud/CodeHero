@@ -277,15 +277,13 @@ Error Main::Run() {
             size_t tSize = mdl.m_Meshes[i]->GetTextures().at("texture_diffuse").size();
             uint32_t j = 0;
             for (j = 0; j < tSize; ++j) {
-                glActiveTexture(GL_TEXTURE0 + j);
+                mdl.m_Meshes[i]->GetTextures().at("texture_diffuse")[j]->Bind(j);
                 glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.diffuse"), j);
-                glBindTexture(GL_TEXTURE_2D, mdl.m_Meshes[i]->GetTextures().at("texture_diffuse")[j]->GetGPUObject().intHandle);
             }
             tSize = mdl.m_Meshes[i]->GetTextures().at("texture_specular").size();
             for (uint32_t k = 0; k < tSize; ++k) {
-                glActiveTexture(GL_TEXTURE0 + j + k);
+                mdl.m_Meshes[i]->GetTextures().at("texture_specular")[k]->Bind(j + k);
                 glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.specular"), j + k);
-                glBindTexture(GL_TEXTURE_2D, mdl.m_Meshes[i]->GetTextures().at("texture_specular")[k]->GetGPUObject().intHandle);
             }
 
             mdl.m_Meshes[i]->GetVertices()->Use();
@@ -294,11 +292,9 @@ Error Main::Run() {
         }
 
         // Bind Textures using texture units
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture1->GetGPUObject().intHandle);
+        texture1->Bind(0);
         glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.diffuse"), 0);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texture2->GetGPUObject().intHandle);
+        texture2->Bind(1);
         glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.specular"), 1);
 
         glUniform1f(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.shininess"), 32.0f);
@@ -319,11 +315,9 @@ Error Main::Run() {
         cube.GetVertices()->Unuse();
 
         // Bind Textures using texture units
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, floorDiffuse->GetGPUObject().intHandle);
+        floorDiffuse->Bind(0);
         glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.diffuse"), 0);
-        // glActiveTexture(GL_TEXTURE1);
-        // glBindTexture(GL_TEXTURE_2D, floorSpecular->GetGPUObject().intHandle);
+        // floorSpecular->Bind(1);
         // glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.specular"), 1);
 
         glUniform1f(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.shininess"), 32.0f);

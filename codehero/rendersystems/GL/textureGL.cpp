@@ -9,9 +9,21 @@ TextureGL::TextureGL(std::shared_ptr<EngineContext>& iContext)
 
 TextureGL::~TextureGL() {}
 
+void TextureGL::Bind(int32_t iUnit /*= -1 */) {
+    if (iUnit != -1) {
+        glActiveTexture(GL_TEXTURE0 + iUnit);
+    }
+
+    glBindTexture(GL_TEXTURE_2D, GetGPUObject().intHandle);
+}
+
+void TextureGL::Unbind() {
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 bool TextureGL::_CreateImpl() {
     glGenTextures(1, &_GetGPUObjectHandle()->intHandle);
-    glBindTexture(GL_TEXTURE_2D, GetGPUObject().intHandle);
+    Bind();
     // Set our texture parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -39,7 +51,8 @@ bool TextureGL::_CreateImpl() {
         }
     }
     glGenerateMipmap(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, 0);
+
+    Unbind();
 
     return true;
 }

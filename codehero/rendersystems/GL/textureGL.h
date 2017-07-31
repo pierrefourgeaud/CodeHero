@@ -15,6 +15,9 @@ public:
     TextureGL(std::shared_ptr<EngineContext>& iContext);
     ~TextureGL();
 
+    void Bind(int32_t iUnit = -1) final override;
+    void Unbind() final override;
+
 protected:
     bool _CreateImpl() override;
 

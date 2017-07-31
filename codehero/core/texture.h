@@ -20,7 +20,8 @@ public:
     Texture(std::shared_ptr<EngineContext>& iContext);
     virtual ~Texture();
 
-    void Use();
+    virtual void Bind(int32_t iUnit = -1) = 0;
+    virtual void Unbind() = 0;
     bool Load(const Image& iImage);
     bool Load(const char* iImage);
 
