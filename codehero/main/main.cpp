@@ -175,9 +175,9 @@ Error Main::Run() {
 
     // Floor texture
     Texture* floorDiffuse = rs->CreateTexture();
-    floorDiffuse->Load("./resources/images/marble.jpg");
-    // Texture* floorSpecular = rs->CreateTexture();
-    // floorSpecular->Load("./resources/images/StoneNormal.dds");
+    floorDiffuse->Load("./resources/images/floor_diffuse.PNG");
+    Texture* floorSpecular = rs->CreateTexture();
+    floorSpecular->Load("./resources/images/floor_specular.PNG");
 
     Model mdl(m_pContext);
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/nanosuit/nanosuit.obj", mdl);
@@ -317,8 +317,8 @@ Error Main::Run() {
         // Bind Textures using texture units
         floorDiffuse->Bind(0);
         glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.diffuse"), 0);
-        // floorSpecular->Bind(1);
-        // glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.specular"), 1);
+        floorSpecular->Bind(1);
+        glUniform1i(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.specular"), 1);
 
         glUniform1f(glGetUniformLocation(crateShader->GetGPUObject().intHandle, "material.shininess"), 32.0f);
 
