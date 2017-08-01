@@ -118,6 +118,8 @@ set (SOURCES
      ${SRCS_PATH}/rendersystems/GL/vertexattribbinding.cpp
      ${SRCS_PATH}/rendersystems/GL/vertexbufferGL.cpp
      ${SRCS_PATH}/rendersystems/GL/indexbufferGL.cpp
+     # Inputs
+     ${SRCS_PATH}/input/input.cpp
 )
 
 set (HEADERS
@@ -174,6 +176,8 @@ set (HEADERS
      ${SRCS_PATH}/rendersystems/GL/vertexattribbinding.h
      ${SRCS_PATH}/rendersystems/GL/vertexbufferGL.h
      ${SRCS_PATH}/rendersystems/GL/indexbufferGL.h
+     # Inputs
+     ${SRCS_PATH}/input/input.h
      # Logger
      ${VENDORS_PATH}/simplelogger/includes/bufferlogger.h
      ${VENDORS_PATH}/simplelogger/includes/consolelogger.h
