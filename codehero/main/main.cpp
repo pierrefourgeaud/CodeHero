@@ -197,7 +197,7 @@ Error Main::Run() {
 
     auto lastTime = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now());
     int nbFrames = 0;
-    int fps = 0.0;
+    int fps = 0;
 
     Scene scene;
     Node* node = scene.CreateChild();
