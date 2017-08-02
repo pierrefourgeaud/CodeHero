@@ -256,9 +256,8 @@ Error Main::Run() {
             rs->SetShaderParameter(base + "base.ambientIntensity", pointLights[i].GetAmbientIntensity());
             rs->SetShaderParameter(base + "base.diffuseIntensity", pointLights[i].GetDiffuseIntensity());
             rs->SetShaderParameter(base + "base.specularIntensity", pointLights[i].GetSpecularIntensity());
-            rs->SetShaderParameter(base + "constant", pointLights[i].GetConstant());
-            rs->SetShaderParameter(base + "linear", pointLights[i].GetLinear());
-            rs->SetShaderParameter(base + "quadratic", pointLights[i].GetQuadratic());
+            float atten[3] = {pointLights[i].GetConstant(), pointLights[i].GetLinear(), pointLights[i].GetQuadratic()};
+            rs->SetShaderParameter(base + "attenuation[0]", atten, sizeof(atten));
         }
 
         PerspectiveMatrix projection(45.0f, g_Width / g_Height, 0.1f, 100.0f);

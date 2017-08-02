@@ -32,9 +32,10 @@ struct DirLight {
 struct PointLight {
     vec3 position;
 
-    float constant;
-    float linear;
-    float quadratic;
+    // [0] = constant;
+    // [1] = linear;
+    // [2] = quadratic;
+    float attenuation[3];
 
     BaseLight base;
 };
@@ -71,9 +72,9 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
     vec3 color = CalcLightBase(light.base, normalize(light.position - fragPos), normal, viewDir);
-        // Attenuation
+    // Attenuation
     float distance = length(light.position - fragPos);
-    float attenuation = (light.constant + light.linear * distance + light.quadratic * (distance * distance));
+    float attenuation = (light.attenuation[0] + light.attenuation[1] * distance + light.attenuation[2] * (distance * distance));
 
     return color / attenuation;
 }

@@ -102,6 +102,31 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Matrix4
     }
 }
 
+void RenderSystemGL::SetShaderParameter(const std::string& iParam, const float* iFloat, const uint32_t iCount) {
+    if (GetShaderProgramInUse()) {
+        ShaderGL* shader = static_cast<ShaderGL*>(GetShaderProgramInUse());
+        if (shader->HasParameter(iParam)) {
+            const ShaderParameter& info = shader->GetParameter(iParam);
+
+            switch (info.type) {
+            case GL_FLOAT:
+                glUniform1fv(info.location, iCount, iFloat);
+                break;
+            case GL_FLOAT_VEC2:
+                glUniform2fv(info.location, iCount / 2, iFloat);
+                break;
+            case GL_FLOAT_VEC3:
+                glUniform3fv(info.location, iCount / 3, iFloat);
+                break;
+            case GL_FLOAT_VEC4:
+                glUniform3fv(info.location, iCount / 4, iFloat);
+                break;
+            default: break;
+            }
+        }
+    }
+}
+
 void RenderSystemGL::SetVertexBuffer(const VertexBuffer& iBuffer) {
     SetVBO(iBuffer);
 
