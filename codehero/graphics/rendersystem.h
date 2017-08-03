@@ -39,7 +39,7 @@ class RenderSystem : public System {
 public:
     OBJECT(RenderSystem)
 
-    RenderSystem(std::shared_ptr<EngineContext>& iContext)
+    RenderSystem(const std::shared_ptr<EngineContext>& iContext)
         : System(iContext) {}
     virtual ~RenderSystem() {}
 
