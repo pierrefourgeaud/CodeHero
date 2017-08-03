@@ -20,8 +20,6 @@ public:
 
     Error Create(const int iWidth, const int iHeight) override;
 
-    bool ShouldClose() const override;
-
     void SwapBuffers() override;
 
 private:

@@ -178,6 +178,7 @@ set (HEADERS
      ${SRCS_PATH}/rendersystems/GL/indexbufferGL.h
      # Inputs
      ${SRCS_PATH}/input/input.h
+     ${SRCS_PATH}/input/inputevents.h
      # Logger
      ${VENDORS_PATH}/simplelogger/includes/bufferlogger.h
      ${VENDORS_PATH}/simplelogger/includes/consolelogger.h

@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include "rendersystems/GL/renderwindowGL.h"
 #include "graphics/rendersystem.h"
+#include "input/input.h"
 
 namespace CodeHero {
 
@@ -34,13 +35,10 @@ Error RenderWindowGL::Create(const int iWidth, const int iHeight) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    glfwSetWindowUserPointer(m_pWindow, (void*)this);
     glfwSetKeyCallback(m_pWindow, RenderWindowGL::_HandleKey);
 
     return Error::OK;
-}
-
-bool RenderWindowGL::ShouldClose() const {
-    return glfwWindowShouldClose(m_pWindow);
 }
 
 void RenderWindowGL::SwapBuffers() {
@@ -51,9 +49,8 @@ void RenderWindowGL::SwapBuffers() {
 void RenderWindowGL::_HandleKey(GLFWwindow* iWindow, int32_t iKey, int32_t iScancode, int32_t iAction, int32_t iMode) {
     (void)iScancode;
     (void)iMode;
-    if (iKey == GLFW_KEY_ESCAPE && iAction == GLFW_PRESS) {
-        glfwSetWindowShouldClose(iWindow, GL_TRUE);
-    }
+    RenderWindowGL* me = static_cast<RenderWindowGL*>(glfwGetWindowUserPointer(iWindow));
+    me->m_pInputHandler->HandleKey(static_cast<Key>(iKey), static_cast<KeyEvent>(iAction));
 }
 
 } // namespace CodeHero

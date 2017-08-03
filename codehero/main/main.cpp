@@ -25,6 +25,8 @@
 #include "graphics/cube.h"
 #include "graphics/plane.h"
 
+#include "input/input.h"
+
 #include "ui/font.h"
 #include "ui/ui.h"
 #include "ui/text.h"
@@ -86,10 +88,14 @@ Error Main::Start() {
     Error error = rs->Initialize();
     m_pContext->RegisterSubsystem(rs);
 
+    m_pContext->RegisterSubsystem(new Input(m_pContext));
+
     if (!error) {
         _LoadDrivers();
         m_pMainWindow.reset(rs->CreateWindow(g_Width, g_Height));
     }
+
+    m_pMainWindow->SetInputHandler(m_pContext->GetSubsystem<Input>());
 
     LOGD2 << "[<] Main::Start()" << std::endl;
 
@@ -218,8 +224,17 @@ Error Main::Run() {
     auto cubeVertices = cube.GetVertices();
     auto planeVertices = plane.GetVertices();
 
-    while (!m_pMainWindow->ShouldClose()) {
-        rs->PollEvents();
+    // Save the input to avoid doing a query at every frame
+    Input* input = m_pContext->GetSubsystem<Input>();
+
+    while (true) {
+        input->Update();
+
+        // Check the inputs
+        if (input->GetKeyPressed(Key::K_ESC)) {
+            // On ESC we exit the example application
+            break;
+        }
 
         rs->ClearFrameBuffer();
         auto now = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now());
