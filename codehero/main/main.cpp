@@ -205,8 +205,8 @@ Error Main::Run() {
     int nbFrames = 0;
     int fps = 0;
 
-    Scene scene;
-    Node* node = scene.CreateChild();
+    std::shared_ptr<Scene> scene = std::make_shared<Scene>();
+    std::shared_ptr<Node> node = scene->CreateChild();
     node->AddDrawable(&mdl);
     std::vector<std::shared_ptr<Viewport>> viewports;
     viewports.push_back(std::make_shared<Viewport>(0, 0, g_Width * 0.75, g_Height));

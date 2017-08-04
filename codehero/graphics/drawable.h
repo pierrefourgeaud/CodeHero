@@ -9,6 +9,9 @@
 
 namespace CodeHero {
 
+// Forward declaration
+class Node;
+
 class Drawable : public Object {
 public:
     enum DrawableType {
@@ -22,6 +25,11 @@ public:
     virtual ~Drawable() {}
 
     DrawableType GetDrawableType() const { return m_Type; }
+
+    void SetNode(const std::shared_ptr<Node>& iNode) { m_pNode = iNode; }
+
+protected:
+    std::weak_ptr<Node> m_pNode;
 
 private:
     DrawableType m_Type;

@@ -5,6 +5,7 @@
 #ifndef CODEHERO_GRAPHICS_NODE_H_
 #define CODEHERO_GRAPHICS_NODE_H_ 
 
+#include <memory>
 #include <vector>
 
 namespace CodeHero {
@@ -12,7 +13,7 @@ namespace CodeHero {
 // Forward declaration
 class Drawable;
 
-class Node {
+class Node : public std::enable_shared_from_this<Node> {
 public:
 
     template <class T>
@@ -25,17 +26,17 @@ public:
     void AddDrawable(Drawable* iComponent);
     const std::vector<Drawable*>& GetComponents() const { return m_Drawables; }
 
-    Node* CreateChild() {
-        Node* node = new Node;
+    std::shared_ptr<Node> CreateChild() {
+        std::shared_ptr<Node> node = std::make_shared<Node>();
         m_Children.push_back(node);
         return node;
     }
 
-    const std::vector<Node*>& GetChildren() const { return m_Children; }
+    const std::vector<std::shared_ptr<Node>>& GetChildren() const { return m_Children; }
 
 private:
     std::vector<Drawable*> m_Drawables;
-    std::vector<Node*> m_Children;
+    std::vector<std::shared_ptr<Node>> m_Children;
 };
 
 } // namespace CodeHero

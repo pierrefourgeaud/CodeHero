@@ -3,11 +3,14 @@
 // found in the LICENSE file.
 
 #include "graphics/node.h"
+#include "graphics/drawable.h"
 
 namespace CodeHero {
 
 void Node::AddDrawable(Drawable* iDrawable) {
     m_Drawables.push_back(iDrawable);
+
+    iDrawable->SetNode(shared_from_this());
 }
 
 } // namespace CodeHero
