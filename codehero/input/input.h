@@ -30,7 +30,7 @@ public:
     void HandleKey(Key iKey, KeyEvent iAction);
 
     // Keyboard
-    bool GetKeyPressed(Key iKey) const;
+    bool IsKeyPressed(Key iKey) const;
 
 private:
     std::unordered_set<Key> m_KeyPressed;

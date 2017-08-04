@@ -231,7 +231,7 @@ Error Main::Run() {
         input->Update();
 
         // Check the inputs
-        if (input->GetKeyPressed(Key::K_ESC)) {
+        if (input->IsKeyPressed(Key::K_ESC)) {
             // On ESC we exit the example application
             break;
         }

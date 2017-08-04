@@ -44,7 +44,7 @@ void Input::Update() {
     rs->PollEvents();
 }
 
-bool Input::GetKeyPressed(Key iKey) const {
+bool Input::IsKeyPressed(Key iKey) const {
     return m_KeyPressed.find(iKey) != m_KeyPressed.end();
 }
 
