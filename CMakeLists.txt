@@ -138,6 +138,7 @@ set (HEADERS
      ${SRCS_PATH}/core/image.h
      ${SRCS_PATH}/core/math/vector2.h
      ${SRCS_PATH}/core/math/vector3.h
+     ${SRCS_PATH}/core/math/vector4.h
      ${SRCS_PATH}/core/math/matrix4.h
      ${SRCS_PATH}/core/math/utils.h
      ${SRCS_PATH}/core/resourcecodec.h
