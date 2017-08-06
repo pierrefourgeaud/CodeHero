@@ -85,6 +85,7 @@ set (SOURCES
      ${SRCS_PATH}/core/math/vector3.cpp
      ${SRCS_PATH}/core/math/vector4.cpp
      ${SRCS_PATH}/core/math/matrix4.cpp
+     ${SRCS_PATH}/core/math/quaternion.cpp
      # UI
      ${SRCS_PATH}/ui/font.cpp
      ${SRCS_PATH}/ui/fontface.cpp
@@ -140,6 +141,7 @@ set (HEADERS
      ${SRCS_PATH}/core/math/vector3.h
      ${SRCS_PATH}/core/math/vector4.h
      ${SRCS_PATH}/core/math/matrix4.h
+     ${SRCS_PATH}/core/math/quaternion.h
      ${SRCS_PATH}/core/math/utils.h
      ${SRCS_PATH}/core/resourcecodec.h
      ${SRCS_PATH}/core/resourceloader.h
