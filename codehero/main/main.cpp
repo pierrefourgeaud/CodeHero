@@ -208,13 +208,18 @@ Error Main::Run() {
     std::shared_ptr<Scene> scene = std::make_shared<Scene>();
     std::shared_ptr<Node> node = scene->CreateChild();
     node->AddDrawable(&mdl);
+
+    Camera camera(m_pContext);
+    std::shared_ptr<Node> cameraNode = scene->CreateChild();
+    cameraNode->AddDrawable(&camera);
+    cameraNode->SetPosition({ 0.0f, 3.2f, 6.5f });
+    cameraNode->SetRotation(Quaternion(Vector3({ 0.0f, 1.0f, 0.0f })-Vector3({ 0.0f, 3.2f, 6.5f }), Vector3::Up));
+
     std::vector<std::shared_ptr<Viewport>> viewports;
     viewports.push_back(std::make_shared<Viewport>(0, 0, g_Width * 0.75, g_Height));
     for (size_t i = 0; i < 3; ++i) {
         viewports.push_back(std::make_shared<Viewport>(g_Width * 0.75, (i * g_Height / 3), g_Width / 4, g_Height / 3));
     }
-
-    Camera camera({0.0f, 3.2f, 6.5f}, {0.0f, 1.0f, 0.0f});
 
     Matrix4 modelFloor;
     modelFloor.Scale({ 100.0f, 1.0f, 100.0f });
@@ -279,6 +284,10 @@ Error Main::Run() {
 
         rs->SetShaderParameter("view", camera.GetView());
         rs->SetShaderParameter("projection", projection);
+
+        // TODO(pierre) This is for now, as we don't have a proper scene rendering
+        // This should be removed ASAP
+        cameraNode->Update();
 
         // TODO(pierre) This code is plain ugly. The idea is to demonstrate the loading and displaying of a model.
         // We should split that code properly with scene node, model, mesh, materials.

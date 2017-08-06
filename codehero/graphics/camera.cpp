@@ -3,46 +3,35 @@
 // found in the LICENSE file.
 
 #include "graphics/camera.h"
+#include "graphics/node.h"
 
 namespace CodeHero {
 
-Camera::Camera() {}
-
-Camera::Camera(const Vector3& iPosition, const Vector3& iTarget)
-    : m_Position(iPosition)
-    , m_Target(iTarget) {}
+Camera::Camera(const std::shared_ptr<EngineContext>& iContext)
+    : Drawable(iContext, DT_Camera) {}
 
 Camera::~Camera() {}
 
 const Matrix4& Camera::GetView() {
-    if (m_ViewDirty) {
+    if (m_IsDirty) {
         _ComputeViewMatrix();
-        m_ViewDirty = false;
+        SetIsDirty(false);
     }
 
     return m_View;
 }
 
-void Camera::SetPosition(const Vector3& iPosition) {
-    m_Position = iPosition;
-    m_ViewDirty = true;
-}
-
-void Camera::SetTarget(const Vector3& iTarget) {
-    m_Target = iTarget;
-    m_ViewDirty = true;
-}
-
 void Camera::_ComputeViewMatrix() {
-    Vector3 direction = (m_Target - m_Position).Normalize();
-    Vector3 cameraRight = direction.Cross({0.0f, 1.0f, 0.0f}).Normalize();
-    Vector3 cameraUp = cameraRight.Cross(direction);
+    // Should assert that node exist
 
-    m_View = Matrix4(
-        cameraRight.x()             , cameraUp.x()             , -direction.x()           , 0.0f,
-        cameraRight.y()             , cameraUp.y()             , -direction.y()           , 0.0f,
-        cameraRight.z()             , cameraUp.z()             , -direction.z()           , 0.0f,
-        -cameraRight.Dot(m_Position), -cameraUp.Dot(m_Position), direction.Dot(m_Position), 1.0f);
+    std::shared_ptr<Node> node = m_pNode.lock();
+    m_View = node->GetRotation().RotationMatrix();
+    Vector3 pos = node->GetPosition();
+
+    // TODO(pierre) Could we clean that somehow ? I don't really like this...
+    m_View.Set(3, 0, -Vector3({m_View.Get(0, 0), m_View.Get(1, 0), m_View.Get(2, 0)}).Dot(pos));
+    m_View.Set(3, 1, -Vector3({m_View.Get(0, 1), m_View.Get(1, 1), m_View.Get(2, 1)}).Dot(pos));
+    m_View.Set(3, 2, -Vector3({m_View.Get(0, 2), m_View.Get(1, 2), m_View.Get(2, 2)}).Dot(pos));
 }
 
 } // namespace CodeHero

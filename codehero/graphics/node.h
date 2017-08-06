@@ -7,6 +7,8 @@
 
 #include <memory>
 #include <vector>
+#include "core/math/vector3.h"
+#include "core/math/quaternion.h"
 
 namespace CodeHero {
 
@@ -34,9 +36,22 @@ public:
 
     const std::vector<std::shared_ptr<Node>>& GetChildren() const { return m_Children; }
 
+    void Update();
+    void MarkDirty();
+
+    void SetPosition(const Vector3& iPosition);
+    void SetRotation(const Quaternion& iRotation);
+    const Vector3& GetPosition() const { return m_Position; }
+    const Quaternion& GetRotation() const { return m_Rotation; }
+
 private:
     std::vector<Drawable*> m_Drawables;
     std::vector<std::shared_ptr<Node>> m_Children;
+
+    bool m_IsDirty = true;
+
+    Vector3 m_Position;
+    Quaternion m_Rotation;
 };
 
 } // namespace CodeHero

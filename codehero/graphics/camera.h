@@ -7,26 +7,22 @@
 
 #include "core/math/vector3.h"
 #include "core/math/matrix4.h"
+#include "graphics/drawable.h"
 
 namespace CodeHero {
 
-class Camera {
+class Camera : public Drawable {
 public:
-    Camera();
-    Camera(const Vector3& iPosition, const Vector3& iTarget);
+    OBJECT(Camera)
+
+    Camera(const std::shared_ptr<EngineContext>& iContext);
     ~Camera();
 
     const Matrix4& GetView();
 
-    void SetPosition(const Vector3& iPosition);
-    void SetTarget(const Vector3& iTarget);
-
 private:
-    Vector3 m_Position;
-    Vector3 m_Target;
     // Cached view matrix
     Matrix4 m_View;
-    bool m_ViewDirty = true;
 
     void _ComputeViewMatrix();
 };

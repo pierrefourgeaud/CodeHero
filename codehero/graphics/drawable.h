@@ -16,7 +16,8 @@ class Drawable : public Object {
 public:
     enum DrawableType {
         DT_Light,
-        DT_Geometry
+        DT_Geometry,
+        DT_Camera // TODO(pierre) Should probably not be there. Should have a Components class on top of drawable
     };
 
     Drawable(const std::shared_ptr<EngineContext>& iContext, DrawableType iType)
@@ -27,9 +28,12 @@ public:
     DrawableType GetDrawableType() const { return m_Type; }
 
     void SetNode(const std::shared_ptr<Node>& iNode) { m_pNode = iNode; }
+    void SetIsDirty(bool iIsDirty) { m_IsDirty = iIsDirty; }
 
 protected:
     std::weak_ptr<Node> m_pNode;
+
+    bool m_IsDirty;
 
 private:
     DrawableType m_Type;
