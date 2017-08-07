@@ -97,7 +97,7 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Matrix4
         if (shader->HasParameter(iParam)) {
             const ShaderParameter& info = shader->GetParameter(iParam);
 
-            glUniformMatrix4fv(info.location, 1, GL_FALSE, iMat.GetPtr());
+            glUniformMatrix4fv(info.location, 1, GL_FALSE, iMat.Data());
         }
     }
 }

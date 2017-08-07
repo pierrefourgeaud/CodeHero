@@ -46,7 +46,7 @@ public:
 
     bool operator==(const Matrix4& iRhs) const;
 
-    const float* GetPtr() const { return _m; }
+    const float* Data() const { return _m; }
 
 private:
     union {
