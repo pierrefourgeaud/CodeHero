@@ -24,7 +24,7 @@ public:
     float Length() const;
     void Normalize();
 
-    const float* GetPtr() const { return m_Vec; }
+    const float* Data() const { return m_Vec; }
 
 private:
     float m_Vec[2] = {0};
@@ -42,7 +42,7 @@ public:
     float Length() const;
     void Normalize();
 
-    const int32_t* GetPtr() const { return m_Vec; }
+    const int32_t* Data() const { return m_Vec; }
 
 private:
     int32_t m_Vec[2] = {0};

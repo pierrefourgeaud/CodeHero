@@ -77,13 +77,13 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Vector3
 
             switch (info.type) {
             case GL_FLOAT:
-                glUniform1fv(info.location, 1, iVec.GetPtr());
+                glUniform1fv(info.location, 1, iVec.Data());
                 break;
             case GL_FLOAT_VEC2:
-                glUniform2fv(info.location, 1, iVec.GetPtr());
+                glUniform2fv(info.location, 1, iVec.Data());
                 break;
             case GL_FLOAT_VEC3:
-                glUniform3fv(info.location, 1, iVec.GetPtr());
+                glUniform3fv(info.location, 1, iVec.Data());
                 break;
             default: break;
             }

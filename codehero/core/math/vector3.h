@@ -35,7 +35,7 @@ public:
     Vector3& operator*=(const float iScalar);
     Vector3 operator-() const { return Vector3(-m_Vec[0], -m_Vec[1], -m_Vec[2]); }
 
-    const float* GetPtr() const { return m_Vec; }
+    const float* Data() const { return m_Vec; }
 
     static const Vector3 Forward;
     static const Vector3 Up;

@@ -27,7 +27,7 @@ public:
     Vector4 operator*(const float iScalar) const;
     Vector4& operator*=(const float iScalar);
 
-    const float* GetPtr() const { return m_Vec; }
+    const float* Data() const { return m_Vec; }
 
 private:
     float m_Vec[4] = {0};
