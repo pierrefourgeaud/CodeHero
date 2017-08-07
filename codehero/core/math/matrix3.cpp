@@ -44,9 +44,9 @@ Matrix3 Matrix3::operator*(const Matrix3& iRhs) const {
 
 Vector3 Matrix3::operator*(const Vector3& iVector) const {
     return {
-        iVector.x() * m[0][0] + iVector.y() * m[0][1] + iVector.w() * m[0][2],
-        iVector.x() * m[1][0] + iVector.y() * m[1][1] + iVector.w() * m[1][2],
-        iVector.x() * m[2][0] + iVector.y() * m[2][1] + iVector.w() * m[2][2]
+        iVector.x() * m[0][0] + iVector.y() * m[0][1] + iVector.z() * m[0][2],
+        iVector.x() * m[1][0] + iVector.y() * m[1][1] + iVector.z() * m[1][2],
+        iVector.x() * m[2][0] + iVector.y() * m[2][1] + iVector.z() * m[2][2]
     };
 }
 
