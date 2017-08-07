@@ -87,6 +87,9 @@ public:
         return !(*this == iRhs);
     }
 
+    // Operators op
+    Vector3 operator*(const Vector3& iRhs) const;
+
     // Accessors
     float w() const { return m_W; }
     float x() const { return m_X; }
