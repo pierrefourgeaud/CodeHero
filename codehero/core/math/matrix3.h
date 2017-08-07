@@ -38,6 +38,7 @@ public:
 
     Matrix3 operator*(const Matrix3& iRhs) const;
     Vector3 operator*(const Vector3& iVector) const;
+    Matrix3 operator-() const;
 
     bool operator==(const Matrix3& iRhs) const;
 

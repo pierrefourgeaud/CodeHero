@@ -51,6 +51,14 @@ Vector3 Matrix3::operator*(const Vector3& iVector) const {
     };
 }
 
+Matrix3 Matrix3::operator-() const {
+    return Matrix3(
+        -m[0][0], -m[0][1], -m[0][2],
+        -m[1][0], -m[1][1], -m[1][2],
+        -m[2][0], -m[2][1], -m[2][2]
+    );
+}
+
 bool Matrix3::operator==(const Matrix3& iRhs) const {
     for (int i = 0; i < 9; ++i) {
         if (!FloatEqu(_m[i], iRhs._m[i])) {
