@@ -4,7 +4,7 @@
 
 #include "core/math/quaternion.h"
 #include "core/math/vector3.h"
-#include "core/math/matrix4.h"
+#include "core/math/matrix3.h"
 #include "core/math/utils.h"
 #include <math.h>
 
@@ -45,7 +45,7 @@ void Quaternion::FromEulerAngles(float iX, float iY, float iZ) {
     m_Z = cosY * cosX * sinZ - sinY * sinX * cosZ;
 }
 
-void Quaternion::FromRotationMatrix(const Matrix4& iMat) {
+void Quaternion::FromRotationMatrix(const Matrix3& iMat) {
     float fourXSquaredMinus1 = iMat.Get(0, 0) - iMat.Get(1, 1) - iMat.Get(2, 2);
     float fourYSquaredMinus1 = iMat.Get(1, 1) - iMat.Get(0, 0) - iMat.Get(2, 2);
     float fourZSquaredMinus1 = iMat.Get(2, 2) - iMat.Get(0, 0) - iMat.Get(1, 1);
@@ -102,10 +102,9 @@ void Quaternion::FromRotationMatrix(const Matrix4& iMat) {
 }
 
 void Quaternion::FromAxis(const Vector3& iXAxis, const Vector3& iYAxis, const Vector3& iZAxis) {
-    Matrix4 matrix(iXAxis.x(), iYAxis.x(), iZAxis.x(), 0.0f,
-                   iXAxis.y(), iYAxis.y(), iZAxis.y(), 0.0f,
-                   iXAxis.z(), iYAxis.z(), iZAxis.z(), 0.0f,
-                   0.0f      , 0.0f      , 0.0f      , 1.0f);
+    Matrix3 matrix(iXAxis.x(), iYAxis.x(), iZAxis.x(),
+                   iXAxis.y(), iYAxis.y(), iZAxis.y(),
+                   iXAxis.z(), iYAxis.z(), iZAxis.z());
 
     FromRotationMatrix(matrix);
 }
@@ -116,16 +115,15 @@ void Quaternion::FromLookAt(const Vector3& iDirection, const Vector3& iUp) {
     Vector3 right = (direction).Cross(iUp).Normalize();
     Vector3 up = right.Cross((direction));
 
-    Matrix4 matrix(right.x(), up.x(), -direction.x(), 0.0f,
-                   right.y(), up.y(), -direction.y(), 0.0f,
-                   right.z(), up.z(), -direction.z(), 0.0f,
-                   0.0f     , 0.0f  , 0.0f          , 1.0f);
+    Matrix3 matrix(right.x(), up.x(), -direction.x(),
+                   right.y(), up.y(), -direction.y(),
+                   right.z(), up.z(), -direction.z());
 
     FromRotationMatrix(matrix);
 }
 
-Matrix4 Quaternion::RotationMatrix() const {
-    Matrix4 result;
+Matrix3 Quaternion::RotationMatrix() const {
+    Matrix3 result;
     float xx(m_X * m_X);
     float yy(m_Y * m_Y);
     float zz(m_Z * m_Z);
@@ -136,11 +134,10 @@ Matrix4 Quaternion::RotationMatrix() const {
     float wy(m_W * m_Y);
     float wz(m_W * m_Z);
 
-    return Matrix4(
-        1.0f - 2.0f * (yy + zz), 2.0f * (xy + wz)       , 2.0f * (xz - wy)       , 0.0f,
-        2.0f * (xy - wz)       , 1.0f - 2.0f * (xx + zz), 2.0f * (yz + wx)       , 0.0f,
-        2.0f * (xz + wy)       , 2.0f * (yz - wx)       , 1.0f - 2.0f * (xx + yy), 0.0f,
-        0.0f                   , 0.0f                   , 0.0f                   , 1.0f
+    return Matrix3(
+        1.0f - 2.0f * (yy + zz), 2.0f * (xy + wz)       , 2.0f * (xz - wy)       ,
+        2.0f * (xy - wz)       , 1.0f - 2.0f * (xx + zz), 2.0f * (yz + wx)       ,
+        2.0f * (xz + wy)       , 2.0f * (yz - wx)       , 1.0f - 2.0f * (xx + yy)
     );
 }
 

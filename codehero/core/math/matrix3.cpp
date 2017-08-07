@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "core/math/matrix3.h"
+#include "core/math/quaternion.h"
 #include "core/math/vector3.h"
 #include "core/assert.h"
 
@@ -58,6 +59,10 @@ bool Matrix3::operator==(const Matrix3& iRhs) const {
     }
 
     return true;
+}
+
+void Matrix3::FromQuaternion(const Quaternion& iQuat) {
+    *this = iQuat.RotationMatrix();
 }
 
 } // namespace CodeHero

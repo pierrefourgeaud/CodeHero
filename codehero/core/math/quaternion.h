@@ -9,7 +9,7 @@ namespace CodeHero {
 
 // Forward declaration
 class Vector3;
-class Matrix4;
+class Matrix3;
 
 class Quaternion {
 public:
@@ -33,7 +33,7 @@ public:
 
     Quaternion(float iAngle, const Vector3& iAxis) { FromAngleAndAxis(iAngle, iAxis); }
     Quaternion(float iX, float iY, float iZ) { FromEulerAngles(iX, iY, iZ); }
-    explicit Quaternion(const Matrix4& iMat) { FromRotationMatrix(iMat); }
+    explicit Quaternion(const Matrix3& iMat) { FromRotationMatrix(iMat); }
     // From orthonormal axis
     Quaternion(const Vector3& iXAxis, const Vector3& iYAxis, const Vector3& iZAxis) {
         FromAxis(iXAxis, iYAxis, iZAxis);
@@ -46,7 +46,7 @@ public:
     // Builder
     void FromAngleAndAxis(float iAngle, const Vector3& iAxis);
     void FromEulerAngles(float iX, float iY, float iZ);
-    void FromRotationMatrix(const Matrix4& iMat);
+    void FromRotationMatrix(const Matrix3& iMat);
     void FromAxis(const Vector3& iXAxis, const Vector3& iYAxis, const Vector3& iZAxis);
     void FromLookAt(const Vector3& iDirection, const Vector3& iUp);
 
@@ -97,7 +97,7 @@ public:
     float z() const { return m_Z; }
     const float* Data() const { return &m_W; }
 
-    Matrix4 RotationMatrix() const;
+    Matrix3 RotationMatrix() const;
 
 private:
 

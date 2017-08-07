@@ -12,6 +12,7 @@ namespace CodeHero {
 
 // Forward declaration
 class Vector3;
+class Quaternion;
 
 /**
 * @brief Matrix 33f
@@ -24,6 +25,7 @@ public:
     Matrix3(float m00, float m01, float m02,
             float m10, float m11, float m12,
             float m20, float m21, float m22);
+    Matrix3(const Quaternion& iQuat) { FromQuaternion(iQuat); }
 
     void ToIdentity() {
         m[0][0] = 1.0f; m[0][1] = 0.0f; m[0][2] = 0.0f;
@@ -41,7 +43,9 @@ public:
 
     const float* Data() const { return _m; }
 
-    // TODO(pierre) Make From/To methods (FromQuaternion, ToQuat, FromAxisAngle, ToAxisAngle, ...)
+    void FromQuaternion(const Quaternion& iQuat);
+
+    // TODO(pierre) Make From/To methods (ToQuat, FromAxisAngle, ToAxisAngle, ...)
 
 private:
     union {
