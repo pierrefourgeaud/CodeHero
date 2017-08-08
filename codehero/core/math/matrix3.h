@@ -44,6 +44,11 @@ public:
 
     const float* Data() const { return _m; }
 
+    // Modify current object and can be chained
+    Matrix3& Transpose();
+    // Return a whole new matrix that is the transposed from the current object
+    Matrix3 Transposed() const;
+
     void FromQuaternion(const Quaternion& iQuat);
 
     // TODO(pierre) Make From/To methods (ToQuat, FromAxisAngle, ToAxisAngle, ...)

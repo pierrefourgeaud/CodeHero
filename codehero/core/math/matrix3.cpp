@@ -69,6 +69,22 @@ bool Matrix3::operator==(const Matrix3& iRhs) const {
     return true;
 }
 
+Matrix3& Matrix3::Transpose() {
+    std::swap(m[1][0], m[0][1]);
+    std::swap(m[2][0], m[0][2]);
+    std::swap(m[1][2], m[2][1]);
+
+    return *this;
+}
+
+Matrix3 Matrix3::Transposed() const {
+    return Matrix3(
+        m[0][0], m[1][0], m[2][0],
+        m[0][1], m[1][1], m[2][1],
+        m[0][2], m[1][2], m[2][2]
+    );
+}
+
 void Matrix3::FromQuaternion(const Quaternion& iQuat) {
     *this = iQuat.RotationMatrix();
 }
