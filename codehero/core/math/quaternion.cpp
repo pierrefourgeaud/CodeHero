@@ -123,7 +123,6 @@ void Quaternion::FromLookAt(const Vector3& iDirection, const Vector3& iUp) {
 }
 
 Matrix3 Quaternion::RotationMatrix() const {
-    Matrix3 result;
     float xx(m_X * m_X);
     float yy(m_Y * m_Y);
     float zz(m_Z * m_Z);
