@@ -5,6 +5,8 @@
 #ifndef CODEHERO_CORE_MATH_VECTOR4_H_
 #define CODEHERO_CORE_MATH_VECTOR4_H_
 
+#include "core/assert.h"
+
 namespace CodeHero {
 
 class Vector4 {
@@ -26,6 +28,15 @@ public:
     Vector4& operator+=(const Vector4& iVec);
     Vector4 operator*(const float iScalar) const;
     Vector4& operator*=(const float iScalar);
+    const float operator[](const size_t iIndex) const {
+        CH_ASSERT(iIndex < 4);
+        return m_Vec[iIndex];
+    }
+
+    float& operator[](const size_t iIndex) {
+        CH_ASSERT(iIndex < 4);
+        return m_Vec[iIndex];
+    }
 
     const float* Data() const { return m_Vec; }
 
