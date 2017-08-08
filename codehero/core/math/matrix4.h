@@ -50,6 +50,11 @@ public:
 
     const float* Data() const { return _m; }
 
+    // Factory
+    static Matrix4 MakeProjectionPerspective(float iFov, float iAspect, float iNear, float iFar);
+
+    static Matrix4 Zero;
+
 private:
     union {
         float m[4][4];
@@ -77,20 +82,6 @@ public:
         0.0f                                , 2.0f / (iTop - iBottom)             , 0.0f  , 0.0f,
         0.0f                                , 0.0f                                , -1.0f , 0.0f,
         -(iRight + iLeft) / (iRight - iLeft), -(iTop + iBottom) / (iTop - iBottom), 0.0f  , 1.0f
-    ) {}
-};
-
-
-// TODO(pierre) FOV should probably be in Radian
-// DegToRad(iFov)
-class PerspectiveMatrix : public Matrix4 {
-public:
-    PerspectiveMatrix(float iFov, float iAspect, float iNear, float iFar)
-        : Matrix4(
-        1.0f / (iAspect * tanf(iFov / 2.0f)), 0.0f                    , 0.0f                                   , 0.0f,
-        0.0f                                , 1.0f / tanf(iFov / 2.0f), 0.0f                                   , 0.0f,
-        0.0f                                , 0.0f                    , -(iFar + iNear) / (iFar - iNear)       , -1.0f,
-        0.0f                                , 0.0f                    , -(2.0f * iFar * iNear) / (iFar - iNear), 0.0f
     ) {}
 };
 

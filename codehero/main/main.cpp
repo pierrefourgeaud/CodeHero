@@ -232,6 +232,8 @@ Error Main::Run() {
     // Save the input to avoid doing a query at every frame
     Input* input = m_pContext->GetSubsystem<Input>();
 
+    Matrix4 projection = Matrix4::MakeProjectionPerspective(45.0f, g_Width / g_Height, 0.1f, 100.0f);
+
     while (true) {
         input->Update();
 
@@ -279,8 +281,6 @@ Error Main::Run() {
             float atten[3] = {pointLights[i].GetConstant(), pointLights[i].GetLinear(), pointLights[i].GetQuadratic()};
             rs->SetShaderParameter(base + "attenuation[0]", atten, sizeof(atten));
         }
-
-        PerspectiveMatrix projection(45.0f, g_Width / g_Height, 0.1f, 100.0f);
 
         rs->SetShaderParameter("view", camera.GetView());
         rs->SetShaderParameter("projection", projection);

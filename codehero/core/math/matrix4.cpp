@@ -11,6 +11,11 @@
 
 namespace CodeHero {
 
+Matrix4 Matrix4::Zero(0.0f, 0.0f, 0.0f, 0.0f,
+                      0.0f, 0.0f, 0.0f, 0.0f,
+                      0.0f, 0.0f, 0.0f, 0.0f,
+                      0.0f, 0.0f, 0.0f, 0.0f);
+
 Matrix4::Matrix4(float m00, float m01, float m02, float m03,
                  float m10, float m11, float m12, float m13,
                  float m20, float m21, float m22, float m23,
@@ -129,6 +134,23 @@ float Matrix4::_DotWithIndex(int iX, int iY, const Matrix4& iMat) const {
     }
 
     return res;
+}
+
+// Statics
+Matrix4 Matrix4::MakeProjectionPerspective(float iFov, float iAspect, float iNear, float iFar) {
+    CH_ASSERT(abs(iAspect - Epsilon()) > 0.0f);
+
+    const float tanHalfFovy = tan(DegToRad(iFov) / 2.0f);
+
+    Matrix4 result = Matrix4::Zero;
+    result.m[0][0] = 1.0f / (iAspect * tanHalfFovy);
+    result.m[1][1] = 1.0f / tanHalfFovy;
+    result.m[2][3] = -1.0f;
+
+    result.m[2][2] = -(iFar + iNear) / (iFar - iNear);
+    result.m[3][2] = -(2.0f * iFar * iNear) / (iFar - iNear);
+
+    return std::move(result);
 }
 
 } // namespace CodeHero
