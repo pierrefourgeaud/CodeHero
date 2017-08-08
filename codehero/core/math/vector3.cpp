@@ -8,7 +8,7 @@
 
 namespace CodeHero {
 
-const Vector3 Vector3::Forward(0.0f, 0.0f, 1.0f);
+const Vector3 Vector3::Forward(0.0f, 0.0f, -1.0f);
 const Vector3 Vector3::Up(0.0f, 1.0f, 0.0f);
 const Vector3 Right(1.0f, 0.0f, 0.0f);
 
@@ -55,6 +55,14 @@ bool Vector3::operator==(const Vector3& iRhs) const {
            FloatEqu(z(), iRhs.z());
 }
 
+Vector3 Vector3::operator+(const Vector3& iRhs) const {
+    return {
+        x() + iRhs.x(),
+        y() + iRhs.y(),
+        z() + iRhs.z()
+    };
+}
+
 Vector3 Vector3::operator-(const Vector3& iRhs) const {
     return {
         x() - iRhs.x(),
@@ -64,13 +72,24 @@ Vector3 Vector3::operator-(const Vector3& iRhs) const {
 }
 
 Vector3 Vector3::operator*(const float iScalar) const {
-    return Vector3(*this) * iScalar;
+    return {
+        x() * iScalar,
+        y() * iScalar,
+        z() * iScalar
+    };
 }
 
 Vector3& Vector3::operator*=(const float iScalar) {
     m_Vec[0] *= iScalar;
     m_Vec[1] *= iScalar;
     m_Vec[2] *= iScalar;
+    return *this;
+}
+
+Vector3& Vector3::operator+=(const Vector3& iRhs) {
+    m_Vec[0] += iRhs.x();
+    m_Vec[1] += iRhs.y();
+    m_Vec[2] += iRhs.z();
     return *this;
 }
 
