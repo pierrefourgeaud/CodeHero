@@ -13,6 +13,7 @@ namespace CodeHero {
 // Forward declaration
 class Vector3;
 class Vector4;
+class Matrix3;
 
 /**
  * @brief Matrix 44f
@@ -24,6 +25,7 @@ public:
             float m10, float m11, float m12, float m13,
             float m20, float m21, float m22, float m23,
             float m30, float m31, float m32, float m33);
+    explicit Matrix4(const Matrix3& iMat3);
 
     void ToIdentity() {
         m[0][0] = 1.0f; m[0][1] = 0.0f; m[0][2] = 0.0f; m[0][3] = 0.0f;
