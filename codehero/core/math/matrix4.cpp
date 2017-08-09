@@ -60,7 +60,7 @@ void Matrix4::Rotate(float iAngle, const Vector3& iVector) {
     Vector3 temp = (1.0f - c) * axis;
 
     // Create a rotation matrix
-    Matrix4 rotation;
+    Matrix3 rotation;
     rotation.m[0][0] = c + temp.x() * axis.x();
     rotation.m[0][1] = temp.x() * axis.y() + s * axis.z();
     rotation.m[0][2] = temp.x() * axis.z() - s * axis.y();

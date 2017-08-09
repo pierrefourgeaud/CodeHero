@@ -20,6 +20,8 @@ class Quaternion;
 * Used for rotation and scaling
 */
 class Matrix3 {
+    friend class Matrix4;
+
 public:
     Matrix3() { ToIdentity(); }
     Matrix3(float m00, float m01, float m02,
