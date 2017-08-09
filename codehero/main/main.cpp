@@ -117,7 +117,7 @@ Error Main::Run() {
 
     // Create scene lights
     std::vector<Light> dirLights;
-    dirLights.push_back(Light(m_pContext, Light::Type::T_Directional).SetDirection({-0.2f, -1.0f, -0.3f})
+    dirLights.push_back(Light(m_pContext, Light::Type::T_Directional).SetDirection({-0.2f, -1.0f, 0.3f})
                                                                      .SetAmbientIntensity(0.45f)
                                                                      .SetDiffuseIntensity(0.8f)
                                                                      .SetSpecularIntensity(0.5f));
@@ -137,14 +137,14 @@ Error Main::Run() {
                                                                  .SetConstant(1.0f)
                                                                  .SetLinear(0.007f)
                                                                  .SetQuadratic(0.0002f));
-    pointLights.push_back(Light(m_pContext, Light::Type::T_Point).SetPosition({-4.0f, 2.0f, -12.0f})
+    pointLights.push_back(Light(m_pContext, Light::Type::T_Point).SetPosition({-4.0f, 2.0f, 12.0f})
                                                                  .SetAmbientIntensity(0.05f)
                                                                  .SetDiffuseIntensity(0.8f)
                                                                  .SetSpecularIntensity(1.0f)
                                                                  .SetConstant(1.0f)
                                                                  .SetLinear(0.007f)
                                                                  .SetQuadratic(0.0002f));
-    pointLights.push_back(Light(m_pContext, Light::Type::T_Point).SetPosition({0.0f, 0.0f, -3.0f})
+    pointLights.push_back(Light(m_pContext, Light::Type::T_Point).SetPosition({0.0f, 3.0f, 3.0f})
                                                                  .SetAmbientIntensity(0.05f)
                                                                  .SetDiffuseIntensity(0.8f)
                                                                  .SetSpecularIntensity(1.0f)
@@ -189,16 +189,16 @@ Error Main::Run() {
     Plane plane(m_pContext);
 
     Vector3 cubePositions[] = {
-        { 0.0f,  0.0f,  0.0f},
-        { 2.0f,  5.0f, -15.0f},
-        {-1.5f, -2.2f, -2.5f},
-        {-3.8f, -2.0f, -12.3f},
-        { 2.4f, -0.4f, -3.5f},
-        {-1.7f,  3.0f, -7.5f},
-        { 1.3f, -2.0f, -2.5f},
-        { 1.5f,  2.0f, -2.5f},
-        { 1.5f,  0.2f, -1.5f},
-        {-1.3f,  1.0f, -1.5f}
+        { 0.0f,  0.0f, 0.0f},
+        { 2.0f,  5.0f, 15.0f},
+        {-1.5f, -2.2f, 2.5f},
+        {-3.8f, -2.0f, 12.3f},
+        { 2.4f, -0.4f, 3.5f},
+        {-1.7f,  3.0f, 7.5f},
+        { 1.3f, -2.0f, 2.5f},
+        { 1.5f,  2.0f, 2.5f},
+        { 1.5f,  0.2f, 1.5f},
+        {-1.3f,  1.0f, 1.5f}
     };
 
     auto lastTime = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now());
@@ -212,8 +212,8 @@ Error Main::Run() {
     Camera camera(m_pContext);
     std::shared_ptr<Node> cameraNode = scene->CreateChild();
     cameraNode->AddDrawable(&camera);
-    cameraNode->SetPosition({ 0.0f, 3.2f, 6.5f });
-    cameraNode->SetRotation(Quaternion(Vector3({ 0.0f, 1.0f, 0.0f })-Vector3({ 0.0f, 3.2f, 6.5f }), Vector3::Up));
+    cameraNode->SetPosition({0.0f, 3.0f, -16.5f});
+    cameraNode->SetRotation(Quaternion(15.0f, 0.0f, 0.0f));
 
     std::vector<std::shared_ptr<Viewport>> viewports;
     viewports.push_back(std::make_shared<Viewport>(0, 0, g_Width * 0.75, g_Height));
@@ -223,8 +223,8 @@ Error Main::Run() {
 
     Matrix4 modelFloor;
     modelFloor.Scale({ 100.0f, 1.0f, 100.0f });
-    modelFloor.Translate({ 0, -40.0f, 0 });
-    modelFloor.Rotate(45.0f, { 1.0f, 0.0f, 0.0f });
+    modelFloor.Translate({ 0, -12.5f, 0.0f });
+    modelFloor.Rotate(90.0f, { 1.0f, 0.0f, 0.0f });
 
     auto cubeVertices = cube.GetVertices();
     auto planeVertices = plane.GetVertices();
@@ -293,7 +293,7 @@ Error Main::Run() {
         // We should split that code properly with scene node, model, mesh, materials.
         // Please do not take that for production code.
         Matrix4 mod;
-        mod.Translate({ 1.0f,  -12.0f, -10.0f});
+        mod.Translate({1.0f, -12.0f, 5.0f});
         rs->SetShaderParameter("model", mod);
         size_t s = mdl.m_Meshes.size();
         for (int i = 0; i < s; ++i) {

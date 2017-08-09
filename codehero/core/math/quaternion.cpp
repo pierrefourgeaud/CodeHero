@@ -29,9 +29,9 @@ void Quaternion::FromAngleAndAxis(float iAngle, const Vector3& iAxis) {
 void Quaternion::FromEulerAngles(float iX, float iY, float iZ) {
     // Order of rotations: Z first, then X, then Y
     // (like typical FPS camera with gimbal lock at top/bottom)
-    float x = DegToRad(iX);
-    float y = DegToRad(iY);
-    float z = DegToRad(iZ);
+    float x = DegToRad(iX) * 0.5f;
+    float y = DegToRad(iY) * 0.5f;
+    float z = DegToRad(iZ) * 0.5f;
     float sinX = sinf(x);
     float cosX = cosf(x);
     float sinY = sinf(y);
@@ -110,14 +110,13 @@ void Quaternion::FromAxis(const Vector3& iXAxis, const Vector3& iYAxis, const Ve
 }
 
 void Quaternion::FromLookAt(const Vector3& iDirection, const Vector3& iUp) {
-    Vector3 direction = iDirection;
-    direction.Normalize();
+    Vector3 direction = -(iDirection.Normalized());
     Vector3 right = (direction).Cross(iUp).Normalize();
     Vector3 up = right.Cross((direction));
 
-    Matrix3 matrix(right.x(), up.x(), -direction.x(),
-                   right.y(), up.y(), -direction.y(),
-                   right.z(), up.z(), -direction.z());
+    Matrix3 matrix(right.x(), up.x(), direction.x(),
+                   right.y(), up.y(), direction.y(),
+                   right.z(), up.z(), direction.z());
 
     FromRotationMatrix(matrix);
 }
@@ -145,7 +144,7 @@ Vector3 Quaternion::operator*(const Vector3& iRhs) const {
     Vector3 uv(quatVec.Cross(iRhs));
     Vector3 uuv(quatVec.Cross(uv));
 
-    return iRhs + 2.0f * (uv * m_W + uuv);
+    return iRhs + ((uv * m_W) + uuv) * 2.0f;
 }
 
 } // namespace CodeHero

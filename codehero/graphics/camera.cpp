@@ -30,7 +30,7 @@ void Camera::_ComputeViewMatrix() {
 
     Vector3 pos = node->GetPosition();
 
-    m_View = Matrix4(node->GetRotation().RotationMatrix());
+    m_View = Matrix4(node->GetRotation().RotationMatrix().Transpose());
     m_View.Set(3, 0, -Vector3({m_View.Get(0, 0), m_View.Get(1, 0), m_View.Get(2, 0)}).Dot(pos));
     m_View.Set(3, 1, -Vector3({m_View.Get(0, 1), m_View.Get(1, 1), m_View.Get(2, 1)}).Dot(pos));
     m_View.Set(3, 2, -Vector3({m_View.Get(0, 2), m_View.Get(1, 2), m_View.Get(2, 2)}).Dot(pos));

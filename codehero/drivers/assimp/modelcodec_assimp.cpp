@@ -32,7 +32,7 @@ Error ModelCodecAssimp::Load(FileAccess& iF, Model& oModel) {
     Assimp::Importer import;
     std::string buffer = iF.ReadAll();
     //const aiScene* scene = import.ReadFileFromMemory(buffer.data(), buffer.size(), aiProcess_Triangulate | aiProcess_FlipUVs);
-    const aiScene* scene = import.ReadFile(iF.GetName(), aiProcess_Triangulate | aiProcess_FlipUVs);
+    const aiScene* scene = import.ReadFile(iF.GetName(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_ConvertToLeftHanded);
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         LOGE << "ModelCodecAssimp: " << import.GetErrorString() << std::endl;

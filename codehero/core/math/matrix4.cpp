@@ -142,9 +142,9 @@ Matrix4 Matrix4::MakeProjectionPerspective(float iFov, float iAspect, float iNea
     Matrix4 result = Matrix4::Zero;
     result.m[0][0] = 1.0f / (iAspect * tanHalfFovy);
     result.m[1][1] = 1.0f / tanHalfFovy;
-    result.m[2][3] = -1.0f;
+    result.m[2][3] = 1.0f;
 
-    result.m[2][2] = -(iFar + iNear) / (iFar - iNear);
+    result.m[2][2] = (iFar + iNear) / (iFar - iNear);
     result.m[3][2] = -(2.0f * iFar * iNear) / (iFar - iNear);
 
     return std::move(result);
