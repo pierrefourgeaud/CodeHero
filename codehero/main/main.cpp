@@ -233,24 +233,39 @@ Error Main::Run() {
     Input* input = m_pContext->GetSubsystem<Input>();
 
     Matrix4 projection = Matrix4::MakeProjectionPerspective(45.0f, g_Width / g_Height, 0.1f, 100.0f);
+    auto previous = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now());
 
     while (true) {
         input->Update();
+
+        rs->ClearFrameBuffer();
+        auto now = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now());
+        auto currentTime = now.time_since_epoch();
+        auto timeStep = (now - previous).count() / 1000.0f; // In seconds
+        previous = now;
+        nbFrames++;
+        if ((now - lastTime).count() >= 1000) {
+            fps = nbFrames;
+            nbFrames = 0;
+            lastTime = now;
+        }
 
         // Check the inputs
         if (input->IsKeyPressed(Key::K_ESC)) {
             // On ESC we exit the example application
             break;
         }
-
-        rs->ClearFrameBuffer();
-        auto now = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now());
-        auto currentTime = now.time_since_epoch();
-        nbFrames++;
-        if ((now - lastTime).count() >= 1000) {
-            fps = nbFrames;
-            nbFrames = 0;
-            lastTime = now;
+        if (input->IsKeyPressed(Key::K_W)) {
+            cameraNode->Translate(Vector3::Forward * 5.0f * timeStep);
+        }
+        if (input->IsKeyPressed(Key::K_S)) {
+            cameraNode->Translate(Vector3::Backward * 5.0f * timeStep);
+        }
+        if (input->IsKeyPressed(Key::K_D)) {
+            cameraNode->Translate(Vector3::Right * 5.0f * timeStep);
+        }
+        if (input->IsKeyPressed(Key::K_A)) {
+            cameraNode->Translate(Vector3::Left * 5.0f * timeStep);
         }
 
         t->SetText("FPS: " + std::to_string(fps));

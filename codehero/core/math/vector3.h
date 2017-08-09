@@ -43,8 +43,11 @@ public:
     const float* Data() const { return m_Vec; }
 
     static const Vector3 Forward;
+    static const Vector3 Backward;
     static const Vector3 Up;
+    static const Vector3 Down;
     static const Vector3 Right;
+    static const Vector3 Left;
 
 private:
     float m_Vec[3] = {0};

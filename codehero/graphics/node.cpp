@@ -47,5 +47,28 @@ void Node::SetRotation(const Quaternion& iRotation) {
     MarkDirty();
 }
 
+void Node::Translate(const Vector3& iDelta, TransformSpace iSpace /*= TS_Local*/) {
+    switch (iSpace) {
+    case TS_Local:
+        m_Position += m_Rotation * iDelta;
+        break;
+
+    case TS_Parent:
+        m_Position += iDelta;
+        break;
+
+    case TS_World:
+        // TODO(pierre) To add when we have the GetWorldTransform available from Node
+        //              for the parent.
+        break;
+
+    default:
+        // Will never reach here
+        break;
+    }
+
+    MarkDirty();
+}
+
 } // namespace CodeHero
 

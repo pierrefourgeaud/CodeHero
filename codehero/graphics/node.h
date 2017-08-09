@@ -15,6 +15,12 @@ namespace CodeHero {
 // Forward declaration
 class Drawable;
 
+enum TransformSpace {
+    TS_Local = 0,
+    TS_Parent,
+    TS_World
+};
+
 class Node : public std::enable_shared_from_this<Node> {
 public:
 
@@ -43,6 +49,8 @@ public:
     void SetRotation(const Quaternion& iRotation);
     const Vector3& GetPosition() const { return m_Position; }
     const Quaternion& GetRotation() const { return m_Rotation; }
+
+    void Translate(const Vector3& iDelta, TransformSpace iSpace = TS_Local);
 
 private:
     std::vector<Drawable*> m_Drawables;
