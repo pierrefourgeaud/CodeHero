@@ -56,9 +56,7 @@ void Matrix4::Rotate(float iAngle, const Vector3& iVector) {
     const float c = cosf(a);
     const float s = sinf(a);
 
-    Vector3 axis = iVector;
-    axis.Normalize();
-
+    Vector3 axis = iVector.Normalized();
     Vector3 temp = (1.0f - c) * axis;
 
     // Create a rotation matrix
@@ -74,7 +72,6 @@ void Matrix4::Rotate(float iAngle, const Vector3& iVector) {
     rotation.m[2][0] = temp.z() * axis.x() + s * axis.y();
     rotation.m[2][1] = temp.z() * axis.y() - s * axis.x();
     rotation.m[2][2] = c + temp.z() * axis.z();
-
 
     Vector4 x = Vector4(m[0]) * rotation.m[0][0] + Vector4(m[1]) * rotation.m[0][1] + Vector4(m[2]) * rotation.m[0][2];
     Vector4 y = Vector4(m[0]) * rotation.m[1][0] + Vector4(m[1]) * rotation.m[1][1] + Vector4(m[2]) * rotation.m[1][2];
