@@ -9,7 +9,7 @@ namespace CodeHero {
 
 class Vector3 {
 public:
-    Vector3() {} // Create Identity vector
+    Vector3() { ToIdentity(); } // Create Identity vector
     Vector3(float iX, float iY, float iZ);
 
     ~Vector3() {}
@@ -22,7 +22,10 @@ public:
 
     float Length() const;
 
+    // Modify the current object and can be chained
     Vector3& Normalize();
+    // Return a new vector being the current vector normalized
+    Vector3 Normalized() const;
 
     Vector3 Cross(const Vector3& iVector) const;
 

@@ -37,6 +37,16 @@ Vector3& Vector3::Normalize() {
     return *this;
 }
 
+Vector3 Vector3::Normalized() const {
+    float l = Length();
+
+    if (l == 0) {
+        return Vector3();
+    } else {
+        return Vector3(m_Vec[0] / l, m_Vec[1] / l, m_Vec[2] / l);
+    }
+}
+
 Vector3 Vector3::Cross(const Vector3& iVector) const {
     return {
         (y() * iVector.z()) - (z() * iVector.y()),
