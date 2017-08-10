@@ -39,6 +39,17 @@ static inline int Clamp(int iValue, int iMin, int iMax)
     }
 }
 
+static inline float Clamp(float iValue, float iMin, float iMax)
+{
+    if (iValue < iMin) {
+        return iMin;
+    } else if (iValue > iMax) {
+        return iMax;
+    } else {
+        return iValue;
+    }
+}
+
 } // namespace CodeHero
 
 #endif // CODEHERO_MATH_UTILS_H
