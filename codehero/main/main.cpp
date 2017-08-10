@@ -241,6 +241,9 @@ Error Main::Run() {
     auto startTime = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now());
     auto previous = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now());
 
+    Matrix4 modelNano;
+    modelNano.Translate({1.0f, -12.0f, 5.0f});
+
     while (true) {
         input->Update();
 
@@ -313,9 +316,7 @@ Error Main::Run() {
         // TODO(pierre) This code is plain ugly. The idea is to demonstrate the loading and displaying of a model.
         // We should split that code properly with scene node, model, mesh, materials.
         // Please do not take that for production code.
-        Matrix4 mod;
-        mod.Translate({1.0f, -12.0f, 5.0f});
-        rs->SetShaderParameter("model", mod);
+        rs->SetShaderParameter("model", modelNano);
         size_t s = mdl.m_Meshes.size();
         for (int i = 0; i < s; ++i) {
             size_t tSize = mdl.m_Meshes[i]->GetTextures().at("texture_diffuse").size();
