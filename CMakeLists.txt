@@ -81,6 +81,7 @@ set (SOURCES
      ${SRCS_PATH}/core/fileaccess.cpp
      ${SRCS_PATH}/core/filesystem.cpp
      ${SRCS_PATH}/core/image.cpp
+     ${SRCS_PATH}/core/time.cpp
      ${SRCS_PATH}/core/math/vector2.cpp
      ${SRCS_PATH}/core/math/vector3.cpp
      ${SRCS_PATH}/core/math/vector4.cpp
@@ -131,6 +132,7 @@ set (HEADERS
      ${SRCS_PATH}/core/errors.h
      ${SRCS_PATH}/core/object.h
      ${SRCS_PATH}/core/system.h
+     ${SRCS_PATH}/core/time.h
      ${SRCS_PATH}/core/typedefs.h
      ${SRCS_PATH}/core/utils.h
      ${SRCS_PATH}/core/shader.h

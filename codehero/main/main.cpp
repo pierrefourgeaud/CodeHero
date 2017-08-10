@@ -2,8 +2,6 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
-#include <chrono>
-
 #include "main/main.h"
 #include <logger.h>
 #include <filelogger.h>
@@ -14,6 +12,7 @@
 #include "core/shader.h"
 #include "core/resourceloader.h"
 #include "core/image.h"
+#include "core/time.h"
 
 #include "graphics/renderwindow.h"
 #include "graphics/viewport.h"
@@ -75,6 +74,11 @@ Error Main::Start() {
     // Create the context that will be the base of everything coming after
     m_pContext = std::shared_ptr<EngineContext>(new EngineContext);
 
+    // Initialize the time as soon as possible
+    Time* time = new Time(m_pContext);
+    time->Initialize();
+    m_pContext->RegisterSubsystem(time);
+
     ResourceLoader<Image>* rlImage = new ResourceLoader<Image>(m_pContext);
     rlImage->Initialize();
     m_pContext->RegisterSubsystem(rlImage);
@@ -108,6 +112,9 @@ Error Main::Start() {
 
 Error Main::Run() {
     LOGD2 << "[>] Main::Run()" << std::endl;
+
+    // Cache the time to avoid repeating the query every loop
+    Time* time = m_pContext->GetSubsystem<Time>();
 
     RenderSystem* rs = m_pContext->GetSubsystem<RenderSystem>();
     std::shared_ptr<RenderWindow> mainWindow = rs->GetWindow();
@@ -206,7 +213,7 @@ Error Main::Run() {
         {-1.3f,  1.0f, 1.5f}
     };
 
-    auto lastTime = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now());
+    auto lastTime = time->GetTimeMilliseconds();
     int nbFrames = 0;
     int fps = 0;
 
@@ -240,8 +247,7 @@ Error Main::Run() {
     Input* input = m_pContext->GetSubsystem<Input>();
 
     Matrix4 projection = Matrix4::MakeProjectionPerspective(45.0f, g_Width / g_Height, 0.1f, 100.0f);
-    auto startTime = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now());
-    auto previous = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now());
+    auto previous = time->GetTimeMilliseconds();
 
     Matrix4 modelNano;
     modelNano.Translate({1.0f, -12.0f, 5.0f});
@@ -250,12 +256,11 @@ Error Main::Run() {
         input->Update();
 
         rs->ClearFrameBuffer();
-        auto now = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now());
-        auto currentTime = now - startTime;
-        auto timeStep = (now - previous).count() / 1000.0f; // In seconds
+        auto now = time->GetTimeMilliseconds();
+        auto timeStep = (now - previous) / 1000.0f; // In seconds
         previous = now;
         nbFrames++;
-        if ((now - lastTime).count() >= 1000) {
+        if (now - lastTime >= 1000) {
             fps = nbFrames;
             nbFrames = 0;
             lastTime = now;
@@ -375,7 +380,7 @@ Error Main::Run() {
 
         rs->SetShaderParameter("material.shininess", 32.0f);
 
-        float duration = currentTime.count() / 1000.0f;
+        float duration = now / 1000.0f;
 
         // Draw container
         cubeVertices->Use();
