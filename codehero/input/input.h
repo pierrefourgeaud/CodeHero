@@ -9,6 +9,7 @@
 #include <unordered_set>
 #include "input/inputevents.h"
 #include "core/system.h"
+#include "core/math/vector2.h"
 
 namespace CodeHero {
 
@@ -22,18 +23,30 @@ public:
     Input(const std::shared_ptr<EngineContext>& iContext);
     ~Input();
 
-    Error Initialize() { return OK; }
+    Error Initialize();
     Error Cleanup() { return OK; }
 
     void Update();
+    void EndFrame();
 
     void HandleKey(Key iKey, KeyEvent iAction);
+    void HandleMouse(int32_t iPosX, int32_t iPosY);
+    void ResetInputAcc();
 
     // Keyboard
     bool IsKeyPressed(Key iKey) const;
 
+    // Mouse
+    IntVector2 GetMousePosition() const { return m_MousePosition; }
+    IntVector2 GetMouseMove() const { return m_MouseMove; }
+
 private:
     std::unordered_set<Key> m_KeyPressed;
+
+    IntVector2 m_MousePosition;
+    IntVector2 m_LastMousePosition;
+    // Cache the mouse move (diff between current and last position
+    IntVector2 m_MouseMove;
 };
 
 } // namespace CodeHero

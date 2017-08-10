@@ -218,7 +218,9 @@ Error Main::Run() {
     std::shared_ptr<Node> cameraNode = scene->CreateChild();
     cameraNode->AddDrawable(&camera);
     cameraNode->SetPosition({0.0f, 3.0f, -16.5f});
-    cameraNode->SetRotation(Quaternion(15.0f, 0.0f, 0.0f));
+    float yaw = 0.0f;
+    float pitch = 15.0f;
+    cameraNode->SetRotation(Quaternion(pitch, yaw, 0.0f));
 
     std::vector<std::shared_ptr<Viewport>> viewports;
     viewports.push_back(std::make_shared<Viewport>(0, 0, g_Width * 0.75, g_Height));
@@ -265,17 +267,44 @@ Error Main::Run() {
             break;
         }
         if (input->IsKeyPressed(Key::K_W)) {
-            cameraNode->Translate(Vector3::Forward * 5.0f * timeStep);
+            cameraNode->Translate(Vector3::Forward * 10.0f * timeStep);
         }
         if (input->IsKeyPressed(Key::K_S)) {
-            cameraNode->Translate(Vector3::Backward * 5.0f * timeStep);
+            cameraNode->Translate(Vector3::Backward * 10.0f * timeStep);
         }
         if (input->IsKeyPressed(Key::K_D)) {
-            cameraNode->Translate(Vector3::Right * 5.0f * timeStep);
+            cameraNode->Translate(Vector3::Right * 10.0f * timeStep);
         }
         if (input->IsKeyPressed(Key::K_A)) {
-            cameraNode->Translate(Vector3::Left * 5.0f * timeStep);
+            cameraNode->Translate(Vector3::Left * 10.0f * timeStep);
         }
+        if (input->IsKeyPressed(Key::K_Q)) {
+            yaw -= 10.0f * timeStep;
+            cameraNode->SetRotation(Quaternion(pitch, yaw, 0.0f));
+        }
+        if (input->IsKeyPressed(Key::K_E)) {
+            yaw += 10.0f * timeStep;
+            cameraNode->SetRotation(Quaternion(pitch, yaw, 0.0f));
+        }
+        if (input->IsKeyPressed(Key::K_R)) {
+            pitch -= 10.0f * timeStep;
+            pitch = Clamp(pitch, -90.0f, 90.0f);
+            cameraNode->SetRotation(Quaternion(pitch, yaw, 0.0f));
+        }
+        if (input->IsKeyPressed(Key::K_F)) {
+            pitch += 10.0f * timeStep;
+            pitch = Clamp(pitch, -90.0f, 90.0f);
+            cameraNode->SetRotation(Quaternion(pitch, yaw, 0.0f));
+        }
+
+        // Use this frame's mouse motion to adjust camera node yaw and pitch. Clamp the pitch between -90 and 90 degrees
+        IntVector2 mouseMove = input->GetMouseMove();
+        yaw += 0.1f * mouseMove.x();
+        pitch += 0.1f * mouseMove.y();
+        pitch = Clamp(pitch, -90.0f, 90.0f);
+
+        // Construct new orientation for the camera scene node from yaw and pitch. Roll is fixed to zero
+        cameraNode->SetRotation(Quaternion(pitch, yaw, 0.0f));
 
         t->SetText("FPS: " + std::to_string(fps));
         Vector3 color(0.5, 0.8f, 0.2f);
@@ -380,6 +409,8 @@ Error Main::Run() {
         planeVertices->Unuse();
 
         mainWindow->SwapBuffers();
+
+        input->EndFrame();
     }
 
     LOGD2 << "[<] Main::Run()" << std::endl;

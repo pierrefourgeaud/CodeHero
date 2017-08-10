@@ -20,12 +20,17 @@ public:
 
     Error Create(const int iWidth, const int iHeight) override;
 
+    // If Grabbed is true (and with not visible), the mouse is grabbed and cannot
+    // leave the client area
+    void SetMouseVisible(bool iIsVisible, bool iGrabbed = true) override;
+
     void SwapBuffers() override;
 
 private:
     GLFWwindow* m_pWindow = nullptr;
 
     static void _HandleKey(GLFWwindow* iWindow, int32_t iKey, int32_t iScancode, int32_t iAction, int32_t iMode);
+    static void _HandleMouse(GLFWwindow* iWindow, double iPosX, double iPosY);
 };
 
 } // namespace CodeHero

@@ -37,8 +37,19 @@ Error RenderWindowGL::Create(const int iWidth, const int iHeight) {
 
     glfwSetWindowUserPointer(m_pWindow, (void*)this);
     glfwSetKeyCallback(m_pWindow, RenderWindowGL::_HandleKey);
+    glfwSetCursorPosCallback(m_pWindow, RenderWindowGL::_HandleMouse);
 
     return Error::OK;
+}
+
+void RenderWindowGL::SetMouseVisible(bool iIsVisible, bool iGrabbed /* = true */) {
+    int mode;
+    if (iIsVisible) {
+        mode = GLFW_CURSOR_NORMAL;
+    } else {
+        mode = iGrabbed ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_HIDDEN;
+    }
+    glfwSetInputMode(m_pWindow, GLFW_CURSOR, mode);
 }
 
 void RenderWindowGL::SwapBuffers() {
@@ -51,6 +62,11 @@ void RenderWindowGL::_HandleKey(GLFWwindow* iWindow, int32_t iKey, int32_t iScan
     (void)iMode;
     RenderWindowGL* me = static_cast<RenderWindowGL*>(glfwGetWindowUserPointer(iWindow));
     me->m_pInputHandler->HandleKey(static_cast<Key>(iKey), static_cast<KeyEvent>(iAction));
+}
+
+void RenderWindowGL::_HandleMouse(GLFWwindow* iWindow, double iPosX, double iPosY) {
+    RenderWindowGL* me = static_cast<RenderWindowGL*>(glfwGetWindowUserPointer(iWindow));
+    me->m_pInputHandler->HandleMouse(iPosX, iPosY);
 }
 
 } // namespace CodeHero

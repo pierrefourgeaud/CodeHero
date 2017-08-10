@@ -21,6 +21,7 @@ public:
 
     virtual Error Create(int iWidth, int iHeight) = 0;
 
+    virtual void SetMouseVisible(bool iIsVisible, bool iGrabbed = true) = 0;
     virtual void SwapBuffers() = 0;
 
     // TODO(pierre) Should be changed to either reference or shared_ptr !

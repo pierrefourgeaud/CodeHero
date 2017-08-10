@@ -5,6 +5,7 @@
 #include "input/input.h"
 #include "core/enginecontext.h"
 #include "graphics/rendersystem.h"
+#include "graphics/renderwindow.h"
 
 namespace CodeHero {
 
@@ -13,6 +14,14 @@ Input::Input(const std::shared_ptr<EngineContext>& iContext)
 {}
 
 Input::~Input() {
+}
+
+Error Input::Initialize() {
+    RenderSystem* rs = m_pContext->GetSubsystem<RenderSystem>();
+
+    // TODO(pierre) I don't like that we have to use the RenderSystem/Window to set some options on the mouse...
+    rs->GetWindow()->SetMouseVisible(false, true); // This should be overridable (Add a Input->SetMouseMode(...))
+    return OK;
 }
 
 void Input::HandleKey(Key iKey, KeyEvent iAction) {
@@ -37,11 +46,25 @@ void Input::HandleKey(Key iKey, KeyEvent iAction) {
     }
 }
 
+void Input::HandleMouse(int32_t iPosX, int32_t iPosY) {
+    m_LastMousePosition = m_MousePosition;
+    m_MousePosition = IntVector2(iPosX, iPosY);
+    m_MouseMove = m_MousePosition - m_LastMousePosition;
+}
+
 void Input::Update() {
     // TODO(pierre) Should we cache this call ? This will have a small perf impact
     RenderSystem* rs = m_pContext->GetSubsystem<RenderSystem>();
 
     rs->PollEvents();
+}
+
+void Input::EndFrame() {
+    ResetInputAcc();
+}
+
+void Input::ResetInputAcc() {
+    m_MouseMove = IntVector2();
 }
 
 bool Input::IsKeyPressed(Key iKey) const {
