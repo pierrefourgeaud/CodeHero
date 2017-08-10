@@ -238,6 +238,7 @@ Error Main::Run() {
     Input* input = m_pContext->GetSubsystem<Input>();
 
     Matrix4 projection = Matrix4::MakeProjectionPerspective(45.0f, g_Width / g_Height, 0.1f, 100.0f);
+    auto startTime = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now());
     auto previous = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now());
 
     while (true) {
@@ -245,7 +246,7 @@ Error Main::Run() {
 
         rs->ClearFrameBuffer();
         auto now = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now());
-        auto currentTime = now.time_since_epoch();
+        auto currentTime = now - startTime;
         auto timeStep = (now - previous).count() / 1000.0f; // In seconds
         previous = now;
         nbFrames++;
