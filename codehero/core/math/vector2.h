@@ -44,6 +44,10 @@ public:
 
     const int32_t* Data() const { return m_Vec; }
 
+    IntVector2 operator-(const IntVector2& iRhs) const {
+        return IntVector2(m_Vec[0] - iRhs.m_Vec[0], m_Vec[1] - iRhs.m_Vec[1]);
+    }
+
 private:
     int32_t m_Vec[2] = {0};
 };
