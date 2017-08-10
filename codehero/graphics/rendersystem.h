@@ -76,11 +76,13 @@ public:
 
     void Render();
 
+    std::shared_ptr<RenderWindow> GetWindow() { return m_pWindow; }
+
     // Factory
 #ifdef WIN32
 #undef CreateWindow
 #endif
-    virtual RenderWindow* CreateWindow(uint32_t iWidth, uint32_t iHeight) = 0;
+    virtual std::shared_ptr<RenderWindow> CreateWindow(uint32_t iWidth, uint32_t iHeight) = 0;
     virtual Texture* CreateTexture() = 0;
     virtual Shader* CreateShader() = 0;
     virtual VertexBuffer* CreateVertexBuffer() = 0;
@@ -90,6 +92,7 @@ protected:
     void _SetTextureManager(TextureManager* iTextureManager) { m_pTextureManager = iTextureManager; }
 
     uint32_t m_BoundVBO = 0;
+    std::shared_ptr<RenderWindow> m_pWindow;
 
 private:
     TextureManager* m_pTextureManager = nullptr;

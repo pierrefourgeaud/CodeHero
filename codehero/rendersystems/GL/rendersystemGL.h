@@ -43,7 +43,7 @@ public:
     void Draw(PrimitiveType iType, uint32_t iIndexCount) final override;
 
     // Factory
-    RenderWindow* CreateWindow(uint32_t iWidth, uint32_t iHeight) final override;
+    std::shared_ptr<RenderWindow> CreateWindow(uint32_t iWidth, uint32_t iHeight) final override;
     Texture* CreateTexture() final override;
     Shader* CreateShader() final override;
     VertexBuffer* CreateVertexBuffer() final override;

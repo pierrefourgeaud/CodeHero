@@ -178,16 +178,15 @@ void RenderSystemGL::Draw(PrimitiveType iType, uint32_t iIndexCount) {
 }
 
 // Factory
-RenderWindow* RenderSystemGL::CreateWindow(uint32_t iWidth, uint32_t iHeight) {
-    RenderWindow* win = new RenderWindowGL(*this);
-    if (win->Create(iWidth, iHeight) != Error::OK) {
-        delete win;
-        win = nullptr;
+std::shared_ptr<RenderWindow> RenderSystemGL::CreateWindow(uint32_t iWidth, uint32_t iHeight) {
+    m_pWindow.reset(new RenderWindowGL(*this));
+    if (m_pWindow->Create(iWidth, iHeight) != Error::OK) {
+        m_pWindow.reset();
     }
 
     LOGI << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
-    return win;
+    return m_pWindow;
 }
 
 Texture* RenderSystemGL::CreateTexture() {

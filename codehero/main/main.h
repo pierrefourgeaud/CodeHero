@@ -16,9 +16,6 @@ namespace CodeHero {
 
 // Forward declaration
 class EngineContext;
-class RenderWindow;
-//template <class T> class ResourceLoader;
-//class Image;
 
 class Main {
 public:
@@ -39,10 +36,6 @@ private:
     std::unique_ptr<ILogListener> m_pConsoleLogger;
 
     std::shared_ptr<EngineContext> m_pContext;
-
-    std::unique_ptr<RenderWindow> m_pMainWindow;
-
-    //std::shared_ptr<ResourceLoader<Image>> m_pImageLoader;
 };
 
 }  // namespace CodeHero

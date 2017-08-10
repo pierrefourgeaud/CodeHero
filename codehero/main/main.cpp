@@ -88,14 +88,18 @@ Error Main::Start() {
     Error error = rs->Initialize();
     m_pContext->RegisterSubsystem(rs);
 
-    m_pContext->RegisterSubsystem(new Input(m_pContext));
-
     if (!error) {
         _LoadDrivers();
-        m_pMainWindow.reset(rs->CreateWindow(g_Width, g_Height));
-    }
+        std::shared_ptr<RenderWindow> mainWindow = rs->CreateWindow(g_Width, g_Height);
 
-    m_pMainWindow->SetInputHandler(m_pContext->GetSubsystem<Input>());
+        // This should be after window since some event might be tight to the window
+        Input* input = new Input(m_pContext);
+        input->Initialize();
+        m_pContext->RegisterSubsystem(input);
+
+        // Then we should add the input handle to the window
+        mainWindow->SetInputHandler(m_pContext->GetSubsystem<Input>());
+    }
 
     LOGD2 << "[<] Main::Start()" << std::endl;
 
@@ -106,6 +110,7 @@ Error Main::Run() {
     LOGD2 << "[>] Main::Run()" << std::endl;
 
     RenderSystem* rs = m_pContext->GetSubsystem<RenderSystem>();
+    std::shared_ptr<RenderWindow> mainWindow = rs->GetWindow();
     std::shared_ptr<Font> f(new Font(m_pContext, "./resources/fonts/Roboto-Regular.ttf"));
     UI ui(m_pContext);
     std::shared_ptr<Text> t(new Text(m_pContext));
@@ -372,7 +377,7 @@ Error Main::Run() {
         }
         planeVertices->Unuse();
 
-        m_pMainWindow->SwapBuffers();
+        mainWindow->SwapBuffers();
     }
 
     LOGD2 << "[<] Main::Run()" << std::endl;
