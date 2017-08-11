@@ -20,10 +20,12 @@ public:
 
     Error Create(const int iWidth, const int iHeight) override;
 
+    void SetShouldClose(bool iShouldClose) override;
+
     // If Grabbed is true (and with not visible), the mouse is grabbed and cannot
     // leave the client area
     void SetMouseVisible(bool iIsVisible, bool iGrabbed = true) override;
-
+    bool ShouldClose() const override;
     void SwapBuffers() override;
 
 private:

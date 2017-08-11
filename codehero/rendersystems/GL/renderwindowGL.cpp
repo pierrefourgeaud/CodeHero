@@ -42,6 +42,10 @@ Error RenderWindowGL::Create(const int iWidth, const int iHeight) {
     return Error::OK;
 }
 
+void RenderWindowGL::SetShouldClose(bool iShouldClose) {
+    glfwSetWindowShouldClose(m_pWindow, iShouldClose);
+}
+
 void RenderWindowGL::SetMouseVisible(bool iIsVisible, bool iGrabbed /* = true */) {
     int mode;
     if (iIsVisible) {
@@ -50,6 +54,10 @@ void RenderWindowGL::SetMouseVisible(bool iIsVisible, bool iGrabbed /* = true */
         mode = iGrabbed ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_HIDDEN;
     }
     glfwSetInputMode(m_pWindow, GLFW_CURSOR, mode);
+}
+
+bool RenderWindowGL::ShouldClose() const {
+    return glfwWindowShouldClose(m_pWindow);
 }
 
 void RenderWindowGL::SwapBuffers() {

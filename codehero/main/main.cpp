@@ -252,7 +252,7 @@ Error Main::Run() {
     Matrix4 modelNano;
     modelNano.Translate({1.0f, -12.0f, 5.0f});
 
-    while (true) {
+    while (!mainWindow->ShouldClose()) {
         input->Update();
 
         rs->ClearFrameBuffer();
@@ -269,7 +269,7 @@ Error Main::Run() {
         // Check the inputs
         if (input->IsKeyPressed(Key::K_ESC)) {
             // On ESC we exit the example application
-            break;
+            mainWindow->SetShouldClose(true);
         }
         if (input->IsKeyPressed(Key::K_W)) {
             cameraNode->Translate(Vector3::Forward * 10.0f * timeStep);
