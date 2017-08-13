@@ -36,6 +36,8 @@ public:
     void SetVertexBuffer(const VertexBuffer& iBuffer) final override;
     void SetTexture(uint32_t iIndex, const Texture& iTexture) final override;
     void SetViewport(Viewport* iViewport) final override;
+    void SetDepthMode(Comparison iCmp) final override;
+    void SetDepthTest(bool iEnabled) final override;
 
     void SetVBO(const VertexBuffer& iBuffer) final override;
 

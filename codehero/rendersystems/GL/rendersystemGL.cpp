@@ -18,6 +18,16 @@
 
 namespace CodeHero {
 
+static const unsigned glComparison[] = {
+    GL_ALWAYS,
+    GL_EQUAL,
+    GL_NOTEQUAL,
+    GL_LESS,
+    GL_LEQUAL,
+    GL_GREATER,
+    GL_GEQUAL
+};
+
 RenderSystemGL::RenderSystemGL(std::shared_ptr<EngineContext>& iContext)
     : RenderSystem(iContext) {}
 
@@ -167,6 +177,16 @@ void RenderSystemGL::SetViewport(Viewport* iViewport) {
                iViewport->y() * scalling.y(),
                iViewport->width() * scalling.x(),
                iViewport->height() * scalling.y());
+}
+
+void RenderSystemGL::SetDepthMode(Comparison iCmp) {
+    // TODO(pierre) Cache the cmp mode
+    glDepthFunc(glComparison[iCmp]);
+}
+
+void RenderSystemGL::SetDepthTest(bool iEnabled) {
+    // TODO(pierre) Maybe cache the value of the depth mask.
+    glDepthMask(iEnabled ? GL_TRUE : GL_FALSE);
 }
 
 void RenderSystemGL::Draw(PrimitiveType iType, uint32_t iVertexStart, uint32_t iVertexCount) {

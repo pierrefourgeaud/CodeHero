@@ -35,6 +35,17 @@ enum PrimitiveType {
     PT_Quads
 };
 
+enum Comparison {
+    C_Always = 0,
+    C_Equal,
+    C_NotEqual,
+    C_Less,
+    C_LessEqual,
+    C_Greater,
+    C_GreaterEqual,
+    C_Max_Comparison
+};
+
 class RenderSystem : public System {
 public:
     OBJECT(RenderSystem)
@@ -59,6 +70,8 @@ public:
     virtual void SetVertexBuffer(const VertexBuffer& iBuffer) = 0;
     virtual void SetTexture(uint32_t iIndex, const Texture& iTexture) = 0;
     virtual void SetViewport(Viewport* iViewport) { m_pActiveViewport = iViewport; };
+    virtual void SetDepthMode(Comparison iCmp) = 0;
+    virtual void SetDepthTest(bool iEnabled) = 0;
 
     virtual void SetVBO(const VertexBuffer& iBuffer) = 0;
 
