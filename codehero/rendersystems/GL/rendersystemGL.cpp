@@ -18,7 +18,7 @@
 
 namespace CodeHero {
 
-static const unsigned glComparison[] = {
+static const uint32_t glComparison[] = {
     GL_ALWAYS,
     GL_EQUAL,
     GL_NOTEQUAL,
@@ -26,6 +26,17 @@ static const unsigned glComparison[] = {
     GL_LEQUAL,
     GL_GREATER,
     GL_GEQUAL
+};
+
+static const uint32_t glStencilOps[] = {
+    GL_KEEP,
+    GL_ZERO,
+    GL_REPLACE,
+    GL_INCR,
+    GL_INCR_WRAP,
+    GL_DECR,
+    GL_DECR_WRAP,
+    GL_INVERT
 };
 
 RenderSystemGL::RenderSystemGL(std::shared_ptr<EngineContext>& iContext)
@@ -187,6 +198,30 @@ void RenderSystemGL::SetDepthMode(Comparison iCmp) {
 void RenderSystemGL::SetDepthTest(bool iEnabled) {
     // TODO(pierre) Maybe cache the value of the depth mask.
     glDepthMask(iEnabled ? GL_TRUE : GL_FALSE);
+}
+
+void RenderSystemGL::SetStencilTest(bool iEnabled) {
+    // TODO(pierre) Maybe we should cache the value of enable ?
+    if (iEnabled) {
+        glEnable(GL_STENCIL_TEST);
+    } else {
+        glDisable(GL_STENCIL_TEST);
+    }
+}
+
+void RenderSystemGL::SetStencilMode(Comparison iMode, uint32_t iRef, uint32_t iMask) {
+    // TODO(pierre) We should probably cache again the 3 args
+    glStencilFunc(glComparison[iMode], iRef, iMask);
+}
+
+void RenderSystemGL::SetStencilWriteMask(uint32_t iMask) {
+    // TODO(pierre) We should probably cache again the 3 args
+    glStencilMask(iMask);
+}
+
+void RenderSystemGL::SetStencilOp(StencilOp iPass, StencilOp iFail, StencilOp iDepthFail) {
+    // TODO(pierre) We should probably cache the 3 pass args
+    glStencilOp(glStencilOps[iFail], glStencilOps[iDepthFail], glStencilOps[iPass]);
 }
 
 void RenderSystemGL::Draw(PrimitiveType iType, uint32_t iVertexStart, uint32_t iVertexCount) {

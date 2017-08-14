@@ -43,7 +43,19 @@ enum Comparison {
     C_LessEqual,
     C_Greater,
     C_GreaterEqual,
-    C_Max_Comparison
+    C_Max
+};
+
+enum StencilOp {
+    SO_Keep,
+    SO_Zero,
+    SO_Replace,
+    SO_Incr,
+    SO_IncrWrap,
+    SO_Decr,
+    SO_DecrWrap,
+    SO_Invert,
+    SO_Max
 };
 
 class RenderSystem : public System {
@@ -72,6 +84,10 @@ public:
     virtual void SetViewport(Viewport* iViewport) { m_pActiveViewport = iViewport; };
     virtual void SetDepthMode(Comparison iCmp) = 0;
     virtual void SetDepthTest(bool iEnabled) = 0;
+    virtual void SetStencilTest(bool iEnabled) = 0;
+    virtual void SetStencilMode(Comparison iMode, uint32_t iRef, uint32_t iMask) = 0;
+    virtual void SetStencilWriteMask(uint32_t iMask) = 0;
+    virtual void SetStencilOp(StencilOp iPass, StencilOp iFail, StencilOp iDepthFail) = 0;
 
     virtual void SetVBO(const VertexBuffer& iBuffer) = 0;
 

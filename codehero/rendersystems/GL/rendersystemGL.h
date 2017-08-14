@@ -38,6 +38,10 @@ public:
     void SetViewport(Viewport* iViewport) final override;
     void SetDepthMode(Comparison iCmp) final override;
     void SetDepthTest(bool iEnabled) final override;
+    void SetStencilTest(bool iEnabled) final override;
+    void SetStencilMode(Comparison iMode, uint32_t iRef, uint32_t iMask) final override;
+    void SetStencilWriteMask(uint32_t iMask) final override;
+    void SetStencilOp(StencilOp iPass, StencilOp iFail, StencilOp iDepthFail) final override;
 
     void SetVBO(const VertexBuffer& iBuffer) final override;
 
