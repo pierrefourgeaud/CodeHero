@@ -51,6 +51,10 @@
 # include "drivers/dds/imagecodec_dds.h"
 #endif // DRIVER_DDS
 
+#ifdef DRIVER_TGA
+# include "drivers/tga/imagecodec_tga.h"
+#endif // DRIVER_TGA
+
 #ifdef DRIVER_ASSIMP
 # include "drivers/assimp/modelcodec_assimp.h"
 #endif // DRIVER_ASSIMP
@@ -453,6 +457,10 @@ void Main::_LoadDrivers() {
 #ifdef DRIVER_DDS
     m_pContext->GetSubsystem<ResourceLoader<Image>>()->AddCodec(new ImageCodecDDS(m_pContext));
 #endif // DRIVER_DDS
+
+#ifdef DRIVER_TGA
+    m_pContext->GetSubsystem<ResourceLoader<Image>>()->AddCodec(new ImageCodecTGA(m_pContext));
+#endif // DRIVER_TGA
 
 #ifdef DRIVER_ASSIMP
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->AddCodec(new ModelCodecAssimp(m_pContext));

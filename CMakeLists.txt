@@ -37,6 +37,7 @@ set (VENDORS_PATH ${PROJECT_SOURCE_DIR}/vendor)
 option (_CODEHERO_DRIVER_PNG "Enable PNG driver" ON)
 option (_CODEHERO_DRIVER_JPG "Enable JPG driver" ON)
 option (_CODEHERO_DRIVER_DDS "Enable DDS driver" ON)
+option (_CODEHERO_DRIVER_TGA "Enable TGA driver" ON)
 option (_CODEHERO_DRIVER_FREETYPE "Enable FreeType driver" ON)
 option (_CODEHERO_DRIVER_ASSIMP "Enable Assimp driver" ON)
 
@@ -45,6 +46,7 @@ message ("*** Configure options:")
 message ("DRIVER_PNG: " ${_CODEHERO_DRIVER_PNG})
 message ("DRIVER_JPG: " ${_CODEHERO_DRIVER_JPG})
 message ("DRIVER_DDS: " ${_CODEHERO_DRIVER_DDS})
+message ("DRIVER_TGA: " ${_CODEHERO_DRIVER_TGA})
 message ("DRIVER_ASSIMP: " ${_CODEHERO_DRIVER_ASSIMP})
 message ("DRIVER_FREETYPE: " ${_CODEHERO_DRIVER_FREETYPE})
 message ("VENDORS_PATH: " ${VENDORS_PATH})
@@ -244,6 +246,18 @@ if (${_CODEHERO_DRIVER_DDS})
     )
 
     add_definitions (-DDRIVER_DDS)
+endif()
+
+if (${_CODEHERO_DRIVER_TGA})
+    set (SOURCES ${SOURCES}
+        ${SRCS_PATH}/drivers/tga/imagecodec_tga.cpp
+    )
+
+    set (HEADERS ${HEADERS}
+        ${SRCS_PATH}/drivers/tga/imagecodec_tga.h
+    )
+
+    add_definitions (-DDRIVER_TGA)
 endif()
 
 if (${_CODEHERO_DRIVER_FREETYPE})

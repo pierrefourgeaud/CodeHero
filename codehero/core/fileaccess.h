@@ -38,6 +38,8 @@ public:
     Error Seek(int64_t iPosition);
     Error SeekEnd();
 
+    int32_t GetPos();
+
     bool IsOpen() const;
 
     int32_t GetSize();
