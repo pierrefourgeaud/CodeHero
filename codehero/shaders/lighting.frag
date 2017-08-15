@@ -49,29 +49,41 @@ uniform PointLight pointLights[NB_POINT_LIGHTS];
 #endif
 uniform Material material;
 
-vec3 CalcLightBase(BaseLight light, vec3 lightDir, vec3 normal, vec3 viewDir) {
+vec4 CalcLightBase(BaseLight light, vec3 lightDir, vec3 normal, vec3 viewDir) {
     // Diffuse shading
     float diff = max(dot(normal, lightDir), 0.0);
     // Specular shading
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     // Combine results
-    vec3 ambient = light.ambientIntensity * vec3(texture(material.diffuse, TexCoords));
-    vec3 diffuse = light.diffuseIntensity * diff * vec3(texture(material.diffuse, TexCoords));
-    vec3 specular = light.specularIntensity * spec * vec3(texture(material.specular, TexCoords));
+    vec4 diffTex = texture(material.diffuse, TexCoords);
+    #ifdef ALPHAMASK
+        if (diffTex.a < 0.1) {
+            discard;
+        }
+    #endif
+    vec4 specTex = texture(material.specular, TexCoords);
+    #ifdef ALPHAMASK
+        if (specTex.a < 0.1) {
+            discard;
+        }
+    #endif
+    vec4 ambient = light.ambientIntensity * diffTex;
+    vec4 diffuse = light.diffuseIntensity * diff * diffTex;
+    vec4 specular = light.specularIntensity * spec * specTex;
     return (ambient + diffuse + specular);
 }
 
 // Calculates the color when using a directional light.
-vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
+vec4 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
 {
     return CalcLightBase(light.base, normalize(-light.direction), normal, viewDir);
 }
 
 // Calculates the color when using a point light.
-vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
+vec4 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
-    vec3 color = CalcLightBase(light.base, normalize(light.position - fragPos), normal, viewDir);
+    vec4 color = CalcLightBase(light.base, normalize(light.position - fragPos), normal, viewDir);
     // Attenuation
     float distance = length(light.position - fragPos);
     float attenuation = (light.attenuation[0] + light.attenuation[1] * distance + light.attenuation[2] * (distance * distance));

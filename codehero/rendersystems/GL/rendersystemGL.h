@@ -42,6 +42,7 @@ public:
     void SetStencilMode(Comparison iMode, uint32_t iRef, uint32_t iMask) final override;
     void SetStencilWriteMask(uint32_t iMask) final override;
     void SetStencilOp(StencilOp iPass, StencilOp iFail, StencilOp iDepthFail) final override;
+    void SetBlendMode(bool iEnabled, BlendMode iSrcMode, BlendMode iDstMode) final override;
 
     void SetVBO(const VertexBuffer& iBuffer) final override;
 

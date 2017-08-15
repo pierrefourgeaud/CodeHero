@@ -39,6 +39,23 @@ static const uint32_t glStencilOps[] = {
     GL_INVERT
 };
 
+static const uint32_t glBlendMode[] = {
+    GL_ZERO,
+    GL_ONE,
+    GL_SRC_COLOR,
+    GL_ONE_MINUS_SRC_COLOR,
+    GL_DST_COLOR,
+    GL_ONE_MINUS_DST_COLOR,
+    GL_SRC_ALPHA,
+    GL_ONE_MINUS_SRC_ALPHA,
+    GL_DST_ALPHA,
+    GL_ONE_MINUS_DST_ALPHA,
+    GL_CONSTANT_COLOR,
+    GL_ONE_MINUS_CONSTANT_COLOR,
+    GL_CONSTANT_ALPHA,
+    GL_ONE_MINUS_CONSTANT_ALPHA
+};
+
 RenderSystemGL::RenderSystemGL(std::shared_ptr<EngineContext>& iContext)
     : RenderSystem(iContext) {}
 
@@ -222,6 +239,17 @@ void RenderSystemGL::SetStencilWriteMask(uint32_t iMask) {
 void RenderSystemGL::SetStencilOp(StencilOp iPass, StencilOp iFail, StencilOp iDepthFail) {
     // TODO(pierre) We should probably cache the 3 pass args
     glStencilOp(glStencilOps[iFail], glStencilOps[iDepthFail], glStencilOps[iPass]);
+}
+
+void RenderSystemGL::SetBlendMode(bool iEnabled, BlendMode iSrcMode, BlendMode iDstMode) {
+    // TODO(pierre) We should probably cache the enable/disable and the modes ?
+    if (iEnabled) {
+        glEnable(GL_BLEND);
+        glBlendFunc(glBlendMode[iSrcMode], glBlendMode[iDstMode]);
+    } else {
+        glDisable(GL_BLEND);
+    }
+    // TODO(pierre) Should we do something for the glBlendEquation and the glBlendFuncSeparate ?
 }
 
 void RenderSystemGL::Draw(PrimitiveType iType, uint32_t iVertexStart, uint32_t iVertexCount) {

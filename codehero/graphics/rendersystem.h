@@ -47,7 +47,7 @@ enum Comparison {
 };
 
 enum StencilOp {
-    SO_Keep,
+    SO_Keep = 0,
     SO_Zero,
     SO_Replace,
     SO_Incr,
@@ -56,6 +56,23 @@ enum StencilOp {
     SO_DecrWrap,
     SO_Invert,
     SO_Max
+};
+
+enum BlendMode {
+    BM_Zero = 0,
+    BM_One,
+    BM_SrcColor,
+    BM_OneMinusSrcColor,
+    BM_DstColor,
+    BM_OneMinusDstColor,
+    BM_SrcAlpha,
+    BM_OneMinusSrcAlpha,
+    BM_DstAlpha,
+    BM_OneMinusDstAlpha,
+    BM_ConstantColor,
+    BM_OneMinusConstantColor,
+    BM_ConstantAlpha,
+    BM_OneMinusConstantAlpha
 };
 
 class RenderSystem : public System {
@@ -88,6 +105,7 @@ public:
     virtual void SetStencilMode(Comparison iMode, uint32_t iRef, uint32_t iMask) = 0;
     virtual void SetStencilWriteMask(uint32_t iMask) = 0;
     virtual void SetStencilOp(StencilOp iPass, StencilOp iFail, StencilOp iDepthFail) = 0;
+    virtual void SetBlendMode(bool iEnabled, BlendMode iSrcMode, BlendMode iDstMode) = 0;
 
     virtual void SetVBO(const VertexBuffer& iBuffer) = 0;
 

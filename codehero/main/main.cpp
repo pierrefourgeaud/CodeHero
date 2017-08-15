@@ -121,6 +121,8 @@ Error Main::Run() {
     Time* time = m_pContext->GetSubsystem<Time>();
 
     RenderSystem* rs = m_pContext->GetSubsystem<RenderSystem>();
+    rs->SetBlendMode(true, BM_SrcAlpha, BM_OneMinusSrcAlpha);
+
     std::shared_ptr<RenderWindow> mainWindow = rs->GetWindow();
     std::shared_ptr<Font> f(new Font(m_pContext, "./resources/fonts/Roboto-Regular.ttf"));
     UI ui(m_pContext);
@@ -177,6 +179,15 @@ Error Main::Run() {
              })
              .Link();
 
+    Shader* grassShader = rs->CreateShader();
+    grassShader->Attach("./codehero/shaders/textured.vert")
+                .Attach("./codehero/shaders/textured.frag", {
+                    { "NB_DIRECTIONAL_LIGHTS", std::to_string(dirLights.size()) },
+                    { "NB_POINT_LIGHTS", std::to_string(pointLights.size()) },
+                    { "ALPHAMASK", ""}
+                })
+                .Link();
+
     Shader* textShader = rs->CreateShader();
     textShader->Attach("./codehero/shaders/text_basic.vert")
               .Attach("./codehero/shaders/text_basic.frag")
@@ -198,11 +209,18 @@ Error Main::Run() {
     Texture* floorSpecular = rs->CreateTexture();
     floorSpecular->Load("./resources/images/floor_specular.PNG");
 
+    Texture* grassTexture = rs->CreateTexture();
+    grassTexture->Load("./resources/images/grass.png");
+
     Model mdl(m_pContext);
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/nanosuit/nanosuit.obj", mdl);
 
+    Model mdl2(m_pContext);
+    m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/small-house-diorama/source/Dio.obj", mdl2);
+
     Cube cube(m_pContext);
     Plane plane(m_pContext);
+    Plane grass(m_pContext);
 
     Vector3 cubePositions[] = {
         { 0.0f,  0.0f, 0.0f},
@@ -215,6 +233,14 @@ Error Main::Run() {
         { 1.5f,  2.0f, 2.5f},
         { 1.5f,  0.2f, 1.5f},
         {-1.3f,  1.0f, 1.5f}
+    };
+
+    Vector3 vegetationPositions[]{
+        {-2.5f, -10.0f, -0.48f},
+        { 2.5f, -10.0f,  0.51f},
+        { 0.0f, -10.0f,  0.7f},
+        {-0.3f, -10.0f, -2.3f},
+        { 1.0f, -10.0f, -0.6f}
     };
 
     auto lastTime = time->GetTimeMilliseconds();
@@ -241,11 +267,12 @@ Error Main::Run() {
 
     Matrix4 modelFloor;
     modelFloor.Scale({ 100.0f, 1.0f, 100.0f });
-    modelFloor.Translate({ 0, -12.5f, 0.0f });
+    modelFloor.Translate({ 0, -12.1f, 0.0f });
     modelFloor.Rotate(90.0f, { 1.0f, 0.0f, 0.0f });
 
     auto cubeVertices = cube.GetVertices();
     auto planeVertices = plane.GetVertices();
+    auto grassVertices = grass.GetVertices();
 
     // Save the input to avoid doing a query at every frame
     Input* input = m_pContext->GetSubsystem<Input>();
@@ -254,7 +281,11 @@ Error Main::Run() {
     auto previous = time->GetTimeMilliseconds();
 
     Matrix4 modelNano;
-    modelNano.Translate({1.0f, -12.0f, 5.0f});
+    modelNano.Translate({1.0f, -12.0f, 4.7f});
+
+    Matrix4 modelHouse;
+    modelHouse.Translate({ -15.0f, 0.0f, 5.0f });
+    modelHouse.Rotate(180.0f, { 0.0f, 1.0f, 0.0f });
 
     while (!mainWindow->ShouldClose()) {
         input->Update();
@@ -416,6 +447,71 @@ Error Main::Run() {
             rs->Draw(PT_Triangles, 0, 6);
         }
         planeVertices->Unuse();
+
+        grassShader->Use();
+
+        rs->SetShaderParameter("dirLight[0].direction", dirLights[0].GetDirection());
+        rs->SetShaderParameter("dirLight[0].base.ambientIntensity", dirLights[0].GetAmbientIntensity());
+        rs->SetShaderParameter("dirLight[0].base.diffuseIntensity", dirLights[0].GetDiffuseIntensity());
+        rs->SetShaderParameter("dirLight[0].base.specularIntensity", dirLights[0].GetSpecularIntensity());
+
+        // TODO(pierre) This should be optimized somehow
+        //              The FPS is droping - One of the main reason is the string concatenation (urgghhh ugly)
+        //              I am leaving as is for now, I am still building the proper rendering pipeline, this will change
+        for (size_t i = 0; i < pLights; ++i) {
+            std::string base = "pointLights[" + std::to_string(i) + "].";
+            rs->SetShaderParameter(base + "position", pointLights[i].GetPosition());
+            rs->SetShaderParameter(base + "base.ambientIntensity", pointLights[i].GetAmbientIntensity());
+            rs->SetShaderParameter(base + "base.diffuseIntensity", pointLights[i].GetDiffuseIntensity());
+            rs->SetShaderParameter(base + "base.specularIntensity", pointLights[i].GetSpecularIntensity());
+            float atten[3] = { pointLights[i].GetConstant(), pointLights[i].GetLinear(), pointLights[i].GetQuadratic() };
+            rs->SetShaderParameter(base + "attenuation[0]", atten, sizeof(atten));
+        }
+
+        rs->SetShaderParameter("view", camera.GetView());
+        rs->SetShaderParameter("projection", projection);
+
+        grassTexture->Bind(0);
+        rs->SetShaderParameter("material.diffuse", 0);
+        rs->SetShaderParameter("material.shininess", 32.0f);
+        grassVertices->Use();
+        for (size_t i = 0; i < 5; ++i) {
+            Matrix4 model;
+            model.Scale({ 5.0f, 5.0f, 0.0f });
+            model.Translate(vegetationPositions[i]);
+
+            rs->SetShaderParameter("model", model);
+            for (size_t i = viewports.size(); i > 0; --i) {
+                rs->SetViewport(viewports[i - 1].get());
+                rs->Draw(PT_Triangles, 0, 6);
+            }
+        }
+        grassVertices->Unuse();
+
+        // TODO(pierre) This code is plain ugly. The idea is to demonstrate the loading and displaying of a model.
+        // We should split that code properly with scene node, model, mesh, materials.
+        // Please do not take that for production code.
+        rs->SetShaderParameter("model", modelHouse);
+        size_t s2 = mdl2.m_Meshes.size();
+        for (int i = 0; i < s2; ++i) {
+            size_t tSize = mdl2.m_Meshes[i]->GetTextures().at("texture_diffuse").size();
+            size_t j = 0;
+            for (j = 0; j < tSize; ++j) {
+                mdl2.m_Meshes[i]->GetTextures().at("texture_diffuse")[j]->Bind(j);
+                rs->SetShaderParameter("material.diffuse", (int32_t)j);
+            }
+            tSize = mdl2.m_Meshes[i]->GetTextures().at("texture_specular").size();
+            for (size_t k = 0; k < tSize; ++k) {
+                mdl2.m_Meshes[i]->GetTextures().at("texture_specular")[k]->Bind(j + k);
+                rs->SetShaderParameter("material.specular", (int32_t)(j + k));
+            }
+
+            rs->SetShaderParameter("material.shininess", 32.0f);
+
+            mdl2.m_Meshes[i]->GetVertices()->Use();
+
+            rs->Draw(PT_Triangles, mdl2.m_Meshes[i]->GetIndices()->GetSize());
+        }
 
         mainWindow->SwapBuffers();
 
