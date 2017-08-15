@@ -140,8 +140,15 @@ std::vector<std::shared_ptr<Texture>> ModelCodecAssimp::_LoadMaterialTextures(ai
     for (uint32_t i = 0; i < iMat->GetTextureCount(iType); ++i) {
         aiString str;
         iMat->GetTexture(static_cast<aiTextureType>(iType), i, &str);
+        // str should be parsed in case that it is with full path,
+        // it should be converted to relative path
+        auto path = Split(str.C_Str(), '/');
+        if (path.empty() || path.size() == 1) {
+            path = Split(str.C_Str(), '\\');
+        }
+        std::string filename = path.empty() ? "" : path[path.size() - 1];
         Texture* texture = rs->CreateTexture();
-        texture->Load((m_ModelDirectory + "/" + str.C_Str()).c_str());
+        texture->Load((m_ModelDirectory + "/" + filename).c_str());
         textures.emplace_back(texture);
     }
     return std::move(textures);
