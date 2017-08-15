@@ -216,7 +216,7 @@ Error Main::Run() {
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/nanosuit/nanosuit.obj", mdl);
 
     Model mdl2(m_pContext);
-    m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/small-house-diorama/source/Dio.obj", mdl2);
+    m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/small-house-diorama/Dio.obj", mdl2);
 
     Cube cube(m_pContext);
     Plane plane(m_pContext);
