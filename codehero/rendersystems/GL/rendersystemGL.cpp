@@ -56,6 +56,11 @@ static const uint32_t glBlendMode[] = {
     GL_ONE_MINUS_CONSTANT_ALPHA
 };
 
+static const uint32_t glCullFaces[] = {
+    GL_FRONT,
+    GL_BACK
+};
+
 RenderSystemGL::RenderSystemGL(std::shared_ptr<EngineContext>& iContext)
     : RenderSystem(iContext) {}
 
@@ -250,6 +255,17 @@ void RenderSystemGL::SetBlendMode(bool iEnabled, BlendMode iSrcMode, BlendMode i
         glDisable(GL_BLEND);
     }
     // TODO(pierre) Should we do something for the glBlendEquation and the glBlendFuncSeparate ?
+}
+
+void RenderSystemGL::SetCullMode(bool iEnabled, CullFace iFace /* = CF_Front */, bool iIsCounterClockwise /* = true */) {
+    // TODO(pierre) Should we cache the values ?
+    if (iEnabled) {
+        glEnable(GL_CULL_FACE);
+        glCullFace(glCullFaces[iFace]);
+        glFrontFace(iIsCounterClockwise ? GL_CCW : GL_CW);
+    } else {
+        glDisable(GL_CULL_FACE);
+    }
 }
 
 void RenderSystemGL::Draw(PrimitiveType iType, uint32_t iVertexStart, uint32_t iVertexCount) {

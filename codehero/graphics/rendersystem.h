@@ -75,6 +75,11 @@ enum BlendMode {
     BM_OneMinusConstantAlpha
 };
 
+enum CullFace {
+    CF_Front = 0,
+    CF_Back
+};
+
 class RenderSystem : public System {
 public:
     OBJECT(RenderSystem)
@@ -106,6 +111,7 @@ public:
     virtual void SetStencilWriteMask(uint32_t iMask) = 0;
     virtual void SetStencilOp(StencilOp iPass, StencilOp iFail, StencilOp iDepthFail) = 0;
     virtual void SetBlendMode(bool iEnabled, BlendMode iSrcMode, BlendMode iDstMode) = 0;
+    virtual void SetCullMode(bool iEnabled, CullFace iFace = CF_Front, bool iIsCounterClockwise = true) = 0;
 
     virtual void SetVBO(const VertexBuffer& iBuffer) = 0;
 

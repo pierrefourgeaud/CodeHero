@@ -48,12 +48,12 @@ void Text::GetBatches(std::vector<UIBatch>& oBatches) {
             // Update VBO for each character
             float vertices[6][5] = {
                 { xpos,     ypos + h, 0.0, 0.0, 0.0 },
-                { xpos,     ypos,     0.0, 0.0, 1.0 },
                 { xpos + w, ypos,     0.0, 1.0, 1.0 },
+                { xpos,     ypos,     0.0, 0.0, 1.0 },
 
                 { xpos,     ypos + h, 0.0, 0.0, 0.0 },
-                { xpos + w, ypos,     0.0, 1.0, 1.0 },
-                { xpos + w, ypos + h, 0.0, 1.0, 0.0 }
+                { xpos + w, ypos + h, 0.0, 1.0, 0.0 },
+                { xpos + w, ypos,     0.0, 1.0, 1.0 }
             };
 
             buffer->SetSubData(vertices, i * 6, 6);

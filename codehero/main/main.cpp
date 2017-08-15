@@ -122,6 +122,7 @@ Error Main::Run() {
 
     RenderSystem* rs = m_pContext->GetSubsystem<RenderSystem>();
     rs->SetBlendMode(true, BM_SrcAlpha, BM_OneMinusSrcAlpha);
+    rs->SetCullMode(true);
 
     std::shared_ptr<RenderWindow> mainWindow = rs->GetWindow();
     std::shared_ptr<Font> f(new Font(m_pContext, "./resources/fonts/Roboto-Regular.ttf"));
