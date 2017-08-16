@@ -139,6 +139,15 @@ Matrix3 Quaternion::RotationMatrix() const {
     );
 }
 
+Quaternion& Quaternion::operator*=(const Quaternion& iRhs) {
+    m_W = m_W * iRhs.m_W - m_X * iRhs.m_X - m_Y * iRhs.m_Y - m_Z * iRhs.m_Z;
+    m_X = m_W * iRhs.m_X + m_X * iRhs.m_W + m_Y * iRhs.m_Z - m_Z * iRhs.m_Y;
+    m_Y = m_W * iRhs.m_Y + m_Y * iRhs.m_W + m_Z * iRhs.m_X - m_X * iRhs.m_Z;
+    m_Z = m_W * iRhs.m_Z + m_Z * iRhs.m_W + m_X * iRhs.m_Y - m_Y * iRhs.m_X;
+
+    return *this;
+}
+
 Quaternion& Quaternion::operator*=(float iRhs) {
     m_W *= iRhs;
     m_X *= iRhs;

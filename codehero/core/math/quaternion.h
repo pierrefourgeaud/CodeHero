@@ -71,15 +71,7 @@ public:
         return *this;
     }
 
-    Quaternion& operator*=(const Quaternion& iRhs) {
-        m_W *= iRhs.m_W;
-        m_X *= iRhs.m_X;
-        m_Y *= iRhs.m_Y;
-        m_Z *= iRhs.m_Z;
-
-        return *this;
-    }
-
+    Quaternion& operator*=(const Quaternion& iRhs);
     Quaternion& operator*=(float iRhs);
 
     // Operators comparison
