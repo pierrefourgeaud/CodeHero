@@ -139,12 +139,44 @@ Matrix3 Quaternion::RotationMatrix() const {
     );
 }
 
+Quaternion& Quaternion::operator*=(float iRhs) {
+    m_W *= iRhs;
+    m_X *= iRhs;
+    m_Y *= iRhs;
+    m_Z *= iRhs;
+    return *this;
+}
+
 Vector3 Quaternion::operator*(const Vector3& iRhs) const {
     Vector3 quatVec(m_X, m_Y, m_Z);
     Vector3 uv(quatVec.Cross(iRhs));
     Vector3 uuv(quatVec.Cross(uv));
 
     return iRhs + ((uv * m_W) + uuv) * 2.0f;
+}
+
+Quaternion Quaternion::operator*(const Quaternion& iRhs) const {
+    return Quaternion(
+        m_W * iRhs.m_W - m_X * iRhs.m_X - m_Y * iRhs.m_Y - m_Z * iRhs.m_Z,
+        m_W * iRhs.m_X + m_X * iRhs.m_W + m_Y * iRhs.m_Z - m_Z * iRhs.m_Y,
+        m_W * iRhs.m_Y + m_Y * iRhs.m_W + m_Z * iRhs.m_X - m_X * iRhs.m_Z,
+        m_W * iRhs.m_Z + m_Z * iRhs.m_W + m_X * iRhs.m_Y - m_Y * iRhs.m_X
+    );
+}
+
+Quaternion Quaternion::operator*(float iRhs) const {
+    return Quaternion(m_W * iRhs, m_X * iRhs, m_Y * iRhs, m_Z * iRhs);
+}
+
+Quaternion& Quaternion::Normalize() {
+    float factor = 1.0f / Length();
+    *this *= factor;
+    return *this;
+}
+
+Quaternion Quaternion::Normalized() const {
+    float factor = 1.0f / Length();
+    return *this * factor;
 }
 
 } // namespace CodeHero

@@ -5,6 +5,8 @@
 #ifndef CODEHERO_CORE_MATH_QUATERNION_H_
 #define CODEHERO_CORE_MATH_QUATERNION_H_
 
+#include <math.h>
+
 namespace CodeHero {
 
 // Forward declaration
@@ -78,6 +80,8 @@ public:
         return *this;
     }
 
+    Quaternion& operator*=(float iRhs);
+
     // Operators comparison
     bool operator==(const Quaternion& iRhs) { // TODO(pierre) We should probably use the utils FloatEqu here
         return m_X == iRhs.m_X && m_Y == iRhs.m_Y && m_Z == iRhs.m_Z && m_W == iRhs.m_W;
@@ -88,7 +92,17 @@ public:
     }
 
     // Operators op
+    Quaternion operator*(float iRhs) const;
     Vector3 operator*(const Vector3& iRhs) const;
+    Quaternion operator*(const Quaternion& iRhs) const;
+
+    // Modify the current object and can be chained
+    Quaternion& Normalize();
+    // Return a new vector being the current vector normalized
+    Quaternion Normalized() const;
+
+    float LengthSquared() const { return m_W * m_W + m_X * m_X * m_Y * m_Y + m_Z * m_Z; }
+    float Length() const { return sqrtf(LengthSquared()); }
 
     // Accessors
     float w() const { return m_W; }
