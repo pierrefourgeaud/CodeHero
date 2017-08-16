@@ -53,6 +53,7 @@ public:
     const Quaternion& GetRotation() const { return m_Rotation; }
 
     void Translate(const Vector3& iDelta, TransformSpace iSpace = TS_Local);
+    void Rotate(const Quaternion& iDelta, TransformSpace iSpace = TS_Local);
 
 private:
     std::shared_ptr<Node> m_pParent;
