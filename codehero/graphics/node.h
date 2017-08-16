@@ -36,9 +36,11 @@ public:
 
     std::shared_ptr<Node> CreateChild() {
         std::shared_ptr<Node> node = std::make_shared<Node>();
+        node->SetParent(shared_from_this());
         m_Children.push_back(node);
         return node;
     }
+    void SetParent(const std::shared_ptr<Node> iParent) { m_pParent = iParent; }
 
     const std::vector<std::shared_ptr<Node>>& GetChildren() const { return m_Children; }
 
@@ -53,6 +55,7 @@ public:
     void Translate(const Vector3& iDelta, TransformSpace iSpace = TS_Local);
 
 private:
+    std::shared_ptr<Node> m_pParent;
     std::vector<Drawable*> m_Drawables;
     std::vector<std::shared_ptr<Node>> m_Children;
 
