@@ -35,6 +35,16 @@ void Node::MarkDirty() {
     }
 }
 
+void Node::SetScale(float iScale) {
+    SetScale({iScale, iScale, iScale});
+}
+
+void Node::SetScale(const Vector3& iScale) {
+    m_Scale = iScale;
+
+    MarkDirty();
+}
+
 void Node::SetPosition(const Vector3& iPosition) {
     m_Position = iPosition;
 
@@ -89,6 +99,16 @@ void Node::Rotate(const Quaternion& iDelta, TransformSpace iSpace /*= TS_Local*/
         // Will never reach here
         break;
     }
+
+    MarkDirty();
+}
+
+void Node::Scale(float iDelta) {
+    Scale({iDelta, iDelta, iDelta});
+}
+
+void Node::Scale(const Vector3& iDelta) {
+    m_Scale *= iDelta;
 
     MarkDirty();
 }

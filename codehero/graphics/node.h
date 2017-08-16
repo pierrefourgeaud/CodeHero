@@ -47,6 +47,8 @@ public:
     void Update();
     void MarkDirty();
 
+    void SetScale(float iScale);
+    void SetScale(const Vector3& iScale);
     void SetPosition(const Vector3& iPosition);
     void SetRotation(const Quaternion& iRotation);
     const Vector3& GetPosition() const { return m_Position; }
@@ -54,6 +56,8 @@ public:
 
     void Translate(const Vector3& iDelta, TransformSpace iSpace = TS_Local);
     void Rotate(const Quaternion& iDelta, TransformSpace iSpace = TS_Local);
+    void Scale(float iDelta);
+    void Scale(const Vector3& iDelta);
 
 private:
     std::shared_ptr<Node> m_pParent;
@@ -62,6 +66,7 @@ private:
 
     bool m_IsDirty = true;
 
+    Vector3 m_Scale{1.0f, 1.0f, 1.0f};
     Vector3 m_Position;
     Quaternion m_Rotation;
 };
