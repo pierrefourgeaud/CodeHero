@@ -14,6 +14,7 @@ namespace CodeHero {
 class Vector3;
 class Vector4;
 class Matrix3;
+class Quaternion;
 
 /**
  * @brief Matrix 44f
@@ -26,6 +27,7 @@ public:
             float m20, float m21, float m22, float m23,
             float m30, float m31, float m32, float m33);
     explicit Matrix4(const Matrix3& iMat3);
+    Matrix4(const Vector3& iPosition, const Quaternion& iRotation, const Vector3& iScale);
 
     void ToIdentity() {
         m[0][0] = 1.0f; m[0][1] = 0.0f; m[0][2] = 0.0f; m[0][3] = 0.0f;
@@ -42,6 +44,8 @@ public:
     void Rotate(float iAngle, const Vector3& iAxis);
     void Scale(float iScale);
     void Scale(const Vector3& iScale);
+
+    void SetRotation(const Matrix3& iRotation);
 
     Matrix4 operator*(const Matrix4& iValue) const;
     Vector4 operator*(const Vector4& iVector) const;

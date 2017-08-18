@@ -6,6 +6,7 @@
 #include "core/math/matrix3.h"
 #include "core/math/vector3.h"
 #include "core/math/vector4.h"
+#include "core/math/quaternion.h"
 #include "core/math/utils.h"
 #include "core/assert.h"
 
@@ -27,10 +28,12 @@ Matrix4::Matrix4(float m00, float m01, float m02, float m03,
 }
 
 Matrix4::Matrix4(const Matrix3& iMat3) {
-    m[0][0] = iMat3.Get(0, 0); m[0][1] = iMat3.Get(0, 1); m[0][2] = iMat3.Get(0, 2); m[0][3] = 0.0f;
-    m[1][0] = iMat3.Get(1, 0); m[1][1] = iMat3.Get(1, 1); m[1][2] = iMat3.Get(1, 2); m[1][3] = 0.0f;
-    m[2][0] = iMat3.Get(2, 0); m[2][1] = iMat3.Get(2, 1); m[2][2] = iMat3.Get(2, 2); m[2][3] = 0.0f;
-    m[3][0] = 0.0f           ; m[3][1] = 0.0f           ; m[3][2] = 0.0f           ; m[3][3] = 1.0f;
+    SetRotation(iMat3);
+}
+
+Matrix4::Matrix4(const Vector3& iPosition, const Quaternion& iRotation, const Vector3& iScale) {
+    SetRotation(iRotation.RotationMatrix().Scale(iScale));
+    Translate(iPosition);
 }
 
 void Matrix4::Set(unsigned int iX, unsigned int iY, float iValue) {
@@ -91,6 +94,13 @@ void Matrix4::Scale(const Vector3& iScale) {
     m[0][0] *= iScale.x();
     m[1][1] *= iScale.y();
     m[2][2] *= iScale.z();
+}
+
+void Matrix4::SetRotation(const Matrix3& iMat3) {
+    m[0][0] = iMat3.Get(0, 0); m[0][1] = iMat3.Get(0, 1); m[0][2] = iMat3.Get(0, 2); m[0][3] = 0.0f;
+    m[1][0] = iMat3.Get(1, 0); m[1][1] = iMat3.Get(1, 1); m[1][2] = iMat3.Get(1, 2); m[1][3] = 0.0f;
+    m[2][0] = iMat3.Get(2, 0); m[2][1] = iMat3.Get(2, 1); m[2][2] = iMat3.Get(2, 2); m[2][3] = 0.0f;
+    m[3][0] = 0.0f;            m[3][1] = 0.0f;            m[3][2] = 0.0f;            m[3][3] = 1.0f;
 }
 
 Matrix4 Matrix4::operator*(const Matrix4& iValue) const {
