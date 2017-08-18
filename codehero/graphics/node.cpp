@@ -113,5 +113,20 @@ void Node::Scale(const Vector3& iDelta) {
     MarkDirty();
 }
 
+Matrix4 Node::GetTransform() {
+    return Matrix4(m_Position, m_Rotation, m_Scale);
+}
+
+Matrix4 Node::GetWorldTransform() {
+    // TODO(pierre) We should cache the transform and recalculate only if needed
+    Matrix4 transform = GetTransform();
+
+    if (!m_pParent) {
+        return transform;
+    } else {
+        return m_pParent->GetWorldTransform() * transform;
+    }
+}
+
 } // namespace CodeHero
 

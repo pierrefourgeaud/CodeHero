@@ -92,6 +92,14 @@ Vector3 Vector3::operator*(const float iScalar) const {
     };
 }
 
+Vector3& Vector3::operator*=(const Vector3& iRhs) {
+    m_Vec[0] *= iRhs.x();
+    m_Vec[1] *= iRhs.y();
+    m_Vec[2] *= iRhs.z();
+
+    return *this;
+}
+
 Vector3& Vector3::operator*=(const float iScalar) {
     m_Vec[0] *= iScalar;
     m_Vec[1] *= iScalar;

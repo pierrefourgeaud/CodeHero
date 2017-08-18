@@ -8,6 +8,7 @@
 #include <memory>
 #include <vector>
 #include "core/math/vector3.h"
+#include "core/math/matrix4.h"
 #include "core/math/quaternion.h"
 
 namespace CodeHero {
@@ -58,6 +59,10 @@ public:
     void Rotate(const Quaternion& iDelta, TransformSpace iSpace = TS_Local);
     void Scale(float iDelta);
     void Scale(const Vector3& iDelta);
+
+    Matrix4 GetTransform();
+    // This takes in cound the parents node
+    Matrix4 GetWorldTransform();
 
 private:
     std::shared_ptr<Node> m_pParent;
