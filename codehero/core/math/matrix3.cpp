@@ -85,6 +85,34 @@ Matrix3 Matrix3::Transposed() const {
     );
 }
 
+Matrix3& Matrix3::Scale(const Vector3& iScale) {
+    m[0][0] *= iScale.x();
+    m[0][1] *= iScale.x();
+    m[0][2] *= iScale.x();
+    m[1][0] *= iScale.y();
+    m[1][1] *= iScale.y();
+    m[1][2] *= iScale.y();
+    m[2][0] *= iScale.z();
+    m[2][1] *= iScale.z();
+    m[2][2] *= iScale.z();
+
+    return *this;
+}
+
+Matrix3 Matrix3::Scaled(const Vector3& iScale) const {
+    return Matrix3(
+        m[0][0] * iScale.x(),
+        m[0][1] * iScale.x(),
+        m[0][2] * iScale.x(),
+        m[1][0] * iScale.y(),
+        m[1][1] * iScale.y(),
+        m[1][2] * iScale.y(),
+        m[2][0] * iScale.z(),
+        m[2][1] * iScale.z(),
+        m[2][2] * iScale.z()
+    );
+}
+
 void Matrix3::FromQuaternion(const Quaternion& iQuat) {
     *this = iQuat.RotationMatrix();
 }

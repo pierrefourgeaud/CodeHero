@@ -51,6 +51,11 @@ public:
     // Return a whole new matrix that is the transposed from the current object
     Matrix3 Transposed() const;
 
+    // Modify current object and can be chained
+    Matrix3& Scale(const Vector3& iScale);
+    // Return a whole new matrix that is the transposed from the current object
+    Matrix3 Scaled(const Vector3& iScale) const;
+
     void FromQuaternion(const Quaternion& iQuat);
 
     // TODO(pierre) Make From/To methods (ToQuat, FromAxisAngle, ToAxisAngle, ...)
