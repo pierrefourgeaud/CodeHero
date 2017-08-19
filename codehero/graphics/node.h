@@ -15,6 +15,7 @@ namespace CodeHero {
 
 // Forward declaration
 class Drawable;
+class Scene;
 
 enum TransformSpace {
     TS_Local = 0,
@@ -35,13 +36,9 @@ public:
     void AddDrawable(Drawable* iComponent);
     const std::vector<Drawable*>& GetComponents() const { return m_Drawables; }
 
-    std::shared_ptr<Node> CreateChild() {
-        std::shared_ptr<Node> node = std::make_shared<Node>();
-        node->SetParent(shared_from_this());
-        m_Children.push_back(node);
-        return node;
-    }
-    void SetParent(const std::shared_ptr<Node> iParent) { m_pParent = iParent; }
+    std::shared_ptr<Node> CreateChild();
+    void SetParent(const std::shared_ptr<Node>& iParent) { m_pParent = iParent; }
+    void SetScene(const std::shared_ptr<Scene>& iScene) { m_pScene = iScene; }
 
     const std::vector<std::shared_ptr<Node>>& GetChildren() const { return m_Children; }
 
@@ -66,6 +63,7 @@ public:
 
 private:
     std::shared_ptr<Node> m_pParent;
+    std::shared_ptr<Scene> m_pScene;
     std::vector<Drawable*> m_Drawables;
     std::vector<std::shared_ptr<Node>> m_Children;
 

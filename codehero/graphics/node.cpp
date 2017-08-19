@@ -4,6 +4,7 @@
 
 #include "graphics/node.h"
 #include "graphics/drawable.h"
+#include "graphics/scene.h"
 
 namespace CodeHero {
 
@@ -11,6 +12,24 @@ void Node::AddDrawable(Drawable* iDrawable) {
     m_Drawables.push_back(iDrawable);
 
     iDrawable->SetNode(shared_from_this());
+}
+
+std::shared_ptr<Node> Node::CreateChild() {
+    std::shared_ptr<Node> node = std::make_shared<Node>();
+    node->SetParent(shared_from_this());
+
+    if (m_pScene.get()) {
+        node->SetScene(m_pScene);
+    } else {
+        // TODO(pierre) This is virtually safe. A Node without scene is a scene.
+        //              BUT: We can safely assume that we could create a node without parent.
+        //              THEN: Disallowing creation of Node unless via CreateChild would be a fair solution.
+        std::shared_ptr<Scene> s = std::static_pointer_cast<Scene>(shared_from_this());
+        node->SetScene(s);
+    }
+
+    m_Children.push_back(node);
+    return node;
 }
 
 void Node::Update() {
