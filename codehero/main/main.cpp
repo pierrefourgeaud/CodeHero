@@ -248,11 +248,7 @@ Error Main::Run() {
 
     std::shared_ptr<Node> node = scene->CreateChild();
     auto nanoMdl = node->CreateDrawable<Model>(m_pContext);
-    // Hack for now (fix coming in the couple of commit next)
-    // The hack is for Loading and rendering
-    Model* mdl = dynamic_cast<Model*>(nanoMdl.get());
-    m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/nanosuit/nanosuit.obj", *mdl);
-    node->AddDrawable(nanoMdl);
+    m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/nanosuit/nanosuit.obj", *nanoMdl.get());
 
     auto camera = std::make_shared<Camera>(m_pContext);
     std::shared_ptr<Node> cameraNode = scene->CreateChild();
@@ -264,16 +260,12 @@ Error Main::Run() {
 
     std::shared_ptr<Node> planeNode = scene->CreateChild();
     auto planeMdl = planeNode->CreateDrawable<Model>(m_pContext);
-    // Hack for now (fix coming in the couple of commit next)
-    // The hack is for rendering
-    Model* plane = dynamic_cast<Model*>(planeMdl.get());
     auto planePtr = std::make_shared<Plane>(m_pContext);
     planePtr->SetTextures({
         { "texture_diffuse", std::vector<std::shared_ptr<Texture>>({ std::shared_ptr<Texture>(floorDiffuse) }) },
         { "texture_specular", std::vector<std::shared_ptr<Texture>>({ std::shared_ptr<Texture>(floorSpecular) }) }
     });
-    plane->AddMesh(planePtr);
-    planeNode->AddDrawable(planeMdl);
+    planeMdl->AddMesh(planePtr);
     planeNode->Scale({ 100.0f, 100.0f, 1.0f });
     planeNode->Translate({ 0, -12.1f, 0.0f });
     planeNode->Rotate(Quaternion(70.0f, 0.0f, 0.0f));
@@ -397,25 +389,25 @@ Error Main::Run() {
         // We should split that code properly with scene node, model, mesh, materials.
         // Please do not take that for production code.
         rs->SetShaderParameter("model", modelNano);
-        size_t s = mdl->m_Meshes.size();
+        size_t s = nanoMdl->m_Meshes.size();
         for (int i = 0; i < s; ++i) {
-            size_t tSize = mdl->m_Meshes[i]->GetTextures().at("texture_diffuse").size();
+            size_t tSize = nanoMdl->m_Meshes[i]->GetTextures().at("texture_diffuse").size();
             size_t j = 0;
             for (j = 0; j < tSize; ++j) {
-                mdl->m_Meshes[i]->GetTextures().at("texture_diffuse")[j]->Bind(j);
+                nanoMdl->m_Meshes[i]->GetTextures().at("texture_diffuse")[j]->Bind(j);
                 rs->SetShaderParameter("material.diffuse", (int32_t)j);
             }
-            tSize = mdl->m_Meshes[i]->GetTextures().at("texture_specular").size();
+            tSize = nanoMdl->m_Meshes[i]->GetTextures().at("texture_specular").size();
             for (size_t k = 0; k < tSize; ++k) {
-                mdl->m_Meshes[i]->GetTextures().at("texture_specular")[k]->Bind(j + k);
+                nanoMdl->m_Meshes[i]->GetTextures().at("texture_specular")[k]->Bind(j + k);
                 rs->SetShaderParameter("material.specular", (int32_t)(j + k));
             }
 
             rs->SetShaderParameter("material.shininess", 32.0f);
 
-            mdl->m_Meshes[i]->GetVertices()->Use();
+            nanoMdl->m_Meshes[i]->GetVertices()->Use();
 
-            rs->Draw(PT_Triangles, mdl->m_Meshes[i]->GetIndices()->GetSize());
+            rs->Draw(PT_Triangles, nanoMdl->m_Meshes[i]->GetIndices()->GetSize());
         }
 
         // Bind Textures using texture units
@@ -446,28 +438,28 @@ Error Main::Run() {
         rs->SetCullMode(false);
 
         rs->SetShaderParameter("model", planeNode->GetWorldTransform());
-        size_t sss = plane->m_Meshes.size();
+        size_t sss = planeMdl->m_Meshes.size();
         for (int i = 0; i < sss; ++i) {
-            size_t tSize = plane->m_Meshes[i]->GetTextures().at("texture_diffuse").size();
+            size_t tSize = planeMdl->m_Meshes[i]->GetTextures().at("texture_diffuse").size();
             size_t j = 0;
             for (j = 0; j < tSize; ++j) {
-                plane->m_Meshes[i]->GetTextures().at("texture_diffuse")[j]->Bind(j);
+                planeMdl->m_Meshes[i]->GetTextures().at("texture_diffuse")[j]->Bind(j);
                 rs->SetShaderParameter("material.diffuse", (int32_t)j);
             }
-            tSize = plane->m_Meshes[i]->GetTextures().at("texture_specular").size();
+            tSize = planeMdl->m_Meshes[i]->GetTextures().at("texture_specular").size();
             for (size_t k = 0; k < tSize; ++k) {
-                plane->m_Meshes[i]->GetTextures().at("texture_specular")[k]->Bind(j + k);
+                planeMdl->m_Meshes[i]->GetTextures().at("texture_specular")[k]->Bind(j + k);
                 rs->SetShaderParameter("material.specular", (int32_t)(j + k));
             }
 
             rs->SetShaderParameter("material.shininess", 32.0f);
 
-            plane->m_Meshes[i]->GetVertices()->Use();
+            planeMdl->m_Meshes[i]->GetVertices()->Use();
 
-            if (plane->m_Meshes[i]->GetIndices().get() && plane->m_Meshes[i]->GetIndices()->GetSize() > 0) {
-                rs->Draw(PT_Triangles, plane->m_Meshes[i]->GetIndices()->GetSize());
+            if (planeMdl->m_Meshes[i]->GetIndices().get() && planeMdl->m_Meshes[i]->GetIndices()->GetSize() > 0) {
+                rs->Draw(PT_Triangles, planeMdl->m_Meshes[i]->GetIndices()->GetSize());
             } else {
-                rs->Draw(PT_Triangles, 0, plane->m_Meshes[i]->GetVertices()->GetVertexCount());
+                rs->Draw(PT_Triangles, 0, planeMdl->m_Meshes[i]->GetVertices()->GetVertexCount());
             }
         }
 

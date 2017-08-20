@@ -28,8 +28,8 @@ class Node : public std::enable_shared_from_this<Node> {
 public:
 
     template <class T>
-    std::shared_ptr<Drawable> CreateDrawable(const std::shared_ptr<EngineContext>& iContext) {
-        std::shared_ptr<Drawable> newComponent(new T(iContext));
+    std::shared_ptr<T> CreateDrawable(const std::shared_ptr<EngineContext>& iContext) {
+        std::shared_ptr<T> newComponent(new T(iContext));
         AddDrawable(newComponent);
         return newComponent;
     }
