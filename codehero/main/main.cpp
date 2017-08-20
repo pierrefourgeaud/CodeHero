@@ -213,19 +213,8 @@ Error Main::Run() {
     Texture* grassTexture = rs->CreateTexture();
     grassTexture->Load("./resources/images/grass.png");
 
-    Model mdl(m_pContext);
-    m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/nanosuit/nanosuit.obj", mdl);
-
     Model mdl2(m_pContext);
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/small-house-diorama/Dio.obj", mdl2);
-
-    Model plane(m_pContext);
-    auto planePtr = std::make_shared<Plane>(m_pContext);
-    planePtr->SetTextures({
-        { "texture_diffuse", std::vector<std::shared_ptr<Texture>>({ std::shared_ptr<Texture>(floorDiffuse) }) },
-        { "texture_specular", std::vector<std::shared_ptr<Texture>>({ std::shared_ptr<Texture>(floorSpecular) }) }
-    });
-    plane.AddMesh(planePtr);
 
     Cube cube(m_pContext);
     Plane grass(m_pContext);
@@ -256,19 +245,35 @@ Error Main::Run() {
     int fps = 0;
 
     std::shared_ptr<Scene> scene = std::make_shared<Scene>();
-    std::shared_ptr<Node> node = scene->CreateChild();
-    node->AddDrawable(&mdl);
 
-    Camera camera(m_pContext);
+    std::shared_ptr<Node> node = scene->CreateChild();
+    auto nanoMdl = node->CreateDrawable<Model>(m_pContext);
+    // Hack for now (fix coming in the couple of commit next)
+    // The hack is for Loading and rendering
+    Model* mdl = dynamic_cast<Model*>(nanoMdl.get());
+    m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/nanosuit/nanosuit.obj", *mdl);
+    node->AddDrawable(nanoMdl);
+
+    auto camera = std::make_shared<Camera>(m_pContext);
     std::shared_ptr<Node> cameraNode = scene->CreateChild();
-    cameraNode->AddDrawable(&camera);
+    cameraNode->AddDrawable(camera);
     cameraNode->SetPosition({0.0f, 3.0f, -16.5f});
     float yaw = 0.0f;
     float pitch = 15.0f;
     cameraNode->SetRotation(Quaternion(pitch, yaw, 0.0f));
 
     std::shared_ptr<Node> planeNode = scene->CreateChild();
-    planeNode->AddDrawable(&plane);
+    auto planeMdl = planeNode->CreateDrawable<Model>(m_pContext);
+    // Hack for now (fix coming in the couple of commit next)
+    // The hack is for rendering
+    Model* plane = dynamic_cast<Model*>(planeMdl.get());
+    auto planePtr = std::make_shared<Plane>(m_pContext);
+    planePtr->SetTextures({
+        { "texture_diffuse", std::vector<std::shared_ptr<Texture>>({ std::shared_ptr<Texture>(floorDiffuse) }) },
+        { "texture_specular", std::vector<std::shared_ptr<Texture>>({ std::shared_ptr<Texture>(floorSpecular) }) }
+    });
+    plane->AddMesh(planePtr);
+    planeNode->AddDrawable(planeMdl);
     planeNode->Scale({ 100.0f, 100.0f, 1.0f });
     planeNode->Translate({ 0, -12.1f, 0.0f });
     planeNode->Rotate(Quaternion(70.0f, 0.0f, 0.0f));
@@ -381,7 +386,7 @@ Error Main::Run() {
             rs->SetShaderParameter(base + "attenuation[0]", atten, sizeof(atten));
         }
 
-        rs->SetShaderParameter("view", camera.GetView());
+        rs->SetShaderParameter("view", camera->GetView());
         rs->SetShaderParameter("projection", projection);
 
         // TODO(pierre) This is for now, as we don't have a proper scene rendering
@@ -392,25 +397,25 @@ Error Main::Run() {
         // We should split that code properly with scene node, model, mesh, materials.
         // Please do not take that for production code.
         rs->SetShaderParameter("model", modelNano);
-        size_t s = mdl.m_Meshes.size();
+        size_t s = mdl->m_Meshes.size();
         for (int i = 0; i < s; ++i) {
-            size_t tSize = mdl.m_Meshes[i]->GetTextures().at("texture_diffuse").size();
+            size_t tSize = mdl->m_Meshes[i]->GetTextures().at("texture_diffuse").size();
             size_t j = 0;
             for (j = 0; j < tSize; ++j) {
-                mdl.m_Meshes[i]->GetTextures().at("texture_diffuse")[j]->Bind(j);
+                mdl->m_Meshes[i]->GetTextures().at("texture_diffuse")[j]->Bind(j);
                 rs->SetShaderParameter("material.diffuse", (int32_t)j);
             }
-            tSize = mdl.m_Meshes[i]->GetTextures().at("texture_specular").size();
+            tSize = mdl->m_Meshes[i]->GetTextures().at("texture_specular").size();
             for (size_t k = 0; k < tSize; ++k) {
-                mdl.m_Meshes[i]->GetTextures().at("texture_specular")[k]->Bind(j + k);
+                mdl->m_Meshes[i]->GetTextures().at("texture_specular")[k]->Bind(j + k);
                 rs->SetShaderParameter("material.specular", (int32_t)(j + k));
             }
 
             rs->SetShaderParameter("material.shininess", 32.0f);
 
-            mdl.m_Meshes[i]->GetVertices()->Use();
+            mdl->m_Meshes[i]->GetVertices()->Use();
 
-            rs->Draw(PT_Triangles, mdl.m_Meshes[i]->GetIndices()->GetSize());
+            rs->Draw(PT_Triangles, mdl->m_Meshes[i]->GetIndices()->GetSize());
         }
 
         // Bind Textures using texture units
@@ -441,28 +446,28 @@ Error Main::Run() {
         rs->SetCullMode(false);
 
         rs->SetShaderParameter("model", planeNode->GetWorldTransform());
-        size_t sss = plane.m_Meshes.size();
+        size_t sss = plane->m_Meshes.size();
         for (int i = 0; i < sss; ++i) {
-            size_t tSize = plane.m_Meshes[i]->GetTextures().at("texture_diffuse").size();
+            size_t tSize = plane->m_Meshes[i]->GetTextures().at("texture_diffuse").size();
             size_t j = 0;
             for (j = 0; j < tSize; ++j) {
-                plane.m_Meshes[i]->GetTextures().at("texture_diffuse")[j]->Bind(j);
+                plane->m_Meshes[i]->GetTextures().at("texture_diffuse")[j]->Bind(j);
                 rs->SetShaderParameter("material.diffuse", (int32_t)j);
             }
-            tSize = plane.m_Meshes[i]->GetTextures().at("texture_specular").size();
+            tSize = plane->m_Meshes[i]->GetTextures().at("texture_specular").size();
             for (size_t k = 0; k < tSize; ++k) {
-                plane.m_Meshes[i]->GetTextures().at("texture_specular")[k]->Bind(j + k);
+                plane->m_Meshes[i]->GetTextures().at("texture_specular")[k]->Bind(j + k);
                 rs->SetShaderParameter("material.specular", (int32_t)(j + k));
             }
 
             rs->SetShaderParameter("material.shininess", 32.0f);
 
-            plane.m_Meshes[i]->GetVertices()->Use();
+            plane->m_Meshes[i]->GetVertices()->Use();
 
-            if (plane.m_Meshes[i]->GetIndices().get() && plane.m_Meshes[i]->GetIndices()->GetSize() > 0) {
-                rs->Draw(PT_Triangles, plane.m_Meshes[i]->GetIndices()->GetSize());
+            if (plane->m_Meshes[i]->GetIndices().get() && plane->m_Meshes[i]->GetIndices()->GetSize() > 0) {
+                rs->Draw(PT_Triangles, plane->m_Meshes[i]->GetIndices()->GetSize());
             } else {
-                rs->Draw(PT_Triangles, 0, plane.m_Meshes[i]->GetVertices()->GetVertexCount());
+                rs->Draw(PT_Triangles, 0, plane->m_Meshes[i]->GetVertices()->GetVertexCount());
             }
         }
 
@@ -486,7 +491,7 @@ Error Main::Run() {
             rs->SetShaderParameter(base + "attenuation[0]", atten, sizeof(atten));
         }
 
-        rs->SetShaderParameter("view", camera.GetView());
+        rs->SetShaderParameter("view", camera->GetView());
         rs->SetShaderParameter("projection", projection);
 
         grassTexture->Bind(0);

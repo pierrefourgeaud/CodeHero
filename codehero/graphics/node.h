@@ -16,6 +16,7 @@ namespace CodeHero {
 // Forward declaration
 class Drawable;
 class Scene;
+class EngineContext;
 
 enum TransformSpace {
     TS_Local = 0,
@@ -27,14 +28,14 @@ class Node : public std::enable_shared_from_this<Node> {
 public:
 
     template <class T>
-    Drawable* CreateDrawable() {
-        Drawable* newComponent = new T;
+    std::shared_ptr<Drawable> CreateDrawable(const std::shared_ptr<EngineContext>& iContext) {
+        std::shared_ptr<Drawable> newComponent(new T(iContext));
         AddDrawable(newComponent);
         return newComponent;
     }
 
-    void AddDrawable(Drawable* iComponent);
-    const std::vector<Drawable*>& GetComponents() const { return m_Drawables; }
+    void AddDrawable(const std::shared_ptr<Drawable>& iComponent);
+    const std::vector<std::shared_ptr<Drawable>>& GetComponents() const { return m_Drawables; }
 
     std::shared_ptr<Node> CreateChild();
     void SetParent(const std::shared_ptr<Node>& iParent) { m_pParent = iParent; }
@@ -64,7 +65,7 @@ public:
 private:
     std::shared_ptr<Node> m_pParent;
     std::shared_ptr<Scene> m_pScene;
-    std::vector<Drawable*> m_Drawables;
+    std::vector<std::shared_ptr<Drawable>> m_Drawables;
     std::vector<std::shared_ptr<Node>> m_Children;
 
     bool m_IsDirty = true;

@@ -8,7 +8,7 @@
 
 namespace CodeHero {
 
-void Node::AddDrawable(Drawable* iDrawable) {
+void Node::AddDrawable(const std::shared_ptr<Drawable>& iDrawable) {
     m_Drawables.push_back(iDrawable);
 
     iDrawable->SetNode(shared_from_this());
