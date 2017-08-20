@@ -252,8 +252,8 @@ Error Main::Run() {
     auto planeMdl = planeNode->CreateDrawable<Model>(m_pContext);
     auto planePtr = std::make_shared<Plane>(m_pContext);
     planePtr->SetTextures({
-        { "texture_diffuse", std::vector<std::shared_ptr<Texture>>({ std::shared_ptr<Texture>(floorDiffuse) }) },
-        { "texture_specular", std::vector<std::shared_ptr<Texture>>({ std::shared_ptr<Texture>(floorSpecular) }) }
+        { TU_Diffuse, std::shared_ptr<Texture>(floorDiffuse) },
+        { TU_Specular, std::shared_ptr<Texture>(floorSpecular) }
     });
     planeMdl->AddMesh(planePtr);
     planeNode->Scale({ 100.0f, 100.0f, 1.0f });
@@ -381,18 +381,16 @@ Error Main::Run() {
         rs->SetShaderParameter("model", modelNano);
         size_t s = nanoMdl->m_Meshes.size();
         for (int i = 0; i < s; ++i) {
-            size_t tSize = nanoMdl->m_Meshes[i]->GetTextures().at("texture_diffuse").size();
-            size_t j = 0;
-            for (j = 0; j < tSize; ++j) {
-                nanoMdl->m_Meshes[i]->GetTextures().at("texture_diffuse")[j]->Bind(j);
-                rs->SetShaderParameter("material.diffuse", (int32_t)j);
+            auto diff = nanoMdl->m_Meshes[i]->GetTexture(TU_Diffuse);
+            if (diff) {
+                diff->Bind(0);
+                rs->SetShaderParameter("material.diffuse", 0);
             }
-            tSize = nanoMdl->m_Meshes[i]->GetTextures().at("texture_specular").size();
-            for (size_t k = 0; k < tSize; ++k) {
-                nanoMdl->m_Meshes[i]->GetTextures().at("texture_specular")[k]->Bind(j + k);
-                rs->SetShaderParameter("material.specular", (int32_t)(j + k));
+            auto spec = nanoMdl->m_Meshes[i]->GetTexture(TU_Diffuse);
+            if (spec) {
+                spec->Bind(1);
+                rs->SetShaderParameter("material.specular", 1);
             }
-
             rs->SetShaderParameter("material.shininess", 32.0f);
 
             nanoMdl->m_Meshes[i]->GetVertices()->Use();
@@ -430,18 +428,16 @@ Error Main::Run() {
         rs->SetShaderParameter("model", planeNode->GetWorldTransform());
         size_t sss = planeMdl->m_Meshes.size();
         for (int i = 0; i < sss; ++i) {
-            size_t tSize = planeMdl->m_Meshes[i]->GetTextures().at("texture_diffuse").size();
-            size_t j = 0;
-            for (j = 0; j < tSize; ++j) {
-                planeMdl->m_Meshes[i]->GetTextures().at("texture_diffuse")[j]->Bind(j);
-                rs->SetShaderParameter("material.diffuse", (int32_t)j);
+            auto diff = planeMdl->m_Meshes[i]->GetTexture(TU_Diffuse);
+            if (diff) {
+                diff->Bind(0);
+                rs->SetShaderParameter("material.diffuse", 0);
             }
-            tSize = planeMdl->m_Meshes[i]->GetTextures().at("texture_specular").size();
-            for (size_t k = 0; k < tSize; ++k) {
-                planeMdl->m_Meshes[i]->GetTextures().at("texture_specular")[k]->Bind(j + k);
-                rs->SetShaderParameter("material.specular", (int32_t)(j + k));
+            auto spec = planeMdl->m_Meshes[i]->GetTexture(TU_Diffuse);
+            if (spec) {
+                spec->Bind(1);
+                rs->SetShaderParameter("material.specular", 1);
             }
-
             rs->SetShaderParameter("material.shininess", 32.0f);
 
             planeMdl->m_Meshes[i]->GetVertices()->Use();
@@ -500,18 +496,16 @@ Error Main::Run() {
         rs->SetShaderParameter("model", modelHouse);
         size_t s2 = mdl2.m_Meshes.size();
         for (int i = 0; i < s2; ++i) {
-            size_t tSize = mdl2.m_Meshes[i]->GetTextures().at("texture_diffuse").size();
-            size_t j = 0;
-            for (j = 0; j < tSize; ++j) {
-                mdl2.m_Meshes[i]->GetTextures().at("texture_diffuse")[j]->Bind(j);
-                rs->SetShaderParameter("material.diffuse", (int32_t)j);
+            auto diff = mdl2.m_Meshes[i]->GetTexture(TU_Diffuse);
+            if (diff) {
+                diff->Bind(0);
+                rs->SetShaderParameter("material.diffuse", 0);
             }
-            tSize = mdl2.m_Meshes[i]->GetTextures().at("texture_specular").size();
-            for (size_t k = 0; k < tSize; ++k) {
-                mdl2.m_Meshes[i]->GetTextures().at("texture_specular")[k]->Bind(j + k);
-                rs->SetShaderParameter("material.specular", (int32_t)(j + k));
+            auto spec = mdl2.m_Meshes[i]->GetTexture(TU_Diffuse);
+            if (spec) {
+                spec->Bind(1);
+                rs->SetShaderParameter("material.specular", 1);
             }
-
             rs->SetShaderParameter("material.shininess", 32.0f);
 
             mdl2.m_Meshes[i]->GetVertices()->Use();

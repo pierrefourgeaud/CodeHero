@@ -23,6 +23,19 @@ void Mesh::SetTextures(const TextureUnitsMaps& iTextures) {
     m_Textures = iTextures;
 }
 
+void Mesh::SetTexture(TextureUnit iUnit, const std::shared_ptr<Texture>& iTexture) {
+    m_Textures[iUnit] = iTexture;
+}
+
+std::shared_ptr<Texture> Mesh::GetTexture(TextureUnit iUnit) const {
+    auto texture = m_Textures.find(iUnit);
+    if (texture == m_Textures.end()) {
+        return nullptr;
+    }
+
+    return texture->second;
+}
+
 
 } // namespace CodeHero
 

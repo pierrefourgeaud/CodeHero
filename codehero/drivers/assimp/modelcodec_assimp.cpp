@@ -119,25 +119,23 @@ std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh, const aiScen
     // It seems that condition is not needed. I am removing it. We can add it back if I am wrong
     // if (iMesh->mMaterialIndex >= 0) {
     aiMaterial* material = iScene->mMaterials[iMesh->mMaterialIndex];
-    std::unordered_map<std::string, std::vector<std::shared_ptr<Texture>>> t;
-    auto textures = _LoadMaterialTextures(material, aiTextureType_DIFFUSE);
-    auto specularMaps = _LoadMaterialTextures(material, aiTextureType_SPECULAR);
-    t["texture_diffuse"] = textures;
-    t["texture_specular"] = specularMaps;
+    mesh->SetTexture(TU_Diffuse, _LoadMaterialTextures(material, aiTextureType_DIFFUSE));
+    mesh->SetTexture(TU_Specular, _LoadMaterialTextures(material, aiTextureType_SPECULAR));
     // }
 
     mesh->AddVertexBuffer(vertex);
     mesh->AddIndexBuffer(indexBuffer);
-    mesh->SetTextures(t);
 
     //return Mesh(vertices, indices, textures);
     return std::move(mesh);
 }
 
-std::vector<std::shared_ptr<Texture>> ModelCodecAssimp::_LoadMaterialTextures(aiMaterial* iMat, aiTextureType iType) {
-    std::vector<std::shared_ptr<Texture>> textures;
+std::shared_ptr<Texture> ModelCodecAssimp::_LoadMaterialTextures(aiMaterial* iMat, aiTextureType iType) {
+    std::shared_ptr<Texture> texture;
     RenderSystem* rs = m_pContext->GetSubsystem<RenderSystem>();
-    for (uint32_t i = 0; i < iMat->GetTextureCount(iType); ++i) {
+    // We load only one textures of each type as the engine does not support more... We will have to see
+    // what to do here
+    for (uint32_t i = 0; i < iMat->GetTextureCount(iType) && i < 1; ++i) {
         aiString str;
         iMat->GetTexture(static_cast<aiTextureType>(iType), i, &str);
         // str should be parsed in case that it is with full path,
@@ -147,11 +145,11 @@ std::vector<std::shared_ptr<Texture>> ModelCodecAssimp::_LoadMaterialTextures(ai
             path = Split(str.C_Str(), '\\');
         }
         std::string filename = path.empty() ? "" : path[path.size() - 1];
-        Texture* texture = rs->CreateTexture();
-        texture->Load((m_ModelDirectory + "/" + filename).c_str());
-        textures.emplace_back(texture);
+        Texture* texturePtr = rs->CreateTexture();
+        texturePtr->Load((m_ModelDirectory + "/" + filename).c_str());
+        texture = std::shared_ptr<Texture>(texturePtr);
     }
-    return std::move(textures);
+    return texture;
 }
 
 } // namespace CodeHero

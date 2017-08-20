@@ -6,7 +6,6 @@
 #define CODEHERO_GRAPHICS_MESH_H_
 
 #include <memory>
-#include <vector>
 #include <unordered_map>
 
 namespace CodeHero {
@@ -16,7 +15,11 @@ class IndexBuffer;
 class VertexBuffer;
 class Texture;
 
-using TextureUnitsMaps = std::unordered_map<std::string, std::vector<std::shared_ptr<Texture>>>;
+enum TextureUnit {
+    TU_Diffuse = 0,
+    TU_Specular
+};
+using TextureUnitsMaps = std::unordered_map<TextureUnit, std::shared_ptr<Texture>>;
 
 class Mesh {
 public:
@@ -26,14 +29,15 @@ public:
     void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& iBuffer);
     void AddIndexBuffer(const std::shared_ptr<IndexBuffer>& iBuffer);
     void SetTextures(const TextureUnitsMaps& iTextures);
+    void SetTexture(TextureUnit iUnit, const std::shared_ptr<Texture>& iTexture);
 
     const std::shared_ptr<VertexBuffer>& GetVertices() const { return m_Vertices; }
     const std::shared_ptr<IndexBuffer>& GetIndices() const { return m_Indices; }
+
+    std::shared_ptr<Texture> GetTexture(TextureUnit iUnit) const;
     const TextureUnitsMaps& GetTextures() const { return m_Textures; }
 
 private:
-    /*std::vector<std::shared_ptr<VertexBuffer>> m_Vertices;
-    std::vector<std::shared_ptr<IndexBuffer>> m_Indices;*/
     std::shared_ptr<VertexBuffer> m_Vertices;
     std::shared_ptr<IndexBuffer> m_Indices;
     TextureUnitsMaps m_Textures;
