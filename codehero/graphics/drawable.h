@@ -28,6 +28,7 @@ public:
     DrawableType GetDrawableType() const { return m_Type; }
 
     void SetNode(const std::shared_ptr<Node>& iNode) { m_pNode = iNode; }
+    std::shared_ptr<Node> GetNode();
     void SetIsDirty(bool iIsDirty) { m_IsDirty = iIsDirty; }
 
 protected:
