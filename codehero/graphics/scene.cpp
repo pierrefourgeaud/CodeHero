@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "graphics/scene.h"
+#include <logger.h>
 #include "graphics/light.h"
 #include "graphics/node.h"
 #include <queue>
@@ -12,6 +13,18 @@ namespace CodeHero {
 Scene::Scene() {}
 
 Scene::~Scene() {}
+
+void Scene::RegisterSceneLight(const std::shared_ptr<Light>& iLight) {
+    // Check if the light in question is not registered already
+    auto light = std::find(m_Lights.begin(), m_Lights.end(), iLight);
+    if (light != std::end(m_Lights)) {
+        // Light exist, log a warning and return
+        LOGW << "Scene: Registration of light failed. Object already registered." << std::endl;
+        return;
+    }
+
+    m_Lights.push_back(iLight);
+}
 
 void Scene::Render(Camera* iCamera) {
     (void)iCamera;

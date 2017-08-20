@@ -4,12 +4,22 @@
 
 #include "graphics/node.h"
 #include "graphics/drawable.h"
+#include "graphics/light.h"
 #include "graphics/scene.h"
+#include "core/assert.h"
 
 namespace CodeHero {
 
 void Node::AddDrawable(const std::shared_ptr<Drawable>& iDrawable) {
+    // You should not be able to add drawables directly on the scene, use child nodes for it
+    CH_ASSERT(m_pScene.get() != nullptr);
+
     m_Drawables.push_back(iDrawable);
+
+    if (iDrawable->GetDrawableType() == Drawable::DT_Light) {
+        // Here we can safely downcast
+        m_pScene->RegisterSceneLight(std::static_pointer_cast<Light>(iDrawable));
+    }
 
     iDrawable->SetNode(shared_from_this());
 }

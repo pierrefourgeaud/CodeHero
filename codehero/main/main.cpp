@@ -134,61 +134,6 @@ Error Main::Run() {
 
     ui.AddChild(t);
 
-    // Create scene lights
-    std::vector<Light> dirLights;
-    dirLights.push_back(Light(m_pContext, Light::Type::T_Directional).SetDirection({-0.2f, -1.0f, 0.3f})
-                                                                     .SetAmbientIntensity(0.45f)
-                                                                     .SetDiffuseIntensity(0.8f)
-                                                                     .SetSpecularIntensity(0.5f));
-
-    std::vector<Light> pointLights;
-    pointLights.push_back(Light(m_pContext, Light::Type::T_Point).SetPosition({0.7f, 0.2f, 2.0f})
-                                                                 .SetAmbientIntensity(0.05f)
-                                                                 .SetDiffuseIntensity(0.8f)
-                                                                 .SetSpecularIntensity(1.0f)
-                                                                 .SetConstant(1.0f)
-                                                                 .SetLinear(0.007f)
-                                                                 .SetQuadratic(0.0002f));
-    pointLights.push_back(Light(m_pContext, Light::Type::T_Point).SetPosition({2.3f, -3.3f, -4.0f})
-                                                                 .SetAmbientIntensity(0.05f)
-                                                                 .SetDiffuseIntensity(0.8f)
-                                                                 .SetSpecularIntensity(1.0f)
-                                                                 .SetConstant(1.0f)
-                                                                 .SetLinear(0.007f)
-                                                                 .SetQuadratic(0.0002f));
-    pointLights.push_back(Light(m_pContext, Light::Type::T_Point).SetPosition({-4.0f, 2.0f, 12.0f})
-                                                                 .SetAmbientIntensity(0.05f)
-                                                                 .SetDiffuseIntensity(0.8f)
-                                                                 .SetSpecularIntensity(1.0f)
-                                                                 .SetConstant(1.0f)
-                                                                 .SetLinear(0.007f)
-                                                                 .SetQuadratic(0.0002f));
-    pointLights.push_back(Light(m_pContext, Light::Type::T_Point).SetPosition({0.0f, 3.0f, 3.0f})
-                                                                 .SetAmbientIntensity(0.05f)
-                                                                 .SetDiffuseIntensity(0.8f)
-                                                                 .SetSpecularIntensity(1.0f)
-                                                                 .SetConstant(1.0f)
-                                                                 .SetLinear(0.007f)
-                                                                 .SetQuadratic(0.0002f));
-
-    // Build and compile our shader program
-    Shader* crateShader = rs->CreateShader();
-    crateShader->Attach("./codehero/shaders/textured.vert")
-             .Attach("./codehero/shaders/textured.frag", {
-                 {"NB_DIRECTIONAL_LIGHTS", std::to_string(dirLights.size())},
-                 {"NB_POINT_LIGHTS", std::to_string(pointLights.size())},
-             })
-             .Link();
-
-    Shader* grassShader = rs->CreateShader();
-    grassShader->Attach("./codehero/shaders/textured.vert")
-                .Attach("./codehero/shaders/textured.frag", {
-                    { "NB_DIRECTIONAL_LIGHTS", std::to_string(dirLights.size()) },
-                    { "NB_POINT_LIGHTS", std::to_string(pointLights.size()) },
-                    { "ALPHAMASK", ""}
-                })
-                .Link();
-
     Shader* textShader = rs->CreateShader();
     textShader->Attach("./codehero/shaders/text_basic.vert")
               .Attach("./codehero/shaders/text_basic.frag")
@@ -232,7 +177,7 @@ Error Main::Run() {
         {-1.3f,  1.0f, 1.5f}
     };
 
-    Vector3 vegetationPositions[]{
+    Vector3 vegetationPositions[] = {
         {-2.5f, -10.0f, -0.48f},
         { 2.5f, -10.0f,  0.51f},
         { 0.0f, -10.0f,  0.7f},
@@ -240,11 +185,56 @@ Error Main::Run() {
         { 1.0f, -10.0f, -0.6f}
     };
 
+    Vector3 pointLightsPositions[] = {
+        { 0.7f,  0.2f,  2.0f},
+        { 2.3f, -3.3f, -4.0f},
+        {-4.0f,  2.0f,  12.0f},
+        { 0.0f,  3.0f,  3.0f}
+    };
+
     auto lastTime = time->GetTimeMilliseconds();
     int nbFrames = 0;
     int fps = 0;
 
     std::shared_ptr<Scene> scene = std::make_shared<Scene>();
+
+    auto dirLightNode = scene->CreateChild();
+    auto dirLight = dirLightNode->CreateDrawable<Light>(m_pContext, Light::Type::T_Directional)
+        ->SetDirection({-0.2f, -1.0f, 0.3f})
+        .SetAmbientIntensity(0.45f)
+        .SetDiffuseIntensity(0.8f)
+        .SetSpecularIntensity(0.5f);
+
+    std::vector<Light> pointLights;
+    for (size_t i = 0; i < 4; ++i) {
+        auto pointLightNode = scene->CreateChild();
+        auto pointLight = pointLightNode->CreateDrawable<Light>(m_pContext, Light::Type::T_Point)
+            ->SetAmbientIntensity(0.05f)
+            .SetDiffuseIntensity(0.8f)
+            .SetSpecularIntensity(1.0f)
+            .SetConstant(1.0f)
+            .SetLinear(0.007f)
+            .SetQuadratic(0.0002f);
+        pointLightNode->SetPosition(pointLightsPositions[i]);
+        pointLights.push_back(pointLight);
+    }
+
+    Shader* crateShader = rs->CreateShader();
+    crateShader->Attach("./codehero/shaders/textured.vert")
+                .Attach("./codehero/shaders/textured.frag", {
+                    {"NB_DIRECTIONAL_LIGHTS", "1"},
+                    {"NB_POINT_LIGHTS", std::to_string(pointLights.size())},
+                })
+                .Link();
+
+    Shader* grassShader = rs->CreateShader();
+    grassShader->Attach("./codehero/shaders/textured.vert")
+                .Attach("./codehero/shaders/textured.frag", {
+                    { "NB_DIRECTIONAL_LIGHTS", "1" },
+                    { "NB_POINT_LIGHTS", std::to_string(pointLights.size()) },
+                    { "ALPHAMASK", ""}
+                })
+                .Link();
 
     std::shared_ptr<Node> node = scene->CreateChild();
     auto nanoMdl = node->CreateDrawable<Model>(m_pContext);
@@ -359,10 +349,10 @@ Error Main::Run() {
         // Draw the triangle
         crateShader->Use();
 
-        rs->SetShaderParameter("dirLight[0].direction", dirLights[0].GetDirection());
-        rs->SetShaderParameter("dirLight[0].base.ambientIntensity", dirLights[0].GetAmbientIntensity());
-        rs->SetShaderParameter("dirLight[0].base.diffuseIntensity", dirLights[0].GetDiffuseIntensity());
-        rs->SetShaderParameter("dirLight[0].base.specularIntensity", dirLights[0].GetSpecularIntensity());
+        rs->SetShaderParameter("dirLight[0].direction", dirLight.GetDirection());
+        rs->SetShaderParameter("dirLight[0].base.ambientIntensity", dirLight.GetAmbientIntensity());
+        rs->SetShaderParameter("dirLight[0].base.diffuseIntensity", dirLight.GetDiffuseIntensity());
+        rs->SetShaderParameter("dirLight[0].base.specularIntensity", dirLight.GetSpecularIntensity());
 
         // TODO(pierre) This should be optimized somehow
         //              The FPS is droping - One of the main reason is the string concatenation (urgghhh ugly)
@@ -370,7 +360,7 @@ Error Main::Run() {
         size_t pLights = pointLights.size();
         for (size_t i = 0; i < pLights; ++i) {
             std::string base = "pointLights[" + std::to_string(i) + "].";
-            rs->SetShaderParameter(base + "position", pointLights[i].GetPosition());
+            rs->SetShaderParameter(base + "position", pointLights[i].GetNode()->GetPosition());
             rs->SetShaderParameter(base + "base.ambientIntensity", pointLights[i].GetAmbientIntensity());
             rs->SetShaderParameter(base + "base.diffuseIntensity", pointLights[i].GetDiffuseIntensity());
             rs->SetShaderParameter(base + "base.specularIntensity", pointLights[i].GetSpecularIntensity());
@@ -465,17 +455,17 @@ Error Main::Run() {
 
         grassShader->Use();
 
-        rs->SetShaderParameter("dirLight[0].direction", dirLights[0].GetDirection());
-        rs->SetShaderParameter("dirLight[0].base.ambientIntensity", dirLights[0].GetAmbientIntensity());
-        rs->SetShaderParameter("dirLight[0].base.diffuseIntensity", dirLights[0].GetDiffuseIntensity());
-        rs->SetShaderParameter("dirLight[0].base.specularIntensity", dirLights[0].GetSpecularIntensity());
+        rs->SetShaderParameter("dirLight[0].direction", dirLight.GetDirection());
+        rs->SetShaderParameter("dirLight[0].base.ambientIntensity", dirLight.GetAmbientIntensity());
+        rs->SetShaderParameter("dirLight[0].base.diffuseIntensity", dirLight.GetDiffuseIntensity());
+        rs->SetShaderParameter("dirLight[0].base.specularIntensity", dirLight.GetSpecularIntensity());
 
         // TODO(pierre) This should be optimized somehow
         //              The FPS is droping - One of the main reason is the string concatenation (urgghhh ugly)
         //              I am leaving as is for now, I am still building the proper rendering pipeline, this will change
         for (size_t i = 0; i < pLights; ++i) {
             std::string base = "pointLights[" + std::to_string(i) + "].";
-            rs->SetShaderParameter(base + "position", pointLights[i].GetPosition());
+            rs->SetShaderParameter(base + "position", pointLights[i].GetNode()->GetPosition());
             rs->SetShaderParameter(base + "base.ambientIntensity", pointLights[i].GetAmbientIntensity());
             rs->SetShaderParameter(base + "base.diffuseIntensity", pointLights[i].GetDiffuseIntensity());
             rs->SetShaderParameter(base + "base.specularIntensity", pointLights[i].GetSpecularIntensity());

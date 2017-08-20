@@ -6,11 +6,14 @@
 #define CODEHERO_GRAPHICS_SCENE_H_ 
 
 #include "graphics/node.h"
+#include <memory>
+#include <vector>
 
 namespace CodeHero {
 
 // Forward declaration
 class Camera;
+class Light;
 
 // Scene is simply a rootNode.
 // It will inerit everything everything for the node
@@ -18,11 +21,15 @@ class Camera;
 class Scene : public Node {
 public:
     Scene();
-    ~Scene();
+    virtual ~Scene();
+
+    // Facility for rendering
+    void RegisterSceneLight(const std::shared_ptr<Light>& iLight);
 
     void Render(Camera* iCamera);
 
 private:
+    std::vector<std::shared_ptr<Light>> m_Lights;
 };
 
 } // namespace CodeHero
