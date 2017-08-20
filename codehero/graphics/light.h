@@ -31,8 +31,6 @@ public:
     // Getter/Setter
     Light& SetDirection(const Vector3& iDirection);
     const Vector3& GetDirection() const;
-    Light& SetPosition(const Vector3& iPosition);
-    const Vector3& GetPosition() const;
 
     Light& SetAmbientIntensity(float iIntensity);
     float GetAmbientIntensity() const;
@@ -54,8 +52,6 @@ private:
 
     // Directional lights only
     Vector3 m_Direction;
-
-    Vector3 m_Position;
 
     float m_AmbientIntensity;
     float m_DiffuseIntensity;

@@ -21,17 +21,6 @@ const Vector3& Light::GetDirection() const {
     return m_Direction;
 }
 
-Light& Light::SetPosition(const Vector3& iPosition) {
-    // TODO(pierre) assert ?
-    m_Position = iPosition;
-    return *this;
-}
-
-const Vector3& Light::GetPosition() const {
-    // TODO(pierre) assert ?
-    return m_Position;
-}
-
 Light& Light::SetAmbientIntensity(float iIntensity) {
     // TODO(pierre) assert ?
     m_AmbientIntensity = iIntensity;
