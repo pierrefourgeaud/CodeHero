@@ -128,7 +128,7 @@ Error Main::Run() {
     std::shared_ptr<Font> f(new Font(m_pContext, "./resources/fonts/Roboto-Regular.ttf"));
     UI ui(m_pContext);
     std::shared_ptr<Text> t(new Text(m_pContext));
-    t->SetPosition(10.0f, g_Height * 0.95);
+    t->SetPosition(20.0f, g_Height - 45.0f);
     t->SetFont(f);
     t->SetSize(38);
 
@@ -194,7 +194,7 @@ Error Main::Run() {
               .Attach("./codehero/shaders/text_basic.frag")
               .Link();
     textShader->Use();
-    OrthoMatrix ortho(0, g_Width * 0.75, 0, g_Width * 0.75);
+    OrthoMatrix ortho(0, g_Width, 0, g_Height);
     rs->SetShaderParameter("projection", ortho);
 
     // Load and create a texture
@@ -219,8 +219,15 @@ Error Main::Run() {
     Model mdl2(m_pContext);
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/small-house-diorama/Dio.obj", mdl2);
 
+    Model plane(m_pContext);
+    auto planePtr = std::make_shared<Plane>(m_pContext);
+    planePtr->SetTextures({
+        { "texture_diffuse", std::vector<std::shared_ptr<Texture>>({ std::shared_ptr<Texture>(floorDiffuse) }) },
+        { "texture_specular", std::vector<std::shared_ptr<Texture>>({ std::shared_ptr<Texture>(floorSpecular) }) }
+    });
+    plane.AddMesh(planePtr);
+
     Cube cube(m_pContext);
-    Plane plane(m_pContext);
     Plane grass(m_pContext);
 
     Vector3 cubePositions[] = {
@@ -260,25 +267,23 @@ Error Main::Run() {
     float pitch = 15.0f;
     cameraNode->SetRotation(Quaternion(pitch, yaw, 0.0f));
 
-    std::vector<std::shared_ptr<Viewport>> viewports;
-    viewports.push_back(std::make_shared<Viewport>(0, 0, g_Width * 0.75, g_Height));
-    for (size_t i = 0; i < 3; ++i) {
-        viewports.push_back(std::make_shared<Viewport>(g_Width * 0.75, (i * g_Height / 3), g_Width / 4, g_Height / 3));
-    }
+    std::shared_ptr<Node> planeNode = scene->CreateChild();
+    planeNode->AddDrawable(&plane);
+    planeNode->Scale({ 100.0f, 100.0f, 1.0f });
+    planeNode->Translate({ 0, -12.1f, 0.0f });
+    planeNode->Rotate(Quaternion(70.0f, 0.0f, 0.0f));
 
-    Matrix4 modelFloor;
-    modelFloor.Scale({ 100.0f, 1.0f, 100.0f });
-    modelFloor.Translate({ 0, -12.1f, 0.0f });
-    modelFloor.Rotate(90.0f, { 1.0f, 0.0f, 0.0f });
+    std::vector<std::shared_ptr<Viewport>> viewports;
+    viewports.push_back(std::make_shared<Viewport>(0, 0, g_Width, g_Height));
+    viewports.push_back(std::make_shared<Viewport>(g_Width * 0.7f, g_Height * 0.6f, g_Width / 4, g_Height / 4));
 
     auto cubeVertices = cube.GetVertices();
-    auto planeVertices = plane.GetVertices();
     auto grassVertices = grass.GetVertices();
 
     // Save the input to avoid doing a query at every frame
     Input* input = m_pContext->GetSubsystem<Input>();
 
-    Matrix4 projection = Matrix4::MakeProjectionPerspective(45.0f, g_Width / g_Height, 0.1f, 100.0f);
+    Matrix4 projection = Matrix4::MakeProjectionPerspective(45.0f, (float)g_Width / (float)g_Height, 0.1f, 100.0f);
     auto previous = time->GetTimeMilliseconds();
 
     Matrix4 modelNano;
@@ -433,21 +438,33 @@ Error Main::Run() {
         }
         cubeVertices->Unuse();
 
-        // Bind Textures using texture units
-        floorDiffuse->Bind(0);
-        rs->SetShaderParameter("material.diffuse", 0);
-        floorSpecular->Bind(1);
-        rs->SetShaderParameter("material.specular", 1);
+        rs->SetCullMode(false);
 
-        rs->SetShaderParameter("material.shininess", 32.0f);
+        rs->SetShaderParameter("model", planeNode->GetWorldTransform());
+        size_t sss = plane.m_Meshes.size();
+        for (int i = 0; i < sss; ++i) {
+            size_t tSize = plane.m_Meshes[i]->GetTextures().at("texture_diffuse").size();
+            size_t j = 0;
+            for (j = 0; j < tSize; ++j) {
+                plane.m_Meshes[i]->GetTextures().at("texture_diffuse")[j]->Bind(j);
+                rs->SetShaderParameter("material.diffuse", (int32_t)j);
+            }
+            tSize = plane.m_Meshes[i]->GetTextures().at("texture_specular").size();
+            for (size_t k = 0; k < tSize; ++k) {
+                plane.m_Meshes[i]->GetTextures().at("texture_specular")[k]->Bind(j + k);
+                rs->SetShaderParameter("material.specular", (int32_t)(j + k));
+            }
 
-        planeVertices->Use();
-        rs->SetShaderParameter("model", modelFloor);
-        for (size_t i = viewports.size(); i > 0; --i) {
-            rs->SetViewport(viewports[i - 1].get());
-            rs->Draw(PT_Triangles, 0, 6);
+            rs->SetShaderParameter("material.shininess", 32.0f);
+
+            plane.m_Meshes[i]->GetVertices()->Use();
+
+            if (plane.m_Meshes[i]->GetIndices().get() && plane.m_Meshes[i]->GetIndices()->GetSize() > 0) {
+                rs->Draw(PT_Triangles, plane.m_Meshes[i]->GetIndices()->GetSize());
+            } else {
+                rs->Draw(PT_Triangles, 0, plane.m_Meshes[i]->GetVertices()->GetVertexCount());
+            }
         }
-        planeVertices->Unuse();
 
         grassShader->Use();
 
@@ -489,6 +506,7 @@ Error Main::Run() {
         }
         grassVertices->Unuse();
 
+        rs->SetCullMode(true);
         // TODO(pierre) This code is plain ugly. The idea is to demonstrate the loading and displaying of a model.
         // We should split that code properly with scene node, model, mesh, materials.
         // Please do not take that for production code.
