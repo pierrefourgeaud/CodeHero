@@ -144,6 +144,28 @@ float Matrix4::_DotWithIndex(int iX, int iY, const Matrix4& iMat) const {
 }
 
 // Statics
+Matrix4 Matrix4::MakeProjectionOrtho(float iLeft, float iRight, float iBottom, float iTop, float iNear, float iFar) {
+    Matrix4 result;
+    result.m[0][0] = 2.0f / (iRight - iLeft);
+    result.m[1][1] = 2.0f / (iTop - iBottom);
+    result.m[3][0] = -(iRight + iLeft) / (iRight - iLeft);
+    result.m[3][1] = -(iTop + iBottom) / (iTop - iBottom);
+
+    result.m[2][2] = -2.0f / (iFar - iNear);
+    result.m[3][2] = -(iFar + iNear) / (iFar - iNear);
+    return result;
+}
+
+Matrix4 Matrix4::MakeProjectionOrtho(float iLeft, float iRight, float iBottom, float iTop) {
+    Matrix4 result;
+    result.m[0][0] = 2.0f / (iRight - iLeft);
+    result.m[1][1] = 2.0f / (iTop - iBottom);
+    result.m[2][2] = -1.0f;
+    result.m[3][0] = -(iRight + iLeft) / (iRight - iLeft);
+    result.m[3][1] = -(iTop + iBottom) / (iTop - iBottom);
+    return result;
+}
+
 Matrix4 Matrix4::MakeProjectionPerspective(float iFov, float iAspect, float iNear, float iFar) {
     CH_ASSERT(abs(iAspect - Epsilon()) > 0.0f);
 

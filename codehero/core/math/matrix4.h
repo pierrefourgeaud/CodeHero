@@ -55,6 +55,8 @@ public:
     const float* Data() const { return _m; }
 
     // Factory
+    static Matrix4 MakeProjectionOrtho(float iLeft, float iRight, float iBottom, float iTop, float iNear, float iFar);
+    static Matrix4 MakeProjectionOrtho(float iLeft, float iRight, float iBottom, float iTop);
     static Matrix4 MakeProjectionPerspective(float iFov, float iAspect, float iNear, float iFar);
 
     static Matrix4 Zero;
@@ -66,27 +68,6 @@ private:
     };
 
     float _DotWithIndex(int iX, int iY, const Matrix4& iMat) const;
-};
-
-// TODO(pierre)
-// Should we be careful about the division by 0 here ? I guess so...
-class OrthoMatrix : public Matrix4 {
-public:
-    OrthoMatrix(float iLeft, float iRight, float iBottom, float iTop, float iNear, float iFar)
-        : Matrix4(
-        2.0f / (iRight - iLeft), 0.0f                   , 0.0f                  , -(iRight + iLeft) / (iRight - iLeft),
-        0.0f                   , 2.0f / (iTop - iBottom), 0.0f                  , -(iTop + iBottom) / (iTop - iBottom),
-        0.0f                   , 0.0f                   , -2.0f / (iFar - iNear), -(iFar + iNear) / (iFar - iNear),
-        0.0f                   , 0.0f                   , -1.0f / (iFar - iNear), 0.0f
-    ) {}
-
-    OrthoMatrix(float iLeft, float iRight, float iBottom, float iTop)
-        : Matrix4(
-        2.0f / (iRight - iLeft)             , 0.0f                                , 0.0f  , 0.0f,
-        0.0f                                , 2.0f / (iTop - iBottom)             , 0.0f  , 0.0f,
-        0.0f                                , 0.0f                                , -1.0f , 0.0f,
-        -(iRight + iLeft) / (iRight - iLeft), -(iTop + iBottom) / (iTop - iBottom), 0.0f  , 1.0f
-    ) {}
 };
 
 } // namespace CodeHero

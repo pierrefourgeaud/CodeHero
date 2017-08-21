@@ -139,7 +139,7 @@ Error Main::Run() {
               .Attach("./codehero/shaders/text_basic.frag")
               .Link();
     textShader->Use();
-    OrthoMatrix ortho(0, g_Width, 0, g_Height);
+    Matrix4 ortho = Matrix4::MakeProjectionOrtho(0, g_Width, 0, g_Height);
     rs->SetShaderParameter("projection", ortho);
 
     // Load and create a texture
