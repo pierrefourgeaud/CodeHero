@@ -40,6 +40,7 @@ option (_CODEHERO_DRIVER_DDS "Enable DDS driver" ON)
 option (_CODEHERO_DRIVER_TGA "Enable TGA driver" ON)
 option (_CODEHERO_DRIVER_FREETYPE "Enable FreeType driver" ON)
 option (_CODEHERO_DRIVER_ASSIMP "Enable Assimp driver" ON)
+option (_CODEHERO_BUILD_TESTS "Build the unit tests" OFF)
 
 ##### Options overview #####
 message ("*** Configure options:")
@@ -48,6 +49,7 @@ message ("DRIVER_JPG: " ${_CODEHERO_DRIVER_JPG})
 message ("DRIVER_DDS: " ${_CODEHERO_DRIVER_DDS})
 message ("DRIVER_TGA: " ${_CODEHERO_DRIVER_TGA})
 message ("DRIVER_ASSIMP: " ${_CODEHERO_DRIVER_ASSIMP})
+message ("BUILD_TESTS: " ${_CODEHERO_BUILD_TESTS})
 message ("DRIVER_FREETYPE: " ${_CODEHERO_DRIVER_FREETYPE})
 message ("VENDORS_PATH: " ${VENDORS_PATH})
 message ("")
@@ -77,7 +79,6 @@ source_group ("Vendors" FILES ${VENDORS_SOURCES})
 
 set (SOURCES
      ${VENDORS_SOURCES}
-     ${SRCS_PATH}/main.cpp
      ${SRCS_PATH}/main/main.cpp
      ${SRCS_PATH}/core/enginecontext.cpp
      ${SRCS_PATH}/core/fileaccess.cpp
@@ -100,7 +101,6 @@ set (SOURCES
      ${SRCS_PATH}/ui/uielement.cpp
      # Graphics
      ${SRCS_PATH}/graphics/camera.cpp
-     ${SRCS_PATH}/graphics/drawable.cpp
      ${SRCS_PATH}/graphics/cube.cpp
      ${SRCS_PATH}/graphics/drawable.cpp
      ${SRCS_PATH}/graphics/indexbuffer.cpp
@@ -161,7 +161,6 @@ set (HEADERS
      ${SRCS_PATH}/ui/uielement.h
      # Graphics
      ${SRCS_PATH}/graphics/camera.h
-     ${SRCS_PATH}/graphics/drawable.h
      ${SRCS_PATH}/graphics/cube.h
      ${SRCS_PATH}/graphics/drawable.h
      ${SRCS_PATH}/graphics/indexbuffer.h
@@ -293,6 +292,7 @@ set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${COMMON_RELEASE_FLAGS}
 set (CMAKE_CXX_FLAGS_RELWITHDEBINFO  "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} ${COMMON_RELEASE_FLAGS}")
 
 # ---------- Executables -----------
+add_library (main_objs OBJECT ${INCLUDES} ${SOURCES} ${HEADERS})
 
 add_definitions (-DGLFW_INCLUDE_NONE
                  -DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
@@ -301,6 +301,10 @@ link_directories (
     ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
 )
 
-add_executable (CodeHero ${INCLUDES} ${SOURCES} ${HEADERS})
+add_executable (CodeHero ${SRCS_PATH}/main.cpp $<TARGET_OBJECTS:main_objs>)
 
 target_link_libraries (${PROJECT_NAME} glfw ${GLFW_LIBRARIES} ${ADDITIONAL_LIBRARIES})
+
+if (_CODEHERO_BUILD_TESTS)
+    add_subdirectory (${PROJECT_SOURCE_DIR}/specs)
+endif ()
