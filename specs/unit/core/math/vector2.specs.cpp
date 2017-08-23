@@ -38,5 +38,16 @@ go_bandit([]() {
                 AssertThat(test.Length(), Equals(res));
             });
         });
+
+        describe("::Normalize", [] {
+            it("should compute the normalized vector", [] {
+                Vector2 test(1.0f, 1.0f);
+
+                float res = 0.70710678118f;
+                test.Normalize();
+                AssertThat(test.x(), Equals(res));
+                AssertThat(test.y(), Equals(res));
+            });
+        });
     });
 });
