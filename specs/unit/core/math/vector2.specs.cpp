@@ -12,10 +12,30 @@ using namespace CodeHero;
 go_bandit([]() {
     describe("Vector2", []() {
         describe("Constructor", []() {
-            it("should initialize vector with 0s if no arguments", []() {
+            it("should initialize vector with 0s if no arguments", [] {
                 Vector2 test;
 
                 AssertThat(test.x(), Equals(0.0f));
+            });
+
+            it("should initialize vector with correct x and y if provided", [] {
+                float x = 1.5f;
+                float y = 1.5f;
+                Vector2 test(x, y);
+
+                AssertThat(test.x(), Equals(x));
+                AssertThat(test.y(), Equals(y));
+            });
+        });
+
+        describe("::Length", [] {
+            it("should compute the proper length", [] {
+                float x = 2.0f;
+                float y = 2.0f;
+                Vector2 test(x, y);
+
+                float res = 2.8284271247461903f;
+                AssertThat(test.Length(), Equals(res));
             });
         });
     });
