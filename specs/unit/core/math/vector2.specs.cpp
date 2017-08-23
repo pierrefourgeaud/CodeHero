@@ -16,6 +16,7 @@ go_bandit([]() {
                 Vector2 test;
 
                 AssertThat(test.x(), Equals(0.0f));
+                AssertThat(test.y(), Equals(0.0f));
             });
 
             it("should initialize vector with correct x and y if provided", [] {
