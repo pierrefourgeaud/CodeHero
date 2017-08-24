@@ -232,7 +232,7 @@ if (${_CODEHERO_DRIVER_JPG})
     )
 
     # Disable some warnings..
-    if (NOT ${MSVC} AND NOT APPLE)
+    if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         set_source_files_properties(${VENDORS_PATH}/jpeg-compressor/jpgd.cpp PROPERTIES COMPILE_FLAGS "-Wno-shift-negative-value -Wno-unused-parameter") 
     endif ()
 
