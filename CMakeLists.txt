@@ -5,8 +5,10 @@ project (CodeHero)
 # ---------- C++ 11 flags ----------
 if (${MSVC})
         set (CMAKE_CXX_FLAGS "/EHsc")
-else (${MSVC})
+elseif (APPLE)
         set (CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
+else ()
+        set (CMAKE_CXX_FLAGS "-std=c++11")
 endif (${MSVC})
 
 # ---------- Build type flags ----------
@@ -206,6 +208,8 @@ include_directories (
 # TODO(pierre) export that to function
 if (${_CODEHERO_DRIVER_PNG})
     set (PNG_TESTS OFF CACHE BOOL "" FORCE)
+    set (PNG_SHARED OFF CACHE BOOL "" FORCE)
+    set (PNG_STATIC ON CACHE BOOL "" FORCE)
     add_subdirectory (${VENDORS_PATH}/libpng)
     include_directories (${VENDORS_PATH}/libpng/)
     set (SOURCES ${SOURCES}
@@ -217,15 +221,18 @@ if (${_CODEHERO_DRIVER_PNG})
     )
 
     add_definitions (-DDRIVER_PNG)
-    set (ADDITIONAL_LIBRARIES ${ADDITIONAL_LIBRARIES} png16)
+    set (ADDITIONAL_LIBRARIES ${ADDITIONAL_LIBRARIES} png16_static)
 endif()
 
 if (${_CODEHERO_DRIVER_JPG})
-    include_directories (${VENDORS_PATH}/jpeg-compressor/)
+    include_directories (SYSTEM ${VENDORS_PATH}/jpeg-compressor/)
     set (SOURCES ${SOURCES}
         ${VENDORS_PATH}/jpeg-compressor/jpgd.cpp
         ${SRCS_PATH}/drivers/jpg/imagecodec_jpg.cpp
     )
+
+    # Disable some warnings..
+    set_source_files_properties(${VENDORS_PATH}/jpeg-compressor/jpgd.cpp PROPERTIES COMPILE_FLAGS "-Wno-shift-negative-value -Wno-unused-parameter") 
 
     set (HEADERS ${HEADERS}
         ${VENDORS_PATH}/jpeg-compressor/jpgd.h
@@ -268,11 +275,15 @@ endif ()
 if (${_CODEHERO_DRIVER_ASSIMP})
     set (ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
     set (ASSIMP_BUILD_SAMPLES OFF CACHE BOOL "" FORCE)
+    set (ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
     add_subdirectory (${VENDORS_PATH}/assimp)
-    include_directories (${VENDORS_PATH}/assimp/include)
+    include_directories (SYSTEM ${VENDORS_PATH}/assimp/include)
     set (SOURCES ${SOURCES}
          ${SRCS_PATH}/drivers/assimp/modelcodec_assimp.cpp
     )
+
+    file (GLOB ASSIMP_SOURCES ${VENDORS_PATH}/assimp/code/*)
+    set_source_files_properties(${ASSIMP_SOURCES} COMPILE_FLAGS "-Wno-unused-parameter -Wno-misleading-indentation -Wno-unused-variable -Wno-strict-aliasing -Wno-stack-overflow")
 
     set (HEADERS ${HEADERS}
          ${SRCS_PATH}/drivers/assimp/modelcodec_assimp.h
@@ -301,7 +312,7 @@ link_directories (
     ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
 )
 
-add_executable (CodeHero ${SRCS_PATH}/main.cpp $<TARGET_OBJECTS:main_objs>)
+add_executable (${PROJECT_NAME} ${SRCS_PATH}/main.cpp $<TARGET_OBJECTS:main_objs>)
 
 target_link_libraries (${PROJECT_NAME} glfw ${GLFW_LIBRARIES} ${ADDITIONAL_LIBRARIES})
 

@@ -8,13 +8,14 @@
 #include <string>
 #include <vector>
 #include "core/resourcecodec.h"
+// aiTextureType
+#include <assimp/material.h>
 
 // Forward declaration
 struct aiMesh;
 struct aiNode;
 struct aiScene;
 struct aiMaterial;
-enum aiTextureType;
 
 namespace CodeHero {
 

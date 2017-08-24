@@ -114,7 +114,7 @@ Error ImageCodecDDS::Load(FileAccess& iF, Image& oImage) {
     // when this is implemented in the engine (header.dwCaps2)
     // DDSF_CUBEMAP or DDSF_VOLUME
 
-    DDSFormat ddsFormat;
+    DDSFormat ddsFormat = DDS_MAX;
     if (header.ddspf.dwFlags & DDSPFF_FOURCC) {
         switch (header.ddspf.dwFourCC) {
         case DDSTCF_FOURCC_DXT1:

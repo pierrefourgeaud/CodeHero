@@ -28,7 +28,7 @@ public:
     Vector4& operator+=(const Vector4& iVec);
     Vector4 operator*(const float iScalar) const;
     Vector4& operator*=(const float iScalar);
-    const float operator[](const size_t iIndex) const {
+    float operator[](const size_t iIndex) const {
         CH_ASSERT(iIndex < 4);
         return m_Vec[iIndex];
     }

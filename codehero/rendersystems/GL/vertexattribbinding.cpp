@@ -4,7 +4,7 @@
 
 #include "rendersystems/GL/vertexattribbinding.h"
 #include <glad/glad.h>
-#include "rendersystems/GL/vertexbuffergl.h"
+#include "rendersystems/GL/vertexbufferGL.h"
 
 namespace CodeHero {
 

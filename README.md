@@ -1,4 +1,4 @@
-# CodeHero
+# CodeHero [![Build Status](https://travis-ci.org/pierrefourgeaud/CodeHero.svg?branch=master)](https://travis-ci.org/pierrefourgeaud/CodeHero)
 
 **This is heavily in development. This is not a complete project - which means that many things will be reworked, the code is experimental for the most part and is subject to rework. Documentation will be added.**
 

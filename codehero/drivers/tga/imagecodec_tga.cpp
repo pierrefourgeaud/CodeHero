@@ -67,7 +67,7 @@ ImageCodecTGA::~ImageCodecTGA() {}
 
 Error ImageCodecTGA::Load(FileAccess& iF, Image& oImage) {
     std::vector<uint8_t> srcImage;
-    int srcImageLen = iF.GetSize();
+    size_t srcImageLen = iF.GetSize();
 
     if (srcImageLen == 0 || srcImageLen < sizeof(TGAHeader)) {
         return Error::ERR_IMAGE_INVALID;
@@ -168,19 +168,19 @@ void ImageCodecTGA::_DecodeTGARle(const std::vector<uint8_t>& iCompressedBuffer,
         count = (c & 0x7f) + 1;
 
         if (c & 0x80) {
-            for (int i = 0; i < iPixelSize; ++i) {
+            for (size_t i = 0; i < iPixelSize; ++i) {
                 pixels[i] = iCompressedBuffer[compressedPos];
                 compressedPos += 1;
             }
-            for (int i = 0; i < count; ++i) {
-                for (int j = 0; j < iPixelSize; ++j) {
+            for (size_t i = 0; i < count; ++i) {
+                for (size_t j = 0; j < iPixelSize; ++j) {
                     oUncompressedBuffer[outputPos + j] = pixels[j];
                 }
                 outputPos += iPixelSize;
             }
         } else {
             count *= iPixelSize;
-            for (int i = 0; i < count; ++i) {
+            for (size_t i = 0; i < count; ++i) {
                 oUncompressedBuffer[outputPos] = iCompressedBuffer[compressedPos];
                 compressedPos += 1;
                 outputPos += 1;

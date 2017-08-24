@@ -4,6 +4,7 @@
 
 #include <jpgd.h>
 #include "imagecodec_jpg.h"
+#include <cstring>
 #include <vector>
 #include "core/image.h"
 #include "core/fileaccess.h"
@@ -62,7 +63,7 @@ Error ImageCodecJPG::Load(FileAccess& iF, Image& oImage) {
         }
 
         jpgd::uint8* dst = imageData + y * dstBpl;
-        memcpy(dst, line, dstBpl);
+        std::memcpy(dst, line, dstBpl);
     }
 
     Image::Format fmt;

@@ -5,6 +5,7 @@
 #ifndef CODEHERO_CORE_VERTEXBUFFER_H_
 #define CODEHERO_CORE_VERTEXBUFFER_H_
 
+#include <cstring>
 #include <memory>
 #include "core/typedefs.h"
 #include "core/gpuobject.h"
@@ -47,7 +48,7 @@ public:
 
         m_Data = MakeSharedArray<unsigned char>(iVertexCount * m_VertexSize);
         if (iData != nullptr) {
-            memcpy(m_Data.get(), iData, iVertexCount * m_VertexSize);
+            std::memcpy(m_Data.get(), iData, iVertexCount * m_VertexSize);
         }
 
         _SetDataImpl();
@@ -57,7 +58,7 @@ public:
     virtual void SetSubData(const void* iData, uint32_t iStart, uint32_t iCount) {
         if (iData) {
             if (m_Data.get() + iStart * m_VertexSize != iData) {
-                memcpy(m_Data.get() + iStart * m_VertexSize, iData, iCount * m_VertexSize);
+                std::memcpy(m_Data.get() + iStart * m_VertexSize, iData, iCount * m_VertexSize);
             }
             _SetSubDataImpl(iStart * m_VertexSize, iCount * m_VertexSize, iData);
         }

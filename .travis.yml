@@ -1,0 +1,30 @@
+
+language: cpp
+compiler: gcc
+cache:
+  ccache: true
+  directories:
+    - $HOME/cmake-3.9.1-Linux-x86_64/bin
+    - $HOME/cmake-3.9.1-Linux-x86_64/share
+dist: trusty
+matrix:
+  fast_finish: true
+  exclude:
+    - compiler: gcc
+  include:
+    - os: linux
+      addons:
+        apt:
+          sources: ubuntu-toolchain-r-test
+          packages: [g++-6, xorg-dev, libxrandr-dev, libglapi-mesa, libgl1-mesa-glx, libgl1-mesa-dev, libxext-dev, libxrender-dev]
+      env:
+        - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+before_script:
+  - eval "${MATRIX_EVAL}"
+  # Upgrade CMake using tarball from its vendor and cache the installation
+  - if [[ ! -f $HOME/cmake-3.9.1-Linux-x86_64/bin/cmake ]]; then wget --no-check-certificate https://cmake.org/files/v3.9/cmake-3.9.1-Linux-x86_64.tar.gz -O $HOME/cmake.tar.gz && tar xf $HOME/cmake.tar.gz -C $HOME && rm $HOME/cmake.tar.gz; fi
+  - export PATH=$HOME/cmake-3.9.1-Linux-x86_64/bin:$PATH
+script:
+  - mkdir build && cd build && cmake -D_CODEHERO_BUILD_TESTS=ON .. && make && cd -
+  - ./out/bin/CodeHeroSpecs
+notifications: {email: {on_success: never, on_failure: change}}

@@ -380,7 +380,7 @@ Error Main::Run() {
         // Please do not take that for production code.
         rs->SetShaderParameter("model", modelNano);
         size_t s = nanoMdl->m_Meshes.size();
-        for (int i = 0; i < s; ++i) {
+        for (size_t i = 0; i < s; ++i) {
             auto diff = nanoMdl->m_Meshes[i]->GetTexture(TU_Diffuse);
             if (diff) {
                 diff->Bind(0);
@@ -427,7 +427,7 @@ Error Main::Run() {
 
         rs->SetShaderParameter("model", planeNode->GetWorldTransform());
         size_t sss = planeMdl->m_Meshes.size();
-        for (int i = 0; i < sss; ++i) {
+        for (size_t i = 0; i < sss; ++i) {
             auto diff = planeMdl->m_Meshes[i]->GetTexture(TU_Diffuse);
             if (diff) {
                 diff->Bind(0);
@@ -495,7 +495,7 @@ Error Main::Run() {
         // Please do not take that for production code.
         rs->SetShaderParameter("model", modelHouse);
         size_t s2 = mdl2.m_Meshes.size();
-        for (int i = 0; i < s2; ++i) {
+        for (size_t i = 0; i < s2; ++i) {
             auto diff = mdl2.m_Meshes[i]->GetTexture(TU_Diffuse);
             if (diff) {
                 diff->Bind(0);
