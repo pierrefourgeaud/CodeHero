@@ -232,7 +232,9 @@ if (${_CODEHERO_DRIVER_JPG})
     )
 
     # Disable some warnings..
-    set_source_files_properties(${VENDORS_PATH}/jpeg-compressor/jpgd.cpp PROPERTIES COMPILE_FLAGS "-Wno-shift-negative-value -Wno-unused-parameter") 
+    if (NOT ${MSVC} AND NOT APPLE)
+        set_source_files_properties(${VENDORS_PATH}/jpeg-compressor/jpgd.cpp PROPERTIES COMPILE_FLAGS "-Wno-shift-negative-value -Wno-unused-parameter") 
+    endif ()
 
     set (HEADERS ${HEADERS}
         ${VENDORS_PATH}/jpeg-compressor/jpgd.h
@@ -281,9 +283,6 @@ if (${_CODEHERO_DRIVER_ASSIMP})
     set (SOURCES ${SOURCES}
          ${SRCS_PATH}/drivers/assimp/modelcodec_assimp.cpp
     )
-
-    file (GLOB ASSIMP_SOURCES ${VENDORS_PATH}/assimp/code/*)
-    set_source_files_properties(${ASSIMP_SOURCES} COMPILE_FLAGS "-Wno-unused-parameter -Wno-misleading-indentation -Wno-unused-variable -Wno-strict-aliasing -Wno-stack-overflow")
 
     set (HEADERS ${HEADERS}
          ${SRCS_PATH}/drivers/assimp/modelcodec_assimp.h
