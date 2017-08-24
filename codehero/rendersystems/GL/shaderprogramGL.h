@@ -2,12 +2,12 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
-#ifndef CODEHERO_RENDERSYSTEMS_GL_SHADERGL_H_
-#define CODEHERO_RENDERSYSTEMS_GL_SHADERGL_H_
+#ifndef CODEHERO_RENDERSYSTEMS_GL_SHADERPROGRAMGL_H_
+#define CODEHERO_RENDERSYSTEMS_GL_SHADERPROGRAMGL_H_
 
 #include <glad/glad.h>
 #include <unordered_map>
-#include "core/shader.h"
+#include "core/shaderprogram.h"
 #include "core/errors.h"
 
 namespace CodeHero {
@@ -17,13 +17,13 @@ struct ShaderParameter {
     unsigned int type;
 };
 
-class ShaderGL : public Shader {
+class ShaderProgramGL : public ShaderProgram {
 public:
-    ShaderGL(RenderSystem& iRenderSystem);
-    ~ShaderGL();
+    ShaderProgramGL(RenderSystem& iRenderSystem);
+    ~ShaderProgramGL();
 
-    Shader& Attach(const std::string& iFilename, const std::unordered_map<std::string, std::string>& iDefines = {}) override;
-    Shader& Link() override;
+    ShaderProgram& Attach(const std::string& iFilename, const std::unordered_map<std::string, std::string>& iDefines = {}) override;
+    ShaderProgram& Link() override;
 
     void Use() override;
 
@@ -44,4 +44,4 @@ private:
 
 }  // namespace CodeHero
 
-#endif // CODEHERO_RENDERSYSTEMS_GL_SHADERGL_H_
+#endif // CODEHERO_RENDERSYSTEMS_GL_SHADERPROGRAMGL_H_

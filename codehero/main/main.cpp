@@ -9,7 +9,7 @@
 
 #include "core/enginecontext.h"
 
-#include "core/shader.h"
+#include "core/shaderprogram.h"
 #include "core/resourceloader.h"
 #include "core/image.h"
 #include "core/time.h"
@@ -134,7 +134,7 @@ Error Main::Run() {
 
     ui.AddChild(t);
 
-    Shader* textShader = rs->CreateShader();
+    ShaderProgram* textShader = rs->CreateShader();
     textShader->Attach("./codehero/shaders/text_basic.vert")
               .Attach("./codehero/shaders/text_basic.frag")
               .Link();
@@ -219,7 +219,7 @@ Error Main::Run() {
         pointLights.push_back(pointLight);
     }
 
-    Shader* crateShader = rs->CreateShader();
+    ShaderProgram* crateShader = rs->CreateShader();
     crateShader->Attach("./codehero/shaders/textured.vert")
                 .Attach("./codehero/shaders/textured.frag", {
                     {"NB_DIRECTIONAL_LIGHTS", "1"},
@@ -227,7 +227,7 @@ Error Main::Run() {
                 })
                 .Link();
 
-    Shader* grassShader = rs->CreateShader();
+    ShaderProgram* grassShader = rs->CreateShader();
     grassShader->Attach("./codehero/shaders/textured.vert")
                 .Attach("./codehero/shaders/textured.frag", {
                     { "NB_DIRECTIONAL_LIGHTS", "1" },

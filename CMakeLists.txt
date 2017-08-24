@@ -115,7 +115,7 @@ set (SOURCES
      ${SRCS_PATH}/core/texturemanager.cpp
      ${SRCS_PATH}/core/texture.cpp
      ${SRCS_PATH}/graphics/viewport.cpp
-     ${SRCS_PATH}/rendersystems/GL/shaderGL.cpp
+     ${SRCS_PATH}/rendersystems/GL/shaderprogramGL.cpp
      ${SRCS_PATH}/rendersystems/GL/rendersystemGL.cpp
      ${SRCS_PATH}/rendersystems/GL/renderwindowGL.cpp
      ${SRCS_PATH}/rendersystems/GL/texturemanagerGL.cpp
@@ -137,7 +137,7 @@ set (HEADERS
      ${SRCS_PATH}/core/time.h
      ${SRCS_PATH}/core/typedefs.h
      ${SRCS_PATH}/core/utils.h
-     ${SRCS_PATH}/core/shader.h
+     ${SRCS_PATH}/core/shaderprogram.h
      ${SRCS_PATH}/core/fileaccess.h
      ${SRCS_PATH}/core/filesystem.h
      ${SRCS_PATH}/core/gpuobject.h
@@ -177,7 +177,7 @@ set (HEADERS
      ${SRCS_PATH}/graphics/vertexbuffer.h
      ${SRCS_PATH}/graphics/viewport.h
      ${SRCS_PATH}/rendersystems/GL/rendersystemGL.h
-     ${SRCS_PATH}/rendersystems/GL/shaderGL.h
+     ${SRCS_PATH}/rendersystems/GL/shaderprogramGL.h
      ${SRCS_PATH}/rendersystems/GL/renderwindowGL.h
      ${SRCS_PATH}/rendersystems/GL/texturemanagerGL.h
      ${SRCS_PATH}/rendersystems/GL/textureGL.h

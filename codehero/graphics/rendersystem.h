@@ -16,7 +16,7 @@ namespace CodeHero {
 // Forward declaration
 class TextureManager;
 class RenderWindow;
-class Shader;
+class ShaderProgram;
 class Texture;
 class Matrix4;
 class Vector3;
@@ -91,8 +91,8 @@ public:
     virtual void PollEvents() = 0;
     virtual void ClearFrameBuffer() = 0;
 
-    void SetShaderProgramInUse(Shader* iShader) { m_pShaderProgramInUse = iShader; }
-    Shader* GetShaderProgramInUse() const { return m_pShaderProgramInUse; }
+    void SetShaderProgramInUse(ShaderProgram* iShader) { m_pShaderProgramInUse = iShader; }
+    ShaderProgram* GetShaderProgramInUse() const { return m_pShaderProgramInUse; }
 
     void RegisterViewport(Viewport* iViewport);
 
@@ -137,7 +137,7 @@ public:
 #endif
     virtual std::shared_ptr<RenderWindow> CreateWindow(uint32_t iWidth, uint32_t iHeight) = 0;
     virtual Texture* CreateTexture() = 0;
-    virtual Shader* CreateShader() = 0;
+    virtual ShaderProgram* CreateShader() = 0;
     virtual VertexBuffer* CreateVertexBuffer() = 0;
     virtual IndexBuffer* CreateIndexBuffer() = 0;
 
@@ -150,7 +150,7 @@ protected:
 private:
     TextureManager* m_pTextureManager = nullptr;
 
-    Shader* m_pShaderProgramInUse = nullptr;
+    ShaderProgram* m_pShaderProgramInUse = nullptr;
     Viewport* m_pActiveViewport = nullptr;
 
     std::vector<Viewport*> m_RegisteredViewports;

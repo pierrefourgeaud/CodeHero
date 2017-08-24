@@ -11,7 +11,7 @@
 #include "graphics/viewport.h"
 #include "rendersystems/GL/rendersystemGL.h"
 #include "rendersystems/GL/renderwindowGL.h"
-#include "rendersystems/GL/shaderGL.h"
+#include "rendersystems/GL/shaderprogramGL.h"
 #include "rendersystems/GL/textureGL.h"
 #include "rendersystems/GL/indexbufferGL.h"
 #include "rendersystems/GL/vertexbufferGL.h"
@@ -92,7 +92,7 @@ void RenderSystemGL::ClearFrameBuffer() {
 
 void RenderSystemGL::SetShaderParameter(const std::string& iParam, int32_t iValue) {
     if (GetShaderProgramInUse()) {
-        ShaderGL* shader = static_cast<ShaderGL*>(GetShaderProgramInUse());
+        ShaderProgramGL* shader = static_cast<ShaderProgramGL*>(GetShaderProgramInUse());
         if (shader->HasParameter(iParam)) {
             const ShaderParameter& info = shader->GetParameter(iParam);
 
@@ -103,7 +103,7 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, int32_t iValu
 
 void RenderSystemGL::SetShaderParameter(const std::string& iParam, float iValue) {
     if (GetShaderProgramInUse()) {
-        ShaderGL* shader = static_cast<ShaderGL*>(GetShaderProgramInUse());
+        ShaderProgramGL* shader = static_cast<ShaderProgramGL*>(GetShaderProgramInUse());
         if (shader->HasParameter(iParam)) {
             const ShaderParameter& info = shader->GetParameter(iParam);
 
@@ -114,7 +114,7 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, float iValue)
 
 void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Vector3& iVec) {
     if (GetShaderProgramInUse()) {
-        ShaderGL* shader = static_cast<ShaderGL*>(GetShaderProgramInUse());
+        ShaderProgramGL* shader = static_cast<ShaderProgramGL*>(GetShaderProgramInUse());
         if (shader->HasParameter(iParam)) {
             const ShaderParameter& info = shader->GetParameter(iParam);
 
@@ -136,7 +136,7 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Vector3
 
 void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Matrix4& iMat) {
     if (GetShaderProgramInUse()) {
-        ShaderGL* shader = static_cast<ShaderGL*>(GetShaderProgramInUse());
+        ShaderProgramGL* shader = static_cast<ShaderProgramGL*>(GetShaderProgramInUse());
         if (shader->HasParameter(iParam)) {
             const ShaderParameter& info = shader->GetParameter(iParam);
 
@@ -147,7 +147,7 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Matrix4
 
 void RenderSystemGL::SetShaderParameter(const std::string& iParam, const float* iFloat, const uint32_t iCount) {
     if (GetShaderProgramInUse()) {
-        ShaderGL* shader = static_cast<ShaderGL*>(GetShaderProgramInUse());
+        ShaderProgramGL* shader = static_cast<ShaderProgramGL*>(GetShaderProgramInUse());
         if (shader->HasParameter(iParam)) {
             const ShaderParameter& info = shader->GetParameter(iParam);
 
@@ -292,8 +292,8 @@ Texture* RenderSystemGL::CreateTexture() {
     return new TextureGL(m_pContext);
 }
 
-Shader* RenderSystemGL::CreateShader() {
-    return new ShaderGL(*this);
+ShaderProgram* RenderSystemGL::CreateShader() {
+    return new ShaderProgramGL(*this);
 }
 
 VertexBuffer* RenderSystemGL::CreateVertexBuffer() {

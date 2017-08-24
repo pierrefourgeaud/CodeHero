@@ -10,23 +10,23 @@
 #include "core/fileaccess.h"
 #include "core/utils.h"
 #include "graphics/rendersystem.h"
-#include "rendersystems/GL/shaderGL.h"
+#include "rendersystems/GL/shaderprogramGL.h"
 #include <logger.h>
 
 using namespace std;
 
 namespace CodeHero {
 
-ShaderGL::ShaderGL(RenderSystem& iRenderSystem)
-    : Shader(iRenderSystem) {
+ShaderProgramGL::ShaderProgramGL(RenderSystem& iRenderSystem)
+    : ShaderProgram(iRenderSystem) {
     _SetGPUObject(glCreateProgram());
 }
 
-ShaderGL::~ShaderGL() {
+ShaderProgramGL::~ShaderProgramGL() {
     glDeleteProgram(GetGPUObject().intHandle);
 }
 
-Shader& ShaderGL::Attach(const string& iFilename, const std::unordered_map<std::string, std::string>& iDefines/* = {}*/) {
+ShaderProgram& ShaderProgramGL::Attach(const string& iFilename, const std::unordered_map<std::string, std::string>& iDefines/* = {}*/) {
     std::string shaderCode = _GetShader(iFilename);
 
     GLuint shader = _CreateShader(iFilename);
@@ -52,7 +52,7 @@ Shader& ShaderGL::Attach(const string& iFilename, const std::unordered_map<std::
     return *this;
 }
 
-Shader& ShaderGL::Link() {
+ShaderProgram& ShaderProgramGL::Link() {
     glLinkProgram(GetGPUObject().intHandle);
 
     GLint success;
@@ -68,17 +68,17 @@ Shader& ShaderGL::Link() {
     return *this;
 }
 
-void ShaderGL::Use() {
+void ShaderProgramGL::Use() {
     glUseProgram(GetGPUObject().intHandle);
 
     m_rRenderSystem.SetShaderProgramInUse(this);
 }
 
-bool ShaderGL::HasParameter(const std::string& iParamName) {
+bool ShaderProgramGL::HasParameter(const std::string& iParamName) {
     return m_Parameters.find(iParamName) != m_Parameters.end();
 }
 
-const ShaderParameter& ShaderGL::GetParameter(const std::string& iParamName) {
+const ShaderParameter& ShaderProgramGL::GetParameter(const std::string& iParamName) {
     auto param = m_Parameters.find(iParamName);
     if (param == m_Parameters.end()) {
         throw std::range_error("Parameter " + iParamName + " does not exists.");
@@ -87,7 +87,7 @@ const ShaderParameter& ShaderGL::GetParameter(const std::string& iParamName) {
     return param->second;
 }
 
-string ShaderGL::_GetShader(const string& iShaderPath) {
+string ShaderProgramGL::_GetShader(const string& iShaderPath) {
     // TODO(pierre) Implement error checking here
     FileAccess file;
     file.Open(iShaderPath, FileAccess::READ);
@@ -98,7 +98,7 @@ string ShaderGL::_GetShader(const string& iShaderPath) {
     return std::move(content);
 }
 
-GLuint ShaderGL::_CreateShader(const string& iFilename) {
+GLuint ShaderProgramGL::_CreateShader(const string& iFilename) {
     auto index = iFilename.rfind(".");
     auto ext = iFilename.substr(index + 1);
     if (ext == "comp") {
@@ -113,7 +113,7 @@ GLuint ShaderGL::_CreateShader(const string& iFilename) {
     return 0;
 }
 
-bool ShaderGL::_CompileShader(GLuint iShader, const string& iShaderCode) {
+bool ShaderProgramGL::_CompileShader(GLuint iShader, const string& iShaderCode) {
     const GLchar* shaderCode = iShaderCode.c_str();
 
     glShaderSource(iShader, 1, &shaderCode, nullptr);
@@ -130,7 +130,7 @@ bool ShaderGL::_CompileShader(GLuint iShader, const string& iShaderCode) {
     return success != 0;
 }
 
-void ShaderGL::_ParseParameters() {
+void ShaderProgramGL::_ParseParameters() {
     const int MAX_PARAMETER_NAME_LENGTH = 256;
     char uniformName[MAX_PARAMETER_NAME_LENGTH];
     int uniformCount;
@@ -151,7 +151,7 @@ void ShaderGL::_ParseParameters() {
 // The defines shall be placed as early as possible (in case of early use) but must be placed
 // after the `#version ...` statement
 // To achieve that, we split the shader per line and pass all empty lines and the line with #version.
-Error ShaderGL::_AddDefines(std::string& ioCode, const std::unordered_map<std::string, std::string>& iDefines) {
+Error ShaderProgramGL::_AddDefines(std::string& ioCode, const std::unordered_map<std::string, std::string>& iDefines) {
     if (!iDefines.empty()) {
         // Split the lines by '\n'
         std::vector<std::string> sources = Split(ioCode, '\n');
@@ -180,7 +180,7 @@ Error ShaderGL::_AddDefines(std::string& ioCode, const std::unordered_map<std::s
     return Error::OK;
 }
 
-Error ShaderGL::_ReplaceIncludes(const std::string& iParentFile, const std::string& iShaderCode, std::string& oCode) {
+Error ShaderProgramGL::_ReplaceIncludes(const std::string& iParentFile, const std::string& iShaderCode, std::string& oCode) {
     std::string::size_type posInclude = iShaderCode.find("#include ");
     oCode += iShaderCode.substr(0, posInclude);
     while (posInclude != std::string::npos) {
