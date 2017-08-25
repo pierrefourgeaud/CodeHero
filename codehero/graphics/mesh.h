@@ -13,13 +13,7 @@ namespace CodeHero {
 // Forward declaration
 class IndexBuffer;
 class VertexBuffer;
-class Texture;
-
-enum TextureUnit {
-    TU_Diffuse = 0,
-    TU_Specular
-};
-using TextureUnitsMaps = std::unordered_map<TextureUnit, std::shared_ptr<Texture>>;
+class Material;
 
 class Mesh {
 public:
@@ -28,19 +22,16 @@ public:
 
     void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& iBuffer);
     void AddIndexBuffer(const std::shared_ptr<IndexBuffer>& iBuffer);
-    void SetTextures(const TextureUnitsMaps& iTextures);
-    void SetTexture(TextureUnit iUnit, const std::shared_ptr<Texture>& iTexture);
+    void SetMaterial(const std::shared_ptr<Material> iMaterial);
 
     const std::shared_ptr<VertexBuffer>& GetVertices() const { return m_Vertices; }
     const std::shared_ptr<IndexBuffer>& GetIndices() const { return m_Indices; }
-
-    std::shared_ptr<Texture> GetTexture(TextureUnit iUnit) const;
-    const TextureUnitsMaps& GetTextures() const { return m_Textures; }
+    std::shared_ptr<Material> GetMaterial() const { return m_pMaterial; }
 
 private:
     std::shared_ptr<VertexBuffer> m_Vertices;
     std::shared_ptr<IndexBuffer> m_Indices;
-    TextureUnitsMaps m_Textures;
+    std::shared_ptr<Material> m_pMaterial;
 };
 
 } // namespace CodeHero

@@ -107,6 +107,7 @@ set (SOURCES
      ${SRCS_PATH}/graphics/drawable.cpp
      ${SRCS_PATH}/graphics/indexbuffer.cpp
      ${SRCS_PATH}/graphics/light.cpp
+     ${SRCS_PATH}/graphics/material.cpp
      ${SRCS_PATH}/graphics/mesh.cpp
      ${SRCS_PATH}/graphics/model.cpp
      ${SRCS_PATH}/graphics/node.cpp
@@ -168,6 +169,7 @@ set (HEADERS
      ${SRCS_PATH}/graphics/indexbuffer.h
      ${SRCS_PATH}/graphics/light.h
      ${SRCS_PATH}/graphics/mesh.h
+     ${SRCS_PATH}/graphics/material.h
      ${SRCS_PATH}/graphics/model.h
      ${SRCS_PATH}/graphics/node.h
      ${SRCS_PATH}/graphics/plane.h

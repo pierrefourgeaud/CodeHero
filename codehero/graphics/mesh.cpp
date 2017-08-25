@@ -19,23 +19,8 @@ void Mesh::AddIndexBuffer(const std::shared_ptr<IndexBuffer>& iBuffer) {
     m_Indices = iBuffer;
 }
 
-void Mesh::SetTextures(const TextureUnitsMaps& iTextures) {
-    m_Textures = iTextures;
+void Mesh::SetMaterial(const std::shared_ptr<Material> iMaterial) {
+    m_pMaterial = iMaterial;
 }
-
-void Mesh::SetTexture(TextureUnit iUnit, const std::shared_ptr<Texture>& iTexture) {
-    m_Textures[iUnit] = iTexture;
-}
-
-std::shared_ptr<Texture> Mesh::GetTexture(TextureUnit iUnit) const {
-    auto texture = m_Textures.find(iUnit);
-    if (texture == m_Textures.end()) {
-        return nullptr;
-    }
-
-    return texture->second;
-}
-
 
 } // namespace CodeHero
-

@@ -14,6 +14,7 @@
 #include "core/math/vector2.h"
 #include "core/math/vector3.h"
 #include "graphics/rendersystem.h"
+#include "graphics/material.h"
 #include "graphics/mesh.h"
 #include "graphics/indexbuffer.h"
 #include "graphics/vertexbuffer.h"
@@ -118,13 +119,15 @@ std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh, const aiScen
     // Process material
     // It seems that condition is not needed. I am removing it. We can add it back if I am wrong
     // if (iMesh->mMaterialIndex >= 0) {
-    aiMaterial* material = iScene->mMaterials[iMesh->mMaterialIndex];
-    mesh->SetTexture(TU_Diffuse, _LoadMaterialTextures(material, aiTextureType_DIFFUSE));
-    mesh->SetTexture(TU_Specular, _LoadMaterialTextures(material, aiTextureType_SPECULAR));
+    aiMaterial* aMaterial = iScene->mMaterials[iMesh->mMaterialIndex];
+    auto material = std::make_shared<Material>(m_pContext);
+    material->SetTexture(TU_Diffuse, _LoadMaterialTextures(aMaterial, aiTextureType_DIFFUSE));
+    material->SetTexture(TU_Specular, _LoadMaterialTextures(aMaterial, aiTextureType_SPECULAR));
     // }
 
     mesh->AddVertexBuffer(vertex);
     mesh->AddIndexBuffer(indexBuffer);
+    mesh->SetMaterial(material);
 
     //return Mesh(vertices, indices, textures);
     return std::move(mesh);
