@@ -144,6 +144,14 @@ void ShaderProgramGL::_ParseParameters() {
 
         glGetActiveUniform(GetGPUObject().intHandle, (GLuint)i, MAX_PARAMETER_NAME_LENGTH, 0, &count, &type, uniformName);
         int location = glGetUniformLocation(GetGPUObject().intHandle, uniformName);
+        // We need to do some processing here if needed for array
+        std::string name(uniformName);
+        auto index = name.find("[");
+        if (index != std::string::npos) {
+            if (name.find("[0]", index) != std::string::npos) {
+                m_Parameters[name.substr(0, index)] = {location, type};
+            }
+        }
         m_Parameters[uniformName] = {location, type};
     }
 }
