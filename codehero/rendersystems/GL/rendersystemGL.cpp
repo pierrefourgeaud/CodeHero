@@ -162,7 +162,10 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, const float* 
                 glUniform3fv(info.location, iCount / 3, iFloat);
                 break;
             case GL_FLOAT_VEC4:
-                glUniform3fv(info.location, iCount / 4, iFloat);
+                glUniform4fv(info.location, iCount / 4, iFloat);
+                break;
+            case GL_FLOAT_MAT3:
+                glUniformMatrix3fv(info.location, iCount / 9, GL_FALSE, iFloat);
                 break;
             default: break;
             }
