@@ -145,6 +145,7 @@ set (HEADERS
      ${SRCS_PATH}/core/filesystem.h
      ${SRCS_PATH}/core/gpuobject.h
      ${SRCS_PATH}/core/image.h
+     ${SRCS_PATH}/core/scopecleaner.h
      ${SRCS_PATH}/core/math/vector2.h
      ${SRCS_PATH}/core/math/vector3.h
      ${SRCS_PATH}/core/math/vector4.h
