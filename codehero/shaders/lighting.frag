@@ -17,21 +17,11 @@ struct Material {
     float shininess;
 };
 
-struct BaseLight {
-    float ambientIntensity;
-    float diffuseIntensity;
-    float specularIntensity;
-};
-
-struct DirLight {
-    vec3 direction;
-
-    BaseLight base;
-};
-
-// [0->2] = Position
-// [3->5] = ambient/diffuse/specular
-// [6->8] = constant/linear/quadratic
+// [0] = ambient, [1] = diffuse, [2] = specular intensities
+#define BaseLight vec3
+// [0] = direction, [1] = BaseLight
+#define DirLight mat2x3
+// [0] = Position, [1] = BaseLight, [2] = constant/linear/quadratic
 #define PointLight mat3
 
 uniform vec3 viewPos;
@@ -62,26 +52,22 @@ vec4 CalcLightBase(BaseLight light, vec3 lightDir, vec3 normal, vec3 viewDir) {
             discard;
         }
     #endif
-    vec4 ambient = light.ambientIntensity * diffTex;
-    vec4 diffuse = light.diffuseIntensity * diff * diffTex;
-    vec4 specular = light.specularIntensity * spec * specTex;
+    vec4 ambient = light[0] * diffTex;
+    vec4 diffuse = light[1] * diff * diffTex;
+    vec4 specular = light[2] * spec * specTex;
     return (ambient + diffuse + specular);
 }
 
 // Calculates the color when using a directional light.
 vec4 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
 {
-    return CalcLightBase(light.base, normalize(-light.direction), normal, viewDir);
+    return CalcLightBase(light[1], normalize(-light[0]), normal, viewDir);
 }
 
 // Calculates the color when using a point light.
 vec4 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
-    BaseLight base;
-    base.ambientIntensity = light[1][0];
-    base.diffuseIntensity = light[1][1];
-    base.specularIntensity = light[1][2];
-    vec4 color = CalcLightBase(base, normalize(light[0] - fragPos), normal, viewDir);
+    vec4 color = CalcLightBase(light[1], normalize(light[0] - fragPos), normal, viewDir);
     // Attenuation
     float distance = length(light[0] - fragPos);
     float attenuation = (light[2][0] + light[2][1] * distance + light[2][2] * (distance * distance));

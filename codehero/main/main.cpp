@@ -308,14 +308,15 @@ Error Main::Run() {
     auto _ = Cleanup([&l]() {
         delete [] l;
     });
+    auto dir = dirLight.GetDirection();
+    float vertexDirLight[6] = {
+        dir.x(), dir.y(), dir.z(),
+        dirLight.GetAmbientIntensity(), dirLight.GetDiffuseIntensity(), dirLight.GetSpecularIntensity()
+    };
 
     // TODO(pierre) This is temporary while we cannot render competely this
     auto bindShaderLightsAndView = [&]() {
-        rs->SetShaderParameter("dirLight[0].direction", dirLight.GetDirection());
-        rs->SetShaderParameter("dirLight[0].base.ambientIntensity", dirLight.GetAmbientIntensity());
-        rs->SetShaderParameter("dirLight[0].base.diffuseIntensity", dirLight.GetDiffuseIntensity());
-        rs->SetShaderParameter("dirLight[0].base.specularIntensity", dirLight.GetSpecularIntensity());
-
+        rs->SetShaderParameter("dirLights", vertexDirLight, 6);
         rs->SetShaderParameter("pointLights", l, pLights * 9);
 
         rs->SetShaderParameter("view", camera->GetView());
