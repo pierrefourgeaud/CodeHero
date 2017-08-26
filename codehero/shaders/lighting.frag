@@ -29,16 +29,10 @@ struct DirLight {
     BaseLight base;
 };
 
-struct PointLight {
-    vec3 position;
-
-    // [0] = constant;
-    // [1] = linear;
-    // [2] = quadratic;
-    float attenuation[3];
-
-    BaseLight base;
-};
+// [0->2] = Position
+// [3->5] = ambient/diffuse/specular
+// [6->8] = constant/linear/quadratic
+#define PointLight mat3
 
 uniform vec3 viewPos;
 #if defined(NB_DIRECTIONAL_LIGHTS) && NB_DIRECTIONAL_LIGHTS > 0
@@ -83,10 +77,14 @@ vec4 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
 // Calculates the color when using a point light.
 vec4 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
-    vec4 color = CalcLightBase(light.base, normalize(light.position - fragPos), normal, viewDir);
+    BaseLight base;
+    base.ambientIntensity = light[1][0];
+    base.diffuseIntensity = light[1][1];
+    base.specularIntensity = light[1][2];
+    vec4 color = CalcLightBase(base, normalize(light[0] - fragPos), normal, viewDir);
     // Attenuation
-    float distance = length(light.position - fragPos);
-    float attenuation = (light.attenuation[0] + light.attenuation[1] * distance + light.attenuation[2] * (distance * distance));
+    float distance = length(light[0] - fragPos);
+    float attenuation = (light[2][0] + light[2][1] * distance + light[2][2] * (distance * distance));
 
     return color / attenuation;
 }

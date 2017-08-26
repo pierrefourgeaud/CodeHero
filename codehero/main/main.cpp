@@ -13,6 +13,7 @@
 #include "core/resourceloader.h"
 #include "core/image.h"
 #include "core/time.h"
+#include "core/scopecleaner.h"
 
 #include "graphics/renderwindow.h"
 #include "graphics/viewport.h"
@@ -290,6 +291,24 @@ Error Main::Run() {
     modelHouse.Translate({ -15.0f, 0.0f, 5.0f });
     modelHouse.Rotate(180.0f, { 0.0f, 1.0f, 0.0f });
 
+    size_t pLights = pointLights.size();
+    float* l = new float[pLights * 9];
+    for (size_t i = 0; i < pLights; ++i) {
+        auto pos = pointLights[i].GetNode()->GetPosition();
+        l[0 + (i * 9)] = pos.x();
+        l[1 + (i * 9)] = pos.y();
+        l[2 + (i * 9)] = pos.z();
+        l[3 + (i * 9)] = pointLights[i].GetAmbientIntensity();
+        l[4 + (i * 9)] = pointLights[i].GetDiffuseIntensity();
+        l[5 + (i * 9)] = pointLights[i].GetSpecularIntensity();
+        l[6 + (i * 9)] = pointLights[i].GetConstant();
+        l[7 + (i * 9)] = pointLights[i].GetLinear();
+        l[8 + (i * 9)] = pointLights[i].GetQuadratic();
+    }
+    auto _ = Cleanup([&l]() {
+        delete [] l;
+    });
+
     // TODO(pierre) This is temporary while we cannot render competely this
     auto bindShaderLightsAndView = [&]() {
         rs->SetShaderParameter("dirLight[0].direction", dirLight.GetDirection());
@@ -297,19 +316,7 @@ Error Main::Run() {
         rs->SetShaderParameter("dirLight[0].base.diffuseIntensity", dirLight.GetDiffuseIntensity());
         rs->SetShaderParameter("dirLight[0].base.specularIntensity", dirLight.GetSpecularIntensity());
 
-        // TODO(pierre) This should be optimized somehow
-        //              The FPS is droping - One of the main reason is the string concatenation (urgghhh ugly)
-        //              I am leaving as is for now, I am still building the proper rendering pipeline, this will change
-        size_t pLights = pointLights.size();
-        for (size_t i = 0; i < pLights; ++i) {
-            std::string base = "pointLights[" + std::to_string(i) + "].";
-            rs->SetShaderParameter(base + "position", pointLights[i].GetNode()->GetPosition());
-            rs->SetShaderParameter(base + "base.ambientIntensity", pointLights[i].GetAmbientIntensity());
-            rs->SetShaderParameter(base + "base.diffuseIntensity", pointLights[i].GetDiffuseIntensity());
-            rs->SetShaderParameter(base + "base.specularIntensity", pointLights[i].GetSpecularIntensity());
-            float atten[3] = {pointLights[i].GetConstant(), pointLights[i].GetLinear(), pointLights[i].GetQuadratic()};
-            rs->SetShaderParameter(base + "attenuation[0]", atten, sizeof(atten));
-        }
+        rs->SetShaderParameter("pointLights", l, pLights * 9);
 
         rs->SetShaderParameter("view", camera->GetView());
         rs->SetShaderParameter("projection", projection);
