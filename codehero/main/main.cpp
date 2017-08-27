@@ -242,8 +242,9 @@ Error Main::Run() {
         mesh->GetMaterial()->SetShaderProgram(grassShader);
     }
 
-    std::shared_ptr<Node> node = scene->CreateChild();
-    auto nanoMdl = node->CreateDrawable<Model>(m_pContext);
+    std::shared_ptr<Node> nanoNode = scene->CreateChild();
+    nanoNode->Translate({ 1.0f, -12.0f, 4.7f });
+    auto nanoMdl = nanoNode->CreateDrawable<Model>(m_pContext);
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/nanosuit/nanosuit.obj", *nanoMdl.get());
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : nanoMdl->m_Meshes) {
@@ -283,9 +284,6 @@ Error Main::Run() {
 
     Matrix4 projection = Matrix4::MakeProjectionPerspective(45.0f, (float)g_Width / (float)g_Height, 0.1f, 100.0f);
     auto previous = time->GetTimeMilliseconds();
-
-    Matrix4 modelNano;
-    modelNano.Translate({1.0f, -12.0f, 4.7f});
 
     Matrix4 modelHouse;
     modelHouse.Translate({ -15.0f, 0.0f, 5.0f });
@@ -375,6 +373,7 @@ Error Main::Run() {
 
         // Use this frame's mouse motion to adjust camera node yaw and pitch. Clamp the pitch between -90 and 90 degrees
         IntVector2 mouseMove = input->GetMouseMove();
+        LOGE << mouseMove.x() << " " << mouseMove.y() << std::endl;
         yaw += 0.1f * mouseMove.x();
         pitch += 0.1f * mouseMove.y();
         pitch = Clamp(pitch, -90.0f, 90.0f);
@@ -389,25 +388,16 @@ Error Main::Run() {
         ui.Update();
         ui.Render();
 
-        // Draw the triangle
-        crateShader->Use();
-
-        bindShaderLightsAndView();
-
         // TODO(pierre) This is for now, as we don't have a proper scene rendering
         // This should be removed ASAP
         cameraNode->Update();
 
-
-        // TODO(pierre) This code is plain ugly. The idea is to demonstrate the loading and displaying of a model.
-        // We should split that code properly with scene node, model, mesh, materials.
-        // Please do not take that for production code.
         size_t s = nanoMdl->m_Meshes.size();
         for (size_t i = 0; i < s; ++i) {
             auto& mesh = nanoMdl->m_Meshes[i];
             mesh->GetMaterial()->Use(*rs);
             bindShaderLightsAndView();
-            rs->SetShaderParameter("model", modelNano);
+            rs->SetShaderParameter("model", nanoNode->GetWorldTransform());
 
             mesh->GetVertices()->Use();
 
