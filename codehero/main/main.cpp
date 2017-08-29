@@ -352,28 +352,9 @@ Error Main::Run() {
         if (input->IsKeyPressed(Key::K_A)) {
             cameraNode->Translate(Vector3::Left * 10.0f * timeStep);
         }
-        if (input->IsKeyPressed(Key::K_Q)) {
-            yaw -= 10.0f * timeStep;
-            cameraNode->SetRotation(Quaternion(pitch, yaw, 0.0f));
-        }
-        if (input->IsKeyPressed(Key::K_E)) {
-            yaw += 10.0f * timeStep;
-            cameraNode->SetRotation(Quaternion(pitch, yaw, 0.0f));
-        }
-        if (input->IsKeyPressed(Key::K_R)) {
-            pitch -= 10.0f * timeStep;
-            pitch = Clamp(pitch, -90.0f, 90.0f);
-            cameraNode->SetRotation(Quaternion(pitch, yaw, 0.0f));
-        }
-        if (input->IsKeyPressed(Key::K_F)) {
-            pitch += 10.0f * timeStep;
-            pitch = Clamp(pitch, -90.0f, 90.0f);
-            cameraNode->SetRotation(Quaternion(pitch, yaw, 0.0f));
-        }
 
         // Use this frame's mouse motion to adjust camera node yaw and pitch. Clamp the pitch between -90 and 90 degrees
         IntVector2 mouseMove = input->GetMouseMove();
-        LOGE << mouseMove.x() << " " << mouseMove.y() << std::endl;
         yaw += 0.1f * mouseMove.x();
         pitch += 0.1f * mouseMove.y();
         pitch = Clamp(pitch, -90.0f, 90.0f);
