@@ -235,13 +235,6 @@ Error Main::Run() {
                 })
                 .Link();
 
-    Model mdl2(m_pContext);
-    m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/small-house-diorama/Dio.obj", mdl2);
-    // TODO(pierre) This should be moved when we initialize the model hopefully
-    for (auto& mesh : mdl2.m_Meshes) {
-        mesh->GetMaterial()->SetShaderProgram(grassShader);
-    }
-
     std::shared_ptr<Node> nanoNode = scene->CreateChild();
     nanoNode->Translate({ 1.0f, -12.0f, 4.7f });
     auto nanoMdl = nanoNode->CreateDrawable<Model>(m_pContext);
@@ -249,6 +242,16 @@ Error Main::Run() {
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : nanoMdl->m_Meshes) {
         mesh->GetMaterial()->SetShaderProgram(crateShader);
+    }
+
+    std::shared_ptr<Node> houseNode = scene->CreateChild();
+    houseNode->Translate({ -15.0f, 0.0f, 5.0f });
+    houseNode->SetRotation(Quaternion(0.0f, 180.0f, 0.0f));
+    auto houseMdl = houseNode->CreateDrawable<Model>(m_pContext);
+    m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/small-house-diorama/Dio.obj", *houseMdl.get());
+    // TODO(pierre) This should be moved when we initialize the model hopefully
+    for (auto& mesh : houseMdl->m_Meshes) {
+        mesh->GetMaterial()->SetShaderProgram(grassShader);
     }
 
     auto camera = std::make_shared<Camera>(m_pContext);
@@ -284,10 +287,6 @@ Error Main::Run() {
 
     Matrix4 projection = Matrix4::MakeProjectionPerspective(45.0f, (float)g_Width / (float)g_Height, 0.1f, 100.0f);
     auto previous = time->GetTimeMilliseconds();
-
-    Matrix4 modelHouse;
-    modelHouse.Translate({ -15.0f, 0.0f, 5.0f });
-    modelHouse.Rotate(180.0f, { 0.0f, 1.0f, 0.0f });
 
     size_t pLights = pointLights.size();
     float* l = new float[pLights * 9];
@@ -451,15 +450,12 @@ Error Main::Run() {
         grassVertices->Unuse();
 
         rs->SetCullMode(true);
-        // TODO(pierre) This code is plain ugly. The idea is to demonstrate the loading and displaying of a model.
-        // We should split that code properly with scene node, model, mesh, materials.
-        // Please do not take that for production code.
-        size_t s2 = mdl2.m_Meshes.size();
+        size_t s2 = houseMdl->m_Meshes.size();
         for (size_t i = 0; i < s2; ++i) {
-            auto mesh = mdl2.m_Meshes[i];
+            auto mesh = houseMdl->m_Meshes[i];
             mesh->GetMaterial()->Use(*rs);
             bindShaderLightsAndView();
-            rs->SetShaderParameter("model", modelHouse);
+            rs->SetShaderParameter("model", houseNode->GetWorldTransform());
 
             mesh->GetVertices()->Use();
 
