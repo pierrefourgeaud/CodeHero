@@ -14,6 +14,26 @@ Camera::Camera(const std::shared_ptr<EngineContext>& iContext)
 
 Camera::~Camera() {}
 
+void Camera::SetNearClip(float iNearClip) {
+    m_ProjectionDirty = true;
+    m_NearClip = iNearClip;
+}
+
+void Camera::SetFarClip(float iFarClip) {
+    m_ProjectionDirty = true;
+    m_FarClip = iFarClip;
+}
+
+void Camera::SetFov(float iFov) {
+    m_ProjectionDirty = true;
+    m_Fov = iFov;
+}
+
+void Camera::SetAspectRatio(float iAspectRatio) {
+    m_ProjectionDirty = true;
+    m_AspectRatio = iAspectRatio;
+}
+
 const Matrix4& Camera::GetView() {
     if (m_IsDirty) {
         _ComputeViewMatrix();
@@ -21,6 +41,15 @@ const Matrix4& Camera::GetView() {
     }
 
     return m_View;
+}
+
+const Matrix4& Camera::GetProjection() {
+    if (m_ProjectionDirty) {
+        m_Projection = Matrix4::MakeProjectionPerspective(m_Fov, m_AspectRatio, m_NearClip, m_FarClip);
+        m_ProjectionDirty = false;
+    }
+
+    return m_Projection;
 }
 
 void Camera::_ComputeViewMatrix() {
@@ -37,4 +66,3 @@ void Camera::_ComputeViewMatrix() {
 }
 
 } // namespace CodeHero
-

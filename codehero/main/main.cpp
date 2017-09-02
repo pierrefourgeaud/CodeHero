@@ -255,6 +255,10 @@ Error Main::Run() {
     }
 
     auto camera = std::make_shared<Camera>(m_pContext);
+    camera->SetFov(45.0f);
+    camera->SetAspectRatio((float)g_Width / (float)g_Height);
+    camera->SetNearClip(0.1f);
+    camera->SetFarClip(100.0f);
     std::shared_ptr<Node> cameraNode = scene->CreateChild();
     cameraNode->AddDrawable(camera);
     cameraNode->SetPosition({0.0f, 3.0f, -16.5f});
@@ -285,7 +289,6 @@ Error Main::Run() {
     // Save the input to avoid doing a query at every frame
     Input* input = m_pContext->GetSubsystem<Input>();
 
-    Matrix4 projection = Matrix4::MakeProjectionPerspective(45.0f, (float)g_Width / (float)g_Height, 0.1f, 100.0f);
     auto previous = time->GetTimeMilliseconds();
 
     size_t pLights = pointLights.size();
@@ -317,7 +320,7 @@ Error Main::Run() {
         rs->SetShaderParameter("pointLights", l, pLights * 9);
 
         rs->SetShaderParameter("view", camera->GetView());
-        rs->SetShaderParameter("projection", projection);
+        rs->SetShaderParameter("projection", camera->GetProjection());
     };
 
     while (!mainWindow->ShouldClose()) {

@@ -18,11 +18,26 @@ public:
     Camera(const std::shared_ptr<EngineContext>& iContext);
     ~Camera();
 
+    void SetNearClip(float iNearClip);
+    void SetFarClip(float iFarClip);
+    void SetFov(float iFov);
+    void SetAspectRatio(float iAspectRatio);
+
     const Matrix4& GetView();
+    const Matrix4& GetProjection();
 
 private:
     // Cached view matrix
     Matrix4 m_View;
+    // Cached project matrix
+    Matrix4 m_Projection;
+
+    bool m_ProjectionDirty = true; // Dirty to be computed the first time
+
+    float m_NearClip;
+    float m_FarClip;
+    float m_Fov;
+    float m_AspectRatio;
 
     void _ComputeViewMatrix();
 };
