@@ -379,9 +379,7 @@ Error Main::Run() {
             bindShaderLightsAndView();
             rs->SetShaderParameter("model", nanoNode->GetWorldTransform());
 
-            mesh->GetVertices()->Use();
-
-            rs->Draw(PT_Triangles, mesh->GetIndices()->GetSize());
+            mesh->Draw(rs);
         }
 
         // Bind Textures using texture units
@@ -419,13 +417,7 @@ Error Main::Run() {
 
             rs->SetShaderParameter("model", planeNode->GetWorldTransform());
 
-            mesh->GetVertices()->Use();
-
-            if (mesh->GetIndices().get() && mesh->GetIndices()->GetSize() > 0) {
-                rs->Draw(PT_Triangles, mesh->GetIndices()->GetSize());
-            } else {
-                rs->Draw(PT_Triangles, 0, mesh->GetVertices()->GetVertexCount());
-            }
+            mesh->Draw(rs);
         }
 
         grassShader->Use();
@@ -457,9 +449,7 @@ Error Main::Run() {
             bindShaderLightsAndView();
             rs->SetShaderParameter("model", houseNode->GetWorldTransform());
 
-            mesh->GetVertices()->Use();
-
-            rs->Draw(PT_Triangles, mesh->GetIndices()->GetSize());
+            mesh->Draw(rs);
         }
 
         mainWindow->SwapBuffers();
