@@ -272,6 +272,7 @@ Error Main::Run() {
     floorMaterial->SetTexture(TU_Diffuse, std::shared_ptr<Texture>(floorDiffuse));
     floorMaterial->SetTexture(TU_Specular, std::shared_ptr<Texture>(floorSpecular));
     floorMaterial->SetShaderProgram(crateShader);
+    floorMaterial->SetTextureCoordsOffset(5.0f, 5.0f);
     auto planePtr = std::make_shared<Plane>(m_pContext);
     planePtr->SetMaterial(floorMaterial);
     planeMdl->AddMesh(planePtr);

@@ -30,6 +30,7 @@ void Material::Use(RenderSystem& iRS) {
         }
 
         iRS.SetShaderParameter("material.shininess", 32.0f);
+        iRS.SetShaderParameter("material.textureCoordsOffset", m_TextureCoordsOffset);
     }
 }
 
@@ -47,6 +48,15 @@ void Material::SetTexture(TextureUnit iUnit, const std::shared_ptr<Texture>& iTe
 
 void Material::SetShaderProgram(const std::shared_ptr<ShaderProgram>& iProgram) {
     m_pShaderProgram = iProgram;
+}
+
+void Material::SetTextureCoordsOffset(float iXOffset, float iYOffset) {
+    m_TextureCoordsOffset.SetX(iXOffset);
+    m_TextureCoordsOffset.SetY(iYOffset);
+}
+
+void Material::SetTextureCoordsOffset(const Vector2& iTextureCoordsOffset) {
+    m_TextureCoordsOffset = iTextureCoordsOffset;
 }
 
 std::shared_ptr<Texture> Material::GetTexture(TextureUnit iUnit) const {

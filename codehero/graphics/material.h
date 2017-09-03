@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <unordered_map>
+#include "core/math/vector2.h"
 #include "core/object.h"
 
 namespace CodeHero {
@@ -44,6 +45,9 @@ public:
     void SetTexture(TextureUnit iUnit, const std::shared_ptr<Texture>& iTexture);
     void SetShaderProgram(const std::shared_ptr<ShaderProgram>& iProgram);
 
+    void SetTextureCoordsOffset(float iXOffset, float iYOffset);
+    void SetTextureCoordsOffset(const Vector2& iTextureCoordsOffset);
+
     void SetCullEnabled(bool iEnabled) { m_CullEnabled = iEnabled; }
 
     bool HasTexture(TextureUnit iUnit) const;
@@ -52,6 +56,8 @@ public:
 private:
     TextureUnitsMaps m_Textures;
     std::shared_ptr<ShaderProgram> m_pShaderProgram;
+
+    Vector2 m_TextureCoordsOffset{ 1, 1 };
 
     bool m_CullEnabled = false;
 };

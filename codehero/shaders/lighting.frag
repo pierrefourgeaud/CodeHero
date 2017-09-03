@@ -15,6 +15,7 @@ struct Material {
     sampler2D diffuse;
     sampler2D specular;
     float shininess;
+    vec2 textureCoordsOffset;
 };
 
 // [0] = ambient, [1] = diffuse, [2] = specular intensities
@@ -40,13 +41,13 @@ vec4 CalcLightBase(BaseLight light, vec3 lightDir, vec3 normal, vec3 viewDir) {
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     // Combine results
-    vec4 diffTex = texture(material.diffuse, TexCoords);
+    vec4 diffTex = texture(material.diffuse, GetTexCoords(material.textureCoordsOffset));
     #ifdef ALPHAMASK
         if (diffTex.a < 0.1) {
             discard;
         }
     #endif
-    vec4 specTex = texture(material.specular, TexCoords);
+    vec4 specTex = texture(material.specular, GetTexCoords(material.textureCoordsOffset));
     #ifdef ALPHAMASK
         if (specTex.a < 0.1) {
             discard;

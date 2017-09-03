@@ -6,6 +6,10 @@ in vec2 TexCoords;
 
 out vec4 color;
 
+vec2 GetTexCoords(vec2 offset) {
+    return TexCoords * offset;
+}
+
 #include "lighting.frag"
 
 void main()
