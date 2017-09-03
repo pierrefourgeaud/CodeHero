@@ -30,6 +30,7 @@ public:
 
     void SetShaderParameter(const std::string& iParam, int32_t iValue) final override;
     void SetShaderParameter(const std::string& iParam, float iValue) final override;
+    void SetShaderParameter(const std::string& iParam, const Vector2& iVec) final override;
     void SetShaderParameter(const std::string& iParam, const Vector3& iVec) final override;
     void SetShaderParameter(const std::string& iParam, const Matrix4& iMat) final override;
     void SetShaderParameter(const std::string& iParam, const float* iFloat, const uint32_t iCount) final override;

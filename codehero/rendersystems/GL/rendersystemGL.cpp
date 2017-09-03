@@ -112,6 +112,25 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, float iValue)
     }
 }
 
+void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Vector2& iVec) {
+    if (GetShaderProgramInUse()) {
+        ShaderProgramGL* shader = static_cast<ShaderProgramGL*>(GetShaderProgramInUse());
+        if (shader->HasParameter(iParam)) {
+            const ShaderParameter& info = shader->GetParameter(iParam);
+
+            switch (info.type) {
+            case GL_FLOAT:
+                glUniform1fv(info.location, 1, iVec.Data());
+                break;
+            case GL_FLOAT_VEC2:
+                glUniform2fv(info.location, 1, iVec.Data());
+                break;
+            default: break;
+            }
+        }
+    }
+}
+
 void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Vector3& iVec) {
     if (GetShaderProgramInUse()) {
         ShaderProgramGL* shader = static_cast<ShaderProgramGL*>(GetShaderProgramInUse());
