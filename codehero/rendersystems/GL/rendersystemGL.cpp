@@ -230,7 +230,7 @@ void RenderSystemGL::SetVBO(const VertexBuffer& iBuffer) {
     }
 }
 
-void RenderSystemGL::SetViewport(Viewport* iViewport) {
+void RenderSystemGL::SetViewport(const std::shared_ptr<Viewport>& iViewport) {
     RenderSystem::SetViewport(iViewport);
 
     Vector2 scalling = GetPixelScalling();

@@ -30,6 +30,9 @@ public:
     void SetCamera(std::shared_ptr<Camera> iCamera) { m_pCamera = iCamera; }
     void SetScene(std::shared_ptr<Scene> iScene) { m_pScene = iScene; }
 
+    const std::shared_ptr<Scene>& GetScene() const { return m_pScene; }
+    const std::shared_ptr<Camera>& GetCamera() const { return m_pCamera; }
+
 private:
     IntVector2 m_Position;
     IntVector2 m_Dimension;

@@ -306,9 +306,14 @@ Error Main::Run() {
         grassNode->Scale({ 5.0f, 5.0f, 0.0f });
     }
 
-    std::vector<std::shared_ptr<Viewport>> viewports;
-    viewports.push_back(std::make_shared<Viewport>(0, 0, g_Width, g_Height));
-    viewports.push_back(std::make_shared<Viewport>(g_Width * 0.7f, g_Height * 0.6f, g_Width / 4, g_Height / 4));
+    auto mainViewport = std::make_shared<Viewport>(0, 0, g_Width, g_Height);
+    mainViewport->SetCamera(camera);
+    mainViewport->SetScene(scene);
+    auto secondaryViewport = std::make_shared<Viewport>(g_Width * 0.75f, g_Height * 0.7f, g_Width / 4, g_Height / 4);
+    secondaryViewport->SetCamera(camera);
+    secondaryViewport->SetScene(scene);
+    rs->RegisterViewport(mainViewport);
+    rs->RegisterViewport(secondaryViewport);
 
     // Save the input to avoid doing a query at every frame
     Input* input = m_pContext->GetSubsystem<Input>();
@@ -361,19 +366,16 @@ Error Main::Run() {
         textShader->Use();
         rs->SetShaderParameter("textColor", color);
         ui.Update();
+
+        // Make sure we render on the main viewport
+        rs->SetViewport(mainViewport);
         ui.Render();
 
         // TODO(pierre) This is for now, as we don't have a proper scene rendering
         // This should be removed ASAP
         cameraNode->Update();
 
-        scene->PrepareVertexLights();
-        auto& batches = scene->GetBatches();
-
-        size_t nbBatches = batches.size();
-        for (size_t i = 0; i < nbBatches; ++i) {
-            batches[i].Draw(*rs, camera);
-        }
+        rs->Render();
 
         mainWindow->SwapBuffers();
 

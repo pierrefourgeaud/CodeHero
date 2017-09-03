@@ -3,11 +3,14 @@
 // found in the LICENSE file.
 
 #include <logger.h>
+#include "graphics/batch.h"
 #include "graphics/rendersystem.h"
+#include "graphics/scene.h"
+#include "graphics/viewport.h"
 
 namespace CodeHero {
 
-void RenderSystem::RegisterViewport(Viewport* iViewport) {
+void RenderSystem::RegisterViewport(const std::shared_ptr<Viewport>& iViewport) {
     m_RegisteredViewports.push_back(iViewport);
 }
 
@@ -19,10 +22,18 @@ void RenderSystem::Render() {
 
     if (!m_RegisteredViewports.empty()) {
         size_t size = m_RegisteredViewports.size();
+
         for (size_t i = 0; i < size; ++i) {
-            SetViewport(m_RegisteredViewports[i]);
+            auto viewport = m_RegisteredViewports[i];
+            SetViewport(viewport);
+            viewport->GetScene()->PrepareVertexLights();
+            auto& batches = viewport->GetScene()->GetBatches();
+
+            size_t nbBatches = batches.size();
+            for (size_t i = 0; i < nbBatches; ++i) {
+                batches[i].Draw(*this, viewport->GetCamera());
+            }
         }
-        return;
     }
 
     // RENDER from here if needed.

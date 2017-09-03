@@ -36,7 +36,7 @@ public:
     void SetShaderParameter(const std::string& iParam, const float* iFloat, const uint32_t iCount) final override;
     void SetVertexBuffer(const VertexBuffer& iBuffer) final override;
     void SetTexture(uint32_t iIndex, const Texture& iTexture) final override;
-    void SetViewport(Viewport* iViewport) final override;
+    void SetViewport(const std::shared_ptr<Viewport>& iViewport) final override;
     void SetDepthMode(Comparison iCmp) final override;
     void SetDepthTest(bool iEnabled) final override;
     void SetStencilTest(bool iEnabled) final override;

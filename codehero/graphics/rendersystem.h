@@ -94,7 +94,7 @@ public:
     void SetShaderProgramInUse(ShaderProgram* iShader) { m_pShaderProgramInUse = iShader; }
     ShaderProgram* GetShaderProgramInUse() const { return m_pShaderProgramInUse; }
 
-    void RegisterViewport(Viewport* iViewport);
+    void RegisterViewport(const std::shared_ptr<Viewport>& iViewport);
 
     virtual void SetShaderParameter(const std::string& iParam, int32_t iValue) = 0;
     virtual void SetShaderParameter(const std::string& iParam, float iValue) = 0;
@@ -104,7 +104,7 @@ public:
     virtual void SetShaderParameter(const std::string& iParam, const float* iFloat, const uint32_t iCount) = 0;
     virtual void SetVertexBuffer(const VertexBuffer& iBuffer) = 0;
     virtual void SetTexture(uint32_t iIndex, const Texture& iTexture) = 0;
-    virtual void SetViewport(Viewport* iViewport) { m_pActiveViewport = iViewport; };
+    virtual void SetViewport(const std::shared_ptr<Viewport>& iViewport) { m_pActiveViewport = iViewport; };
     virtual void SetDepthMode(Comparison iCmp) = 0;
     virtual void SetDepthTest(bool iEnabled) = 0;
     virtual void SetStencilTest(bool iEnabled) = 0;
@@ -152,9 +152,9 @@ private:
     TextureManager* m_pTextureManager = nullptr;
 
     ShaderProgram* m_pShaderProgramInUse = nullptr;
-    Viewport* m_pActiveViewport = nullptr;
+    std::shared_ptr<Viewport> m_pActiveViewport = nullptr;
 
-    std::vector<Viewport*> m_RegisteredViewports;
+    std::vector<std::shared_ptr<Viewport>> m_RegisteredViewports;
     
     Vector2 m_PixelScalling{1.0f, 1.0f};
 };
