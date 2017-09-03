@@ -32,6 +32,8 @@ public:
     Light& SetDirection(const Vector3& iDirection);
     const Vector3& GetDirection() const;
 
+    Type GetType() const { return m_LightType; }
+
     Light& SetAmbientIntensity(float iIntensity);
     float GetAmbientIntensity() const;
     Light& SetDiffuseIntensity(float iIntensity);

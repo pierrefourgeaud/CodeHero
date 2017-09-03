@@ -38,10 +38,13 @@ public:
     const TextureUnitsMaps& GetTextures() const { return m_Textures; }
     std::shared_ptr<Texture> GetTexture(TextureUnit iUnit) const;
     std::shared_ptr<ShaderProgram> GetShaderProgram() const { return m_pShaderProgram; }
+    bool GetCullEnabled() const { return m_CullEnabled; }
 
     void SetTextures(const TextureUnitsMaps& iTextures);
     void SetTexture(TextureUnit iUnit, const std::shared_ptr<Texture>& iTexture);
     void SetShaderProgram(const std::shared_ptr<ShaderProgram>& iProgram);
+
+    void SetCullEnabled(bool iEnabled) { m_CullEnabled = iEnabled; }
 
     bool HasTexture(TextureUnit iUnit) const;
     bool HasShaderProgram() const { return !!m_pShaderProgram; }
@@ -49,6 +52,8 @@ public:
 private:
     TextureUnitsMaps m_Textures;
     std::shared_ptr<ShaderProgram> m_pShaderProgram;
+
+    bool m_CullEnabled = false;
 };
 
 } // namespace CodeHero

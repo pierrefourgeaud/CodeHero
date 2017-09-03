@@ -5,15 +5,17 @@
 #ifndef CODEHERO_GRAPHICS_SCENE_H_
 #define CODEHERO_GRAPHICS_SCENE_H_ 
 
-#include "graphics/node.h"
 #include <memory>
+#include <unordered_map>
 #include <vector>
+#include "graphics/light.h"
+#include "graphics/node.h"
 
 namespace CodeHero {
 
 // Forward declaration
+class Batch;
 class Camera;
-class Light;
 
 // Scene is simply a rootNode.
 // It will inerit everything everything for the node
@@ -26,10 +28,21 @@ public:
     // Facility for rendering
     void RegisterSceneLight(const std::shared_ptr<Light>& iLight);
 
-    void Render(Camera* iCamera);
+    void PrepareVertexLights();
+
+    // TODO(pierre) There is optimization that should be done here
+    //    - We can use a good data structure to help localization of object, and by default not process the too far/
+    //      not visible ones
+    //    - We should use a worker queue to retrieve the batches
+    std::vector<Batch> GetBatches();
+
+    const std::unordered_map<Light::Type, std::vector<float>>& GetVertexLights() const { return m_VertexLights; }
 
 private:
     std::vector<std::shared_ptr<Light>> m_Lights;
+
+    // Cached vertex lights
+    std::unordered_map<Light::Type, std::vector<float>> m_VertexLights;
 };
 
 } // namespace CodeHero

@@ -22,6 +22,7 @@ public:
     virtual ~Model();
 
     void AddMesh(const std::shared_ptr<Mesh>& iMesh);
+    const std::vector<std::shared_ptr<Mesh>>& GetMeshes() const { return m_Meshes; }
 
 // private:
     std::vector<std::shared_ptr<Mesh>> m_Meshes;

@@ -25,6 +25,7 @@
 #include "graphics/scene.h"
 #include "graphics/cube.h"
 #include "graphics/plane.h"
+#include "graphics/batch.h"
 
 #include "input/input.h"
 
@@ -242,6 +243,7 @@ Error Main::Run() {
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : nanoMdl->m_Meshes) {
         mesh->GetMaterial()->SetShaderProgram(crateShader);
+        mesh->GetMaterial()->SetCullEnabled(true);
     }
 
     std::shared_ptr<Node> houseNode = scene->CreateChild();
@@ -252,6 +254,7 @@ Error Main::Run() {
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : houseMdl->m_Meshes) {
         mesh->GetMaterial()->SetShaderProgram(grassShader);
+        mesh->GetMaterial()->SetCullEnabled(true);
     }
 
     auto camera = std::make_shared<Camera>(m_pContext);
@@ -375,15 +378,10 @@ Error Main::Run() {
         // This should be removed ASAP
         cameraNode->Update();
 
-        size_t s = nanoMdl->m_Meshes.size();
-        for (size_t i = 0; i < s; ++i) {
-            auto& mesh = nanoMdl->m_Meshes[i];
-            mesh->GetMaterial()->Use(*rs);
-            bindShaderLightsAndView();
-            rs->SetShaderParameter("model", nanoNode->GetWorldTransform());
+        scene->PrepareVertexLights();
+        auto& batches = scene->GetBatches();
 
-            mesh->Draw(rs);
-        }
+        crateShader->Use();
 
         // Bind Textures using texture units
         texture1->Bind(0);
@@ -410,19 +408,6 @@ Error Main::Run() {
         }
         cubeVertices->Unuse();
 
-        rs->SetCullMode(false);
-
-        size_t sss = planeMdl->m_Meshes.size();
-        for (size_t i = 0; i < sss; ++i) {
-            auto mesh = planeMdl->m_Meshes[i];
-            mesh->GetMaterial()->Use(*rs);
-            bindShaderLightsAndView();
-
-            rs->SetShaderParameter("model", planeNode->GetWorldTransform());
-
-            mesh->Draw(rs);
-        }
-
         grassShader->Use();
 
         bindShaderLightsAndView();
@@ -444,15 +429,9 @@ Error Main::Run() {
         }
         grassVertices->Unuse();
 
-        rs->SetCullMode(true);
-        size_t s2 = houseMdl->m_Meshes.size();
-        for (size_t i = 0; i < s2; ++i) {
-            auto mesh = houseMdl->m_Meshes[i];
-            mesh->GetMaterial()->Use(*rs);
-            bindShaderLightsAndView();
-            rs->SetShaderParameter("model", houseNode->GetWorldTransform());
-
-            mesh->Draw(rs);
+        size_t nbBatches = batches.size();
+        for (size_t i = 0; i < nbBatches; ++i) {
+            batches[i].Draw(*rs, camera);
         }
 
         mainWindow->SwapBuffers();

@@ -12,14 +12,14 @@ namespace CodeHero {
 Mesh::Mesh() {}
 Mesh::~Mesh() {}
 
-void Mesh::Draw(RenderSystem* iRS) const {
+void Mesh::Draw(RenderSystem& iRS) const {
     m_pVertices->Use();
 
     if (m_pIndices && m_pIndices->GetSize() > 0) {
         m_pIndices->Use();
-        iRS->Draw(PT_Triangles, m_pIndices->GetSize());
+        iRS.Draw(PT_Triangles, m_pIndices->GetSize());
     } else {
-        iRS->Draw(PT_Triangles, 0, m_pVertices->GetVertexCount());
+        iRS.Draw(PT_Triangles, 0, m_pVertices->GetVertexCount());
     }
 }
 

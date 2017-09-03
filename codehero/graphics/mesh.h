@@ -21,7 +21,7 @@ public:
     Mesh();
     virtual ~Mesh();
 
-    void Draw(RenderSystem* iRS) const;
+    void Draw(RenderSystem& iRS) const;
 
     void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& iBuffer);
     void AddIndexBuffer(const std::shared_ptr<IndexBuffer>& iBuffer);
