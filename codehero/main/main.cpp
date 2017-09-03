@@ -162,16 +162,11 @@ Error Main::Run() {
     grassDiffuse->Load("./resources/images/grass.png");
 
     Vector3 cubePositions[] = {
-        { 0.0f,  0.0f, 0.0f},
-        { 2.0f,  5.0f, 15.0f},
-        {-1.5f, -2.2f, 2.5f},
-        {-3.8f, -2.0f, 12.3f},
-        { 2.4f, -0.4f, 3.5f},
-        {-1.7f,  3.0f, 7.5f},
-        { 1.3f, -2.0f, 2.5f},
-        { 1.5f,  2.0f, 2.5f},
-        { 1.5f,  0.2f, 1.5f},
-        {-1.3f,  1.0f, 1.5f}
+        { 10.0f,  -10.5f, 10.0f},
+        { 2.0f,  -10.5f, 15.0f},
+        {-6.5f,  -10.5f, 5.5f},
+        { 7.5f,  -10.5f, 0.0f},
+        { 6.3f,  -10.5f, 5.5f}
     };
 
     Vector3 vegetationPositions[] = {
@@ -183,8 +178,6 @@ Error Main::Run() {
     };
 
     Vector3 pointLightsPositions[] = {
-        { 0.7f,  0.2f,  2.0f},
-        { 2.3f, -3.3f, -4.0f},
         {-4.0f,  2.0f,  12.0f},
         { 0.0f,  3.0f,  3.0f}
     };
@@ -207,8 +200,8 @@ Error Main::Run() {
         auto pointLightNode = scene->CreateChild();
         auto pointLight = pointLightNode->CreateDrawable<Light>(m_pContext, Light::Type::T_Point)
             ->SetAmbientIntensity(0.05f)
-            .SetDiffuseIntensity(0.8f)
-            .SetSpecularIntensity(1.0f)
+            .SetDiffuseIntensity(0.5f)
+            .SetSpecularIntensity(0.4f)
             .SetConstant(1.0f)
             .SetLinear(0.007f)
             .SetQuadratic(0.0002f);
@@ -254,6 +247,44 @@ Error Main::Run() {
         mesh->GetMaterial()->SetCullEnabled(true);
     }
 
+    std::shared_ptr<Node> rockNode = scene->CreateChild();
+    rockNode->Translate({ -2.8f, -12.0f, 3.2f });
+    auto rockMdl = rockNode->CreateDrawable<Model>(m_pContext);
+    m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/rock/rock.obj", *rockMdl.get());
+    // TODO(pierre) This should be moved when we initialize the model hopefully
+    for (auto& mesh : rockMdl->m_Meshes) {
+        mesh->GetMaterial()->SetShaderProgram(crateShader);
+        mesh->GetMaterial()->SetCullEnabled(true);
+    }
+
+    std::shared_ptr<Node> planetNode = scene->CreateChild();
+    planetNode->Translate({ 12.8f, 12.0f, 23.2f });
+    auto planetMdl = planetNode->CreateDrawable<Model>(m_pContext);
+    m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/planet/planet.obj", *planetMdl.get());
+    // TODO(pierre) This should be moved when we initialize the model hopefully
+    for (auto& mesh : planetMdl->m_Meshes) {
+        mesh->GetMaterial()->SetShaderProgram(crateShader);
+        mesh->GetMaterial()->SetCullEnabled(true);
+    }
+
+    std::shared_ptr<Node> treasureChestNode = scene->CreateChild();
+    treasureChestNode->Translate({ -5.0f, -12.0f, 12.0f });
+    treasureChestNode->Scale(0.015f);
+    treasureChestNode->Rotate(Quaternion({ 0.0f, -45.0f, 0.0f }));
+    auto treasureChestMdl = treasureChestNode->CreateDrawable<Model>(m_pContext);
+    m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/treasure-chest/Chest.obj", *treasureChestMdl.get());
+    std::shared_ptr<Texture> chestDiffuse(rs->CreateTexture());
+    chestDiffuse->Load("./resources/models/treasure-chest/Chest_C.png");
+    std::shared_ptr<Texture> chestSpecular(rs->CreateTexture());
+    chestSpecular->Load("./resources/models/treasure-chest/Chest_M.png");
+    // TODO(pierre) This should be moved when we initialize the model hopefully
+    for (auto& mesh : treasureChestMdl->m_Meshes) {
+        mesh->GetMaterial()->SetShaderProgram(crateShader);
+        mesh->GetMaterial()->SetTexture(TextureUnit::TU_Diffuse, chestDiffuse);
+        mesh->GetMaterial()->SetTexture(TextureUnit::TU_Specular, chestSpecular);
+        mesh->GetMaterial()->SetCullEnabled(true);
+    }
+
     auto camera = std::make_shared<Camera>(m_pContext);
     camera->SetFov(45.0f);
     camera->SetAspectRatio((float)g_Width / (float)g_Height);
@@ -288,6 +319,7 @@ Error Main::Run() {
     cube->SetMaterial(crateMaterial);
     for (auto& pos : cubePositions) {
         auto cubeNode = scene->CreateChild();
+        cubeNode->Scale(3.0f);
         auto cubeMdl = cubeNode->CreateDrawable<Model>(m_pContext);
         cubeMdl->AddMesh(cube);
         cubeNode->SetPosition(pos);
@@ -309,11 +341,7 @@ Error Main::Run() {
     auto mainViewport = std::make_shared<Viewport>(0, 0, g_Width, g_Height);
     mainViewport->SetCamera(camera);
     mainViewport->SetScene(scene);
-    auto secondaryViewport = std::make_shared<Viewport>(g_Width * 0.75f, g_Height * 0.7f, g_Width / 4, g_Height / 4);
-    secondaryViewport->SetCamera(camera);
-    secondaryViewport->SetScene(scene);
     rs->RegisterViewport(mainViewport);
-    rs->RegisterViewport(secondaryViewport);
 
     // Save the input to avoid doing a query at every frame
     Input* input = m_pContext->GetSubsystem<Input>();
@@ -366,9 +394,6 @@ Error Main::Run() {
         textShader->Use();
         rs->SetShaderParameter("textColor", color);
         ui.Update();
-
-        // Make sure we render on the main viewport
-        rs->SetViewport(mainViewport);
         ui.Render();
 
         // TODO(pierre) This is for now, as we don't have a proper scene rendering

@@ -35,6 +35,7 @@ to do so:
 
 * Special thanks to Joey for his awesome tutorials on OpenGL that made me even more motivated to start that project: [learnopengl.com](https://learnopengl.com)
 * (Model) Small House Diorama by glenatron is licensed under CC Attribution-NonCommercial.
+* (Model) Treasure Chest by Demeter Dzadik is licensed under CC BY 4.0.
 * To all the Open Source Game Engine that I enjoyed in the past browsing the source code and learn from and that made me even more eager to continue ! (Ogre, Irrlicht, Torque3D, Urho3D, Godot, UnrealEngine, CryEngine, ...)
 
 ### Screenshots
