@@ -158,10 +158,8 @@ Error Main::Run() {
     Texture* floorSpecular = rs->CreateTexture();
     floorSpecular->Load("./resources/images/floor_specular.PNG");
 
-    Texture* grassTexture = rs->CreateTexture();
-    grassTexture->Load("./resources/images/grass.png");
-
-    Plane grass(m_pContext);
+    Texture* grassDiffuse = rs->CreateTexture();
+    grassDiffuse->Load("./resources/images/grass.png");
 
     Vector3 cubePositions[] = {
         { 0.0f,  0.0f, 0.0f},
@@ -294,48 +292,27 @@ Error Main::Run() {
         cubeNode->SetPosition(pos);
     }
 
+    auto grass = std::make_shared<Plane>(m_pContext);
+    auto grassMaterial = std::make_shared<Material>(m_pContext);
+    grassMaterial->SetTexture(TU_Diffuse, std::shared_ptr<Texture>(grassDiffuse));
+    grassMaterial->SetShaderProgram(grassShader);
+    grass->SetMaterial(grassMaterial);
+    for (auto& pos : vegetationPositions) {
+        auto grassNode = scene->CreateChild();
+        auto grassMdl = grassNode->CreateDrawable<Model>(m_pContext);
+        grassMdl->AddMesh(grass);
+        grassNode->SetPosition(pos);
+        grassNode->Scale({ 5.0f, 5.0f, 0.0f });
+    }
+
     std::vector<std::shared_ptr<Viewport>> viewports;
     viewports.push_back(std::make_shared<Viewport>(0, 0, g_Width, g_Height));
     viewports.push_back(std::make_shared<Viewport>(g_Width * 0.7f, g_Height * 0.6f, g_Width / 4, g_Height / 4));
-
-    auto grassVertices = grass.GetVertices();
 
     // Save the input to avoid doing a query at every frame
     Input* input = m_pContext->GetSubsystem<Input>();
 
     auto previous = time->GetTimeMilliseconds();
-
-    size_t pLights = pointLights.size();
-    float* l = new float[pLights * 9];
-    for (size_t i = 0; i < pLights; ++i) {
-        auto pos = pointLights[i].GetNode()->GetPosition();
-        l[0 + (i * 9)] = pos.x();
-        l[1 + (i * 9)] = pos.y();
-        l[2 + (i * 9)] = pos.z();
-        l[3 + (i * 9)] = pointLights[i].GetAmbientIntensity();
-        l[4 + (i * 9)] = pointLights[i].GetDiffuseIntensity();
-        l[5 + (i * 9)] = pointLights[i].GetSpecularIntensity();
-        l[6 + (i * 9)] = pointLights[i].GetConstant();
-        l[7 + (i * 9)] = pointLights[i].GetLinear();
-        l[8 + (i * 9)] = pointLights[i].GetQuadratic();
-    }
-    auto _ = Cleanup([&l]() {
-        delete [] l;
-    });
-    auto dir = dirLight.GetDirection();
-    float vertexDirLight[6] = {
-        dir.x(), dir.y(), dir.z(),
-        dirLight.GetAmbientIntensity(), dirLight.GetDiffuseIntensity(), dirLight.GetSpecularIntensity()
-    };
-
-    // TODO(pierre) This is temporary while we cannot render competely this
-    auto bindShaderLightsAndView = [&]() {
-        rs->SetShaderParameter("dirLights", vertexDirLight, 6);
-        rs->SetShaderParameter("pointLights", l, pLights * 9);
-
-        rs->SetShaderParameter("view", camera->GetView());
-        rs->SetShaderParameter("projection", camera->GetProjection());
-    };
 
     while (!mainWindow->ShouldClose()) {
         input->Update();
@@ -391,27 +368,6 @@ Error Main::Run() {
 
         scene->PrepareVertexLights();
         auto& batches = scene->GetBatches();
-
-        grassShader->Use();
-
-        bindShaderLightsAndView();
-
-        grassTexture->Bind(0);
-        rs->SetShaderParameter("material.diffuse", 0);
-        rs->SetShaderParameter("material.shininess", 32.0f);
-        grassVertices->Use();
-        for (size_t i = 0; i < 5; ++i) {
-            Matrix4 model;
-            model.Scale({ 5.0f, 5.0f, 0.0f });
-            model.Translate(vegetationPositions[i]);
-
-            rs->SetShaderParameter("model", model);
-            for (size_t i = viewports.size(); i > 0; --i) {
-                rs->SetViewport(viewports[i - 1].get());
-                rs->Draw(PT_Triangles, 0, 6);
-            }
-        }
-        grassVertices->Unuse();
 
         size_t nbBatches = batches.size();
         for (size_t i = 0; i < nbBatches; ++i) {
