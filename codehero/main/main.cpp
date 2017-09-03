@@ -146,11 +146,11 @@ Error Main::Run() {
     rs->SetShaderParameter("projection", ortho);
 
     // Load and create a texture
-    Texture* texture1 = rs->CreateTexture();
-    texture1->Load("./resources/images/container2.png");
+    Texture* crateDiffuse = rs->CreateTexture();
+    crateDiffuse->Load("./resources/images/container2.png");
 
-    Texture* texture2 = rs->CreateTexture();
-    texture2->Load("./resources/images/container2_specular.png");
+    Texture* crateSpecular = rs->CreateTexture();
+    crateSpecular->Load("./resources/images/container2_specular.png");
 
     // Floor texture
     Texture* floorDiffuse = rs->CreateTexture();
@@ -161,7 +161,6 @@ Error Main::Run() {
     Texture* grassTexture = rs->CreateTexture();
     grassTexture->Load("./resources/images/grass.png");
 
-    Cube cube(m_pContext);
     Plane grass(m_pContext);
 
     Vector3 cubePositions[] = {
@@ -282,11 +281,23 @@ Error Main::Run() {
     planeNode->Translate({ 0, -12.1f, 0.0f });
     planeNode->Rotate(Quaternion(70.0f, 0.0f, 0.0f));
 
+    auto cube = std::make_shared<Cube>(m_pContext);
+    auto crateMaterial = std::make_shared<Material>(m_pContext);
+    crateMaterial->SetTexture(TU_Diffuse, std::shared_ptr<Texture>(crateDiffuse));
+    crateMaterial->SetTexture(TU_Specular, std::shared_ptr<Texture>(crateSpecular));
+    crateMaterial->SetShaderProgram(crateShader);
+    cube->SetMaterial(crateMaterial);
+    for (auto& pos : cubePositions) {
+        auto cubeNode = scene->CreateChild();
+        auto cubeMdl = cubeNode->CreateDrawable<Model>(m_pContext);
+        cubeMdl->AddMesh(cube);
+        cubeNode->SetPosition(pos);
+    }
+
     std::vector<std::shared_ptr<Viewport>> viewports;
     viewports.push_back(std::make_shared<Viewport>(0, 0, g_Width, g_Height));
     viewports.push_back(std::make_shared<Viewport>(g_Width * 0.7f, g_Height * 0.6f, g_Width / 4, g_Height / 4));
 
-    auto cubeVertices = cube.GetVertices();
     auto grassVertices = grass.GetVertices();
 
     // Save the input to avoid doing a query at every frame
@@ -380,33 +391,6 @@ Error Main::Run() {
 
         scene->PrepareVertexLights();
         auto& batches = scene->GetBatches();
-
-        crateShader->Use();
-
-        // Bind Textures using texture units
-        texture1->Bind(0);
-        rs->SetShaderParameter("material.diffuse", 0);
-        texture2->Bind(1);
-        rs->SetShaderParameter("material.specular", 1);
-
-        rs->SetShaderParameter("material.shininess", 32.0f);
-
-        float duration = now / 1000.0f;
-
-        // Draw container
-        cubeVertices->Use();
-        for (uint32_t i = 0; i < 10; ++i) {
-            Matrix4 model;
-            model.Translate(cubePositions[i]);
-            model.Rotate(duration * 20.0f * i, {1.0f, 0.3f, 0.5f});
-
-            rs->SetShaderParameter("model", model);
-            for (size_t i = viewports.size(); i > 0; --i) {
-                rs->SetViewport(viewports[i - 1].get());
-                rs->Draw(PT_Triangles, 0, cubeVertices->GetVertexCount());
-            }
-        }
-        cubeVertices->Unuse();
 
         grassShader->Use();
 
