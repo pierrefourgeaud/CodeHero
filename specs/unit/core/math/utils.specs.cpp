@@ -10,6 +10,12 @@ using namespace snowhouse;
 using namespace CodeHero;
 
 go_bandit([]() {
+    describe("::DegToRad", [] {
+        it("should convert degree to radian", [] {
+            AssertThat(DegToRad(180.0f), Equals((float)PI));
+        });
+    });
+
     describe("::Clamp", []() {
         it("should not do anything if in the range", [] {
             AssertThat(Clamp(5.0f, 0.0f, 10.0f), Equals(5.0f));
