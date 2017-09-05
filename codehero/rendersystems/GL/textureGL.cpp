@@ -1,6 +1,7 @@
 #include <glad/glad.h>
-#include "./core/image.h"
-#include "./rendersystems/GL/textureGL.h"
+#include "core/assert.h"
+#include "core/image.h"
+#include "rendersystems/GL/textureGL.h"
 
 namespace CodeHero {
 
@@ -32,28 +33,19 @@ bool TextureGL::_CreateImpl() {
     // Set our texture parameters
     glTexParameteri(glTexture[m_Type], GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(glTexture[m_Type], GL_TEXTURE_WRAP_T, GL_REPEAT);
+    if (m_Type == T_Cube) {
+        glTexParameteri(glTexture[m_Type], GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    }
     // Set texture filtering
     glTexParameteri(glTexture[m_Type], GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(glTexture[m_Type], GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    GLenum enumColorFormat = _GetGLFormat(_GetRawImage().GetFormat());
-    if (enumColorFormat == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT ||
-        enumColorFormat == GL_COMPRESSED_RGBA_S3TC_DXT3_EXT ||
-        enumColorFormat == GL_COMPRESSED_RGBA_S3TC_DXT5_EXT) {
-        glCompressedTexImage2D(glTexture[m_Type], 0, enumColorFormat,
-            _GetRawImage().GetWidth(), _GetRawImage().GetHeight(), 0,
-            _GetRawImage().GetSize(), _GetRawImage().GetRawData());
+    if (m_Type == T_2D) {
+        _GenerateTexture2D();
+    } else if (m_Type == T_Cube) {
+        _GenerateTextureCubeMap();
     } else {
-        GLint alignment = -1;
-        glGetIntegerv(GL_UNPACK_ALIGNMENT, &alignment);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        // Load, create texture and generate mipmaps
-        glTexImage2D(glTexture[m_Type], 0, enumColorFormat,
-            _GetRawImage().GetWidth(), _GetRawImage().GetHeight(), 0,
-            enumColorFormat, GL_UNSIGNED_BYTE, _GetRawImage().GetRawData());
-        if (alignment != -1) {
-            glPixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-        }
+        CH_ASSERT(false);
     }
     glGenerateMipmap(glTexture[m_Type]);
 
@@ -72,6 +64,56 @@ GLenum TextureGL::_GetGLFormat(const Image::Format iFormat) {
     case Image::Format::IFMT_DXT5: return GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
     default:
         return GL_RGB;
+    }
+}
+
+void TextureGL::_GenerateTexture2D() {
+    GLenum enumColorFormat = _GetGLFormat(_GetImage()->GetFormat());
+    if (enumColorFormat == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT ||
+        enumColorFormat == GL_COMPRESSED_RGBA_S3TC_DXT3_EXT ||
+        enumColorFormat == GL_COMPRESSED_RGBA_S3TC_DXT5_EXT) {
+        glCompressedTexImage2D(glTexture[m_Type], 0, enumColorFormat,
+            _GetImage()->GetWidth(), _GetImage()->GetHeight(), 0,
+            _GetImage()->GetSize(), _GetImage()->GetRawData());
+    }
+    else {
+        GLint alignment = -1;
+        glGetIntegerv(GL_UNPACK_ALIGNMENT, &alignment);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        // Load, create texture and generate mipmaps
+        glTexImage2D(glTexture[m_Type], 0, enumColorFormat,
+            _GetImage()->GetWidth(), _GetImage()->GetHeight(), 0,
+            enumColorFormat, GL_UNSIGNED_BYTE, _GetImage()->GetRawData());
+        if (alignment != -1) {
+            glPixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+        }
+    }
+}
+
+void TextureGL::_GenerateTextureCubeMap() {
+    size_t nbTextures = numberTextureFaces[m_Type];
+    for (size_t i = 0; i < nbTextures; ++i) {
+        TextureFace face = static_cast<TextureFace>(i);
+        GLenum enumColorFormat = _GetGLFormat(_GetImage(face)->GetFormat());
+        if (enumColorFormat == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT ||
+            enumColorFormat == GL_COMPRESSED_RGBA_S3TC_DXT3_EXT ||
+            enumColorFormat == GL_COMPRESSED_RGBA_S3TC_DXT5_EXT) {
+            glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, enumColorFormat,
+                _GetImage(face)->GetWidth(), _GetImage(face)->GetHeight(), 0,
+                _GetImage(face)->GetSize(), _GetImage(face)->GetRawData());
+        }
+        else {
+            GLint alignment = -1;
+            glGetIntegerv(GL_UNPACK_ALIGNMENT, &alignment);
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+            // Load, create texture and generate mipmaps
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, enumColorFormat,
+                _GetImage(face)->GetWidth(), _GetImage(face)->GetHeight(), 0,
+                enumColorFormat, GL_UNSIGNED_BYTE, _GetImage(face)->GetRawData());
+            if (alignment != -1) {
+                glPixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+            }
+        }
     }
 }
 

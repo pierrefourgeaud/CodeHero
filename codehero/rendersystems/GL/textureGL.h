@@ -23,6 +23,8 @@ protected:
 
 private:
     GLenum _GetGLFormat(const Image::Format iFormat);
+    void _GenerateTexture2D();
+    void _GenerateTextureCubeMap();
 };
 
 } // namespace CodeHero

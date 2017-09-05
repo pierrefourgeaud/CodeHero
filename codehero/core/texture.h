@@ -15,12 +15,29 @@ namespace CodeHero {
 // Forward declaration
 class EngineContext;
 
+enum TextureFace {
+    TF_Main2D = 0, // Used for 2D textures
+    // Next 6 are used in Cubemaps
+    TF_PosX = TF_Main2D,
+    TF_NegX = 1,
+    TF_PosY = 2,
+    TF_NegY = 3,
+    TF_PosZ = 4,
+    TF_NegZ = 5,
+    TF_MaxCubeMap = 6
+};
+
+static const uint32_t numberTextureFaces[] = {
+    1, // T_2D
+    6  // T_CUBE
+};
+
 class Texture : public GPUObject {
 public:
     enum Type {
         T_2D = 0,
-        T_CUBE,
-        T_MAX
+        T_Cube,
+        T_Max
     };
 
     Texture(std::shared_ptr<EngineContext>& iContext, Type iType);
@@ -28,8 +45,12 @@ public:
 
     virtual void Bind(int32_t iUnit = -1) = 0;
     virtual void Unbind() = 0;
-    bool Load(const Image& iImage);
+    bool Load(const std::shared_ptr<Image>& iImage);
     bool Load(const char* iImage);
+    bool Load(TextureFace iFace, const std::shared_ptr<Image>& iImage);
+    bool Load(TextureFace iFace, const char* iImage);
+    bool Load(const std::vector<std::shared_ptr<Image>>& iImages);
+    bool Load(const std::vector<const char*>& iImages);
 
     Type GetType() { return m_Type; }
 
@@ -38,11 +59,11 @@ protected:
 
     virtual bool _CreateImpl() = 0;
 
-    Image& _GetRawImage() { return m_Image; }
+    const std::shared_ptr<Image>& _GetImage(TextureFace iFace = TF_Main2D) const { return m_Images[iFace]; }
 
 private:
     std::shared_ptr<EngineContext> m_pContext;
-    Image m_Image;
+    std::vector<std::shared_ptr<Image>> m_Images;
 };
 
 }  // namespace CodeHero
