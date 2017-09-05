@@ -17,7 +17,13 @@ class EngineContext;
 
 class Texture : public GPUObject {
 public:
-    Texture(std::shared_ptr<EngineContext>& iContext);
+    enum Type {
+        T_2D = 0,
+        T_CUBE,
+        T_MAX
+    };
+
+    Texture(std::shared_ptr<EngineContext>& iContext, Type iType);
     virtual ~Texture();
 
     virtual void Bind(int32_t iUnit = -1) = 0;
@@ -25,7 +31,11 @@ public:
     bool Load(const Image& iImage);
     bool Load(const char* iImage);
 
+    Type GetType() { return m_Type; }
+
 protected:
+    Type m_Type;
+
     virtual bool _CreateImpl() = 0;
 
     Image& _GetRawImage() { return m_Image; }

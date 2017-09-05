@@ -10,6 +10,7 @@
 #include "core/errors.h"
 #include "core/math/vector2.h"
 #include "core/system.h"
+#include "core/texture.h"
 
 namespace CodeHero {
 
@@ -17,7 +18,6 @@ namespace CodeHero {
 class TextureManager;
 class RenderWindow;
 class ShaderProgram;
-class Texture;
 class Matrix4;
 class Vector3;
 class IndexBuffer;
@@ -137,7 +137,7 @@ public:
 #undef CreateWindow
 #endif
     virtual std::shared_ptr<RenderWindow> CreateWindow(uint32_t iWidth, uint32_t iHeight) = 0;
-    virtual Texture* CreateTexture() = 0;
+    virtual Texture* CreateTexture(Texture::Type iType = Texture::T_2D) = 0;
     virtual ShaderProgram* CreateShader() = 0;
     virtual VertexBuffer* CreateVertexBuffer() = 0;
     virtual IndexBuffer* CreateIndexBuffer() = 0;

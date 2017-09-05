@@ -8,8 +8,9 @@
 
 namespace CodeHero {
 
-Texture::Texture(std::shared_ptr<EngineContext>& iContext)
-    : m_pContext(iContext)
+Texture::Texture(std::shared_ptr<EngineContext>& iContext, Type iType)
+    : m_Type(iType)
+    , m_pContext(iContext)
     , m_Image(iContext) {}
 
 Texture::~Texture() {}

@@ -12,7 +12,7 @@ namespace CodeHero {
 
 class TextureGL : public Texture {
 public:
-    TextureGL(std::shared_ptr<EngineContext>& iContext);
+    TextureGL(std::shared_ptr<EngineContext>& iContext, Type iType);
     ~TextureGL();
 
     void Bind(int32_t iUnit = -1) final override;

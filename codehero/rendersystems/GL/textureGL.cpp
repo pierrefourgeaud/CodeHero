@@ -4,8 +4,13 @@
 
 namespace CodeHero {
 
-TextureGL::TextureGL(std::shared_ptr<EngineContext>& iContext)
-    : Texture(iContext) {}
+static const uint32_t glTexture[] = {
+    GL_TEXTURE_2D,
+    GL_TEXTURE_CUBE_MAP
+};
+
+TextureGL::TextureGL(std::shared_ptr<EngineContext>& iContext, Type iType)
+    : Texture(iContext, iType) {}
 
 TextureGL::~TextureGL() {}
 
@@ -14,28 +19,28 @@ void TextureGL::Bind(int32_t iUnit /*= -1 */) {
         glActiveTexture(GL_TEXTURE0 + iUnit);
     }
 
-    glBindTexture(GL_TEXTURE_2D, GetGPUObject().intHandle);
+    glBindTexture(glTexture[m_Type], GetGPUObject().intHandle);
 }
 
 void TextureGL::Unbind() {
-    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTexture(glTexture[m_Type], 0);
 }
 
 bool TextureGL::_CreateImpl() {
     glGenTextures(1, &_GetGPUObjectHandle()->intHandle);
     Bind();
     // Set our texture parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(glTexture[m_Type], GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(glTexture[m_Type], GL_TEXTURE_WRAP_T, GL_REPEAT);
     // Set texture filtering
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(glTexture[m_Type], GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(glTexture[m_Type], GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     GLenum enumColorFormat = _GetGLFormat(_GetRawImage().GetFormat());
     if (enumColorFormat == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT ||
         enumColorFormat == GL_COMPRESSED_RGBA_S3TC_DXT3_EXT ||
         enumColorFormat == GL_COMPRESSED_RGBA_S3TC_DXT5_EXT) {
-        glCompressedTexImage2D(GL_TEXTURE_2D, 0, enumColorFormat,
+        glCompressedTexImage2D(glTexture[m_Type], 0, enumColorFormat,
             _GetRawImage().GetWidth(), _GetRawImage().GetHeight(), 0,
             _GetRawImage().GetSize(), _GetRawImage().GetRawData());
     } else {
@@ -43,14 +48,14 @@ bool TextureGL::_CreateImpl() {
         glGetIntegerv(GL_UNPACK_ALIGNMENT, &alignment);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         // Load, create texture and generate mipmaps
-        glTexImage2D(GL_TEXTURE_2D, 0, enumColorFormat,
+        glTexImage2D(glTexture[m_Type], 0, enumColorFormat,
             _GetRawImage().GetWidth(), _GetRawImage().GetHeight(), 0,
             enumColorFormat, GL_UNSIGNED_BYTE, _GetRawImage().GetRawData());
         if (alignment != -1) {
             glPixelStorei(GL_UNPACK_ALIGNMENT, alignment);
         }
     }
-    glGenerateMipmap(GL_TEXTURE_2D);
+    glGenerateMipmap(glTexture[m_Type]);
 
     Unbind();
 
