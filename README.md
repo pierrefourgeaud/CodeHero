@@ -16,9 +16,12 @@ to do so:
 * Use degrees for angles
 * Using OpenGL 3.3+
 
+### Features (to be completed of course)
+* Skybox
+
 ### Very high level roadmap
 * Continue to push support for modern OpenGL
-* More effect (SkyBox, Fog, Toon shading, PBR, ...)
+* More effect (Fog, Toon shading, PBR, ...)
 * UI (for Editor and In-Game)
 * Integrate a physics engine
 * Add support for Audio
