@@ -406,7 +406,7 @@ Error Main::Run() {
         }
 
         // Use this frame's mouse motion to adjust camera node yaw and pitch. Clamp the pitch between -90 and 90 degrees
-        IntVector2 mouseMove = input->GetMouseMove();
+        Vector2 mouseMove = input->GetMouseMove();
         yaw += 0.1f * mouseMove.x();
         pitch += 0.1f * mouseMove.y();
         pitch = Clamp(pitch, -90.0f, 90.0f);
