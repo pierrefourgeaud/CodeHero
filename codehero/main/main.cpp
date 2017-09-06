@@ -26,6 +26,7 @@
 #include "graphics/cube.h"
 #include "graphics/plane.h"
 #include "graphics/batch.h"
+#include "graphics/skybox.h"
 
 #include "input/input.h"
 
@@ -63,7 +64,7 @@
 #endif // DRIVER_ASSIMP
 
 const uint32_t g_Width = 1920;
-const uint32_t g_Height = 1440;
+const uint32_t g_Height = 960;
 
 namespace CodeHero {
 
@@ -226,12 +227,36 @@ Error Main::Run() {
                 })
                 .Link();
 
+    std::shared_ptr<ShaderProgram> skyboxShader(rs->CreateShader());
+    skyboxShader->Attach("./codehero/shaders/skybox.vert")
+                 .Attach("./codehero/shaders/skybox.frag")
+                 .Link();
+
+    Texture* skyboxTexture = rs->CreateTexture(Texture::T_Cube);
+    skyboxTexture->Load({
+        "./resources/images/skybox_clear_sky/right.jpg",
+        "./resources/images/skybox_clear_sky/left.jpg",
+        "./resources/images/skybox_clear_sky/top.jpg",
+        "./resources/images/skybox_clear_sky/bottom.jpg",
+        "./resources/images/skybox_clear_sky/back.jpg",
+        "./resources/images/skybox_clear_sky/front.jpg"
+    });
+
+    auto skyboxMaterial = std::make_shared<Material>(m_pContext);
+    skyboxMaterial->SetTexture(TU_Diffuse, std::shared_ptr<Texture>(skyboxTexture));
+    skyboxMaterial->SetShaderProgram(skyboxShader);
+    skyboxMaterial->SetDepthTest(false);
+
+    auto skyboxNode = scene->CreateChild();
+    auto skyboxMdl = skyboxNode->CreateDrawable<Skybox>(m_pContext);
+    skyboxMdl->Initialize(skyboxMaterial);
+
     std::shared_ptr<Node> nanoNode = scene->CreateChild();
     nanoNode->Translate({ 1.0f, -12.0f, 4.7f });
     auto nanoMdl = nanoNode->CreateDrawable<Model>(m_pContext);
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/nanosuit/nanosuit.obj", *nanoMdl.get());
     // TODO(pierre) This should be moved when we initialize the model hopefully
-    for (auto& mesh : nanoMdl->m_Meshes) {
+    for (auto& mesh : nanoMdl->GetMeshes()) {
         mesh->GetMaterial()->SetShaderProgram(crateShader);
         mesh->GetMaterial()->SetCullEnabled(true);
     }
@@ -242,7 +267,7 @@ Error Main::Run() {
     auto houseMdl = houseNode->CreateDrawable<Model>(m_pContext);
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/small-house-diorama/Dio.obj", *houseMdl.get());
     // TODO(pierre) This should be moved when we initialize the model hopefully
-    for (auto& mesh : houseMdl->m_Meshes) {
+    for (auto& mesh : houseMdl->GetMeshes()) {
         mesh->GetMaterial()->SetShaderProgram(grassShader);
         mesh->GetMaterial()->SetCullEnabled(true);
     }
@@ -252,7 +277,7 @@ Error Main::Run() {
     auto rockMdl = rockNode->CreateDrawable<Model>(m_pContext);
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/rock/rock.obj", *rockMdl.get());
     // TODO(pierre) This should be moved when we initialize the model hopefully
-    for (auto& mesh : rockMdl->m_Meshes) {
+    for (auto& mesh : rockMdl->GetMeshes()) {
         mesh->GetMaterial()->SetShaderProgram(crateShader);
         mesh->GetMaterial()->SetCullEnabled(true);
     }
@@ -262,7 +287,7 @@ Error Main::Run() {
     auto planetMdl = planetNode->CreateDrawable<Model>(m_pContext);
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/planet/planet.obj", *planetMdl.get());
     // TODO(pierre) This should be moved when we initialize the model hopefully
-    for (auto& mesh : planetMdl->m_Meshes) {
+    for (auto& mesh : planetMdl->GetMeshes()) {
         mesh->GetMaterial()->SetShaderProgram(crateShader);
         mesh->GetMaterial()->SetCullEnabled(true);
     }
@@ -278,7 +303,7 @@ Error Main::Run() {
     std::shared_ptr<Texture> chestSpecular(rs->CreateTexture());
     chestSpecular->Load("./resources/models/treasure-chest/Chest_M.png");
     // TODO(pierre) This should be moved when we initialize the model hopefully
-    for (auto& mesh : treasureChestMdl->m_Meshes) {
+    for (auto& mesh : treasureChestMdl->GetMeshes()) {
         mesh->GetMaterial()->SetShaderProgram(crateShader);
         mesh->GetMaterial()->SetTexture(TextureUnit::TU_Diffuse, chestDiffuse);
         mesh->GetMaterial()->SetTexture(TextureUnit::TU_Specular, chestSpecular);

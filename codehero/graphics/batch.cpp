@@ -30,6 +30,7 @@ void Batch::Draw(RenderSystem& iRS, const std::shared_ptr<Camera>& iCamera) {
 
     // Params
     iRS.SetCullMode(m_pMaterial->GetCullEnabled());
+    iRS.SetDepthTest(m_pMaterial->GetDepthTest());
 
     m_pMesh->Draw(iRS);
 }

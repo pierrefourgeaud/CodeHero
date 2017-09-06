@@ -40,6 +40,7 @@ public:
     std::shared_ptr<Texture> GetTexture(TextureUnit iUnit) const;
     std::shared_ptr<ShaderProgram> GetShaderProgram() const { return m_pShaderProgram; }
     bool GetCullEnabled() const { return m_CullEnabled; }
+    bool GetDepthTest() const { return m_DepthTest; }
 
     void SetTextures(const TextureUnitsMaps& iTextures);
     void SetTexture(TextureUnit iUnit, const std::shared_ptr<Texture>& iTexture);
@@ -49,6 +50,7 @@ public:
     void SetTextureCoordsOffset(const Vector2& iTextureCoordsOffset);
 
     void SetCullEnabled(bool iEnabled) { m_CullEnabled = iEnabled; }
+    void SetDepthTest(bool iEnabled) { m_DepthTest = iEnabled; }
 
     bool HasTexture(TextureUnit iUnit) const;
     bool HasShaderProgram() const { return !!m_pShaderProgram; }
@@ -60,6 +62,7 @@ private:
     Vector2 m_TextureCoordsOffset{ 1, 1 };
 
     bool m_CullEnabled = false;
+    bool m_DepthTest = true;
 };
 
 } // namespace CodeHero

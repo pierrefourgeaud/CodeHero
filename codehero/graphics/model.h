@@ -24,7 +24,7 @@ public:
     void AddMesh(const std::shared_ptr<Mesh>& iMesh);
     const std::vector<std::shared_ptr<Mesh>>& GetMeshes() const { return m_Meshes; }
 
-// private:
+protected:
     std::vector<std::shared_ptr<Mesh>> m_Meshes;
 };
 

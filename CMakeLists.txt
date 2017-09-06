@@ -116,6 +116,7 @@ set (SOURCES
      ${SRCS_PATH}/graphics/rendersystem.cpp
      ${SRCS_PATH}/graphics/renderwindow.cpp
      ${SRCS_PATH}/graphics/scene.cpp
+     ${SRCS_PATH}/graphics/skybox.cpp
      ${SRCS_PATH}/core/texturemanager.cpp
      ${SRCS_PATH}/core/texture.cpp
      ${SRCS_PATH}/graphics/viewport.cpp
@@ -179,6 +180,7 @@ set (HEADERS
      ${SRCS_PATH}/graphics/rendersystem.h
      ${SRCS_PATH}/graphics/renderwindow.h
      ${SRCS_PATH}/graphics/scene.h
+     ${SRCS_PATH}/graphics/skybox.h
      ${SRCS_PATH}/core/texturemanager.h
      ${SRCS_PATH}/core/texture.h
      ${SRCS_PATH}/graphics/vertexbuffer.h
