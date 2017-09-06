@@ -26,6 +26,10 @@ public:
 
     const float* Data() const { return m_Vec; }
 
+    Vector2 operator-(const Vector2& iRhs) const {
+        return Vector2(m_Vec[0] - iRhs.m_Vec[0], m_Vec[1] - iRhs.m_Vec[1]);
+    }
+
 private:
     float m_Vec[2] = {0};
 };

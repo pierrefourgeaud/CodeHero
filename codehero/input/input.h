@@ -30,23 +30,23 @@ public:
     void EndFrame();
 
     void HandleKey(Key iKey, KeyEvent iAction);
-    void HandleMouse(int32_t iPosX, int32_t iPosY);
+    void HandleMouse(float iPosX, float iPosY);
     void ResetInputAcc();
 
     // Keyboard
     bool IsKeyPressed(Key iKey) const;
 
     // Mouse
-    IntVector2 GetMousePosition() const { return m_MousePosition; }
-    IntVector2 GetMouseMove() const { return m_MouseMove; }
+    Vector2 GetMousePosition() const { return m_MousePosition; }
+    Vector2 GetMouseMove() const { return m_MouseMove; }
 
 private:
     std::unordered_set<Key> m_KeyPressed;
 
-    IntVector2 m_MousePosition;
-    IntVector2 m_LastMousePosition;
+    Vector2 m_MousePosition;
+    Vector2 m_LastMousePosition;
     // Cache the mouse move (diff between current and last position
-    IntVector2 m_MouseMove;
+    Vector2 m_MouseMove;
 };
 
 } // namespace CodeHero

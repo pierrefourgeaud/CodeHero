@@ -46,9 +46,16 @@ void Input::HandleKey(Key iKey, KeyEvent iAction) {
     }
 }
 
-void Input::HandleMouse(int32_t iPosX, int32_t iPosY) {
-    m_LastMousePosition = m_MousePosition;
-    m_MousePosition = IntVector2(iPosX, iPosY);
+void Input::HandleMouse(float iPosX, float iPosY) {
+    // TODO(pierre) Could we use a setter instead ? This look hackish
+    static bool firstMouse = true;
+    if (firstMouse) {
+        m_LastMousePosition = Vector2(iPosX, iPosY);
+        firstMouse = false;
+    } else {
+        m_LastMousePosition = m_MousePosition;
+    }
+    m_MousePosition = Vector2(iPosX, iPosY);
     m_MouseMove = m_MousePosition - m_LastMousePosition;
 }
 
@@ -64,7 +71,7 @@ void Input::EndFrame() {
 }
 
 void Input::ResetInputAcc() {
-    m_MouseMove = IntVector2();
+    m_MouseMove = Vector2();
 }
 
 bool Input::IsKeyPressed(Key iKey) const {
