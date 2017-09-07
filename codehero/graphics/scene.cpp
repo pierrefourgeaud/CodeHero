@@ -88,7 +88,7 @@ std::vector<Batch> Scene::GetBatches() {
         // then process the node
         auto drawables = node->GetComponents();
         size_t drawablesSize = drawables.size();
-        for (int i = 0; i < drawablesSize; ++i) {
+        for (size_t i = 0; i < drawablesSize; ++i) {
             auto drawable = drawables[i];
             switch (drawable->GetDrawableType()) {
             // case Drawable::DT_Light:
