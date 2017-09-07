@@ -27,7 +27,7 @@ void RenderSystem::Render() {
             auto viewport = m_RegisteredViewports[i];
             SetViewport(viewport);
             viewport->GetScene()->PrepareVertexLights();
-            auto& batches = viewport->GetScene()->GetBatches();
+            auto batches = viewport->GetScene()->GetBatches();
 
             size_t nbBatches = batches.size();
             for (size_t i = 0; i < nbBatches; ++i) {
