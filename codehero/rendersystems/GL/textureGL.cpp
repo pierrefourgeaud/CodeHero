@@ -10,6 +10,14 @@ static const uint32_t glTexture[] = {
     GL_TEXTURE_CUBE_MAP
 };
 
+static const uint32_t glWrapModes[] = {
+    GL_REPEAT,
+    GL_MIRRORED_REPEAT,
+    GL_CLAMP_TO_EDGE,
+    GL_MIRROR_CLAMP_TO_EDGE,
+    GL_CLAMP_TO_BORDER
+};
+
 TextureGL::TextureGL(std::shared_ptr<EngineContext>& iContext, Type iType)
     : Texture(iContext, iType) {}
 
@@ -31,10 +39,10 @@ bool TextureGL::_CreateImpl() {
     glGenTextures(1, &_GetGPUObjectHandle()->intHandle);
     Bind();
     // Set our texture parameters
-    glTexParameteri(glTexture[m_Type], GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(glTexture[m_Type], GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(glTexture[m_Type], GL_TEXTURE_WRAP_S, glWrapModes[m_WrapCoordinates[TC_U]]);
+    glTexParameteri(glTexture[m_Type], GL_TEXTURE_WRAP_T, glWrapModes[m_WrapCoordinates[TC_V]]);
     if (m_Type == T_Cube) {
-        glTexParameteri(glTexture[m_Type], GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+        glTexParameteri(glTexture[m_Type], GL_TEXTURE_WRAP_R, glWrapModes[m_WrapCoordinates[TC_W]]);
     }
     // Set texture filtering
     glTexParameteri(glTexture[m_Type], GL_TEXTURE_MIN_FILTER, GL_LINEAR);

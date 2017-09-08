@@ -71,4 +71,8 @@ bool Texture::Load(const std::vector<const char*>& iImages) {
     return _CreateImpl();
 }
 
+void Texture::SetWrapMode(TextureCoordinate iCoordinate, TextureWrapMode iWrapMode) {
+    m_WrapCoordinates[iCoordinate] = iWrapMode;
+}
+
 } // namespace CodeHero

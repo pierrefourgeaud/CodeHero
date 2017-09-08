@@ -160,6 +160,8 @@ Error Main::Run() {
     floorSpecular->Load("./resources/images/floor_specular.PNG");
 
     Texture* grassDiffuse = rs->CreateTexture();
+    grassDiffuse->SetWrapMode(TC_U, TWM_ClampEdge);
+    grassDiffuse->SetWrapMode(TC_V, TWM_ClampEdge);
     grassDiffuse->Load("./resources/images/grass.png");
 
     Vector3 cubePositions[] = {
@@ -233,6 +235,10 @@ Error Main::Run() {
                  .Link();
 
     Texture* skyboxTexture = rs->CreateTexture(Texture::T_Cube);
+    // Should this be protected to be called always before setting picture
+    skyboxTexture->SetWrapMode(TC_U, TWM_ClampEdge);
+    skyboxTexture->SetWrapMode(TC_V, TWM_ClampEdge);
+    skyboxTexture->SetWrapMode(TC_W, TWM_ClampEdge);
     skyboxTexture->Load({
         "./resources/images/skybox_clear_sky/right.jpg",
         "./resources/images/skybox_clear_sky/left.jpg",
