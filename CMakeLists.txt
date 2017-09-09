@@ -42,6 +42,7 @@ option (_CODEHERO_DRIVER_DDS "Enable DDS driver" ON)
 option (_CODEHERO_DRIVER_TGA "Enable TGA driver" ON)
 option (_CODEHERO_DRIVER_FREETYPE "Enable FreeType driver" ON)
 option (_CODEHERO_DRIVER_ASSIMP "Enable Assimp driver" ON)
+option (_CODEHERO_DRIVER_PUGIXML "Enable PugiXML driver" ON)
 option (_CODEHERO_BUILD_TESTS "Build the unit tests" OFF)
 
 ##### Options overview #####
@@ -51,6 +52,7 @@ message ("DRIVER_JPG: " ${_CODEHERO_DRIVER_JPG})
 message ("DRIVER_DDS: " ${_CODEHERO_DRIVER_DDS})
 message ("DRIVER_TGA: " ${_CODEHERO_DRIVER_TGA})
 message ("DRIVER_ASSIMP: " ${_CODEHERO_DRIVER_ASSIMP})
+message ("DRIVER_PUGIXML: " ${_CODEHERO_DRIVER_PUGIXML})
 message ("BUILD_TESTS: " ${_CODEHERO_BUILD_TESTS})
 message ("DRIVER_FREETYPE: " ${_CODEHERO_DRIVER_FREETYPE})
 message ("VENDORS_PATH: " ${VENDORS_PATH})
@@ -297,6 +299,14 @@ if (${_CODEHERO_DRIVER_ASSIMP})
 
     add_definitions (-DDRIVER_ASSIMP)
     set (ADDITIONAL_LIBRARIES ${ADDITIONAL_LIBRARIES} assimp)
+endif ()
+
+if (${_CODEHERO_DRIVER_PUGIXML})
+    add_subdirectory (${VENDORS_PATH}/pugixml)
+    include_directories (SYSTEM ${VENDORS_PATH}/pugixml/include)
+
+    add_definitions (-DDRIVER_PUGIXML)
+    set (ADDITIONAL_LIBRARIES ${ADDITIONAL_LIBRARIES} pugixml)
 endif ()
 
 # Source groups

@@ -21,3 +21,6 @@
 [submodule "vendor/bandit"]
 	path = vendor/bandit
 	url = https://github.com/banditcpp/bandit.git
+[submodule "vendor/pugixml"]
+	path = vendor/pugixml
+	url = https://github.com/zeux/pugixml.git
