@@ -19,6 +19,8 @@ class FileAccess;
 template <class T>
 class ResourceCodec : public Object {
 public:
+    OBJECT_TEMPLATE(ResourceCodec, T, Object)
+
     ResourceCodec(const std::shared_ptr<EngineContext>& iContext) : Object(iContext) {}
     virtual ~ResourceCodec() {}
     ResourceCodec(const ResourceCodec&) = delete;

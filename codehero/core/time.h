@@ -15,7 +15,7 @@ class EngineContext;
 
 class Time : public System {
 public:
-    OBJECT(Time)
+    OBJECT(Time, System)
 
     Time(const std::shared_ptr<EngineContext>& iContext);
     ~Time();

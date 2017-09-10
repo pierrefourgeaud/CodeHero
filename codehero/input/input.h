@@ -18,7 +18,7 @@ class EngineContext;
 
 class Input : public System {
 public:
-    OBJECT(Input)
+    OBJECT(Input, System)
 
     Input(const std::shared_ptr<EngineContext>& iContext);
     ~Input();

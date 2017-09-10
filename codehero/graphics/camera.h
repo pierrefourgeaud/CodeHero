@@ -13,7 +13,7 @@ namespace CodeHero {
 
 class Camera : public Drawable {
 public:
-    OBJECT(Camera)
+    OBJECT(Camera, Drawable)
 
     Camera(const std::shared_ptr<EngineContext>& iContext);
     ~Camera();

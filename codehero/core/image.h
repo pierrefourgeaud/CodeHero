@@ -15,7 +15,7 @@ using ImageData = std::vector<uint8_t>;
 
 class Image : public Object {
 public:
-    OBJECT(Image)
+    OBJECT(Image, Object)
 
     enum Format {
         IFMT_Luminance, // one byte

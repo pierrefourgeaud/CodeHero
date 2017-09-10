@@ -25,7 +25,7 @@ using TextureUnitsMaps = std::unordered_map<TextureUnit, std::shared_ptr<Texture
 
 class Material : public Object {
 public:
-    OBJECT(Material)
+    OBJECT(Material, Object)
 
     Material(const std::shared_ptr<EngineContext>& iContext);
     virtual ~Material();

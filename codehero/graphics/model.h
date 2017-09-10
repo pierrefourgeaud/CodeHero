@@ -16,7 +16,7 @@ class Mesh;
 
 class Model : public Drawable {
 public:
-    OBJECT(Model)
+    OBJECT(Model, Drawable)
 
     explicit Model(const std::shared_ptr<EngineContext>& iContext);
     virtual ~Model();

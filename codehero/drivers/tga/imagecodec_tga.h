@@ -17,7 +17,7 @@ struct TGAHeader;
 
 class ImageCodecTGA : public ResourceCodec<Image> {
 public:
-    OBJECT(ImageCodecTGA)
+    OBJECT(ImageCodecTGA, ResourceCodec<Image>)
 
     ImageCodecTGA(const std::shared_ptr<EngineContext>& iContext);
     ~ImageCodecTGA();

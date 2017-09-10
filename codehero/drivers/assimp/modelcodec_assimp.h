@@ -26,7 +26,7 @@ class Texture;
 
 class ModelCodecAssimp : public ResourceCodec<Model> {
 public:
-    OBJECT(ModelCodecAssimp)
+    OBJECT(ModelCodecAssimp, ResourceCodec<Model>)
     ModelCodecAssimp(const std::shared_ptr<EngineContext>& iContext);
 
     Error Load(FileAccess& iF, Model& oModel) override;

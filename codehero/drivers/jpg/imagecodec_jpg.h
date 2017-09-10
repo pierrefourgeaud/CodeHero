@@ -15,7 +15,7 @@ class FileAccess;
 
 class ImageCodecJPG : public ResourceCodec<Image> {
 public:
-    OBJECT(ImageCodeJPG)
+    OBJECT(ImageCodeJPG, ResourceCodec<Image>)
 
     ImageCodecJPG(const std::shared_ptr<EngineContext>& iContext);
     ~ImageCodecJPG();

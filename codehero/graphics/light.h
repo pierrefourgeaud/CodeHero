@@ -23,7 +23,7 @@ public:
         T_Spot
     };
 
-    OBJECT(Light)
+    OBJECT(Light, Drawable)
 
     Light(const std::shared_ptr<EngineContext>& iContext, Type iType);
     virtual ~Light() {}

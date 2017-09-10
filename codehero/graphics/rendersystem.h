@@ -82,7 +82,7 @@ enum CullFace {
 
 class RenderSystem : public System {
 public:
-    OBJECT(RenderSystem)
+    OBJECT(RenderSystem, System)
 
     RenderSystem(const std::shared_ptr<EngineContext>& iContext)
         : System(iContext) {}
