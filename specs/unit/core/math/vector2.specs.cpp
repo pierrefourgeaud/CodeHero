@@ -50,5 +50,15 @@ go_bandit([]() {
                 AssertThat(test.y(), Equals(res));
             });
         });
+
+        describe("::operator-", [] {
+            it("should substract properly two vectors", [] {
+                Vector2 lhs(1.0f, 2.0f);
+                Vector2 rhs(3.0f, 4.0f);
+                Vector2 result(-3.0f, -3.0f);
+
+                AssertThat(lhs - rhs, Equals(result));
+            });
+        });
     });
 });
