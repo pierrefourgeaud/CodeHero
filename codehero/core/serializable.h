@@ -8,8 +8,8 @@
 #include <functional>
 #include <string>
 #include <unordered_map>
-#include <variant>
 #include "core/object.h"
+#include "core/variant.h"
 
 namespace CodeHero {
 
@@ -17,16 +17,9 @@ namespace CodeHero {
 class Serializable;
 
 using Builder = std::function<std::shared_ptr<Serializable>(const std::shared_ptr<EngineContext>&)>;
-using AttributeVariant = std::variant<
-    char,
-    int,
-    float,
-    double,
-    std::string
->;
 
 class Attribute {
-    AttributeVariant m_Value;
+    Variant m_Value;
 };
 
 class Serializable : public Object {
