@@ -4,11 +4,11 @@ project (CodeHero)
 
 # ---------- C++ 11 flags ----------
 if (${MSVC})
-        set (CMAKE_CXX_FLAGS "/EHsc")
+    set (CMAKE_CXX_FLAGS "/EHs")
 elseif (APPLE)
-        set (CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
+    set (CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
 else ()
-        set (CMAKE_CXX_FLAGS "-std=c++11")
+    set (CMAKE_CXX_FLAGS "-std=c++11")
 endif (${MSVC})
 
 # ---------- Build type flags ----------
@@ -95,6 +95,7 @@ set (SOURCES
      ${SRCS_PATH}/core/math/matrix3.cpp
      ${SRCS_PATH}/core/math/matrix4.cpp
      ${SRCS_PATH}/core/math/quaternion.cpp
+     ${SRCS_PATH}/core/variant.cpp
      # UI
      ${SRCS_PATH}/ui/font.cpp
      ${SRCS_PATH}/ui/fontface.cpp
@@ -159,6 +160,7 @@ set (HEADERS
      ${SRCS_PATH}/core/math/utils.h
      ${SRCS_PATH}/core/resourcecodec.h
      ${SRCS_PATH}/core/resourceloader.h
+     ${SRCS_PATH}/core/variant.h
      # UI
      ${SRCS_PATH}/ui/font.h
      ${SRCS_PATH}/ui/fontface.h
