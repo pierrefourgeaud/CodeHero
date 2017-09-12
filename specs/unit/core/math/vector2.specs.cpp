@@ -51,6 +51,22 @@ go_bandit([]() {
             });
         });
 
+        describe("::operator==", [] {
+            it("should return true if condition is valid", [] {
+                Vector2 lhs(1.0f, 2.0f);
+                Vector2 rhs(1.0f, 2.0f);
+
+                AssertThat(lhs == rhs, Is().True());
+            });
+
+            it("should return false if condition is invalid", [] {
+                Vector2 lhs(1.0f, 2.0f);
+                Vector2 rhs(3.0f, 4.0f);
+
+                AssertThat(lhs == rhs, Is().False());
+            });
+        });
+
         describe("::operator-", [] {
             it("should substract properly two vectors", [] {
                 Vector2 lhs(1.0f, 2.0f);
