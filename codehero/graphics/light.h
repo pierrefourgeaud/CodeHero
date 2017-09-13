@@ -32,7 +32,11 @@ public:
     Light& SetDirection(const Vector3& iDirection);
     const Vector3& GetDirection() const;
 
+    void SetType(const Type& iType) { m_LightType = iType; }
+    void SetType(const std::string& iType);
+
     Type GetType() const { return m_LightType; }
+    std::string GetTypeString() const;
 
     Light& SetAmbientIntensity(float iIntensity);
     float GetAmbientIntensity() const;
