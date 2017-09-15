@@ -88,6 +88,7 @@ set (SOURCES
      ${SRCS_PATH}/core/fileaccess.cpp
      ${SRCS_PATH}/core/filesystem.cpp
      ${SRCS_PATH}/core/image.cpp
+     ${SRCS_PATH}/core/objectdefinition.cpp
      ${SRCS_PATH}/core/time.cpp
      ${SRCS_PATH}/core/math/vector2.cpp
      ${SRCS_PATH}/core/math/vector3.cpp
@@ -151,6 +152,7 @@ set (HEADERS
      ${SRCS_PATH}/core/filesystem.h
      ${SRCS_PATH}/core/gpuobject.h
      ${SRCS_PATH}/core/image.h
+     ${SRCS_PATH}/core/objectdefinition.h
      ${SRCS_PATH}/core/scopecleaner.h
      ${SRCS_PATH}/core/math/vector2.h
      ${SRCS_PATH}/core/math/vector3.h
