@@ -307,7 +307,15 @@ endif ()
 
 if (${_CODEHERO_DRIVER_PUGIXML})
     add_subdirectory (${VENDORS_PATH}/pugixml)
-    include_directories (SYSTEM ${VENDORS_PATH}/pugixml/include)
+    include_directories (SYSTEM ${VENDORS_PATH}/pugixml/src)
+
+    set (SOURCES ${SOURCES}
+        ${SRCS_PATH}/drivers/xml/serializablecodec_xml.cpp
+    )
+
+    set (HEADERS ${HEADERS}
+        ${SRCS_PATH}/drivers/xml/serializablecodec_xml.h
+    )
 
     add_definitions (-DDRIVER_PUGIXML)
     set (ADDITIONAL_LIBRARIES ${ADDITIONAL_LIBRARIES} pugixml)

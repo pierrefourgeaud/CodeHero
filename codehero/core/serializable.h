@@ -24,6 +24,8 @@ class Attribute {
 
 class Serializable : public Object {
 public:
+    OBJECT(Serializable, Object)
+
     Serializable(const std::shared_ptr<EngineContext>& iContext);
     virtual ~Serializable();
 
