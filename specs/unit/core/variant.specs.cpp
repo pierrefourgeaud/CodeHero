@@ -43,6 +43,14 @@ go_bandit([]() {
                 AssertThat(test.GetType(), Equals(Variant::Value::Type::VVT_Double));
                 AssertThat(test.GetValue().m_Double, Equals(value));
             });
+
+            it("should initialize vector3 with proper type and right value", [] {
+                Vector3 value(1.0f, 2.0f, 3.0f);
+                Variant test(value);
+
+                AssertThat(test.GetType(), Equals(Variant::Value::Type::VVT_Vector3));
+                AssertThat(test.GetValue().m_Vector3, Equals(value));
+            });
         });
 
         describe("::GetInt", [] {
@@ -120,6 +128,22 @@ go_bandit([]() {
                 Variant test(value);
 
                 AssertThat(test.GetDouble(), Equals(0.0));
+            });
+        });
+
+        describe("::GetVector3", [] {
+            it("should return the proper value if correct type", [] {
+                Vector3 value(1.0f, 2.0f, 3.0f);
+                Variant test(value);
+
+                AssertThat(test.GetVector3(), Equals(value));
+            });
+
+            it("should return 0 vector3 if type is not vector3", [] {
+                char value = 'a';
+                Variant test(value);
+
+                AssertThat(test.GetVector3(), Equals(Vector3(0.0f, 0.0f, 0.0f)));
             });
         });
     });

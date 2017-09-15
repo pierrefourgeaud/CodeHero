@@ -30,6 +30,11 @@ Variant::Variant(double iValue) {
     m_Type = Value::Type::VVT_Double;
 }
 
+Variant::Variant(const Vector3& iValue) {
+    m_Value.m_Vector3 = iValue;
+    m_Type = Value::Type::VVT_Vector3;
+}
+
 int Variant::GetInt() const {
     if (m_Type == Value::Type::VVT_Int) {
         return m_Value.m_Int;
@@ -68,6 +73,15 @@ double Variant::GetDouble() const {
 
     // Default to 0.0
     return 0.0;
+}
+
+Vector3 Variant::GetVector3() const {
+    if (m_Type == Value::Type::VVT_Vector3) {
+        return m_Value.m_Vector3;
+    }
+
+    // Default to 0 vector
+    return Vector3();
 }
 
 } // namespace CodeHero
