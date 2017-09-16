@@ -84,4 +84,24 @@ Vector3 Variant::GetVector3() const {
     return Vector3();
 }
 
+template <> int Variant::Get<int>() const {
+    return GetInt();
+}
+
+template <> char Variant::Get<char>() const {
+    return GetChar();
+}
+
+template <> float Variant::Get<float>() const {
+    return GetFloat();
+}
+
+template <> double Variant::Get<double>() const {
+    return GetDouble();
+}
+
+template <> Vector3 Variant::Get<Vector3>() const {
+    return GetVector3();
+}
+
 } // namespace CodeHero

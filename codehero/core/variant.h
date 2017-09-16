@@ -50,6 +50,9 @@ public:
     double GetDouble() const;
     Vector3 GetVector3() const;
 
+    // Base template method
+    template <class T> T Get() const;
+
     Value& GetValue() { return m_Value; }
     const Value& GetValue() const { return m_Value; }
     Value::Type GetType() const { return m_Type; }
@@ -58,6 +61,13 @@ private:
     Value m_Value;
     Value::Type m_Type;
 };
+
+// Specialization of template <class T> T Get() const;
+template <> int Variant::Get<int>() const;
+template <> char Variant::Get<char>() const;
+template <> float Variant::Get<float>() const;
+template <> double Variant::Get<double>() const;
+template <> Vector3 Variant::Get<Vector3>() const;
 
 } // namespace CodeHero
 
