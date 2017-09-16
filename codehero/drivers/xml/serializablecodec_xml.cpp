@@ -21,7 +21,9 @@ namespace CodeHero {
 SerializableCodecXML::~SerializableCodecXML() {}
 
 Error SerializableCodecXML::Load(FileAccess& iF, Serializable& oObject) {
+    (void)oObject;
     const int32_t size = iF.GetSize();
+    (void)size;
     // ImageData buffer(size);
     // iF.Read(&buffer[0], size);
 

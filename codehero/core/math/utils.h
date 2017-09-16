@@ -11,15 +11,15 @@ namespace CodeHero {
 
 static const double PI = 3.14159265358979323846264338327950288;
 
-static float Epsilon() {
+static inline float Epsilon() {
     return std::numeric_limits<float>::epsilon();
 }
 
-static float DegToRad(float iDeg) {
+static inline float DegToRad(float iDeg) {
     return iDeg * (static_cast<float>(PI) / 180.0f);
 }
 
-static bool FloatEqu(float iLhs, float iRhs, float iEps = Epsilon()) {
+static inline bool FloatEqu(float iLhs, float iRhs, float iEps = Epsilon()) {
     float delta = iRhs - iLhs;
     if (delta < 0.0) {
         return delta >= -iEps;

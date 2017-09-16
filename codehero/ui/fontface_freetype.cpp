@@ -45,14 +45,16 @@ void FontFaceFreeType::_Load() {
         uint32_t numGlyphs = static_cast<uint32_t>(face->num_glyphs);
         std::vector<uint32_t> charCodes(numGlyphs, 0);
 
-        FT_UInt glyphIndex;
-        FT_ULong charCode = FT_Get_First_Char(face, &glyphIndex);
-        while (glyphIndex != 0) {
-            if (glyphIndex < numGlyphs) {
-                charCodes[glyphIndex] = static_cast<uint32_t>(charCode);
-            }
+        {
+            FT_UInt glyphIndex;
+            FT_ULong charCode = FT_Get_First_Char(face, &glyphIndex);
+            while (glyphIndex != 0) {
+                if (glyphIndex < numGlyphs) {
+                    charCodes[glyphIndex] = static_cast<uint32_t>(charCode);
+                }
 
-            charCode = FT_Get_Next_Char(face, charCode, &glyphIndex);
+                charCode = FT_Get_Next_Char(face, charCode, &glyphIndex);
+            }
         }
 
         // Load them all !

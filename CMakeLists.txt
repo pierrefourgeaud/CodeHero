@@ -5,6 +5,8 @@ project (CodeHero)
 # ---------- C++ 11 flags ----------
 if (${MSVC})
     set (CMAKE_CXX_FLAGS "/EHs")
+    add_definitions (-D_CRT_SECURE_NO_WARNINGS)
+    set (CODEHERO_CXX_FLAGS "/W4 /WX /wd4244 /wd4611")
 elseif (APPLE)
     set (CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
 else ()
@@ -97,6 +99,7 @@ set (SOURCES
      ${SRCS_PATH}/core/math/matrix4.cpp
      ${SRCS_PATH}/core/math/quaternion.cpp
      ${SRCS_PATH}/core/serializable.cpp
+     ${SRCS_PATH}/core/utils.cpp
      ${SRCS_PATH}/core/variant.cpp
      # UI
      ${SRCS_PATH}/ui/font.cpp
@@ -248,11 +251,13 @@ if (${_CODEHERO_DRIVER_JPG})
 
     # Disable some warnings..
     if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-        set_source_files_properties(${VENDORS_PATH}/jpeg-compressor/jpgd.cpp PROPERTIES COMPILE_FLAGS "-Wno-shift-negative-value -Wno-unused-parameter") 
+        set_source_files_properties(${VENDORS_PATH}/jpeg-compressor/jpgd.cpp PROPERTIES COMPILE_FLAGS "-Wno-shift-negative-value -Wno-unused-parameter")
+        if (${MSVC})
+            set_source_files_properties(${VENDORS_PATH}/jpeg-compressor/jpgd.cpp PROPERTIES COMPILE_FLAGS "/wd458")
+        endif ()
     endif ()
 
     set (HEADERS ${HEADERS}
-        ${VENDORS_PATH}/jpeg-compressor/jpgd.h
         ${SRCS_PATH}/drivers/jpg/imagecodec_jpg.h
     )
 
@@ -331,6 +336,7 @@ source_group (TREE ${PROJECT_SOURCE_DIR} FILES ${HEADERS} ${SOURCES})
 set (COMMON_RELEASE_FLAGS "-fPIC -g -O3 -fstack-protector -fvisibility=hidden -W -Wall -Wno-missing-braces -Wno-unused-function -Wpointer-arith -Wformat -Wreturn-type -Wsign-compare -Wmultichar -Wformat-nonliteral -Winit-self -Wuninitialized -Wno-deprecated -Wformat-security -Werror")
 set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${COMMON_RELEASE_FLAGS}")
 set (CMAKE_CXX_FLAGS_RELWITHDEBINFO  "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} ${COMMON_RELEASE_FLAGS}")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CODEHERO_CXX_FLAGS}")
 
 # ---------- Executables -----------
 add_library (main_objs OBJECT ${INCLUDES} ${SOURCES} ${HEADERS})

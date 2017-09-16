@@ -32,7 +32,7 @@ enum TextureWrapMode {
     TWM_MaxWrapModes
 };
 
-enum TextureFace {
+enum TextureFace : uint32_t {
     TF_Main2D = 0, // Used for 2D textures
     // Next 6 are used in Cubemaps
     TF_PosX = TF_Main2D,

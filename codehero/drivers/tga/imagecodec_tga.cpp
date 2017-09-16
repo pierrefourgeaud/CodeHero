@@ -212,7 +212,8 @@ Error ImageCodecTGA::_ConvertToImage(Image& oImage,
     } else {
         xStart = width - 1;
         xStep = -1;
-        xEnd = -1;
+        // TODO(pierre) This is not tested
+        xEnd = 0;
     }
 
     if (origin == TGAO_TopLeft || origin == TGAO_TopRight) {
@@ -222,7 +223,8 @@ Error ImageCodecTGA::_ConvertToImage(Image& oImage,
     } else {
         yStart = height - 1;
         yStep = -1;
-        yEnd = -1;
+        // TODO(pierre) This is not tested
+        yEnd = 0;
     }
 
     std::vector<uint8_t> imageData;

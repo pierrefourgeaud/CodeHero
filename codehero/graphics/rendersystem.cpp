@@ -30,8 +30,8 @@ void RenderSystem::Render() {
             auto batches = viewport->GetScene()->GetBatches();
 
             size_t nbBatches = batches.size();
-            for (size_t i = 0; i < nbBatches; ++i) {
-                batches[i].Draw(*this, viewport->GetCamera());
+            for (size_t j = 0; j < nbBatches; ++j) {
+                batches[j].Draw(*this, viewport->GetCamera());
             }
         }
     }

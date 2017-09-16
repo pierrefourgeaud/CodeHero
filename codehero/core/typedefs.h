@@ -11,13 +11,13 @@
 namespace CodeHero {
 
 template<typename T>
-std::shared_ptr<T> MakeSharedArray(uint64_t size)
+std::shared_ptr<T> MakeSharedArray(size_t size)
 {
     return std::shared_ptr<T>(new T[size], std::default_delete<T[]>());
 }
 
 template<typename T>
-std::unique_ptr<T> MakeUniqueArray(uint64_t size)
+std::unique_ptr<T> MakeUniqueArray(size_t size)
 {
     return std::unique_ptr<T>(new T[size], std::default_delete<T[]>());
 }

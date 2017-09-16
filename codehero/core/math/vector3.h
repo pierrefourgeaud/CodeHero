@@ -54,7 +54,7 @@ private:
     float m_Vec[3] = {0};
 };
 
-static Vector3 operator*(float iScalar, const Vector3& iVec) {
+inline Vector3 operator*(float iScalar, const Vector3& iVec) {
     return Vector3(iVec) *= iScalar;
 }
 
