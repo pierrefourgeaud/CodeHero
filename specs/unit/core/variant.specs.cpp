@@ -59,6 +59,7 @@ go_bandit([]() {
                 Variant test(value);
 
                 AssertThat(test.GetInt(), Equals(value));
+                AssertThat(test.Get<int>(), Equals(value));
             });
 
             it("should return 0 if type is not int", [] {
@@ -66,6 +67,7 @@ go_bandit([]() {
                 Variant test(value);
 
                 AssertThat(test.GetInt(), Equals(0));
+                AssertThat(test.Get<int>(), Equals(0));
             });
         });
 
@@ -75,6 +77,7 @@ go_bandit([]() {
                 Variant test(value);
 
                 AssertThat(test.GetChar(), Equals(value));
+                AssertThat(test.Get<char>(), Equals(value));
             });
 
             it("should return '\0' if type is not char", [] {
@@ -82,6 +85,7 @@ go_bandit([]() {
                 Variant test(value);
 
                 AssertThat(test.GetChar(), Equals('\0'));
+                AssertThat(test.Get<char>(), Equals('\0'));
             });
         });
 
@@ -98,6 +102,7 @@ go_bandit([]() {
                 Variant test(value);
 
                 AssertThat(test.GetFloat(), Equals(value));
+                AssertThat(test.Get<float>(), Equals(value));
             });
 
             it("should return 0.0f if type is not float or double", [] {
@@ -105,6 +110,7 @@ go_bandit([]() {
                 Variant test(value);
 
                 AssertThat(test.GetFloat(), Equals(0.0f));
+                AssertThat(test.Get<float>(), Equals(0.0f));
             });
         });
 
@@ -114,6 +120,7 @@ go_bandit([]() {
                 Variant test(value);
 
                 AssertThat(test.GetDouble(), Equals(value));
+                AssertThat(test.Get<double>(), Equals(value));
             });
 
             it("should return the proper value if type is float", [] {
@@ -121,6 +128,7 @@ go_bandit([]() {
                 Variant test(value);
 
                 AssertThat(test.GetDouble(), Equals(value));
+                AssertThat(test.Get<double>(), Equals(value));
             });
 
             it("should return 0.0f if type is not float or double", [] {
@@ -128,6 +136,7 @@ go_bandit([]() {
                 Variant test(value);
 
                 AssertThat(test.GetDouble(), Equals(0.0));
+                AssertThat(test.Get<double>(), Equals(0.0));
             });
         });
 
@@ -137,6 +146,7 @@ go_bandit([]() {
                 Variant test(value);
 
                 AssertThat(test.GetVector3(), Equals(value));
+                AssertThat(test.Get<Vector3>(), Equals(value));
             });
 
             it("should return 0 vector3 if type is not vector3", [] {
@@ -144,6 +154,7 @@ go_bandit([]() {
                 Variant test(value);
 
                 AssertThat(test.GetVector3(), Equals(Vector3(0.0f, 0.0f, 0.0f)));
+                AssertThat(test.Get<Vector3>(), Equals(Vector3(0.0f, 0.0f, 0.0f)));
             });
         });
     });
