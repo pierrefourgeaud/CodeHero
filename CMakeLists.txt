@@ -252,9 +252,8 @@ if (${_CODEHERO_DRIVER_JPG})
     # Disable some warnings..
     if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         set_source_files_properties(${VENDORS_PATH}/jpeg-compressor/jpgd.cpp PROPERTIES COMPILE_FLAGS "-Wno-shift-negative-value -Wno-unused-parameter")
-        if (${MSVC})
-            set_source_files_properties(${VENDORS_PATH}/jpeg-compressor/jpgd.cpp PROPERTIES COMPILE_FLAGS "/wd458")
-        endif ()
+    elseif (${MSVC})
+        set_source_files_properties(${VENDORS_PATH}/jpeg-compressor/jpgd.cpp PROPERTIES COMPILE_FLAGS "/wd458")
     endif ()
 
     set (HEADERS ${HEADERS}
@@ -308,7 +307,7 @@ if (${_CODEHERO_DRIVER_ASSIMP})
          ${SRCS_PATH}/drivers/assimp/modelcodec_assimp.h
     )
 
-    if (NOT ${MSVC})
+    if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         set_source_files_properties(${VENDORS_PATH}/assimp/code/AssbinExporter.cpp PROPERTIES COMPILE_FLAGS "-Wno-strict-aliasing")
         set_source_files_properties(${VENDORS_PATH}/assimp/code/AssbinLoader.cpp PROPERTIES COMPILE_FLAGS "-Wno-unused-variable")
         set_source_files_properties(${VENDORS_PATH}/assimp/code/AssxmlExporter.cpp PROPERTIES COMPILE_FLAGS "-Wno-unused-variable")
