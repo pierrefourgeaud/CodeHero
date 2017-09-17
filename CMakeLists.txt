@@ -308,6 +308,16 @@ if (${_CODEHERO_DRIVER_ASSIMP})
          ${SRCS_PATH}/drivers/assimp/modelcodec_assimp.h
     )
 
+    if (NOT ${MSVC})
+    set_source_files_properties(${VENDORS_PATH}assimp/code/CMakeFiles/assimp.dir/AssbinExporter.cpp PROPERTIES COMPILE_FLAGS "-Wno-strict-aliasing")
+    set_source_files_properties(${VENDORS_PATH}assimp/code/CMakeFiles/assimp.dir/AssbinLoader.cpp PROPERTIES COMPILE_FLAGS "-Wno-unused-variable")
+    set_source_files_properties(${VENDORS_PATH}assimp/code/CMakeFiles/assimp.dir/AssxmlExporter.cpp PROPERTIES COMPILE_FLAGS "-Wno-unused-variable")
+    set_source_files_properties(${VENDORS_PATH}assimp/code/CMakeFiles/assimp.dir/ColladaParser.cpp PROPERTIES COMPILE_FLAGS "-Wno-unused-variable")
+    set_source_files_properties(${VENDORS_PATH}assimp/code/CMakeFiles/assimp.dir/ColladaExporter.cpp PROPERTIES COMPILE_FLAGS "-Wno-switch")
+    set_source_files_properties(${VENDORS_PATH}assimp/code/CMakeFiles/assimp.dir/OpenGEXImporter.cpp PROPERTIES COMPILE_FLAGS "-Wno-char-subscripts")
+    set_source_files_properties(${VENDORS_PATH}assimp/code/CMakeFiles/assimp.dir/BlenderScene.cpp PROPERTIES COMPILE_FLAGS "-Wno-strict-aliasing")
+    endif ()
+
     add_definitions (-DDRIVER_ASSIMP)
     set (ADDITIONAL_LIBRARIES ${ADDITIONAL_LIBRARIES} assimp)
 endif ()
