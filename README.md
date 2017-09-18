@@ -26,11 +26,13 @@ to do so:
 * Integrate a physics engine
 * Add support for Audio
 * Particle system
+* Add networking
 * Scripting (Lua ? JS ? C# ?)
 * Editor
 * More tooling
 * Add support for modern D3D12
 * Add support for Vulkan
+* Support for VR ? Using MiddleVR ?
 * Documentation: How to compile, how to create project, how to contribute, general architecture, ...
 * Better window/input management. Probably moving from GLFW to in-house drivers.
 
