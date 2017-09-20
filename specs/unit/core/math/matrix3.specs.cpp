@@ -28,5 +28,29 @@ go_bandit([]() {
                 AssertThat(test.Get(2, 2), Equals(1.0f));
             });
         });
+
+        describe("::operator==", [] {
+            it("should return true if 2 matrices are equal", [] {
+                Matrix lhs(1.0f, 2.0f, 3.0f,
+                           4.0f, 5.0f, 6.0f,
+                           7.0f, 8.0f, 9.0f);
+                Matrix lhs(1.0f, 2.0f, 3.0f,
+                           4.0f, 5.0f, 6.0f,
+                           7.0f, 8.0f, 9.0f);
+
+                AssertThat(lhs == rhs, Is().True());
+            });
+
+            it("should return true if 2 matrices are equal", [] {
+                Matrix lhs(1.0f, 2.0f, 3.0f,
+                           4.0f, 5.0f, 6.0f,
+                           7.0f, 8.0f, 9.0f);
+                Matrix lhs(9.0f, 8.0f, 7.0f,
+                           6.0f, 5.0f, 4.0f,
+                           3.0f, 2.0f, 1.0f);
+
+                AssertThat(lhs == rhs, Is().False());
+            });
+        });
     });
 });
