@@ -52,5 +52,18 @@ go_bandit([]() {
                 AssertThat(lhs == rhs, Is().False());
             });
         });
+
+        describe("::operator-", [] {
+            it("should negate all members of the matrix", [] {
+                Matrix lhs(1.0f, 2.0f, 3.0f,
+                           4.0f, 5.0f, 6.0f,
+                           7.0f, 8.0f, 9.0f);
+                Matrix rhs(-1.0f, -2.0f, -3.0f,
+                           -4.0f, -5.0f, -6.0f,
+                           -7.0f, -8.0f, -9.0f);
+
+                AssertThat(-lhs == rhs, Is().True());
+            });
+        });
     });
 });
