@@ -31,23 +31,23 @@ go_bandit([]() {
 
         describe("::operator==", [] {
             it("should return true if 2 matrices are equal", [] {
-                Matrix lhs(1.0f, 2.0f, 3.0f,
-                           4.0f, 5.0f, 6.0f,
-                           7.0f, 8.0f, 9.0f);
-                Matrix rhs(1.0f, 2.0f, 3.0f,
-                           4.0f, 5.0f, 6.0f,
-                           7.0f, 8.0f, 9.0f);
+                Matrix3 lhs(1.0f, 2.0f, 3.0f,
+                            4.0f, 5.0f, 6.0f,
+                            7.0f, 8.0f, 9.0f);
+                Matrix3 rhs(1.0f, 2.0f, 3.0f,
+                            4.0f, 5.0f, 6.0f,
+                            7.0f, 8.0f, 9.0f);
 
                 AssertThat(lhs == rhs, Is().True());
             });
 
             it("should return true if 2 matrices are equal", [] {
-                Matrix lhs(1.0f, 2.0f, 3.0f,
-                           4.0f, 5.0f, 6.0f,
-                           7.0f, 8.0f, 9.0f);
-                Matrix rhs(9.0f, 8.0f, 7.0f,
-                           6.0f, 5.0f, 4.0f,
-                           3.0f, 2.0f, 1.0f);
+                Matrix3 lhs(1.0f, 2.0f, 3.0f,
+                            4.0f, 5.0f, 6.0f,
+                            7.0f, 8.0f, 9.0f);
+                Matrix3 rhs(9.0f, 8.0f, 7.0f,
+                            6.0f, 5.0f, 4.0f,
+                            3.0f, 2.0f, 1.0f);
 
                 AssertThat(lhs == rhs, Is().False());
             });
@@ -55,12 +55,12 @@ go_bandit([]() {
 
         describe("::operator-", [] {
             it("should negate all members of the matrix", [] {
-                Matrix lhs(1.0f, 2.0f, 3.0f,
-                           4.0f, 5.0f, 6.0f,
-                           7.0f, 8.0f, 9.0f);
-                Matrix rhs(-1.0f, -2.0f, -3.0f,
-                           -4.0f, -5.0f, -6.0f,
-                           -7.0f, -8.0f, -9.0f);
+                Matrix3 lhs(1.0f, 2.0f, 3.0f,
+                            4.0f, 5.0f, 6.0f,
+                            7.0f, 8.0f, 9.0f);
+                Matrix3 rhs(-1.0f, -2.0f, -3.0f,
+                            -4.0f, -5.0f, -6.0f,
+                            -7.0f, -8.0f, -9.0f);
 
                 AssertThat(-lhs == rhs, Is().True());
             });
