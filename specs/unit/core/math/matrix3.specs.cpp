@@ -4,6 +4,7 @@
 
 #include <bandit/bandit.h>
 #include "core/math/matrix3.h"
+#include "core/math/vector3.h"
 
 using namespace bandit;
 using namespace snowhouse;
@@ -50,6 +51,34 @@ go_bandit([]() {
                             3.0f, 2.0f, 1.0f);
 
                 AssertThat(lhs == rhs, Is().False());
+            });
+        });
+
+        describe("::operator*", [] {
+            it("should multiply with another Matrix3", [] {
+                Matrix3 lhs(1.0f, 2.0f, 3.0f,
+                            4.0f, 5.0f, 6.0f,
+                            7.0f, 8.0f, 9.0f);
+                Matrix3 rhs(1.0f, 2.0f, 3.0f,
+                            4.0f, 5.0f, 6.0f,
+                            7.0f, 8.0f, 9.0f);
+
+                Matrix3 result(30.0f,  36.0f,  42.0f,
+                               66.0f,  81.0f,  96.0f,
+                               102.0f, 126.0f, 150.0f);
+
+                AssertThat(lhs * rhs, Equals(result));
+            });
+
+            it("should multiply with vector3", [] {
+                Matrix3 lhs(1.0f, 2.0f, 3.0f,
+                            4.0f, 5.0f, 6.0f,
+                            7.0f, 8.0f, 9.0f);
+                Vector3 rhs(1.0f, 2.0f, 3.0f);
+
+                Vector3 result(14.0f,  32.0f,  50.0f);
+
+                AssertThat(lhs * rhs, Equals(result));
             });
         });
 
