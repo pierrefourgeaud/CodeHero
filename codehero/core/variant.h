@@ -5,6 +5,7 @@
 #ifndef CODEHERO_CORE_VARIANT_H_
 #define CODEHERO_CORE_VARIANT_H_
 
+#include <string>
 #include "core/math/vector3.h"
 
 namespace CodeHero {
@@ -20,6 +21,7 @@ public:
             VVT_Char,
             VVT_Float,
             VVT_Double,
+            VVT_String,
             VVT_Vector3
         };
 
@@ -27,6 +29,7 @@ public:
         char m_Char;
         float m_Float;
         double m_Double;
+        std::string m_String;
         Vector3 m_Vector3;
 
         Value() {}
@@ -42,12 +45,14 @@ public:
     explicit Variant(char iValue);
     explicit Variant(float iValue);
     explicit Variant(double iValue);
+    explicit Variant(const std::string& iValue);
     explicit Variant(const Vector3& iValue);
 
     int GetInt() const;
     char GetChar() const;
     float GetFloat() const;
     double GetDouble() const;
+    std::string GetString() const;
     Vector3 GetVector3() const;
 
     // Base template method
@@ -67,6 +72,7 @@ template <> int Variant::Get<int>() const;
 template <> char Variant::Get<char>() const;
 template <> float Variant::Get<float>() const;
 template <> double Variant::Get<double>() const;
+template <> std::string Variant::Get<std::string>() const;
 template <> Vector3 Variant::Get<Vector3>() const;
 
 } // namespace CodeHero

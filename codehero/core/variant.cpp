@@ -7,7 +7,6 @@
 namespace CodeHero {
 
 Variant::Variant() {}
-
 Variant::~Variant() {}
 
 Variant::Variant(int iValue) {
@@ -28,6 +27,11 @@ Variant::Variant(float iValue) {
 Variant::Variant(double iValue) {
     m_Value.m_Double = iValue;
     m_Type = Value::Type::VVT_Double;
+}
+
+Variant::Variant(const std::string& iValue) {
+    m_Value.m_String = iValue;
+    m_Type = Value::Type::VVT_String;
 }
 
 Variant::Variant(const Vector3& iValue) {
@@ -75,6 +79,15 @@ double Variant::GetDouble() const {
     return 0.0;
 }
 
+std::string Variant::GetString() const {
+    if (m_Type == Value::Type::VVT_String) {
+        return m_Value.m_String;
+    }
+
+    // Default to ""
+    return "";
+}
+
 Vector3 Variant::GetVector3() const {
     if (m_Type == Value::Type::VVT_Vector3) {
         return m_Value.m_Vector3;
@@ -98,6 +111,10 @@ template <> float Variant::Get<float>() const {
 
 template <> double Variant::Get<double>() const {
     return GetDouble();
+}
+
+template <> std::string Variant::Get<std::string>() const {
+    return GetString();
 }
 
 template <> Vector3 Variant::Get<Vector3>() const {
