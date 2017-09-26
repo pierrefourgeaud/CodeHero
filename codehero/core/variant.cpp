@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "core/variant.h"
+#include <logger.h>
 
 namespace CodeHero {
 
@@ -19,6 +20,41 @@ Variant::~Variant() {
     default:
         break;
     }
+}
+
+Variant::Variant(const Variant& iRhs) {
+    m_Type = iRhs.m_Type;
+    switch (iRhs.m_Type) {
+    case Value::VVT_Int:
+        m_Value.m_Int = iRhs.m_Value.m_Int;
+        break;
+    case Value::VVT_Char:
+        m_Value.m_Char = iRhs.m_Value.m_Char;
+        break;
+    case Value::VVT_Float:
+        m_Value.m_Float = iRhs.m_Value.m_Float;
+        break;
+    case Value::VVT_Double:
+        m_Value.m_Double = iRhs.m_Value.m_Double;
+        break;
+    case Value::VVT_String:
+        m_Value.m_String = iRhs.m_Value.m_String;
+        break;
+    case Value::VVT_Vector3:
+        m_Value.m_Vector3 = iRhs.m_Value.m_Vector3;
+        break;
+    default:
+        // Default to int
+        LOGW << "Variant: Attempted to copy variant that wasn't initialized... Default to Int" << std::endl;
+        m_Value.m_Int = 0;
+        m_Type = Value::VVT_Int;
+        break;
+    }
+}
+
+Variant& Variant::operator=(Variant iRhs) {
+    std::swap(*this, iRhs);
+    return *this;
 }
 
 Variant::Variant(int iValue) {

@@ -41,6 +41,11 @@ public:
     Variant();
     ~Variant();
 
+    // Copy
+    Variant(const Variant& iRhs);
+    // Passing by value is intentional here
+    Variant& operator=(Variant iRhs);
+
     explicit Variant(int iValue);
     explicit Variant(char iValue);
     explicit Variant(float iValue);
