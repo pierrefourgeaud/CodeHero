@@ -12,22 +12,22 @@ Light::Light(const std::shared_ptr<EngineContext>& iContext, Type iType)
     : Drawable(iContext, Drawable::DrawableType::DT_Light)
     , m_LightType(iType) {}
 
-void Light::SetType(const std::string& iType) {
+void Light::SetTypeString(const std::string& iType) {
     if (iType == "T_Directional") {
         m_LightType = T_Directional;
     } else if (iType == "T_Point") {
         m_LightType = T_Point;
     } else if (iType == "T_Spot") {
         m_LightType = T_Spot;
+    } else {
+        LOGE << "Light: Wrong light type [" << iType << "]" << std::endl;
+        CH_ASSERT(false);
     }
-
-    LOGE << "Light: Wrong light type [" << iType << "]" << std::endl;
-    CH_ASSERT(false);
 }
 
 std::string Light::GetTypeString() const {
     switch (m_LightType) {
-    case T_Directional: return "T_Directional;";
+    case T_Directional: return "T_Directional";
     case T_Point: return "T_Point";
     case T_Spot: return "T_Spot";
     default:

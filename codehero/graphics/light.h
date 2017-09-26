@@ -33,7 +33,7 @@ public:
     const Vector3& GetDirection() const;
 
     void SetType(const Type& iType) { m_LightType = iType; }
-    void SetType(const std::string& iType);
+    void SetTypeString(const std::string& iType);
 
     Type GetType() const { return m_LightType; }
     std::string GetTypeString() const;
