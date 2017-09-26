@@ -90,6 +90,7 @@ set (SOURCES
      ${SRCS_PATH}/core/fileaccess.cpp
      ${SRCS_PATH}/core/filesystem.cpp
      ${SRCS_PATH}/core/image.cpp
+     ${SRCS_PATH}/core/object.cpp
      ${SRCS_PATH}/core/objectdefinition.cpp
      ${SRCS_PATH}/core/time.cpp
      ${SRCS_PATH}/core/math/vector2.cpp

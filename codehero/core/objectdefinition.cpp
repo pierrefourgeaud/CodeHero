@@ -6,8 +6,9 @@
 
 namespace CodeHero {
 
-ObjectDefinition::ObjectDefinition(const std::shared_ptr<EngineContext>& iContext)
-    : m_pContext(iContext) {}
+ObjectDefinition::ObjectDefinition(const std::shared_ptr<EngineContext>& iContext, const std::string& iName)
+    : m_pContext(iContext)
+    , m_Name(iName) {}
 
 ObjectDefinition::~ObjectDefinition() {}
 
@@ -17,9 +18,11 @@ ObjectDefinition& ObjectDefinition::RegisterFactory(const ObjectFactory& iFactor
 }
 
 ObjectDefinition& ObjectDefinition::AddAttribute(const std::string& iName,
-                                                 Variant::Value::Type iType) {
+                                                 Variant::Value::Type iType,
+                                                 const std::shared_ptr<AttributeAccessor>& iAccessor) {
     AttributeInfo attrib;
     attrib.SetType(iType);
+    attrib.SetAccessor(iAccessor);
 
     m_Attributes[iName] = attrib;
 

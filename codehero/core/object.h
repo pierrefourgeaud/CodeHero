@@ -7,11 +7,13 @@
 
 #include <memory>
 #include <string>
+#include <unordered_map>
 
 namespace CodeHero {
 
 // Forward declaration
 class EngineContext;
+class ObjectDefinition;
 
 /**
  * class TypeInfo
@@ -49,8 +51,14 @@ public:
         return nullType;
     }
 
+    static std::shared_ptr<ObjectDefinition> CreateDefinition(const std::shared_ptr<EngineContext>& iContext,
+                                                              const std::string& iName);
+    static std::shared_ptr<ObjectDefinition> GetDefinition(const std::string& iName);
+
 protected:
     std::shared_ptr<EngineContext> m_pContext;
+
+    static std::unordered_map<std::string, std::shared_ptr<ObjectDefinition>> m_Definitions;
 };
 
 } // namespace CodeHero
@@ -70,5 +78,14 @@ protected:
         static const auto typeInfoStatic = std::make_shared<TypeInfo>(#className + T::GetTypeNameStatic(), baseClassName::GetTypeInfoStatic()); \
         return typeInfoStatic; \
     } \
+
+// Needs to be called for object that contains static ::Create(const shared_ptr<EngineContext>&);
+#define CH_REGISTER_OBJECT(Class) \
+    auto objectDef = Object::CreateDefinition(iContext, #Class); \
+    objectDef->RegisterFactory(Class::Create);
+
+// Needs to be called only after a CH_REGISTER_OBJECT (the objectDef is used here)
+#define CH_OBJECT_ATTRIBUTE(Class, Name, Type, VariantType, GetFunction, SetFunction) \
+    objectDef->AddAttribute(Name, VariantType, MakeAccessorImpl<Class, Type>(GetFunction, SetFunction));
 
 #endif // CODEHERO_CORE_OBJECT_H_
