@@ -21,7 +21,6 @@ public:
     ~SerializableCodecXML();
 
     Error Load(FileAccess& iF, Serializable& oObject) override;
-private:
 };
 
 }  // namespace CodeHero

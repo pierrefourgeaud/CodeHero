@@ -14,6 +14,7 @@
 #include "core/image.h"
 #include "core/time.h"
 #include "core/scopecleaner.h"
+#include "core/serializable.h"
 
 #include "graphics/renderwindow.h"
 #include "graphics/viewport.h"
@@ -63,8 +64,12 @@
 # include "drivers/assimp/modelcodec_assimp.h"
 #endif // DRIVER_ASSIMP
 
+#ifdef DRIVER_PUGIXML
+# include "drivers/xml/serializablecodec_xml.h"
+#endif // DRIVER_PUGIXML
+
 const uint32_t g_Width = 1920;
-const uint32_t g_Height = 960;
+const uint32_t g_Height = 1260;
 
 namespace CodeHero {
 
@@ -82,6 +87,9 @@ Error Main::Start() {
     // Create the context that will be the base of everything coming after
     m_pContext = std::shared_ptr<EngineContext>(new EngineContext);
 
+    // Register objects first
+    Light::RegisterObject(m_pContext);
+
     // Initialize the time as soon as possible
     Time* time = new Time(m_pContext);
     time->Initialize();
@@ -94,6 +102,10 @@ Error Main::Start() {
     ResourceLoader<Model>* rlModel = new ResourceLoader<Model>(m_pContext);
     rlModel->Initialize();
     m_pContext->RegisterSubsystem(rlModel);
+
+    ResourceLoader<Serializable>* rlSerializable = new ResourceLoader<Serializable>(m_pContext);
+    rlSerializable->Initialize();
+    m_pContext->RegisterSubsystem(rlSerializable);
 
     // m_pRS.reset(new RenderSystemGL);
     RenderSystem* rs = new RenderSystemGL(m_pContext);
@@ -192,11 +204,8 @@ Error Main::Run() {
     std::shared_ptr<Scene> scene = std::make_shared<Scene>();
 
     auto dirLightNode = scene->CreateChild();
-    auto dirLight = dirLightNode->CreateDrawable<Light>(m_pContext, Light::Type::T_Directional)
-        ->SetDirection({-0.2f, -1.0f, 0.3f})
-        .SetAmbientIntensity(0.45f)
-        .SetDiffuseIntensity(0.8f)
-        .SetSpecularIntensity(0.5f);
+    auto dirLight = dirLightNode->CreateDrawable<Light>(m_pContext, Light::T_Directional);
+    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/dir_light1.xml", *dirLight.get());
 
     std::vector<Light> pointLights;
     for (size_t i = 0; i < 4; ++i) {
@@ -481,6 +490,10 @@ void Main::_LoadDrivers() {
 #ifdef DRIVER_ASSIMP
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->AddCodec(new ModelCodecAssimp(m_pContext));
 #endif // DRIVER_ASSIMP
+
+#ifdef DRIVER_PUGIXML
+    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->AddCodec(new SerializableCodecXML(m_pContext));
+#endif // DRIVER_PUGIXML
     LOGI << "Drivers loaded..." << std::endl;
 }
 
@@ -488,6 +501,7 @@ void Main::_UnloadDrivers() {
     LOGI << "Unloading drivers..." << std::endl;
     m_pContext->GetSubsystem<ResourceLoader<Image>>()->ClearCodecs();
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->ClearCodecs();
+    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->ClearCodecs();
     LOGI << "Drivers unloaded..." << std::endl;
 }
 
