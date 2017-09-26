@@ -5,15 +5,17 @@
 #ifndef CODEHERO_GRAPHICS_DRAWABLE_H_
 #define CODEHERO_GRAPHICS_DRAWABLE_H_ 
 
-#include "core/object.h"
+#include "core/serializable.h"
 
 namespace CodeHero {
 
 // Forward declaration
 class Node;
 
-class Drawable : public Object {
+class Drawable : public Serializable {
 public:
+    OBJECT(Drawable, Serializable);
+
     enum DrawableType {
         DT_Light,
         DT_Geometry,
@@ -21,7 +23,7 @@ public:
     };
 
     Drawable(const std::shared_ptr<EngineContext>& iContext, DrawableType iType)
-        : Object(iContext)
+        : Serializable(iContext)
         , m_Type(iType) {}
     virtual ~Drawable() {}
 

@@ -28,6 +28,9 @@ public:
     Light(const std::shared_ptr<EngineContext>& iContext, Type iType);
     virtual ~Light() {}
 
+    static void RegisterObject(const std::shared_ptr<EngineContext>& iContext);
+    static std::shared_ptr<Light> Create(const std::shared_ptr<EngineContext>& iContext);
+
     // Getter/Setter
     Light& SetDirection(const Vector3& iDirection);
     const Vector3& GetDirection() const;
