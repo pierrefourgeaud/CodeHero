@@ -253,7 +253,7 @@ if (${_CODEHERO_DRIVER_JPG})
     if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         set_source_files_properties(${VENDORS_PATH}/jpeg-compressor/jpgd.cpp PROPERTIES COMPILE_FLAGS "-Wno-shift-negative-value -Wno-unused-parameter")
     elseif (${MSVC})
-        set_source_files_properties(${VENDORS_PATH}/jpeg-compressor/jpgd.cpp PROPERTIES COMPILE_FLAGS "/wd458")
+        set_source_files_properties(${VENDORS_PATH}/jpeg-compressor/jpgd.cpp PROPERTIES COMPILE_FLAGS "/wd4458")
     endif ()
 
     set (HEADERS ${HEADERS}
