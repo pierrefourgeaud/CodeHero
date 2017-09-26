@@ -17,6 +17,9 @@ public:
     float x() const { return m_Vec[0]; }
     float y() const { return m_Vec[1]; }
     float z() const { return m_Vec[2]; }
+    void SetX(float iX) { m_Vec[0] = iX; }
+    void SetY(float iY) { m_Vec[1] = iY; }
+    void SetZ(float iZ) { m_Vec[2] = iZ; }
 
     void ToIdentity() { m_Vec[0] = m_Vec[1] = m_Vec[2] = 0.0f; }
 
