@@ -7,7 +7,19 @@
 namespace CodeHero {
 
 Variant::Variant() {}
-Variant::~Variant() {}
+Variant::~Variant() {
+    using std::string;
+    switch (m_Type) {
+    case Value::VVT_String:
+        m_Value.m_String.~string();
+        break;
+    case Value::VVT_Vector3:
+        m_Value.m_Vector3.~Vector3();
+        break;
+    default:
+        break;
+    }
+}
 
 Variant::Variant(int iValue) {
     m_Value.m_Int = iValue;
@@ -30,6 +42,7 @@ Variant::Variant(double iValue) {
 }
 
 Variant::Variant(const std::string& iValue) {
+    new (&m_Value.m_String) std::string();
     m_Value.m_String = iValue;
     m_Type = Value::Type::VVT_String;
 }
