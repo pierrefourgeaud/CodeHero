@@ -94,5 +94,38 @@ go_bandit([]() {
                 AssertThat(-lhs == rhs, Is().True());
             });
         });
+
+        describe("::Transpose", [] {
+            it("should transpose the matrix in place and return a reference", [] {
+                Matrix3 input(1.0f, 2.0f, 3.0f,
+                              4.0f, 5.0f, 6.0f,
+                              7.0f, 8.0f, 9.0f);
+                Matrix3 output(1.0f, 4.0f, 7.0f,
+                               2.0f, 5.0f, 8.0f,
+                               3.0f, 6.0f, 9.0f);
+                
+                Matrix3 res = input.Transpose();
+
+                AssertThat(input, Equals(output));
+                AssertThat(res, Equals(output));
+            });
+        });
+
+        describe("::Transposed", [] {
+            it("should transpose the matrix and return a new object. Input not modified.", [] {
+                Matrix3 input(1.0f, 2.0f, 3.0f,
+                              4.0f, 5.0f, 6.0f,
+                              7.0f, 8.0f, 9.0f);
+                Matrix3 save = input; // Copy to make sure that the source is not modified
+                Matrix3 output(1.0f, 4.0f, 7.0f,
+                               2.0f, 5.0f, 8.0f,
+                               3.0f, 6.0f, 9.0f);
+                
+                Matrix3 res = input.Transposed();
+
+                AssertThat(input, Equals(save));
+                AssertThat(res, Equals(output));
+            });
+        });
     });
 });
