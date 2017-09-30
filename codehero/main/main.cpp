@@ -9,7 +9,6 @@
 
 #include "core/enginecontext.h"
 
-#include "core/shaderprogram.h"
 #include "core/resourceloader.h"
 #include "core/image.h"
 #include "core/time.h"
@@ -27,6 +26,7 @@
 #include "graphics/cube.h"
 #include "graphics/plane.h"
 #include "graphics/batch.h"
+#include "graphics/shaderprogram.h"
 #include "graphics/skybox.h"
 
 #include "input/input.h"

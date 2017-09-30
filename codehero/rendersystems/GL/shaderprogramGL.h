@@ -7,7 +7,7 @@
 
 #include <glad/glad.h>
 #include <unordered_map>
-#include "core/shaderprogram.h"
+#include "graphics/shaderprogram.h"
 #include "core/errors.h"
 
 namespace CodeHero {

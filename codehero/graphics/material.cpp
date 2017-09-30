@@ -4,7 +4,7 @@
 
 #include "graphics/material.h"
 #include "graphics/rendersystem.h"
-#include "core/shaderprogram.h"
+#include "graphics/shaderprogram.h"
 #include "core/texture.h"
 
 namespace CodeHero {

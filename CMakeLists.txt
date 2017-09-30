@@ -151,7 +151,6 @@ set (HEADERS
      ${SRCS_PATH}/core/time.h
      ${SRCS_PATH}/core/typedefs.h
      ${SRCS_PATH}/core/utils.h
-     ${SRCS_PATH}/core/shaderprogram.h
      ${SRCS_PATH}/core/fileaccess.h
      ${SRCS_PATH}/core/filesystem.h
      ${SRCS_PATH}/core/gpuobject.h
@@ -192,6 +191,7 @@ set (HEADERS
      ${SRCS_PATH}/graphics/rendersystem.h
      ${SRCS_PATH}/graphics/renderwindow.h
      ${SRCS_PATH}/graphics/scene.h
+     ${SRCS_PATH}/graphics/shaderprogram.h
      ${SRCS_PATH}/graphics/skybox.h
      ${SRCS_PATH}/core/texturemanager.h
      ${SRCS_PATH}/core/texture.h
