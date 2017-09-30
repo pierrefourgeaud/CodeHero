@@ -11,6 +11,7 @@
 #include "graphics/viewport.h"
 #include "rendersystems/GL/rendersystemGL.h"
 #include "rendersystems/GL/renderwindowGL.h"
+#include "rendersystems/GL/shaderGL.h"
 #include "rendersystems/GL/shaderprogramGL.h"
 #include "rendersystems/GL/textureGL.h"
 #include "rendersystems/GL/indexbufferGL.h"
@@ -320,8 +321,12 @@ Texture* RenderSystemGL::CreateTexture(Texture::Type iType/* = T_2D*/) {
     return new TextureGL(m_pContext, iType);
 }
 
-ShaderProgram* RenderSystemGL::CreateShader() {
-    return new ShaderProgramGL(*this);
+std::shared_ptr<Shader> RenderSystemGL::CreateShader() {
+    return std::make_shared<ShaderGL>();
+}
+
+std::shared_ptr<ShaderProgram> RenderSystemGL::CreateShaderProgram() {
+    return std::make_shared<ShaderProgramGL>(*this);
 }
 
 VertexBuffer* RenderSystemGL::CreateVertexBuffer() {

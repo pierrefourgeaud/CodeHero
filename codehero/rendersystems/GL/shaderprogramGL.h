@@ -22,7 +22,7 @@ public:
     ShaderProgramGL(RenderSystem& iRenderSystem);
     ~ShaderProgramGL();
 
-    ShaderProgram& Attach(const std::string& iFilename, const std::unordered_map<std::string, std::string>& iDefines = {}) override;
+    ShaderProgram& Attach(const std::shared_ptr<Shader>& iShader) override;
     ShaderProgram& Link() override;
 
     void Use() override;
@@ -31,13 +31,7 @@ public:
     const ShaderParameter& GetParameter(const std::string& iParamName);
 
 private:
-    std::string _GetShader(const std::string& iShaderPath);
-    GLuint _CreateShader(const std::string& iCode);
-    bool _CompileShader(GLuint iShader, const std::string& iShaderCode);
     void _ParseParameters();
-
-    Error _AddDefines(std::string& ioCode, const std::unordered_map<std::string, std::string>& iDefines);
-    Error _ReplaceIncludes(const std::string& iParentFile, const std::string& iSourceCode, std::string& oCode);
 
     std::unordered_map<std::string, ShaderParameter> m_Parameters;
 };

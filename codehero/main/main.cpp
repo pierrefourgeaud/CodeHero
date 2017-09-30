@@ -26,6 +26,7 @@
 #include "graphics/cube.h"
 #include "graphics/plane.h"
 #include "graphics/batch.h"
+#include "graphics/shader.h"
 #include "graphics/shaderprogram.h"
 #include "graphics/skybox.h"
 
@@ -150,10 +151,12 @@ Error Main::Run() {
 
     ui.AddChild(t);
 
-    ShaderProgram* textShader = rs->CreateShader();
-    textShader->Attach("./codehero/shaders/text_basic.vert")
-              .Attach("./codehero/shaders/text_basic.frag")
-              .Link();
+    auto textShaderVert = rs->CreateShader();
+    textShaderVert->Load("./codehero/shaders/text_basic.vert").Compile();
+    auto textShaderFrag = rs->CreateShader();
+    textShaderFrag->Load("./codehero/shaders/text_basic.frag").Compile();
+    auto textShader = rs->CreateShaderProgram();
+    textShader->Attach(textShaderVert).Attach(textShaderFrag).Link();
     textShader->Use();
     Matrix4 ortho = Matrix4::MakeProjectionOrtho(0, g_Width, 0, g_Height);
     rs->SetShaderParameter("projection", ortho);
@@ -221,27 +224,37 @@ Error Main::Run() {
         pointLights.push_back(pointLight);
     }
 
-    std::shared_ptr<ShaderProgram> crateShader(rs->CreateShader());
-    crateShader->Attach("./codehero/shaders/textured.vert")
-                .Attach("./codehero/shaders/textured.frag", {
-                    {"NB_DIRECTIONAL_LIGHTS", "1"},
-                    {"NB_POINT_LIGHTS", std::to_string(pointLights.size())},
-                })
+    auto texturedShaderVert = rs->CreateShader();
+    texturedShaderVert->Load("./codehero/shaders/textured.vert").Compile();
+    auto texturedShaderNoAlphaFrag = rs->CreateShader();
+    texturedShaderNoAlphaFrag->Load("./codehero/shaders/textured.frag")
+                              .SetDefines({
+                                  {"NB_DIRECTIONAL_LIGHTS", "1"},
+                                  {"NB_POINT_LIGHTS", std::to_string(pointLights.size())},
+                              })
+                              .Compile();
+    auto crateShader = rs->CreateShaderProgram();
+    crateShader->Attach(texturedShaderVert)
+                .Attach(texturedShaderNoAlphaFrag)
                 .Link();
 
-    std::shared_ptr<ShaderProgram> grassShader(rs->CreateShader());
-    grassShader->Attach("./codehero/shaders/textured.vert")
-                .Attach("./codehero/shaders/textured.frag", {
-                    { "NB_DIRECTIONAL_LIGHTS", "1" },
-                    { "NB_POINT_LIGHTS", std::to_string(pointLights.size()) },
-                    { "ALPHAMASK", ""}
-                })
-                .Link();
+    auto texturedShaderFrag = rs->CreateShader();
+    texturedShaderFrag->Load("./codehero/shaders/textured.frag")
+                       .SetDefines({
+                           {"NB_DIRECTIONAL_LIGHTS", "1"},
+                           {"NB_POINT_LIGHTS", std::to_string(pointLights.size())},
+                           { "ALPHAMASK", ""}
+                       })
+                       .Compile();
+    auto grassShader = rs->CreateShaderProgram();
+    grassShader->Attach(texturedShaderVert).Attach(texturedShaderFrag).Link();
 
-    std::shared_ptr<ShaderProgram> skyboxShader(rs->CreateShader());
-    skyboxShader->Attach("./codehero/shaders/skybox.vert")
-                 .Attach("./codehero/shaders/skybox.frag")
-                 .Link();
+    auto skyboxShaderVert = rs->CreateShader();
+    skyboxShaderVert->Load("./codehero/shaders/skybox.vert").Compile();
+    auto skyboxShaderFrag = rs->CreateShader();
+    skyboxShaderFrag->Load("./codehero/shaders/skybox.frag").Compile();
+    auto skyboxShader = rs->CreateShaderProgram();
+    skyboxShader->Attach(skyboxShaderVert).Attach(skyboxShaderFrag).Link();
 
     Texture* skyboxTexture = rs->CreateTexture(Texture::T_Cube);
     // Should this be protected to be called always before setting picture
