@@ -56,7 +56,7 @@ private:
  * This is used for SetMethods only when Getting the attribute is not possible
  */
 template <class Class, class Type, class SetFn>
-class AttributeAccessorImpl<Class, Type, nullptr_t, SetFn> : public AttributeAccessor {
+class AttributeAccessorImpl<Class, Type, std::nullptr_t, SetFn> : public AttributeAccessor {
 public:
     AttributeAccessorImpl(void*, SetFn iSet)
         : m_pSet(iSet) {}
