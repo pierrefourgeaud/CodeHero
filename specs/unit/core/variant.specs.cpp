@@ -59,6 +59,14 @@ go_bandit([]() {
                 AssertThat(test.GetType(), Equals(Variant::Value::Type::VVT_Vector3));
                 AssertThat(test.GetValue().m_Vector3, Equals(value));
             });
+
+            it("should initialize hashmap with proper type and right value", [] {
+                VariantHashMap value({{"test", "value"}});
+                Variant test(value);
+
+                AssertThat(test.GetType(), Equals(Variant::Value::Type::VVT_HashMap));
+                AssertThat(test.GetValue().m_HashMap, Equals(value));
+            });
         });
 
         describe("::GetInt", [] {
@@ -181,6 +189,24 @@ go_bandit([]() {
 
                 AssertThat(test.GetVector3(), Equals(Vector3(0.0f, 0.0f, 0.0f)));
                 AssertThat(test.Get<Vector3>(), Equals(Vector3(0.0f, 0.0f, 0.0f)));
+            });
+        });
+
+        describe("::GetHashMap", [] {
+            it("should return the proper value if correct type", [] {
+                VariantHashMap value({{"test", "value"}});
+                Variant test(value);
+
+                AssertThat(test.GetHashMap(), Equals(value));
+                AssertThat(test.Get<VariantHashMap>(), Equals(value));
+            });
+
+            it("should return empth hashmap if type is not hashmap", [] {
+                char value = 'a';
+                Variant test(value);
+
+                AssertThat(test.GetHashMap(), Equals(VariantHashMap()));
+                AssertThat(test.Get<VariantHashMap>(), Equals(VariantHashMap()));
             });
         });
     });

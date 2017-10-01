@@ -10,12 +10,16 @@ namespace CodeHero {
 Variant::Variant() {}
 Variant::~Variant() {
     using std::string;
+    using std::unordered_map;
     switch (m_Type) {
     case Value::VVT_String:
         m_Value.m_String.~string();
         break;
     case Value::VVT_Vector3:
         m_Value.m_Vector3.~Vector3();
+        break;
+    case Value::VVT_HashMap:
+        m_Value.m_HashMap.~unordered_map();
         break;
     default:
         break;
@@ -42,6 +46,9 @@ Variant::Variant(const Variant& iRhs) {
         break;
     case Value::VVT_Vector3:
         m_Value.m_Vector3 = iRhs.m_Value.m_Vector3;
+        break;
+    case Value::VVT_HashMap:
+        m_Value.m_HashMap = iRhs.m_Value.m_HashMap;
         break;
     default:
         // Default to int
@@ -86,6 +93,12 @@ Variant::Variant(const std::string& iValue) {
 Variant::Variant(const Vector3& iValue) {
     m_Value.m_Vector3 = iValue;
     m_Type = Value::Type::VVT_Vector3;
+}
+
+Variant::Variant(const VariantHashMap& iValue) {
+    new (&m_Value.m_HashMap) VariantHashMap();
+    m_Value.m_HashMap = iValue;
+    m_Type = Value::Type::VVT_HashMap;
 }
 
 int Variant::GetInt() const {
@@ -146,6 +159,15 @@ Vector3 Variant::GetVector3() const {
     return Vector3();
 }
 
+VariantHashMap Variant::GetHashMap() const {
+    if (m_Type == Value::Type::VVT_HashMap) {
+        return m_Value.m_HashMap;
+    }
+
+    // Default to empty hashmap
+    return VariantHashMap();
+}
+
 template <> int Variant::Get<int>() const {
     return GetInt();
 }
@@ -168,6 +190,10 @@ template <> std::string Variant::Get<std::string>() const {
 
 template <> Vector3 Variant::Get<Vector3>() const {
     return GetVector3();
+}
+
+template <> VariantHashMap Variant::Get<VariantHashMap>() const {
+    return GetHashMap();
 }
 
 } // namespace CodeHero
