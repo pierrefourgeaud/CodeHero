@@ -7,7 +7,10 @@
 
 namespace CodeHero {
 
-Variant::Variant() {}
+Variant::Variant() {
+    m_Type = Value::Type::VVT_None;
+}
+
 Variant::~Variant() {
     using std::string;
     using std::unordered_map;

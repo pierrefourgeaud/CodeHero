@@ -12,12 +12,20 @@ using namespace CodeHero;
 go_bandit([]() {
     describe("Variant", []() {
         describe("Constructor", []() {
+            it("should initialize to none if default ctor is used", [] {
+                Variant test;
+
+                AssertThat(test.GetType(), Equals(Variant::Value::Type::VVT_None));
+                AssertThat(test.IsNone(), Is().True());
+            });
+
             it("should initialize int with proper type and right value", [] {
                 int value = 1;
                 Variant test(value);
 
                 AssertThat(test.GetType(), Equals(Variant::Value::Type::VVT_Int));
                 AssertThat(test.GetValue().m_Int, Equals(value));
+                AssertThat(test.IsNone(), Is().False());
             });
 
             it("should initialize char with proper type and right value", [] {
@@ -26,6 +34,7 @@ go_bandit([]() {
 
                 AssertThat(test.GetType(), Equals(Variant::Value::Type::VVT_Char));
                 AssertThat(test.GetValue().m_Char, Equals(value));
+                AssertThat(test.IsNone(), Is().False());
             });
 
             it("should initialize float with proper type and right value", [] {
@@ -34,6 +43,7 @@ go_bandit([]() {
 
                 AssertThat(test.GetType(), Equals(Variant::Value::Type::VVT_Float));
                 AssertThat(test.GetValue().m_Float, Equals(value));
+                AssertThat(test.IsNone(), Is().False());
             });
 
             it("should initialize double with proper type and right value", [] {
@@ -42,6 +52,7 @@ go_bandit([]() {
 
                 AssertThat(test.GetType(), Equals(Variant::Value::Type::VVT_Double));
                 AssertThat(test.GetValue().m_Double, Equals(value));
+                AssertThat(test.IsNone(), Is().False());
             });
 
             it("should initialize string with proper type and right value", [] {
@@ -50,6 +61,7 @@ go_bandit([]() {
 
                 AssertThat(test.GetType(), Equals(Variant::Value::Type::VVT_String));
                 AssertThat(test.GetValue().m_String, Equals(value));
+                AssertThat(test.IsNone(), Is().False());
             });
 
             it("should initialize vector3 with proper type and right value", [] {
@@ -58,6 +70,7 @@ go_bandit([]() {
 
                 AssertThat(test.GetType(), Equals(Variant::Value::Type::VVT_Vector3));
                 AssertThat(test.GetValue().m_Vector3, Equals(value));
+                AssertThat(test.IsNone(), Is().False());
             });
 
             it("should initialize hashmap with proper type and right value", [] {
@@ -66,6 +79,7 @@ go_bandit([]() {
 
                 AssertThat(test.GetType(), Equals(Variant::Value::Type::VVT_HashMap));
                 AssertThat(test.GetValue().m_HashMap, Equals(value));
+                AssertThat(test.IsNone(), Is().False());
             });
         });
 

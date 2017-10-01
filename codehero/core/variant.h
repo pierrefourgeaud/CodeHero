@@ -21,7 +21,8 @@ class Variant {
 public:
     union Value {
         enum Type {
-            VVT_Int = 0,
+            VVT_None = 0,
+            VVT_Int,
             VVT_Char,
             VVT_Float,
             VVT_Double,
@@ -74,6 +75,10 @@ public:
     Value& GetValue() { return m_Value; }
     const Value& GetValue() const { return m_Value; }
     Value::Type GetType() const { return m_Type; }
+
+    bool IsNone() const {
+        return m_Type == Value::Type::VVT_None;
+    }
 
     bool IsMapType() const {
         return m_Type == Value::Type::VVT_HashMap;
