@@ -8,16 +8,25 @@
 #include <string>
 #include <unordered_map>
 #include "core/gpuobject.h"
+#include "core/serializable.h"
 
 namespace CodeHero {
 
 // Forward declaration
-class RenderSystem;
+class EngineContext;
 
-class Shader : public GPUObject {
+class Shader : public Serializable, public GPUObject {
 public:
-    Shader() {}
+    OBJECT(Shader, Serializable)
+
+    Shader(const std::shared_ptr<EngineContext>& iContext)
+        : Serializable(iContext) {}
     virtual ~Shader() {}
+
+    static void RegisterObject(const std::shared_ptr<EngineContext>& iContext);
+    static std::shared_ptr<Shader> Create(const std::shared_ptr<EngineContext>& iContext);
+
+    void EndLoad() override { Compile(); }
 
     virtual Shader& Load(const std::string& iFilePath) = 0;
     virtual Shader& SetDefines(const std::unordered_map<std::string, std::string>& iDefines) = 0;

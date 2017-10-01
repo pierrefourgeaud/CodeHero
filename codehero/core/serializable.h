@@ -29,6 +29,11 @@ public:
     Serializable(const std::shared_ptr<EngineContext>& iContext);
     virtual ~Serializable();
 
+    // It is called before the serialized object starts to load
+    virtual void BeginLoad() {}
+    // It is called after the serialized object finished to load
+    virtual void EndLoad() {}
+
     static void RegisterSerializable(const std::string& iName, const Builder& iBuilder);
 
 private:

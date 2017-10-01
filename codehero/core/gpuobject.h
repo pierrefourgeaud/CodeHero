@@ -8,20 +8,20 @@
 namespace CodeHero {
 
 class GPUObject {
-    union Object {
+    union ObjectHandle {
         unsigned int intHandle;
         void* ptrHandle;
     };
 
 public:
-    Object GetGPUObject() const { return m_Object; }
+    ObjectHandle GetGPUObject() const { return m_Object; }
 
 protected:
     void _SetGPUObject(unsigned int iObject) { m_Object = {iObject}; }
-    Object* _GetGPUObjectHandle() { return &m_Object; }
+    ObjectHandle* _GetGPUObjectHandle() { return &m_Object; }
 
 private:
-    Object m_Object = {0};
+    ObjectHandle m_Object = {0};
 };
 
 } // namespace CodeHero

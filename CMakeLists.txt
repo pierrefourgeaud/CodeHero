@@ -125,6 +125,7 @@ set (SOURCES
      ${SRCS_PATH}/graphics/rendersystem.cpp
      ${SRCS_PATH}/graphics/renderwindow.cpp
      ${SRCS_PATH}/graphics/scene.cpp
+     ${SRCS_PATH}/graphics/shader.cpp
      ${SRCS_PATH}/graphics/skybox.cpp
      ${SRCS_PATH}/core/texturemanager.cpp
      ${SRCS_PATH}/core/texture.cpp

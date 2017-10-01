@@ -90,6 +90,7 @@ Error Main::Start() {
 
     // Register objects first
     Light::RegisterObject(m_pContext);
+    Shader::RegisterObject(m_pContext);
 
     // Initialize the time as soon as possible
     Time* time = new Time(m_pContext);
@@ -227,25 +228,14 @@ Error Main::Run() {
     auto texturedShaderVert = rs->CreateShader();
     texturedShaderVert->Load("./codehero/shaders/textured.vert").Compile();
     auto texturedShaderNoAlphaFrag = rs->CreateShader();
-    texturedShaderNoAlphaFrag->Load("./codehero/shaders/textured.frag")
-                              .SetDefines({
-                                  {"NB_DIRECTIONAL_LIGHTS", "1"},
-                                  {"NB_POINT_LIGHTS", std::to_string(pointLights.size())},
-                              })
-                              .Compile();
+    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/shader_texturedFragNoAlpha.xml", *texturedShaderNoAlphaFrag.get());
     auto crateShader = rs->CreateShaderProgram();
     crateShader->Attach(texturedShaderVert)
                 .Attach(texturedShaderNoAlphaFrag)
                 .Link();
 
     auto texturedShaderFrag = rs->CreateShader();
-    texturedShaderFrag->Load("./codehero/shaders/textured.frag")
-                       .SetDefines({
-                           {"NB_DIRECTIONAL_LIGHTS", "1"},
-                           {"NB_POINT_LIGHTS", std::to_string(pointLights.size())},
-                           { "ALPHAMASK", ""}
-                       })
-                       .Compile();
+    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/shader_texturedFragAlpha.xml", *texturedShaderFrag.get());
     auto grassShader = rs->CreateShaderProgram();
     grassShader->Attach(texturedShaderVert).Attach(texturedShaderFrag).Link();
 

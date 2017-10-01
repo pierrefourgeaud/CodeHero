@@ -44,6 +44,23 @@ Vector3 ParseVector3(const std::string& iInput) {
     return res;
 }
 
+VariantHashMap ParseHashMap(const pugi::xml_object_range<pugi::xml_node_iterator>& iChildren) {
+    VariantHashMap res;
+
+    for (pugi::xml_node_iterator it = iChildren.begin(); it != iChildren.end(); ++it) {
+        if (std::strcmp(it->name(), "Define") == 0) {
+            std::string attr = it->attribute("name").as_string();
+            std::string attrVal = it->attribute("value").as_string();
+
+            res[attr] = attrVal;
+        } else {
+            LOGE << "[SerializableCodeXML]: Failed to parse hashmap attribute with name '" << it->name() << "'" << std::endl;
+        }
+    }
+
+    return std::move(res);
+}
+
 SerializableCodecXML::SerializableCodecXML(const std::shared_ptr<EngineContext>& iContext)
     : ResourceCodec<Serializable>(iContext) {
     std::vector<std::string> ext{"xml", "XML"};
@@ -82,6 +99,8 @@ Error SerializableCodecXML::Load(FileAccess& iF, Serializable& oObject) {
         return ERR_INVALID_PARAMETER;
     }
 
+    oObject.BeginLoad();
+
     for (pugi::xml_node_iterator it = root.begin(); it != root.end(); ++it) {
         // If the current node is attribute, then it is an attribute for the current object
         if (std::strcmp(it->name(), "attribute") == 0) {
@@ -104,6 +123,12 @@ Error SerializableCodecXML::Load(FileAccess& iF, Serializable& oObject) {
                 case Variant::Value::VVT_Vector3:
                     attrInfo.GetAccessor()->Set(&oObject, Variant(ParseVector3(attrVal)));
                     break;
+                case Variant::Value::VVT_HashMap:
+                    // HashMap in variant for now does support only <string, string>
+                    // When the type will evolve in a more complicated/complete version
+                    // we will need to revise this parsing
+                    attrInfo.GetAccessor()->Set(&oObject, Variant(ParseHashMap(it->children())));
+                    break;
                 default:
                     // Should not be here...
                     CH_ASSERT(false);
@@ -112,6 +137,8 @@ Error SerializableCodecXML::Load(FileAccess& iF, Serializable& oObject) {
             }
         }
     }
+
+    oObject.EndLoad();
 
     delete [] buffer;
 

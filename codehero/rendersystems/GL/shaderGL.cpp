@@ -10,7 +10,8 @@
 
 namespace CodeHero {
 
-ShaderGL::ShaderGL() {}
+ShaderGL::ShaderGL(const std::shared_ptr<EngineContext>& iContext)
+    : Shader(iContext) {}
 
 ShaderGL::~ShaderGL() {
     glDeleteShader(GetGPUObject().intHandle);

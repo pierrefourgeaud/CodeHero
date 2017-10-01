@@ -322,7 +322,7 @@ Texture* RenderSystemGL::CreateTexture(Texture::Type iType/* = T_2D*/) {
 }
 
 std::shared_ptr<Shader> RenderSystemGL::CreateShader() {
-    return std::make_shared<ShaderGL>();
+    return std::make_shared<ShaderGL>(m_pContext);
 }
 
 std::shared_ptr<ShaderProgram> RenderSystemGL::CreateShaderProgram() {

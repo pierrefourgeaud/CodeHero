@@ -13,7 +13,7 @@ namespace CodeHero {
 
 class ShaderGL : public Shader {
 public:
-    ShaderGL();
+    ShaderGL(const std::shared_ptr<EngineContext>& iContext);
     ~ShaderGL();
 
     Shader& Load(const std::string& iFilePath) override;

@@ -1,0 +1,7 @@
+<Shader>
+  <attribute name="File" value="./codehero/shaders/textured.frag" />
+  <attribute name="Defines">
+    <Define name="NB_DIRECTIONAL_LIGHTS" value="1" />
+    <Define name="NB_POINT_LIGHTS" value="4" />
+  </attribute>
+</Shader>
