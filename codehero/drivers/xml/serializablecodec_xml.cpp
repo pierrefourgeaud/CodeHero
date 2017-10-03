@@ -48,7 +48,7 @@ VariantHashMap ParseHashMap(const pugi::xml_object_range<pugi::xml_node_iterator
     VariantHashMap res;
 
     for (pugi::xml_node_iterator it = iChildren.begin(); it != iChildren.end(); ++it) {
-        if (std::strcmp(it->name(), "Define") == 0) {
+        if (std::strcmp(it->name(), "subattribute") == 0) {
             std::string attr = it->attribute("name").as_string();
             std::string attrVal = it->attribute("value").as_string();
 
