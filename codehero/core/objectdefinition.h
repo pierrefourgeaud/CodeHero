@@ -99,7 +99,7 @@ public:
         //   One way would be to use the information that we have on our type
         //   i.e: "Shader" IsTypeOf "Serializable"
         Class* classPtr = static_cast<Class*>(iPtr);
-        (classPtr->*m_pSet)(reinterpret_cast<CastTo>(iValue.Get<Type>()));
+        (classPtr->*m_pSet)(std::static_pointer_cast<CastTo>(iValue.Get<Type>()));
     }
 
 private:
@@ -124,7 +124,7 @@ public:
         //   One way would be to use the information that we have on our type
         //   i.e: "Shader" IsTypeOf "Serializable"
         Class* classPtr = static_cast<Class*>(iPtr);
-        (classPtr->*m_pSet)(reinterpret_cast<CastTo>(iValue.Get<Type>()));
+        (classPtr->*m_pSet)(std::static_pointer_cast<CastTo>(iValue.Get<Type>()));
     }
 
 private:
@@ -134,6 +134,11 @@ private:
 template <class Class, class Type, class GetFn, class SetFn>
 std::shared_ptr<AttributeAccessorImpl<Class, Type, GetFn, SetFn>> MakeAccessorImpl(GetFn iGet, SetFn iSet) {
     return std::make_shared<AttributeAccessorImpl<Class, Type, GetFn, SetFn>>(iGet, iSet);
+}
+
+template <class Class, class Type, class CastTo, class GetFn, class SetFn>
+std::shared_ptr<AttributeAccessorImplCast<Class, Type, CastTo, GetFn, SetFn>> MakeAccessorImplCast(GetFn iGet, SetFn iSet) {
+    return std::make_shared<AttributeAccessorImplCast<Class, Type, CastTo, GetFn, SetFn>>(iGet, iSet);
 }
 
 class AttributeInfo {

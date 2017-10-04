@@ -91,6 +91,7 @@ Error Main::Start() {
     // Register objects first
     Light::RegisterObject(m_pContext);
     Shader::RegisterObject(m_pContext);
+    ShaderProgram::RegisterObject(m_pContext);
 
     // Initialize the time as soon as possible
     Time* time = new Time(m_pContext);
@@ -234,10 +235,8 @@ Error Main::Run() {
                 .Attach(texturedShaderNoAlphaFrag)
                 .Link();
 
-    auto texturedShaderFrag = rs->CreateShader();
-    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/shader_texturedFragAlpha.xml", *texturedShaderFrag.get());
-    auto grassShader = rs->CreateShaderProgram();
-    grassShader->Attach(texturedShaderVert).Attach(texturedShaderFrag).Link();
+    auto shaderTexturedAlpha = rs->CreateShaderProgram();
+    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/shaderProgram_texturedAlpha.xml", *shaderTexturedAlpha.get());
 
     auto skyboxShaderVert = rs->CreateShader();
     skyboxShaderVert->Load("./codehero/shaders/skybox.vert").Compile();
@@ -286,7 +285,7 @@ Error Main::Run() {
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/small-house-diorama/Dio.obj", *houseMdl.get());
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : houseMdl->GetMeshes()) {
-        mesh->GetMaterial()->SetShaderProgram(grassShader);
+        mesh->GetMaterial()->SetShaderProgram(shaderTexturedAlpha);
         mesh->GetMaterial()->SetCullEnabled(true);
     }
 
@@ -371,7 +370,7 @@ Error Main::Run() {
     auto grass = std::make_shared<Plane>(m_pContext);
     auto grassMaterial = std::make_shared<Material>(m_pContext);
     grassMaterial->SetTexture(TU_Diffuse, std::shared_ptr<Texture>(grassDiffuse));
-    grassMaterial->SetShaderProgram(grassShader);
+    grassMaterial->SetShaderProgram(shaderTexturedAlpha);
     grass->SetMaterial(grassMaterial);
     for (auto& pos : vegetationPositions) {
         auto grassNode = scene->CreateChild();

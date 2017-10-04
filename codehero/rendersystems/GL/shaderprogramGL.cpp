@@ -5,6 +5,7 @@
 #include <exception>
 #include <string>
 #include "core/assert.h"
+#include "core/enginecontext.h"
 #include "graphics/shader.h"
 #include "graphics/rendersystem.h"
 #include "rendersystems/GL/shaderprogramGL.h"
@@ -12,8 +13,8 @@
 
 namespace CodeHero {
 
-ShaderProgramGL::ShaderProgramGL(RenderSystem& iRenderSystem)
-    : ShaderProgram(iRenderSystem) {
+ShaderProgramGL::ShaderProgramGL(const std::shared_ptr<EngineContext>& iContext)
+    : ShaderProgram(iContext) {
     _SetGPUObject(glCreateProgram());
 }
 
@@ -50,7 +51,7 @@ ShaderProgram& ShaderProgramGL::Link() {
 void ShaderProgramGL::Use() {
     glUseProgram(GetGPUObject().intHandle);
 
-    m_rRenderSystem.SetShaderProgramInUse(this);
+    m_pContext->GetSubsystem<RenderSystem>()->SetShaderProgramInUse(this);
 }
 
 bool ShaderProgramGL::HasParameter(const std::string& iParamName) {

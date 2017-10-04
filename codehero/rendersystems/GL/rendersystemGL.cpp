@@ -326,7 +326,7 @@ std::shared_ptr<Shader> RenderSystemGL::CreateShader() {
 }
 
 std::shared_ptr<ShaderProgram> RenderSystemGL::CreateShaderProgram() {
-    return std::make_shared<ShaderProgramGL>(*this);
+    return std::make_shared<ShaderProgramGL>(m_pContext);
 }
 
 VertexBuffer* RenderSystemGL::CreateVertexBuffer() {

@@ -19,7 +19,7 @@ struct ShaderParameter {
 
 class ShaderProgramGL : public ShaderProgram {
 public:
-    ShaderProgramGL(RenderSystem& iRenderSystem);
+    ShaderProgramGL(const std::shared_ptr<EngineContext>& iContext);
     ~ShaderProgramGL();
 
     ShaderProgram& Attach(const std::shared_ptr<Shader>& iShader) override;

@@ -8,10 +8,17 @@
 #include "core/errors.h"
 #include "core/resourcecodec.h"
 
+// Forward declaration
+namespace pugi {
+class xml_node;
+}
+
 namespace CodeHero {
 
+// Forward declaration
 class Serializable;
 class FileAccess;
+class ObjectDefinition;
 
 class SerializableCodecXML : public ResourceCodec<Serializable> {
 public:
@@ -21,6 +28,11 @@ public:
     ~SerializableCodecXML();
 
     Error Load(FileAccess& iF, Serializable& oObject) override;
+
+private:
+    Error _Load(const std::shared_ptr<ObjectDefinition>& iDefinition,
+                const pugi::xml_node& iNode,
+                Serializable& oObject) const;
 };
 
 }  // namespace CodeHero

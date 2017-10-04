@@ -7,25 +7,31 @@
 
 #include <string>
 #include "core/gpuobject.h"
+#include "core/serializable.h"
 
 namespace CodeHero {
 
 // Forward declaration
-class RenderSystem;
+class EngineContext;
 class Shader;
 
-class ShaderProgram : public GPUObject {
+class ShaderProgram : public Serializable, public GPUObject {
 public:
-    ShaderProgram(RenderSystem& iRenderSystem) : m_rRenderSystem(iRenderSystem) {}
+    OBJECT(ShaderProgram, Serializable)
+
+    ShaderProgram(const std::shared_ptr<EngineContext>& iContext)
+        : Serializable(iContext) {}
     virtual ~ShaderProgram() {}
+
+    static void RegisterObject(const std::shared_ptr<EngineContext>& iContext);
+    static std::shared_ptr<ShaderProgram> Create(const std::shared_ptr<EngineContext>& iContext);
+
+    void EndLoad() override { Link(); }
 
     virtual ShaderProgram& Attach(const std::shared_ptr<Shader>& iShader) = 0;
     virtual ShaderProgram& Link() = 0;
 
     virtual void Use() = 0;
-
-protected:
-    RenderSystem& m_rRenderSystem;
 };
 
 }  // namespace CodeHero

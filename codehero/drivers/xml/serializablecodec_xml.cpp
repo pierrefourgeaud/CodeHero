@@ -4,7 +4,6 @@
 
 #include <pugixml.hpp>
 #include "drivers/xml/serializablecodec_xml.h"
-#include "core/image.h"
 #include "core/serializable.h"
 #include "core/fileaccess.h"
 #include "core/objectdefinition.h"
@@ -88,8 +87,9 @@ Error SerializableCodecXML::Load(FileAccess& iF, Serializable& oObject) {
 
     const std::string rootTypeName = oObject.GetTypeName();
     pugi::xml_node root = doc.child(rootTypeName.c_str());
+
     if (!root) {
-        LOGE << "Failed to find root node " << rootTypeName << ". Object not imported." << std::endl;
+        LOGE << "Failed to find node " << rootTypeName << ". Object not imported." << std::endl;
         return ERR_PARSING_FAILED;
     }
 
@@ -99,18 +99,28 @@ Error SerializableCodecXML::Load(FileAccess& iF, Serializable& oObject) {
         return ERR_INVALID_PARAMETER;
     }
 
+    Error loadResult = _Load(rootDef, root, oObject);
+
+    delete [] buffer;
+
+    return loadResult;
+}
+
+Error SerializableCodecXML::_Load(const std::shared_ptr<ObjectDefinition>& iDefinition,
+                                  const pugi::xml_node& iNode,
+                                  Serializable& oObject) const {
     oObject.BeginLoad();
 
-    for (pugi::xml_node_iterator it = root.begin(); it != root.end(); ++it) {
+    for (pugi::xml_node_iterator it = iNode.begin(); it != iNode.end(); ++it) {
         // If the current node is attribute, then it is an attribute for the current object
         if (std::strcmp(it->name(), "attribute") == 0) {
             // No need to check for neither if name or value exists, the GetAttribe and then the parsers will fail
             // if no value where passed
             std::string attr = it->attribute("name").as_string();
             std::string attrVal = it->attribute("value").as_string();
-            auto attrInfo = rootDef->GetAttribute(attr);
+            auto attrInfo = iDefinition->GetAttribute(attr);
             if (attrInfo.IsNull()) {
-                LOGE << "Attribute '" << attr << "' not registered for object '" << rootTypeName
+                LOGE << "Attribute '" << attr << "' not registered for object '" << iDefinition->GetName()
                      << "', ignored." << std::endl;
             } else {
                 switch (attrInfo.GetType()) {
@@ -135,12 +145,31 @@ Error SerializableCodecXML::Load(FileAccess& iF, Serializable& oObject) {
                     break;
                 }
             }
+        } else {
+            auto def = Object::GetDefinition(it->name());
+            if (!def) {
+                LOGE << "No definition was declared for object '" << it->name() << "'. Object not imported." << std::endl;
+                continue;
+            }
+            // TODO(pierre) All object here can be serializable
+            // but we should add a test. We can at least do a IsA (to be added soon)
+            std::shared_ptr<Serializable> obj = std::static_pointer_cast<Serializable>(def->Create());
+            Error res = _Load(def, *it, *obj.get());
+            if (res == Error::OK) {
+                auto attrInfo = iDefinition->GetAttribute(it->name());
+                if (attrInfo.IsNull()) {
+                    LOGE << "Attribute '" << it->name() << "' not registered for object '" << iDefinition->GetName()
+                         << "', ignored." << std::endl;
+                } else {
+                    attrInfo.GetAccessor()->Set(&oObject, Variant(obj));
+                }
+            } else {
+                LOGE << "Failed to import " << it->name() << " object. Continuing..." << std::endl;
+            }
         }
     }
 
     oObject.EndLoad();
-
-    delete [] buffer;
 
     return OK;
 }
