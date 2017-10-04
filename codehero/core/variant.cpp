@@ -14,6 +14,7 @@ Variant::Variant() {
 Variant::~Variant() {
     using std::string;
     using std::unordered_map;
+    using std::shared_ptr;
     switch (m_Type) {
     case Value::VVT_String:
         m_Value.m_String.~string();
@@ -23,6 +24,9 @@ Variant::~Variant() {
         break;
     case Value::VVT_HashMap:
         m_Value.m_HashMap.~unordered_map();
+        break;
+    case Value::VVT_SerializablePtr:
+        m_Value.m_SerializablePtr.~shared_ptr();
         break;
     default:
         break;
@@ -52,6 +56,9 @@ Variant::Variant(const Variant& iRhs) {
         break;
     case Value::VVT_HashMap:
         m_Value.m_HashMap = iRhs.m_Value.m_HashMap;
+        break;
+    case Value::VVT_SerializablePtr:
+        m_Value.m_SerializablePtr = iRhs.m_Value.m_SerializablePtr;
         break;
     default:
         // Default to int
@@ -102,6 +109,12 @@ Variant::Variant(const VariantHashMap& iValue) {
     new (&m_Value.m_HashMap) VariantHashMap();
     m_Value.m_HashMap = iValue;
     m_Type = Value::Type::VVT_HashMap;
+}
+
+Variant::Variant(const std::shared_ptr<Serializable>& iValue) {
+    new (&m_Value.m_SerializablePtr) std::shared_ptr<Serializable>();
+    m_Value.m_SerializablePtr = iValue;
+    m_Type = Value::Type::VVT_SerializablePtr;
 }
 
 int Variant::GetInt() const {
@@ -171,6 +184,15 @@ VariantHashMap Variant::GetHashMap() const {
     return VariantHashMap();
 }
 
+std::shared_ptr<Serializable> Variant::GetSerializablePtr() const {
+    if (m_Type == Value::Type::VVT_SerializablePtr) {
+        return m_Value.m_SerializablePtr;
+    }
+
+    // Default to nullptr
+    return nullptr;
+}
+
 template <> int Variant::Get<int>() const {
     return GetInt();
 }
@@ -197,6 +219,10 @@ template <> Vector3 Variant::Get<Vector3>() const {
 
 template <> VariantHashMap Variant::Get<VariantHashMap>() const {
     return GetHashMap();
+}
+
+template <> std::shared_ptr<Serializable> Variant::Get<std::shared_ptr<Serializable>>() const {
+    return GetSerializablePtr();
 }
 
 } // namespace CodeHero

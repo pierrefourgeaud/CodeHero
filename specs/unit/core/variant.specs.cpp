@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include <bandit/bandit.h>
+#include "core/serializable.h"
 #include "core/variant.h"
 
 using namespace bandit;
@@ -79,6 +80,15 @@ go_bandit([]() {
 
                 AssertThat(test.GetType(), Equals(Variant::Value::Type::VVT_HashMap));
                 AssertThat(test.GetValue().m_HashMap, Equals(value));
+                AssertThat(test.IsNone(), Is().False());
+            });
+
+            it("should initialize shared_ptr<Serializable> with proper type and right value", [] {
+                auto value = std::make_shared<Serializable>(nullptr);
+                Variant test(value);
+
+                AssertThat(test.GetType(), Equals(Variant::Value::Type::VVT_SerializablePtr));
+                AssertThat(test.GetValue().m_SerializablePtr, Equals(value));
                 AssertThat(test.IsNone(), Is().False());
             });
         });
@@ -221,6 +231,24 @@ go_bandit([]() {
 
                 AssertThat(test.GetHashMap(), Equals(VariantHashMap()));
                 AssertThat(test.Get<VariantHashMap>(), Equals(VariantHashMap()));
+            });
+        });
+
+        describe("::GetSerializablePtr", [] {
+            it("should return the proper value if correct type", [] {
+                auto value = std::make_shared<Serializable>(nullptr);
+                Variant test(value);
+
+                AssertThat(test.GetSerializablePtr(), Equals(value));
+                AssertThat(test.Get<std::shared_ptr<Serializable>>(), Equals(value));
+            });
+
+            it("should return nullptr if type is not serializable pointer", [] {
+                char value = 'a';
+                Variant test(value);
+
+                AssertThat(test.GetSerializablePtr(), Equals(nullptr));
+                AssertThat(test.Get<std::shared_ptr<Serializable>>(), Equals(nullptr));
             });
         });
     });
