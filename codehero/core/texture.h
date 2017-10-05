@@ -5,7 +5,6 @@
 #ifndef CODEHERO_CORE_TEXTURE_H_
 #define CODEHERO_CORE_TEXTURE_H_
 
-#include <glad/glad.h>
 #include <array>
 #include <memory>
 #include "core/gpuobject.h"
