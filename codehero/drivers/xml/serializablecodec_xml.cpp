@@ -4,9 +4,11 @@
 
 #include <pugixml.hpp>
 #include "drivers/xml/serializablecodec_xml.h"
-#include "core/serializable.h"
+#include "core/enginecontext.h"
 #include "core/fileaccess.h"
 #include "core/objectdefinition.h"
+#include "core/resourceloader.h"
+#include "core/serializable.h"
 #include "core/utils.h"
 #include <cstring>
 #include <logger.h>
@@ -146,25 +148,36 @@ Error SerializableCodecXML::_Load(const std::shared_ptr<ObjectDefinition>& iDefi
                 }
             }
         } else {
+            auto attrInfo = iDefinition->GetAttribute(it->name());
+            if (attrInfo.IsNull()) {
+                LOGE << "Attribute '" << it->name() << "' not registered for object '" << iDefinition->GetName()
+                    << "', ignored." << std::endl;
+                continue;
+            }
+
             auto def = Object::GetDefinition(it->name());
             if (!def) {
                 LOGE << "No definition was declared for object '" << it->name() << "'. Object not imported." << std::endl;
                 continue;
             }
-            // TODO(pierre) All object here can be serializable
-            // but we should add a test. We can at least do a IsA (to be added soon)
-            std::shared_ptr<Serializable> obj = std::static_pointer_cast<Serializable>(def->Create());
-            Error res = _Load(def, *it, *obj.get());
-            if (res == Error::OK) {
-                auto attrInfo = iDefinition->GetAttribute(it->name());
-                if (attrInfo.IsNull()) {
-                    LOGE << "Attribute '" << it->name() << "' not registered for object '" << iDefinition->GetName()
-                         << "', ignored." << std::endl;
-                } else {
+
+            auto attr = it->attribute("path");
+
+            // If it has a path to file, we use the resource loader
+            if (attr) {
+                std::shared_ptr<Serializable> obj = std::static_pointer_cast<Serializable>(def->Create());
+                m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load(attr.as_string(), *obj.get());
+                attrInfo.GetAccessor()->Set(&oObject, Variant(obj));
+            } else { // Or we load it here
+                // TODO(pierre) All object here can be serializable
+                // but we should add a test. We can at least do a IsA (to be added soon)
+                std::shared_ptr<Serializable> obj = std::static_pointer_cast<Serializable>(def->Create());
+                Error res = _Load(def, *it, *obj.get());
+                if (res == Error::OK) {
                     attrInfo.GetAccessor()->Set(&oObject, Variant(obj));
+                } else {
+                    LOGE << "Failed to import " << it->name() << " object. Continuing..." << std::endl;
                 }
-            } else {
-                LOGE << "Failed to import " << it->name() << " object. Continuing..." << std::endl;
             }
         }
     }
