@@ -13,6 +13,7 @@ Variant::Variant() {
 
 Variant::~Variant() {
     using std::string;
+    using std::vector;
     using std::unordered_map;
     using std::shared_ptr;
     switch (m_Type) {
@@ -21,6 +22,9 @@ Variant::~Variant() {
         break;
     case Value::VVT_Vector3:
         m_Value.m_Vector3.~Vector3();
+        break;
+    case Value::VVT_Array:
+        m_Value.m_Array.~vector();
         break;
     case Value::VVT_HashMap:
         m_Value.m_HashMap.~unordered_map();
@@ -53,6 +57,9 @@ Variant::Variant(const Variant& iRhs) {
         break;
     case Value::VVT_Vector3:
         m_Value.m_Vector3 = iRhs.m_Value.m_Vector3;
+        break;
+    case Value::VVT_Array:
+        m_Value.m_Array = iRhs.m_Value.m_Array;
         break;
     case Value::VVT_HashMap:
         m_Value.m_HashMap = iRhs.m_Value.m_HashMap;
@@ -103,6 +110,12 @@ Variant::Variant(const std::string& iValue) {
 Variant::Variant(const Vector3& iValue) {
     m_Value.m_Vector3 = iValue;
     m_Type = Value::Type::VVT_Vector3;
+}
+
+Variant::Variant(const VariantArray& iValue) {
+    new (&m_Value.m_Array) VariantArray();
+    m_Value.m_Array = iValue;
+    m_Type = Value::Type::VVT_Array;
 }
 
 Variant::Variant(const VariantHashMap& iValue) {
@@ -175,6 +188,15 @@ Vector3 Variant::GetVector3() const {
     return Vector3();
 }
 
+VariantArray Variant::GetArray() const {
+    if (m_Type == Value::Type::VVT_Array) {
+        return m_Value.m_Array;
+    }
+
+    // Default to empty hashmap
+    return VariantArray();
+}
+
 VariantHashMap Variant::GetHashMap() const {
     if (m_Type == Value::Type::VVT_HashMap) {
         return m_Value.m_HashMap;
@@ -215,6 +237,10 @@ template <> std::string Variant::Get<std::string>() const {
 
 template <> Vector3 Variant::Get<Vector3>() const {
     return GetVector3();
+}
+
+template <> VariantArray Variant::Get<VariantArray>() const {
+    return GetArray();
 }
 
 template <> VariantHashMap Variant::Get<VariantHashMap>() const {

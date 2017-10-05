@@ -8,6 +8,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
 #include "core/math/vector3.h"
 
 namespace CodeHero {
@@ -18,6 +19,8 @@ class Serializable;
 
 // TODO(pierre) Should the value be a Variant ?
 using VariantHashMap = std::unordered_map<std::string, std::string>;
+// TODO(pierre) Should the elements be Variant ?
+using VariantArray = std::vector<std::string>;
 
 class Variant {
 public:
@@ -30,6 +33,7 @@ public:
             VVT_Double,
             VVT_String,
             VVT_Vector3,
+            VVT_Array,
             VVT_HashMap,
             VVT_SerializablePtr
         };
@@ -40,6 +44,7 @@ public:
         double m_Double;
         std::string m_String;
         Vector3 m_Vector3;
+        VariantArray m_Array;
         VariantHashMap m_HashMap;
         std::shared_ptr<Serializable> m_SerializablePtr;
 
@@ -63,6 +68,7 @@ public:
     explicit Variant(double iValue);
     explicit Variant(const std::string& iValue);
     explicit Variant(const Vector3& iValue);
+    explicit Variant(const VariantArray& iValue);
     explicit Variant(const VariantHashMap& iHashMap);
     explicit Variant(const std::shared_ptr<Serializable>& iValue);
 
@@ -72,6 +78,7 @@ public:
     double GetDouble() const;
     std::string GetString() const;
     Vector3 GetVector3() const;
+    VariantArray GetArray() const;
     VariantHashMap GetHashMap() const;
     std::shared_ptr<Serializable> GetSerializablePtr() const;
 
@@ -102,6 +109,7 @@ template <> float Variant::Get<float>() const;
 template <> double Variant::Get<double>() const;
 template <> std::string Variant::Get<std::string>() const;
 template <> Vector3 Variant::Get<Vector3>() const;
+template <> VariantArray Variant::Get<VariantArray>() const;
 template <> VariantHashMap Variant::Get<VariantHashMap>() const;
 template <> std::shared_ptr<Serializable> Variant::Get<std::shared_ptr<Serializable>>() const;
 

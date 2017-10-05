@@ -74,6 +74,15 @@ go_bandit([]() {
                 AssertThat(test.IsNone(), Is().False());
             });
 
+            it("should initialize array with proper type and right value", [] {
+                VariantArray value({"test", "value"});
+                Variant test(value);
+
+                AssertThat(test.GetType(), Equals(Variant::Value::Type::VVT_Array));
+                AssertThat(test.GetValue().m_Array, Equals(value));
+                AssertThat(test.IsNone(), Is().False());
+            });
+
             it("should initialize hashmap with proper type and right value", [] {
                 VariantHashMap value({{"test", "value"}});
                 Variant test(value);
@@ -216,6 +225,24 @@ go_bandit([]() {
             });
         });
 
+        describe("::GetArray", [] {
+            it("should return the proper value if correct type", [] {
+                VariantArray value({"test", "value"});
+                Variant test(value);
+
+                AssertThat(test.GetArray(), Equals(value));
+                AssertThat(test.Get<VariantArray>(), Equals(value));
+            });
+
+            it("should return empty array if type is not array", [] {
+                char value = 'a';
+                Variant test(value);
+
+                AssertThat(test.GetArray(), Equals(VariantArray()));
+                AssertThat(test.Get<VariantArray>(), Equals(VariantArray()));
+            });
+        });
+
         describe("::GetHashMap", [] {
             it("should return the proper value if correct type", [] {
                 VariantHashMap value({{"test", "value"}});
@@ -225,7 +252,7 @@ go_bandit([]() {
                 AssertThat(test.Get<VariantHashMap>(), Equals(value));
             });
 
-            it("should return empth hashmap if type is not hashmap", [] {
+            it("should return empty hashmap if type is not hashmap", [] {
                 char value = 'a';
                 Variant test(value);
 
