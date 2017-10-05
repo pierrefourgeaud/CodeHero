@@ -317,8 +317,8 @@ std::shared_ptr<RenderWindow> RenderSystemGL::CreateWindow(uint32_t iWidth, uint
     return m_pWindow;
 }
 
-Texture* RenderSystemGL::CreateTexture(Texture::Type iType/* = T_2D*/) {
-    return new TextureGL(m_pContext, iType);
+std::shared_ptr<Texture> RenderSystemGL::CreateTexture() {
+    return std::make_shared<TextureGL>(m_pContext);
 }
 
 std::shared_ptr<Shader> RenderSystemGL::CreateShader() {

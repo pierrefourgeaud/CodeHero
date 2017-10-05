@@ -18,8 +18,8 @@ static const uint32_t glWrapModes[] = {
     GL_CLAMP_TO_BORDER
 };
 
-TextureGL::TextureGL(std::shared_ptr<EngineContext>& iContext, Type iType)
-    : Texture(iContext, iType) {}
+TextureGL::TextureGL(std::shared_ptr<EngineContext>& iContext)
+    : Texture(iContext) {}
 
 TextureGL::~TextureGL() {}
 

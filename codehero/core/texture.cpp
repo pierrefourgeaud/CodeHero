@@ -9,10 +9,9 @@
 
 namespace CodeHero {
 
-Texture::Texture(std::shared_ptr<EngineContext>& iContext, Type iType)
-    : m_Type(iType)
-    , m_pContext(iContext) {
-    m_Images.resize(numberTextureFaces[iType]);
+Texture::Texture(std::shared_ptr<EngineContext>& iContext)
+    : m_pContext(iContext) {
+    m_Images.resize(numberTextureFaces[m_Type]);
 }
 
 Texture::~Texture() {}
@@ -73,6 +72,11 @@ bool Texture::Load(const std::vector<const char*>& iImages) {
 
 void Texture::SetWrapMode(TextureCoordinate iCoordinate, TextureWrapMode iWrapMode) {
     m_WrapCoordinates[iCoordinate] = iWrapMode;
+}
+
+void Texture::SetType(Type iType) {
+    m_Type = iType;
+    m_Images.resize(numberTextureFaces[m_Type]);
 }
 
 } // namespace CodeHero

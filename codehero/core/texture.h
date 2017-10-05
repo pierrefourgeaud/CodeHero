@@ -56,7 +56,7 @@ public:
         T_Max
     };
 
-    Texture(std::shared_ptr<EngineContext>& iContext, Type iType);
+    Texture(std::shared_ptr<EngineContext>& iContext);
     virtual ~Texture();
 
     virtual void Bind(int32_t iUnit = -1) = 0;
@@ -70,10 +70,11 @@ public:
 
     void SetWrapMode(TextureCoordinate iCoordinate, TextureWrapMode iWrapMode);
 
-    Type GetType() { return m_Type; }
+    void SetType(Type iType);
+    Type GetType() const { return m_Type; }
 
 protected:
-    Type m_Type;
+    Type m_Type = T_2D;
     std::array<TextureWrapMode, TC_MaxCoords> m_WrapCoordinates{ TextureWrapMode::TWM_Repeat };
 
     virtual bool _CreateImpl() = 0;

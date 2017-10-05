@@ -138,7 +138,7 @@ public:
 #undef CreateWindow
 #endif
     virtual std::shared_ptr<RenderWindow> CreateWindow(uint32_t iWidth, uint32_t iHeight) = 0;
-    virtual Texture* CreateTexture(Texture::Type iType = Texture::T_2D) = 0;
+    virtual std::shared_ptr<Texture> CreateTexture() = 0;
     virtual std::shared_ptr<Shader> CreateShader() = 0;
     virtual std::shared_ptr<ShaderProgram> CreateShaderProgram() = 0;
     virtual VertexBuffer* CreateVertexBuffer() = 0;

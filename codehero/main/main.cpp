@@ -164,19 +164,19 @@ Error Main::Run() {
     rs->SetShaderParameter("projection", ortho);
 
     // Load and create a texture
-    Texture* crateDiffuse = rs->CreateTexture();
+    auto crateDiffuse = rs->CreateTexture();
     crateDiffuse->Load("./resources/images/container2.png");
 
-    Texture* crateSpecular = rs->CreateTexture();
+    auto crateSpecular = rs->CreateTexture();
     crateSpecular->Load("./resources/images/container2_specular.png");
 
     // Floor texture
-    Texture* floorDiffuse = rs->CreateTexture();
+    auto floorDiffuse = rs->CreateTexture();
     floorDiffuse->Load("./resources/images/floor_diffuse.PNG");
-    Texture* floorSpecular = rs->CreateTexture();
+    auto floorSpecular = rs->CreateTexture();
     floorSpecular->Load("./resources/images/floor_specular.PNG");
 
-    Texture* grassDiffuse = rs->CreateTexture();
+    auto grassDiffuse = rs->CreateTexture();
     grassDiffuse->SetWrapMode(TC_U, TWM_ClampEdge);
     grassDiffuse->SetWrapMode(TC_V, TWM_ClampEdge);
     grassDiffuse->Load("./resources/images/grass.png");
@@ -245,7 +245,8 @@ Error Main::Run() {
     auto skyboxShader = rs->CreateShaderProgram();
     skyboxShader->Attach(skyboxShaderVert).Attach(skyboxShaderFrag).Link();
 
-    Texture* skyboxTexture = rs->CreateTexture(Texture::T_Cube);
+    auto skyboxTexture = rs->CreateTexture();
+    skyboxTexture->SetType(Texture::T_Cube);
     // Should this be protected to be called always before setting picture
     skyboxTexture->SetWrapMode(TC_U, TWM_ClampEdge);
     skyboxTexture->SetWrapMode(TC_V, TWM_ClampEdge);

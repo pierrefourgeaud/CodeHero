@@ -76,9 +76,8 @@ void FontFaceFreeType::_Load() {
                 image->Create(fontGlyph.width, fontGlyph.height);
                 uint8_t* dest = image->GetRawData();
                 memcpy(dest, face->glyph->bitmap.buffer, image->GetSize());
-                Texture* t = m_rFont.GetContext()->GetSubsystem<RenderSystem>()->CreateTexture();
-                t->Load(image);
-                fontGlyph.texture.reset(t);
+                fontGlyph.texture = m_rFont.GetContext()->GetSubsystem<RenderSystem>()->CreateTexture();
+                fontGlyph.texture->Load(image);
                 m_Glyphs[charCode] = std::move(fontGlyph);
             }
         }

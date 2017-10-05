@@ -148,9 +148,8 @@ std::shared_ptr<Texture> ModelCodecAssimp::_LoadMaterialTextures(aiMaterial* iMa
             path = Split(str.C_Str(), '\\');
         }
         std::string filename = path.empty() ? "" : path[path.size() - 1];
-        Texture* texturePtr = rs->CreateTexture();
-        texturePtr->Load((m_ModelDirectory + "/" + filename).c_str());
-        texture = std::shared_ptr<Texture>(texturePtr);
+        texture = rs->CreateTexture();
+        texture->Load((m_ModelDirectory + "/" + filename).c_str());
     }
     return texture;
 }

@@ -53,7 +53,7 @@ public:
 
     // Factory
     std::shared_ptr<RenderWindow> CreateWindow(uint32_t iWidth, uint32_t iHeight) final override;
-    Texture* CreateTexture(Texture::Type iType = Texture::T_2D) final override;
+    std::shared_ptr<Texture> CreateTexture() final override;
     std::shared_ptr<Shader> CreateShader() final override;
     std::shared_ptr<ShaderProgram> CreateShaderProgram() final override;
     VertexBuffer* CreateVertexBuffer() final override;
