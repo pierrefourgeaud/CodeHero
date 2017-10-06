@@ -45,6 +45,22 @@ Vector3 ParseVector3(const std::string& iInput) {
     return res;
 }
 
+VariantArray ParseArray(const pugi::xml_object_range<pugi::xml_node_iterator>& iChildren) {
+    VariantArray res;
+
+    for (pugi::xml_node_iterator it = iChildren.begin(); it != iChildren.end(); ++it) {
+        if (std::strcmp(it->name(), "subattribute") == 0) {
+            std::string attrVal = it->attribute("value").as_string();
+
+            res.push_back(attrVal);
+        } else {
+            LOGE << "[SerializableCodeXML]: Failed to parse array attribute with name '" << it->name() << "'" << std::endl;
+        }
+    }
+
+    return std::move(res);
+}
+
 VariantHashMap ParseHashMap(const pugi::xml_object_range<pugi::xml_node_iterator>& iChildren) {
     VariantHashMap res;
 
@@ -134,6 +150,9 @@ Error SerializableCodecXML::_Load(const std::shared_ptr<ObjectDefinition>& iDefi
                     break;
                 case Variant::Value::VVT_Vector3:
                     attrInfo.GetAccessor()->Set(&oObject, Variant(ParseVector3(attrVal)));
+                    break;
+                case Variant::Value::VVT_Array:
+                    attrInfo.GetAccessor()->Set(&oObject, Variant(ParseArray(it->children())));
                     break;
                 case Variant::Value::VVT_HashMap:
                     // HashMap in variant for now does support only <string, string>

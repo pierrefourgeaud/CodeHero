@@ -9,6 +9,7 @@
 #include <memory>
 #include "core/gpuobject.h"
 #include "core/image.h"
+#include "core/serializable.h"
 
 namespace CodeHero {
 
@@ -48,8 +49,10 @@ static const uint32_t numberTextureFaces[] = {
     6  // T_CUBE
 };
 
-class Texture : public GPUObject {
+class Texture : public Serializable, public GPUObject {
 public:
+    OBJECT(Texture, Serializable)
+
     enum Type {
         T_2D = 0,
         T_Cube,
@@ -59,14 +62,17 @@ public:
     Texture(std::shared_ptr<EngineContext>& iContext);
     virtual ~Texture();
 
+    static void RegisterObject(const std::shared_ptr<EngineContext>& iContext);
+    static std::shared_ptr<Texture> Create(const std::shared_ptr<EngineContext>& iContext);
+
     virtual void Bind(int32_t iUnit = -1) = 0;
     virtual void Unbind() = 0;
     bool Load(const std::shared_ptr<Image>& iImage);
-    bool Load(const char* iImage);
+    bool Load(const std::string& iImage);
     bool Load(TextureFace iFace, const std::shared_ptr<Image>& iImage);
-    bool Load(TextureFace iFace, const char* iImage);
+    bool Load(TextureFace iFace, const std::string& iImage);
     bool Load(const std::vector<std::shared_ptr<Image>>& iImages);
-    bool Load(const std::vector<const char*>& iImages);
+    bool Load(const std::vector<std::string>& iImages);
 
     void SetWrapMode(TextureCoordinate iCoordinate, TextureWrapMode iWrapMode);
 
@@ -82,7 +88,6 @@ protected:
     const std::shared_ptr<Image>& _GetImage(TextureFace iFace = TF_Main2D) const { return m_Images[iFace]; }
 
 private:
-    std::shared_ptr<EngineContext> m_pContext;
     std::vector<std::shared_ptr<Image>> m_Images;
 };
 

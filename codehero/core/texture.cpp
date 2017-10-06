@@ -4,17 +4,29 @@
 
 #include "core/texture.h"
 #include "core/assert.h"
-#include "core/resourceloader.h"
 #include "core/enginecontext.h"
+#include "core/objectdefinition.h"
+#include "core/resourceloader.h"
+#include "graphics/rendersystem.h"
 
 namespace CodeHero {
 
 Texture::Texture(std::shared_ptr<EngineContext>& iContext)
-    : m_pContext(iContext) {
+    : Serializable(iContext) {
     m_Images.resize(numberTextureFaces[m_Type]);
 }
 
 Texture::~Texture() {}
+
+void Texture::RegisterObject(const std::shared_ptr<EngineContext>& iContext) {
+    CH_REGISTER_OBJECT(Texture);
+
+    CH_OBJECT_ATTRIBUTE(Texture, "Faces", VariantArray, Variant::Value::VVT_Array, nullptr, static_cast<bool(Texture::*)(const std::vector<std::string>&)>(&Texture::Load));
+}
+
+std::shared_ptr<Texture> Texture::Create(const std::shared_ptr<EngineContext>& iContext) {
+    return iContext->GetSubsystem<RenderSystem>()->CreateTexture();
+}
 
 bool Texture::Load(const std::shared_ptr<Image>& iImage) {
     CH_ASSERT(m_Type == T_2D);
@@ -24,7 +36,7 @@ bool Texture::Load(const std::shared_ptr<Image>& iImage) {
     return _CreateImpl();
 }
 
-bool Texture::Load(const char* iImage) {
+bool Texture::Load(const std::string& iImage) {
     CH_ASSERT(m_Type == T_2D);
 
     m_Images[0] = std::make_shared<Image>(m_pContext);
@@ -41,7 +53,7 @@ bool Texture::Load(TextureFace iFace, const std::shared_ptr<Image>& iImage) {
     return _CreateImpl();
 }
 
-bool Texture::Load(TextureFace iFace, const char* iImage) {
+bool Texture::Load(TextureFace iFace, const std::string& iImage) {
     CH_ASSERT(numberTextureFaces[m_Type] > iFace);
 
     m_Images[iFace] = std::make_shared<Image>(m_pContext);
@@ -58,7 +70,7 @@ bool Texture::Load(const std::vector<std::shared_ptr<Image>>& iImages) {
     return _CreateImpl();
 }
 
-bool Texture::Load(const std::vector<const char*>& iImages) {
+bool Texture::Load(const std::vector<std::string>& iImages) {
     CH_ASSERT(numberTextureFaces[m_Type] == iImages.size());
 
     size_t nbImages = iImages.size();

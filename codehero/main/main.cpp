@@ -92,6 +92,7 @@ Error Main::Start() {
     Light::RegisterObject(m_pContext);
     Shader::RegisterObject(m_pContext);
     ShaderProgram::RegisterObject(m_pContext);
+    Texture::RegisterObject(m_pContext);
 
     // Initialize the time as soon as possible
     Time* time = new Time(m_pContext);
@@ -172,7 +173,7 @@ Error Main::Run() {
 
     // Floor texture
     auto floorDiffuse = rs->CreateTexture();
-    floorDiffuse->Load("./resources/images/floor_diffuse.PNG");
+    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/texture_FloorDiffuse.xml", *floorDiffuse.get());
     auto floorSpecular = rs->CreateTexture();
     floorSpecular->Load("./resources/images/floor_specular.PNG");
 
