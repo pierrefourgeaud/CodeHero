@@ -23,5 +23,7 @@ public:
 
 #include "core/type_traits/attributeaccessor_impl.h"
 #include "core/type_traits/attributeaccessorcast_impl.h"
+#include "core/type_traits/attributeaccessorenum_impl.h"
+#include "core/type_traits/attributeaccessorcustom_impl.h"
 
 #endif // CODEHERO_CORE_TYPE_TRAITS_ATTRIBUTE_ACCESSOR_H_

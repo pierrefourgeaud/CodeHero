@@ -92,4 +92,12 @@ protected:
 #define CH_OBJECT_ATTRIBUTE_CAST(Class, Name, Type, CastTo, VariantType, GetFunction, SetFunction) \
     objectDef->AddAttribute(Name, VariantType, MakeAccessorCastImpl<Class, Type, CastTo>(GetFunction, SetFunction));
 
+// Needs to be called only after a CH_REGISTER_OBJECT (the objectDef is used here)
+#define CH_OBJECT_ATTRIBUTE_CUSTOM(Class, Name, Type, VariantType, GetFunction, SetFunction) \
+    objectDef->AddAttribute(Name, VariantType, MakeAccessorCustomImpl<Class, Type>(GetFunction, SetFunction));
+
+// Needs to be called only after a CH_REGISTER_OBJECT (the objectDef is used here)
+#define CH_OBJECT_ATTRIBUTE_ENUM(Class, Name, Type, GetFunction, SetFunction, FromStringFunction, ToStringFunction) \
+    objectDef->AddAttribute(Name, Variant::Value::VVT_String, MakeAccessorEnumImpl<Class, Type>(GetFunction, SetFunction, FromStringFunction, ToStringFunction));
+
 #endif // CODEHERO_CORE_OBJECT_H_

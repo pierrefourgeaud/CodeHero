@@ -247,19 +247,7 @@ Error Main::Run() {
     skyboxShader->Attach(skyboxShaderVert).Attach(skyboxShaderFrag).Link();
 
     auto skyboxTexture = rs->CreateTexture();
-    skyboxTexture->SetType(Texture::T_Cube);
-    // Should this be protected to be called always before setting picture
-    skyboxTexture->SetWrapMode(TC_U, TWM_ClampEdge);
-    skyboxTexture->SetWrapMode(TC_V, TWM_ClampEdge);
-    skyboxTexture->SetWrapMode(TC_W, TWM_ClampEdge);
-    skyboxTexture->Load({
-        "./resources/images/skybox_clear_sky/right.jpg",
-        "./resources/images/skybox_clear_sky/left.jpg",
-        "./resources/images/skybox_clear_sky/top.jpg",
-        "./resources/images/skybox_clear_sky/bottom.jpg",
-        "./resources/images/skybox_clear_sky/back.jpg",
-        "./resources/images/skybox_clear_sky/front.jpg"
-    });
+    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/skybox.xml", *skyboxTexture.get());
 
     auto skyboxMaterial = std::make_shared<Material>(m_pContext);
     skyboxMaterial->SetTexture(TU_Diffuse, std::shared_ptr<Texture>(skyboxTexture));

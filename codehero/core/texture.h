@@ -6,6 +6,7 @@
 #define CODEHERO_CORE_TEXTURE_H_
 
 #include <array>
+#include <map>
 #include <memory>
 #include "core/gpuobject.h"
 #include "core/image.h"
@@ -30,6 +31,14 @@ enum TextureWrapMode {
     TWM_MirroredClampEdge,
     TWM_ClampBorder,
     TWM_MaxWrapModes
+};
+
+static const std::map<std::string, TextureWrapMode> textureWrapModeFromString = {
+    {"TWM_Repeat", TWM_Repeat},
+    {"TWM_MirroredRepeat", TWM_MirroredRepeat},
+    {"TWM_ClampEdge", TWM_ClampEdge},
+    {"TWM_MirroredClampEdge", TWM_MirroredClampEdge},
+    {"TWM_ClampBorder", TWM_ClampBorder}
 };
 
 enum TextureFace : uint32_t {

@@ -173,6 +173,8 @@ set (HEADERS
      ${SRCS_PATH}/core/type_traits/attributeaccessor.h
      ${SRCS_PATH}/core/type_traits/attributeaccessor_impl.h
      ${SRCS_PATH}/core/type_traits/attributeaccessorcast_impl.h
+     ${SRCS_PATH}/core/type_traits/attributeaccessorcustom_impl.h
+     ${SRCS_PATH}/core/type_traits/attributeaccessorenum_impl.h
      ${SRCS_PATH}/core/type_traits/attributeinfo.h
      ${SRCS_PATH}/core/type_traits/objectdefinition.h
      # UI
