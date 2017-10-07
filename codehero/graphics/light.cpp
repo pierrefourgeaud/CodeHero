@@ -5,7 +5,8 @@
 #include "graphics/light.h"
 #include <logger.h>
 #include "core/assert.h"
-#include "core/objectdefinition.h"
+#include "core/type_traits/attributeaccessor.h"
+#include "core/type_traits/objectdefinition.h"
 
 namespace CodeHero {
 

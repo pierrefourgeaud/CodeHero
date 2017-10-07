@@ -6,9 +6,10 @@
 #include "drivers/xml/serializablecodec_xml.h"
 #include "core/enginecontext.h"
 #include "core/fileaccess.h"
-#include "core/objectdefinition.h"
 #include "core/resourceloader.h"
 #include "core/serializable.h"
+#include "core/type_traits/attributeaccessor.h"
+#include "core/type_traits/objectdefinition.h"
 #include "core/utils.h"
 #include <cstring>
 #include <logger.h>

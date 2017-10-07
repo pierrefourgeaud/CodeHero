@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 #include "core/object.h"
-#include "core/objectdefinition.h"
+#include "core/type_traits/objectdefinition.h"
 
 namespace CodeHero {
 

@@ -4,7 +4,8 @@
 
 #include "graphics/shader.h"
 #include "core/enginecontext.h"
-#include "core/objectdefinition.h"
+#include "core/type_traits/attributeaccessor.h"
+#include "core/type_traits/objectdefinition.h"
 #include "graphics/rendersystem.h"
 
 namespace CodeHero {

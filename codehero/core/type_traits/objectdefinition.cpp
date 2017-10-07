@@ -2,7 +2,7 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
-#include "core/objectdefinition.h"
+#include "core/type_traits/objectdefinition.h"
 
 namespace CodeHero {
 

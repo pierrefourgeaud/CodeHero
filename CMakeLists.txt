@@ -91,7 +91,6 @@ set (SOURCES
      ${SRCS_PATH}/core/filesystem.cpp
      ${SRCS_PATH}/core/image.cpp
      ${SRCS_PATH}/core/object.cpp
-     ${SRCS_PATH}/core/objectdefinition.cpp
      ${SRCS_PATH}/core/time.cpp
      ${SRCS_PATH}/core/math/vector2.cpp
      ${SRCS_PATH}/core/math/vector3.cpp
@@ -102,6 +101,7 @@ set (SOURCES
      ${SRCS_PATH}/core/serializable.cpp
      ${SRCS_PATH}/core/utils.cpp
      ${SRCS_PATH}/core/variant.cpp
+     ${SRCS_PATH}/core/type_traits/objectdefinition.cpp
      # UI
      ${SRCS_PATH}/ui/font.cpp
      ${SRCS_PATH}/ui/fontface.cpp
@@ -158,7 +158,6 @@ set (HEADERS
      ${SRCS_PATH}/core/filesystem.h
      ${SRCS_PATH}/core/gpuobject.h
      ${SRCS_PATH}/core/image.h
-     ${SRCS_PATH}/core/objectdefinition.h
      ${SRCS_PATH}/core/scopecleaner.h
      ${SRCS_PATH}/core/math/vector2.h
      ${SRCS_PATH}/core/math/vector3.h
@@ -171,6 +170,11 @@ set (HEADERS
      ${SRCS_PATH}/core/resourceloader.h
      ${SRCS_PATH}/core/serializable.h
      ${SRCS_PATH}/core/variant.h
+     ${SRCS_PATH}/core/type_traits/attributeaccessor.h
+     ${SRCS_PATH}/core/type_traits/attributeaccessor_impl.h
+     ${SRCS_PATH}/core/type_traits/attributeaccessorcast_impl.h
+     ${SRCS_PATH}/core/type_traits/attributeinfo.h
+     ${SRCS_PATH}/core/type_traits/objectdefinition.h
      # UI
      ${SRCS_PATH}/ui/font.h
      ${SRCS_PATH}/ui/fontface.h
