@@ -90,6 +90,6 @@ protected:
 
 // Needs to be called only after a CH_REGISTER_OBJECT (the objectDef is used here)
 #define CH_OBJECT_ATTRIBUTE_CAST(Class, Name, Type, CastTo, VariantType, GetFunction, SetFunction) \
-    objectDef->AddAttribute(Name, VariantType, MakeAccessorImplCast<Class, Type, CastTo>(GetFunction, SetFunction));
+    objectDef->AddAttribute(Name, VariantType, MakeAccessorCastImpl<Class, Type, CastTo>(GetFunction, SetFunction));
 
 #endif // CODEHERO_CORE_OBJECT_H_

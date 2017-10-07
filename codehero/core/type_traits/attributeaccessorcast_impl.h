@@ -16,9 +16,9 @@ namespace CodeHero {
 //   - Also requires that CastTo can be cast statically to Type (again inheritance usually)
 // TODO(pierre) This is error prone - We should try to find a better way to achieve this
 template <class Class, class Type, class CastTo, class GetFn, class SetFn>
-class AttributeAccessorImplCast : public AttributeAccessor {
+class AttributeAccessorCastImpl : public AttributeAccessor {
 public:
-    AttributeAccessorImplCast(GetFn iGet, SetFn iSet)
+    AttributeAccessorCastImpl(GetFn iGet, SetFn iSet)
         : m_pGet(iGet)
         , m_pSet(iSet) {}
 
@@ -43,9 +43,9 @@ private:
 };
 
 template <class Class, class Type, class CastTo, class SetFn>
-class AttributeAccessorImplCast<Class, Type, CastTo, std::nullptr_t, SetFn> : public AttributeAccessor {
+class AttributeAccessorCastImpl<Class, Type, CastTo, std::nullptr_t, SetFn> : public AttributeAccessor {
 public:
-    AttributeAccessorImplCast(void*, SetFn iSet)
+    AttributeAccessorCastImpl(void*, SetFn iSet)
         : m_pSet(iSet) {}
 
     Variant Get(const Serializable* iPtr) const override {
@@ -67,8 +67,8 @@ private:
 };
 
 template <class Class, class Type, class CastTo, class GetFn, class SetFn>
-std::shared_ptr<AttributeAccessorImplCast<Class, Type, CastTo, GetFn, SetFn>> MakeAccessorImplCast(GetFn iGet, SetFn iSet) {
-    return std::make_shared<AttributeAccessorImplCast<Class, Type, CastTo, GetFn, SetFn>>(iGet, iSet);
+std::shared_ptr<AttributeAccessorCastImpl<Class, Type, CastTo, GetFn, SetFn>> MakeAccessorCastImpl(GetFn iGet, SetFn iSet) {
+    return std::make_shared<AttributeAccessorCastImpl<Class, Type, CastTo, GetFn, SetFn>>(iGet, iSet);
 }
 
 } // namespace CodeHero
