@@ -1,4 +1,4 @@
-# CodeHero [![Build Status](https://travis-ci.org/pierrefourgeaud/CodeHero.svg?branch=master)](https://travis-ci.org/pierrefourgeaud/CodeHero)
+# CodeHero [![Build Status](https://travis-ci.org/pierrefourgeaud/CodeHero.svg?branch=master)](https://travis-ci.org/pierrefourgeaud/CodeHero) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/3b78a40ffb444b9690e7579b36d59dec)](https://www.codacy.com/app/pierrefourgeaud/CodeHero?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pierrefourgeaud/CodeHero&amp;utm_campaign=Badge_Grade)
 
 **This is heavily in development. This is not a complete project - which means that many things will be reworked, the code is experimental for the most part and is subject to rework. Documentation will be added.**
 
