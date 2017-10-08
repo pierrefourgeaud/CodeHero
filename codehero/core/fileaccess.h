@@ -6,9 +6,10 @@
 #define CODEHERO_CORE_FILEACCESS_H_
 
 #include <cstdio>
+#include <limits>
 #include <string>
 
-#include "./errors.h"
+#include "core/errors.h"
 
 namespace CodeHero {
 
@@ -42,7 +43,7 @@ public:
 
     bool IsOpen() const;
 
-    int32_t GetSize();
+    size_t GetSize();
 
     // TODO(pierre) We should split the name of the file and the rest (directory)
     std::string GetName() const { return m_Name; }
@@ -55,7 +56,7 @@ private:
     std::string m_Name;
     Error m_LastError = OK;
 
-    int32_t m_Size = -1;
+    size_t m_Size = (std::numeric_limits<std::size_t>::max)();
 
     void _CheckErrors();
 };

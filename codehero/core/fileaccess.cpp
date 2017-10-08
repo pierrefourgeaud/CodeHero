@@ -2,8 +2,9 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
-#include "./core/fileaccess.h"
+#include "core/fileaccess.h"
 #include <logger.h>
+#include <sys/stat.h>
 
 namespace CodeHero {
 
@@ -133,12 +134,31 @@ Error FileAccess::SeekEnd() {
     return OK;
 }
 
-int32_t FileAccess::GetSize() {
-    if (m_Size < 0) {
-        int32_t pos = std::ftell(m_pFile);
-        SeekEnd();
-        m_Size = std::ftell(m_pFile);
-        Seek(pos);
+size_t FileAccess::GetSize() {
+    if (m_Size == (std::numeric_limits<std::size_t>::max)()) {
+        // Although fseek/ftell would allow us to reuse the exising file handle here,
+        // it is generally unsafe because:
+        //  - For binary streams, it is not technically well-defined
+        //  - For text files the results are meaningless
+        // That's why we use the safer variant fstat here.
+        //
+        // See here for details:
+        // https://www.securecoding.cert.org/confluence/display/c/FIO19-C.+Do+not+use+fseek%28%29+and+ftell%28%29+to+compute+the+size+of+a+regular+file
+#if defined _WIN32 && !defined __GNUC__
+        struct __stat64 fileStat;
+        int err = _stat64(m_Name.c_str(), &fileStat);
+        if (err != 0) {
+            return 0;
+        }
+        m_Size = static_cast<size_t>(fileStat.st_size);
+#else
+        struct stat fileStat;
+        int err = stat(m_Name.c_str(), &fileStat);
+        if (err != 0) {
+            return 0;
+        }
+        m_Size = static_cast<size_t>(fileStat.st_size);
+#endif
     }
 
     return m_Size;
