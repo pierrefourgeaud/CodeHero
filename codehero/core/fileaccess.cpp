@@ -94,7 +94,9 @@ std::string FileAccess::ReadAll() {
 }
 
 int32_t FileAccess::GetPos() {
-    if (!IsOpen()) { return ERR_NO_FILE_OPENED; }
+    if (!IsOpen()) {
+        return 0;
+    }
 
     int32_t pos = std::ftell(m_pFile);
     return pos;
