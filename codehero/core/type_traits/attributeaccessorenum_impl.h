@@ -72,7 +72,7 @@ std::shared_ptr<AttributeAccessorEnumImpl<Class, Type, GetFn, SetFn>>
     MakeAccessorEnumImpl(GetFn iGet,
                          SetFn iSet,
                          const std::function<Type(const std::string&)>& iFromString,
-                         const std::function<std::string(Type)> iToString) {
+                         const std::function<std::string(Type)>& iToString) {
     return std::make_shared<AttributeAccessorEnumImpl<Class, Type, GetFn, SetFn>>(iGet, iSet, iFromString, iToString);
 }
 
