@@ -313,10 +313,12 @@ if (${_CODEHERO_DRIVER_ASSIMP})
     include_directories (SYSTEM ${VENDORS_PATH}/assimp/include)
     set (SOURCES ${SOURCES}
          ${SRCS_PATH}/drivers/assimp/modelcodec_assimp.cpp
+         ${SRCS_PATH}/drivers/assimp/iosystem.cpp
     )
 
     set (HEADERS ${HEADERS}
          ${SRCS_PATH}/drivers/assimp/modelcodec_assimp.h
+         ${SRCS_PATH}/drivers/assimp/iosystem.h
     )
 
     if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")

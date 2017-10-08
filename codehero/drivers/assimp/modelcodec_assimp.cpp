@@ -13,6 +13,7 @@
 #include "core/texture.h"
 #include "core/math/vector2.h"
 #include "core/math/vector3.h"
+#include "drivers/assimp/iosystem.h"
 #include "graphics/rendersystem.h"
 #include "graphics/material.h"
 #include "graphics/mesh.h"
@@ -31,8 +32,7 @@ ModelCodecAssimp::ModelCodecAssimp(const std::shared_ptr<EngineContext>& iContex
 
 Error ModelCodecAssimp::Load(FileAccess& iF, Model& oModel) {
     Assimp::Importer import;
-    std::string buffer = iF.ReadAll();
-    //const aiScene* scene = import.ReadFileFromMemory(buffer.data(), buffer.size(), aiProcess_Triangulate | aiProcess_FlipUVs);
+    import.SetIOHandler(new IOSystem(&iF));
     const aiScene* scene = import.ReadFile(iF.GetName(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_ConvertToLeftHanded);
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
