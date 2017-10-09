@@ -82,7 +82,8 @@ protected:
 // Needs to be called for object that contains static ::Create(const shared_ptr<EngineContext>&);
 #define CH_REGISTER_OBJECT(Class) \
     auto objectDef = Object::CreateDefinition(iContext, #Class); \
-    objectDef->RegisterFactory(Class::Create);
+    objectDef->RegisterFactory(Class::Create); \
+    objectDef->RegisterTypeInfo(Class::GetTypeInfoStatic());
 
 // Needs to be called only after a CH_REGISTER_OBJECT (the objectDef is used here)
 #define CH_OBJECT_ATTRIBUTE(Class, Name, Type, VariantType, GetFunction, SetFunction) \

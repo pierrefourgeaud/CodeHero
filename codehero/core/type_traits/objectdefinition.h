@@ -18,6 +18,7 @@ namespace CodeHero {
 // Forward declaration
 class EngineContext;
 class Object;
+class TypeInfo;
 
 using ObjectFactory = std::function<std::shared_ptr<Object>(const std::shared_ptr<EngineContext>&)>;
 
@@ -30,6 +31,7 @@ public:
 
     // Those methods are returning an ObjectDefinition& to be chainable
     ObjectDefinition& RegisterFactory(const ObjectFactory& iFactory);
+    ObjectDefinition& RegisterTypeInfo(const std::shared_ptr<TypeInfo>& iTypeInfo);
     ObjectDefinition& AddAttribute(const std::string& iName,
                                    Variant::Value::Type iType,
                                    const std::shared_ptr<AttributeAccessor>& iAccessor);
@@ -49,6 +51,7 @@ private:
     std::shared_ptr<EngineContext> m_pContext;
     std::string m_Name;
     ObjectFactory m_pFactory = nullptr;
+    std::shared_ptr<TypeInfo> m_pTypeInfo;
     std::unordered_map<std::string, AttributeInfo> m_Attributes;
 };
 
