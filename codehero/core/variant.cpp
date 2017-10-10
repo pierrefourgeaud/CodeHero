@@ -23,6 +23,9 @@ Variant::~Variant() {
     case Value::VVT_Vector3:
         m_Value.m_Vector3.~Vector3();
         break;
+    case Value::VVT_Quaternion:
+        m_Value.m_Quaternion.~Quaternion();
+        break;
     case Value::VVT_Array:
         m_Value.m_Array.~vector();
         break;
@@ -57,6 +60,9 @@ Variant::Variant(const Variant& iRhs) {
         break;
     case Value::VVT_Vector3:
         m_Value.m_Vector3 = iRhs.m_Value.m_Vector3;
+        break;
+    case Value::VVT_Quaternion:
+        m_Value.m_Quaternion = iRhs.m_Value.m_Quaternion;
         break;
     case Value::VVT_Array:
         m_Value.m_Array = iRhs.m_Value.m_Array;
@@ -110,6 +116,11 @@ Variant::Variant(const std::string& iValue) {
 Variant::Variant(const Vector3& iValue) {
     m_Value.m_Vector3 = iValue;
     m_Type = Value::Type::VVT_Vector3;
+}
+
+Variant::Variant(const Quaternion& iValue) {
+    m_Value.m_Quaternion = iValue;
+    m_Type = Value::Type::VVT_Quaternion;
 }
 
 Variant::Variant(const VariantArray& iValue) {
@@ -188,6 +199,15 @@ Vector3 Variant::GetVector3() const {
     return Vector3();
 }
 
+Quaternion Variant::GetQuaternion() const {
+    if (m_Type == Value::Type::VVT_Quaternion) {
+        return m_Value.m_Quaternion;
+    }
+
+    // Default to 0 quaternion
+    return Quaternion();
+}
+
 VariantArray Variant::GetArray() const {
     if (m_Type == Value::Type::VVT_Array) {
         return m_Value.m_Array;
@@ -237,6 +257,10 @@ template <> std::string Variant::Get<std::string>() const {
 
 template <> Vector3 Variant::Get<Vector3>() const {
     return GetVector3();
+}
+
+template <> Quaternion Variant::Get<Quaternion>() const {
+    return GetQuaternion();
 }
 
 template <> VariantArray Variant::Get<VariantArray>() const {

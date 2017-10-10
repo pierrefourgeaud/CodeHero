@@ -74,6 +74,15 @@ go_bandit([]() {
                 AssertThat(test.IsNone(), Is().False());
             });
 
+            it("should initialize quaternion with proper type and right value", [] {
+                Quaternion value(1.0f, 2.0f, 3.0f);
+                Variant test(value);
+
+                AssertThat(test.GetType(), Equals(Variant::Value::Type::VVT_Quaternion));
+                AssertThat(test.GetValue().m_Quaternion, Equals(value));
+                AssertThat(test.IsNone(), Is().False());
+            });
+
             it("should initialize array with proper type and right value", [] {
                 VariantArray value({"test", "value"});
                 Variant test(value);
@@ -222,6 +231,24 @@ go_bandit([]() {
 
                 AssertThat(test.GetVector3(), Equals(Vector3(0.0f, 0.0f, 0.0f)));
                 AssertThat(test.Get<Vector3>(), Equals(Vector3(0.0f, 0.0f, 0.0f)));
+            });
+        });
+
+        describe("::GetQuaternion", [] {
+            it("should return the proper value if correct type", [] {
+                Quaternion value(1.0f, 2.0f, 3.0f);
+                Variant test(value);
+
+                AssertThat(test.GetQuaternion(), Equals(value));
+                AssertThat(test.Get<Quaternion>(), Equals(value));
+            });
+
+            it("should return 0 vector3 if type is not vector3", [] {
+                char value = 'a';
+                Variant test(value);
+
+                AssertThat(test.GetQuaternion(), Equals(Quaternion(0.0f, 0.0f, 0.0f)));
+                AssertThat(test.Get<Quaternion>(), Equals(Quaternion(0.0f, 0.0f, 0.0f)));
             });
         });
 

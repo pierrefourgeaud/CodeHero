@@ -75,7 +75,7 @@ public:
     Quaternion& operator*=(float iRhs);
 
     // Operators comparison
-    bool operator==(const Quaternion& iRhs) { // TODO(pierre) We should probably use the utils FloatEqu here
+    bool operator==(const Quaternion& iRhs) const { // TODO(pierre) We should probably use the utils FloatEqu here
         return m_X == iRhs.m_X && m_Y == iRhs.m_Y && m_Z == iRhs.m_Z && m_W == iRhs.m_W;
     }
 
