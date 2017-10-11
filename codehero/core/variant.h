@@ -9,6 +9,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include "core/math/vector2.h"
 #include "core/math/vector3.h"
 #include "core/math/quaternion.h"
 
@@ -33,6 +34,7 @@ public:
             VVT_Float,
             VVT_Double,
             VVT_String,
+            VVT_Vector2,
             VVT_Vector3,
             VVT_Quaternion,
             VVT_Array,
@@ -45,6 +47,7 @@ public:
         float m_Float;
         double m_Double;
         std::string m_String;
+        Vector2 m_Vector2;
         Vector3 m_Vector3;
         Quaternion m_Quaternion;
         VariantArray m_Array;
@@ -70,6 +73,7 @@ public:
     explicit Variant(float iValue);
     explicit Variant(double iValue);
     explicit Variant(const std::string& iValue);
+    explicit Variant(const Vector2& iValue);
     explicit Variant(const Vector3& iValue);
     explicit Variant(const Quaternion& iValue);
     explicit Variant(const VariantArray& iValue);
@@ -81,6 +85,7 @@ public:
     float GetFloat() const;
     double GetDouble() const;
     std::string GetString() const;
+    Vector2 GetVector2() const;
     Vector3 GetVector3() const;
     Quaternion GetQuaternion() const;
     VariantArray GetArray() const;
@@ -113,6 +118,7 @@ template <> char Variant::Get<char>() const;
 template <> float Variant::Get<float>() const;
 template <> double Variant::Get<double>() const;
 template <> std::string Variant::Get<std::string>() const;
+template <> Vector2 Variant::Get<Vector2>() const;
 template <> Vector3 Variant::Get<Vector3>() const;
 template <> Quaternion Variant::Get<Quaternion>() const;
 template <> VariantArray Variant::Get<VariantArray>() const;

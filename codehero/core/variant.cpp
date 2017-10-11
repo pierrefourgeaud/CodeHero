@@ -20,6 +20,9 @@ Variant::~Variant() {
     case Value::VVT_String:
         m_Value.m_String.~string();
         break;
+    case Value::VVT_Vector2:
+        m_Value.m_Vector2.~Vector2();
+        break;
     case Value::VVT_Vector3:
         m_Value.m_Vector3.~Vector3();
         break;
@@ -57,6 +60,9 @@ Variant::Variant(const Variant& iRhs) {
         break;
     case Value::VVT_String:
         m_Value.m_String = iRhs.m_Value.m_String;
+        break;
+    case Value::VVT_Vector2:
+        m_Value.m_Vector2 = iRhs.m_Value.m_Vector2;
         break;
     case Value::VVT_Vector3:
         m_Value.m_Vector3 = iRhs.m_Value.m_Vector3;
@@ -111,6 +117,11 @@ Variant::Variant(const std::string& iValue) {
     new (&m_Value.m_String) std::string();
     m_Value.m_String = iValue;
     m_Type = Value::Type::VVT_String;
+}
+
+Variant::Variant(const Vector2& iValue) {
+    m_Value.m_Vector2 = iValue;
+    m_Type = Value::Type::VVT_Vector2;
 }
 
 Variant::Variant(const Vector3& iValue) {
@@ -190,6 +201,15 @@ std::string Variant::GetString() const {
     return "";
 }
 
+Vector2 Variant::GetVector2() const {
+    if (m_Type == Value::Type::VVT_Vector2) {
+        return m_Value.m_Vector2;
+    }
+
+    // Default to 0 vector
+    return Vector2();
+}
+
 Vector3 Variant::GetVector3() const {
     if (m_Type == Value::Type::VVT_Vector3) {
         return m_Value.m_Vector3;
@@ -253,6 +273,10 @@ template <> double Variant::Get<double>() const {
 
 template <> std::string Variant::Get<std::string>() const {
     return GetString();
+}
+
+template <> Vector2 Variant::Get<Vector2>() const {
+    return GetVector2();
 }
 
 template <> Vector3 Variant::Get<Vector3>() const {

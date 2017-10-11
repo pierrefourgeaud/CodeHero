@@ -65,6 +65,15 @@ go_bandit([]() {
                 AssertThat(test.IsNone(), Is().False());
             });
 
+            it("should initialize vector2 with proper type and right value", [] {
+                Vector2 value(1.0f, 2.0f);
+                Variant test(value);
+
+                AssertThat(test.GetType(), Equals(Variant::Value::Type::VVT_Vector2));
+                AssertThat(test.GetValue().m_Vector2, Equals(value));
+                AssertThat(test.IsNone(), Is().False());
+            });
+
             it("should initialize vector3 with proper type and right value", [] {
                 Vector3 value(1.0f, 2.0f, 3.0f);
                 Variant test(value);
@@ -213,6 +222,24 @@ go_bandit([]() {
 
                 AssertThat(test.GetString(), Equals(""));
                 AssertThat(test.Get<std::string>(), Equals(""));
+            });
+        });
+
+        describe("::GetVector2", [] {
+            it("should return the proper value if correct type", [] {
+                Vector2 value(1.0f, 2.0f);
+                Variant test(value);
+
+                AssertThat(test.GetVector2(), Equals(value));
+                AssertThat(test.Get<Vector2>(), Equals(value));
+            });
+
+            it("should return 0 vector2 if type is not vector2", [] {
+                char value = 'a';
+                Variant test(value);
+
+                AssertThat(test.GetVector2(), Equals(Vector2(0.0f, 0.0f)));
+                AssertThat(test.Get<Vector2>(), Equals(Vector2(0.0f, 0.0f)));
             });
         });
 
