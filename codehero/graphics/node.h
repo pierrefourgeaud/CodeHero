@@ -10,6 +10,7 @@
 #include "core/math/vector3.h"
 #include "core/math/matrix4.h"
 #include "core/math/quaternion.h"
+#include "core/serializable.h"
 
 namespace CodeHero {
 
@@ -24,8 +25,15 @@ enum TransformSpace {
     TS_World
 };
 
-class Node : public std::enable_shared_from_this<Node> {
+class Node : public Serializable, public std::enable_shared_from_this<Node> {
 public:
+    OBJECT(Node, Serializable);
+
+    Node(const std::shared_ptr<EngineContext>& iContext);
+    virtual ~Node() {}
+
+    static void RegisterObject(const std::shared_ptr<EngineContext>& iContext);
+    static std::shared_ptr<Node> Create(const std::shared_ptr<EngineContext>& iContext);
 
     template <class T, class... Args>
     std::shared_ptr<T> CreateDrawable(const std::shared_ptr<EngineContext>& iContext, Args&&... iArgs) {
@@ -39,7 +47,11 @@ public:
 
     std::shared_ptr<Node> CreateChild();
     void SetParent(const std::shared_ptr<Node>& iParent) { m_pParent = iParent; }
-    void SetScene(const std::shared_ptr<Scene>& iScene) { m_pScene = iScene; }
+    void SetScene(const std::shared_ptr<Scene>& iScene);
+    std::shared_ptr<Scene> GetScene() const { return m_pScene; }
+
+    // Mostly used for serialization
+    void AddChild(const std::shared_ptr<Node>& iChild);
 
     const std::vector<std::shared_ptr<Node>>& GetChildren() const { return m_Children; }
 
@@ -52,6 +64,7 @@ public:
     void SetRotation(const Quaternion& iRotation);
     const Vector3& GetPosition() const { return m_Position; }
     const Quaternion& GetRotation() const { return m_Rotation; }
+    const Vector3& GetScale() const { return m_Scale; }
 
     void Translate(const Vector3& iDelta, TransformSpace iSpace = TS_Local);
     void Rotate(const Quaternion& iDelta, TransformSpace iSpace = TS_Local);
@@ -61,6 +74,14 @@ public:
     Matrix4 GetTransform();
     // This takes in cound the parents node
     Matrix4 GetWorldTransform();
+
+    bool IsScene() const { return m_IsScene; }
+
+protected:
+    // We cannot use m_pScene == nullptr for this purpose because
+    // a node might be created but it does not require to be IN a scene
+    // before being used
+    bool m_IsScene = false;
 
 private:
     std::shared_ptr<Node> m_pParent;

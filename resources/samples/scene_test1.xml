@@ -1,0 +1,30 @@
+<Scene>
+  <Node>
+    <attribute name="Position" value="-4.0 2.0 12.0" />
+    <attribute name="Components">
+      <Light>
+        <attribute name="Type" value="T_Point" />
+        <attribute name="Ambient Intensity" value="0.05" />
+        <attribute name="Diffuse Intensity" value="0.5" />
+        <attribute name="Specular Intensity" value="0.4" />
+        <attribute name="Constant" value="1.0" />
+        <attribute name="Linear" value="0.007" />
+        <attribute name="Quadratic" value="0.0002" />
+      </Light>
+    </attribute>
+  </Node>
+  <Node>
+    <attribute name="Position" value="0.0 3.0 3.0" />
+    <attribute name="Components">
+      <Light>
+        <attribute name="Type" value="T_Point" />
+        <attribute name="Ambient Intensity" value="0.05" />
+        <attribute name="Diffuse Intensity" value="0.5" />
+        <attribute name="Specular Intensity" value="0.4" />
+        <attribute name="Constant" value="1.0" />
+        <attribute name="Linear" value="0.007" />
+        <attribute name="Quadratic" value="0.0002" />
+      </Light>
+    </attribute>
+  </Node>
+</Scene>

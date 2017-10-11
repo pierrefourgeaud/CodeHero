@@ -22,8 +22,13 @@ class Camera;
 // But with extra properties
 class Scene : public Node {
 public:
-    Scene();
+    OBJECT(Scene, Node);
+
+    Scene(const std::shared_ptr<EngineContext>& iContext);
     virtual ~Scene();
+
+    static void RegisterObject(const std::shared_ptr<EngineContext>& iContext);
+    static std::shared_ptr<Scene> Create(const std::shared_ptr<EngineContext>& iContext);
 
     // Facility for rendering
     void RegisterSceneLight(const std::shared_ptr<Light>& iLight);

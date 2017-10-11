@@ -4,6 +4,7 @@
 
 #include "graphics/scene.h"
 #include <logger.h>
+#include "core/type_traits/objectdefinition.h"
 #include "graphics/batch.h"
 #include "graphics/light.h"
 #include "graphics/mesh.h"
@@ -13,9 +14,20 @@
 
 namespace CodeHero {
 
-Scene::Scene() {}
+Scene::Scene(const std::shared_ptr<EngineContext>& iContext)
+    : Node(iContext) {
+    m_IsScene = true;
+}
 
 Scene::~Scene() {}
+
+void Scene::RegisterObject(const std::shared_ptr<EngineContext>& iContext) {
+    CH_REGISTER_OBJECT(Scene);
+}
+
+std::shared_ptr<Scene> Scene::Create(const std::shared_ptr<EngineContext>& iContext) {
+    return std::make_shared<Scene>(iContext);
+}
 
 void Scene::RegisterSceneLight(const std::shared_ptr<Light>& iLight) {
     // Check if the light in question is not registered already

@@ -2,7 +2,6 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
-#include <pugixml.hpp>
 #include "drivers/xml/serializablecodec_xml.h"
 #include "core/enginecontext.h"
 #include "core/fileaccess.h"
@@ -161,6 +160,14 @@ Error SerializableCodecXML::_Load(const std::shared_ptr<ObjectDefinition>& iDefi
                     // we will need to revise this parsing
                     attrInfo.GetAccessor()->Set(&oObject, Variant(ParseHashMap(it->children())));
                     break;
+                case Variant::Value::VVT_SerializablePtr:
+                    // If the tag is attribute and the type is shared_ptr<Serializable>
+                    // we consider that we expect a collection of SerializablePtr object
+                    // the attribute tag being a way to group those elements together
+                    if (_ParseCollection(oObject, attrInfo, it->children()) != Error::OK) {
+                        LOGE << "[SerializableCodeXML]: Failed to parse collection '" << attr << "'." << std::endl;
+                    }
+                    break;
                 default:
                     // Should not be here...
                     CH_ASSERT(false);
@@ -205,6 +212,33 @@ Error SerializableCodecXML::_Load(const std::shared_ptr<ObjectDefinition>& iDefi
     oObject.EndLoad();
 
     return OK;
+}
+
+Error SerializableCodecXML::_ParseCollection(Serializable& oObject,
+                                             const AttributeInfo& iAttrInfo,
+                                             const pugi::xml_object_range<pugi::xml_node_iterator>& iChildren) const {
+    Error ret = Error::OK;
+
+    for (pugi::xml_node_iterator it = iChildren.begin(); it != iChildren.end(); ++it) {
+        auto def = Object::GetDefinition(it->name());
+        if (!def) {
+            LOGE << "[SerializableCodecXML]: No definition was declared for object '" << it->name()
+                 << "'. Object not imported." << std::endl;
+            ret = Error::ERR_INVALID_PARAMETER;
+            break;
+        }
+
+        auto obj = std::static_pointer_cast<Serializable>(def->Create());
+        ret = _Load(def, *it, *obj);
+        if (ret == Error::OK) {
+            iAttrInfo.GetAccessor()->Set(&oObject, Variant(obj));
+        } else {
+            LOGE << "[SerializableCodecXML]: Failed to parse collection attribute'" << it->name() << "'." << std::endl;
+            break;
+        }
+    }
+
+    return ret;
 }
 
 }  // namespace CodeHero

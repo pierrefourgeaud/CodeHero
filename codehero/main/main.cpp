@@ -89,6 +89,8 @@ Error Main::Start() {
     m_pContext = std::shared_ptr<EngineContext>(new EngineContext);
 
     // Register objects first
+    Scene::RegisterObject(m_pContext);
+    Node::RegisterObject(m_pContext);
     Light::RegisterObject(m_pContext);
     Shader::RegisterObject(m_pContext);
     ShaderProgram::RegisterObject(m_pContext);
@@ -198,34 +200,16 @@ Error Main::Run() {
         { 1.0f, -10.0f, -0.6f}
     };
 
-    Vector3 pointLightsPositions[] = {
-        {-4.0f,  2.0f,  12.0f},
-        { 0.0f,  3.0f,  3.0f}
-    };
-
     auto lastTime = time->GetTimeMilliseconds();
     int nbFrames = 0;
     int fps = 0;
 
-    std::shared_ptr<Scene> scene = std::make_shared<Scene>();
+    std::shared_ptr<Scene> scene = std::make_shared<Scene>(m_pContext);
+    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/scene_test1.xml", *scene);
 
     auto dirLightNode = scene->CreateChild();
     auto dirLight = dirLightNode->CreateDrawable<Light>(m_pContext, Light::T_Directional);
     m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/dir_light1.xml", *dirLight.get());
-
-    std::vector<Light> pointLights;
-    for (size_t i = 0; i < 4; ++i) {
-        auto pointLightNode = scene->CreateChild();
-        auto pointLight = pointLightNode->CreateDrawable<Light>(m_pContext, Light::Type::T_Point)
-            ->SetAmbientIntensity(0.05f)
-            .SetDiffuseIntensity(0.5f)
-            .SetSpecularIntensity(0.4f)
-            .SetConstant(1.0f)
-            .SetLinear(0.007f)
-            .SetQuadratic(0.0002f);
-        pointLightNode->SetPosition(pointLightsPositions[i]);
-        pointLights.push_back(pointLight);
-    }
 
     auto texturedShaderVert = rs->CreateShader();
     texturedShaderVert->Load("./codehero/shaders/textured.vert").Compile();
