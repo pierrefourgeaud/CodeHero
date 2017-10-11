@@ -29,6 +29,7 @@ public:
     union Value {
         enum Type {
             VVT_None = 0,
+            VVT_Bool,
             VVT_Int,
             VVT_Char,
             VVT_Float,
@@ -42,6 +43,7 @@ public:
             VVT_SerializablePtr
         };
 
+        bool m_Bool;
         int m_Int;
         char m_Char;
         float m_Float;
@@ -68,6 +70,7 @@ public:
     // Passing by value is intentional here
     Variant& operator=(Variant iRhs);
 
+    explicit Variant(bool iValue);
     explicit Variant(int iValue);
     explicit Variant(char iValue);
     explicit Variant(float iValue);
@@ -80,6 +83,7 @@ public:
     explicit Variant(const VariantHashMap& iHashMap);
     explicit Variant(const std::shared_ptr<Serializable>& iValue);
 
+    bool GetBool() const;
     int GetInt() const;
     char GetChar() const;
     float GetFloat() const;
@@ -113,6 +117,7 @@ private:
 };
 
 // Specialization of template <class T> T Get() const;
+template <> bool Variant::Get<bool>() const;
 template <> int Variant::Get<int>() const;
 template <> char Variant::Get<char>() const;
 template <> float Variant::Get<float>() const;

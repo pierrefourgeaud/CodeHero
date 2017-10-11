@@ -46,6 +46,9 @@ Variant::~Variant() {
 Variant::Variant(const Variant& iRhs) {
     m_Type = iRhs.m_Type;
     switch (iRhs.m_Type) {
+    case Value::VVT_Bool:
+        m_Value.m_Bool = iRhs.m_Value.m_Bool;
+        break;
     case Value::VVT_Int:
         m_Value.m_Int = iRhs.m_Value.m_Int;
         break;
@@ -91,6 +94,11 @@ Variant::Variant(const Variant& iRhs) {
 Variant& Variant::operator=(Variant iRhs) {
     std::swap(*this, iRhs);
     return *this;
+}
+
+Variant::Variant(bool iValue) {
+    m_Value.m_Bool = iValue;
+    m_Type = Value::Type::VVT_Bool;
 }
 
 Variant::Variant(int iValue) {
@@ -150,6 +158,15 @@ Variant::Variant(const std::shared_ptr<Serializable>& iValue) {
     new (&m_Value.m_SerializablePtr) std::shared_ptr<Serializable>();
     m_Value.m_SerializablePtr = iValue;
     m_Type = Value::Type::VVT_SerializablePtr;
+}
+
+bool Variant::GetBool() const {
+    if (m_Type == Value::Type::VVT_Bool) {
+        return m_Value.m_Bool;
+    }
+
+    // Default to false
+    return false;
 }
 
 int Variant::GetInt() const {
@@ -253,6 +270,10 @@ std::shared_ptr<Serializable> Variant::GetSerializablePtr() const {
 
     // Default to nullptr
     return nullptr;
+}
+
+template <> bool Variant::Get<bool>() const {
+    return GetBool();
 }
 
 template <> int Variant::Get<int>() const {

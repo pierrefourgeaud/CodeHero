@@ -20,6 +20,15 @@ go_bandit([]() {
                 AssertThat(test.IsNone(), Is().True());
             });
 
+            it("should initialize bool with proper type and right value", [] {
+                bool value = true;
+                Variant test(value);
+
+                AssertThat(test.GetType(), Equals(Variant::Value::Type::VVT_Bool));
+                AssertThat(test.GetValue().m_Bool, Equals(value));
+                AssertThat(test.IsNone(), Is().False());
+            });
+
             it("should initialize int with proper type and right value", [] {
                 int value = 1;
                 Variant test(value);
@@ -117,6 +126,24 @@ go_bandit([]() {
                 AssertThat(test.GetType(), Equals(Variant::Value::Type::VVT_SerializablePtr));
                 AssertThat(test.GetValue().m_SerializablePtr, Equals(value));
                 AssertThat(test.IsNone(), Is().False());
+            });
+        });
+
+        describe("::GetBool", [] {
+            it("should return the proper value if correct type", [] {
+                bool value = true;
+                Variant test(value);
+
+                AssertThat(test.GetBool(), Equals(value));
+                AssertThat(test.Get<bool>(), Equals(value));
+            });
+
+            it("should return false if type is not bool", [] {
+                float value = 1.0f;
+                Variant test(value);
+
+                AssertThat(test.GetBool(), Equals(false));
+                AssertThat(test.Get<bool>(), Equals(false));
             });
         });
 
