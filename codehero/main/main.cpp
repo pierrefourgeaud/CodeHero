@@ -207,10 +207,6 @@ Error Main::Run() {
     std::shared_ptr<Scene> scene = std::make_shared<Scene>(m_pContext);
     m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/scene_test1.xml", *scene);
 
-    auto dirLightNode = scene->CreateChild();
-    auto dirLight = dirLightNode->CreateDrawable<Light>(m_pContext, Light::T_Directional);
-    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/dir_light1.xml", *dirLight.get());
-
     auto texturedShaderVert = rs->CreateShader();
     texturedShaderVert->Load("./codehero/shaders/textured.vert").Compile();
     auto texturedShaderNoAlphaFrag = rs->CreateShader();

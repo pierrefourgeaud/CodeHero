@@ -30,9 +30,12 @@ private:
     Error _Load(const std::shared_ptr<ObjectDefinition>& iDefinition,
                 const pugi::xml_node& iNode,
                 Serializable& oObject) const;
-    Error _ParseCollection(Serializable& oObject,
+    Error _ParseCollection(const pugi::xml_object_range<pugi::xml_node_iterator>& iChildren,
                            const AttributeInfo& iAttrInfo,
-                           const pugi::xml_object_range<pugi::xml_node_iterator>& iChildren) const;
+                           Serializable& oObject) const;
+    Error _LoadObject(const pugi::xml_node_iterator& iNode,
+                      const AttributeInfo& iAttrInfo,
+                      Serializable& oObject) const;
 };
 
 }  // namespace CodeHero

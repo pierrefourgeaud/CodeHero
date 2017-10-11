@@ -164,7 +164,7 @@ Error SerializableCodecXML::_Load(const std::shared_ptr<ObjectDefinition>& iDefi
                     // If the tag is attribute and the type is shared_ptr<Serializable>
                     // we consider that we expect a collection of SerializablePtr object
                     // the attribute tag being a way to group those elements together
-                    if (_ParseCollection(oObject, attrInfo, it->children()) != Error::OK) {
+                    if (_ParseCollection(it->children(), attrInfo, oObject) != Error::OK) {
                         LOGE << "[SerializableCodeXML]: Failed to parse collection '" << attr << "'." << std::endl;
                     }
                     break;
@@ -182,30 +182,7 @@ Error SerializableCodecXML::_Load(const std::shared_ptr<ObjectDefinition>& iDefi
                 continue;
             }
 
-            auto def = Object::GetDefinition(it->name());
-            if (!def) {
-                LOGE << "No definition was declared for object '" << it->name() << "'. Object not imported." << std::endl;
-                continue;
-            }
-
-            auto attr = it->attribute("path");
-
-            // If it has a path to file, we use the resource loader
-            if (attr) {
-                std::shared_ptr<Serializable> obj = std::static_pointer_cast<Serializable>(def->Create());
-                m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load(attr.as_string(), *obj.get());
-                attrInfo.GetAccessor()->Set(&oObject, Variant(obj));
-            } else { // Or we load it here
-                // TODO(pierre) All object here can be serializable
-                // but we should add a test. We can at least do a IsA (to be added soon)
-                std::shared_ptr<Serializable> obj = std::static_pointer_cast<Serializable>(def->Create());
-                Error res = _Load(def, *it, *obj.get());
-                if (res == Error::OK) {
-                    attrInfo.GetAccessor()->Set(&oObject, Variant(obj));
-                } else {
-                    LOGE << "Failed to import " << it->name() << " object. Continuing..." << std::endl;
-                }
-            }
+            _LoadObject(it, attrInfo, oObject);
         }
     }
 
@@ -214,31 +191,52 @@ Error SerializableCodecXML::_Load(const std::shared_ptr<ObjectDefinition>& iDefi
     return OK;
 }
 
-Error SerializableCodecXML::_ParseCollection(Serializable& oObject,
+Error SerializableCodecXML::_ParseCollection(const pugi::xml_object_range<pugi::xml_node_iterator>& iChildren,
                                              const AttributeInfo& iAttrInfo,
-                                             const pugi::xml_object_range<pugi::xml_node_iterator>& iChildren) const {
+                                             Serializable& oObject) const {
     Error ret = Error::OK;
 
     for (pugi::xml_node_iterator it = iChildren.begin(); it != iChildren.end(); ++it) {
-        auto def = Object::GetDefinition(it->name());
-        if (!def) {
-            LOGE << "[SerializableCodecXML]: No definition was declared for object '" << it->name()
-                 << "'. Object not imported." << std::endl;
-            ret = Error::ERR_INVALID_PARAMETER;
-            break;
-        }
-
-        auto obj = std::static_pointer_cast<Serializable>(def->Create());
-        ret = _Load(def, *it, *obj);
-        if (ret == Error::OK) {
-            iAttrInfo.GetAccessor()->Set(&oObject, Variant(obj));
-        } else {
-            LOGE << "[SerializableCodecXML]: Failed to parse collection attribute'" << it->name() << "'." << std::endl;
+        ret = _LoadObject(it, iAttrInfo, oObject);
+        if (ret != Error::OK) {
+            LOGE << "[SerializableCodecXML]: Failed to load object '" << it->name() << "'." << std::endl;
             break;
         }
     }
 
     return ret;
+}
+
+Error SerializableCodecXML::_LoadObject(const pugi::xml_node_iterator& iNode, const AttributeInfo& iAttrInfo, Serializable& oObject) const {
+    auto def = Object::GetDefinition(iNode->name());
+    if (!def) {
+        LOGE << "[SerializableCodecXML]: No definition was declared for object '" << iNode->name()
+             << "'. Object not imported." << std::endl;
+        return Error::ERR_PARSING_FAILED;
+    }
+
+    auto attr = iNode->attribute("path");
+
+    // Whatever path we take next, we will need this object
+    std::shared_ptr<Serializable> obj = std::static_pointer_cast<Serializable>(def->Create());
+
+    // If it has a path to file, we use the resource loader
+    if (attr) {
+        m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load(attr.as_string(), *obj.get());
+    } else { // Or we load it here
+        // TODO(pierre) All object here can be serializable
+        // but we should add a test. We can at least do a IsA (to be added soon)
+        Error res = _Load(def, *iNode, *obj.get());
+        if (res != Error::OK) {
+            LOGE << "[SerializableCodecXML]: Failed to import " << iNode->name() << " object. Continuing..."
+                 << std::endl;
+            return res;
+        }
+    }
+
+    iAttrInfo.GetAccessor()->Set(&oObject, Variant(obj));
+
+    return Error::OK;
 }
 
 }  // namespace CodeHero
