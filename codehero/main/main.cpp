@@ -95,6 +95,7 @@ Error Main::Start() {
     Shader::RegisterObject(m_pContext);
     ShaderProgram::RegisterObject(m_pContext);
     Texture::RegisterObject(m_pContext);
+    Material::RegisterObject(m_pContext);
 
     // Initialize the time as soon as possible
     Time* time = new Time(m_pContext);
@@ -219,20 +220,8 @@ Error Main::Run() {
     auto shaderTexturedAlpha = rs->CreateShaderProgram();
     m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/shaderProgram_texturedAlpha.xml", *shaderTexturedAlpha.get());
 
-    auto skyboxShaderVert = rs->CreateShader();
-    skyboxShaderVert->Load("./codehero/shaders/skybox.vert").Compile();
-    auto skyboxShaderFrag = rs->CreateShader();
-    skyboxShaderFrag->Load("./codehero/shaders/skybox.frag").Compile();
-    auto skyboxShader = rs->CreateShaderProgram();
-    skyboxShader->Attach(skyboxShaderVert).Attach(skyboxShaderFrag).Link();
-
-    auto skyboxTexture = rs->CreateTexture();
-    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/skybox.xml", *skyboxTexture.get());
-
     auto skyboxMaterial = std::make_shared<Material>(m_pContext);
-    skyboxMaterial->SetTexture(TU_Diffuse, std::shared_ptr<Texture>(skyboxTexture));
-    skyboxMaterial->SetShaderProgram(skyboxShader);
-    skyboxMaterial->SetDepthTest(false);
+    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/skybox_material.xml", *skyboxMaterial);
 
     auto skyboxNode = scene->CreateChild();
     auto skyboxMdl = skyboxNode->CreateDrawable<Skybox>(m_pContext);

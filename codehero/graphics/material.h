@@ -8,7 +8,7 @@
 #include <memory>
 #include <unordered_map>
 #include "core/math/vector2.h"
-#include "core/object.h"
+#include "core/serializable.h"
 
 namespace CodeHero {
 
@@ -23,12 +23,15 @@ enum TextureUnit {
 };
 using TextureUnitsMaps = std::unordered_map<TextureUnit, std::shared_ptr<Texture>>;
 
-class Material : public Object {
+class Material : public Serializable {
 public:
-    OBJECT(Material, Object)
+    OBJECT(Material, Serializable)
 
     Material(const std::shared_ptr<EngineContext>& iContext);
     virtual ~Material();
+
+    static void RegisterObject(const std::shared_ptr<EngineContext>& iContext);
+    static std::shared_ptr<Material> Create(const std::shared_ptr<EngineContext>& iContext);
 
     // This will probably be replaced by technique when we will be able to dynamically load them
     // and when we will be supporting mulpasses

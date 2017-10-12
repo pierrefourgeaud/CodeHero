@@ -16,6 +16,20 @@
 namespace CodeHero {
 
 // Standard parsing
+bool ParseBool(const std::string& iInput) {
+    bool res = false;
+
+    if (iInput == "true") {
+        res = true;
+    } else if (iInput == "false") {
+        res = false;
+    } else {
+        LOGE << "[SerializableCodecXML]: Faile to parse bool argument: '" << iInput << "' is not valid." << std::endl;
+    }
+
+    return res;
+}
+
 float ParseFloat(const std::string& iInput) {
     float res = 0.0f;
     try {
@@ -142,6 +156,9 @@ Error SerializableCodecXML::_Load(const std::shared_ptr<ObjectDefinition>& iDefi
                      << "', ignored." << std::endl;
             } else {
                 switch (attrInfo.GetType()) {
+                case Variant::Value::VVT_Bool:
+                    attrInfo.GetAccessor()->Set(&oObject, Variant(ParseBool(attrVal)));
+                    break;
                 case Variant::Value::VVT_Float:
                     attrInfo.GetAccessor()->Set(&oObject, Variant(ParseFloat(attrVal)));
                     break;
