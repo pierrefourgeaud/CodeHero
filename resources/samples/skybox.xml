@@ -1,14 +1,29 @@
-<Texture>
-  <attribute name="Type" value="T_Cube" />
-  <attribute name="WrapMode U" value="TWM_ClampEdge" />
-  <attribute name="WrapMode V" value="TWM_ClampEdge" />
-  <attribute name="WrapMode W" value="TWM_ClampEdge" />
-  <attribute name="Faces">
-    <subattribute value="./resources/images/skybox_clear_sky/right.jpg" />
-    <subattribute value="./resources/images/skybox_clear_sky/left.jpg" />
-    <subattribute value="./resources/images/skybox_clear_sky/top.jpg" />
-    <subattribute value="./resources/images/skybox_clear_sky/bottom.jpg" />
-    <subattribute value="./resources/images/skybox_clear_sky/back.jpg" />
-    <subattribute value="./resources/images/skybox_clear_sky/front.jpg" />
-  </attribute>
-</Texture>
+<Skybox>
+  <Material>
+    <attribute name="Depth Test Enabled" value="false" />
+    <ShaderProgram>
+      <Shader>
+        <attribute name="File" value="./codehero/shaders/skybox.frag" />
+      </Shader>
+      <Shader>
+        <attribute name="File" value="./codehero/shaders/skybox.vert" />
+      </Shader>
+    </ShaderProgram>
+    <attribute name="Texture Diffuse">
+      <Texture>
+        <attribute name="Type" value="T_Cube" />
+        <attribute name="WrapMode U" value="TWM_ClampEdge" />
+        <attribute name="WrapMode V" value="TWM_ClampEdge" />
+        <attribute name="WrapMode W" value="TWM_ClampEdge" />
+        <attribute name="Faces">
+          <subattribute value="./resources/images/skybox_clear_sky/right.jpg" />
+          <subattribute value="./resources/images/skybox_clear_sky/left.jpg" />
+          <subattribute value="./resources/images/skybox_clear_sky/top.jpg" />
+          <subattribute value="./resources/images/skybox_clear_sky/bottom.jpg" />
+          <subattribute value="./resources/images/skybox_clear_sky/back.jpg" />
+          <subattribute value="./resources/images/skybox_clear_sky/front.jpg" />
+        </attribute>
+      </Texture>
+    </attribute>
+  </Material>
+</Skybox>

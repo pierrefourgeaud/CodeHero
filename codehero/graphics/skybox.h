@@ -14,8 +14,13 @@ class Material;
 
 class Skybox : public Model {
 public:
+    OBJECT(Skybox, Model);
+
     Skybox(const std::shared_ptr<EngineContext>& iContext);
     virtual ~Skybox();
+
+    static void RegisterObject(const std::shared_ptr<EngineContext>& iContext);
+    static std::shared_ptr<Skybox> Create(const std::shared_ptr<EngineContext>& iContext);
 
     void Initialize(const std::shared_ptr<Material>& iMaterial);
 };

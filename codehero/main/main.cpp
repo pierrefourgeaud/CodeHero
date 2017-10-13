@@ -96,6 +96,7 @@ Error Main::Start() {
     ShaderProgram::RegisterObject(m_pContext);
     Texture::RegisterObject(m_pContext);
     Material::RegisterObject(m_pContext);
+    Skybox::RegisterObject(m_pContext);
 
     // Initialize the time as soon as possible
     Time* time = new Time(m_pContext);
@@ -220,12 +221,9 @@ Error Main::Run() {
     auto shaderTexturedAlpha = rs->CreateShaderProgram();
     m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/shaderProgram_texturedAlpha.xml", *shaderTexturedAlpha.get());
 
-    auto skyboxMaterial = std::make_shared<Material>(m_pContext);
-    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/skybox_material.xml", *skyboxMaterial);
-
     auto skyboxNode = scene->CreateChild();
     auto skyboxMdl = skyboxNode->CreateDrawable<Skybox>(m_pContext);
-    skyboxMdl->Initialize(skyboxMaterial);
+    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/skybox.xml", *skyboxMdl);
 
     std::shared_ptr<Node> nanoNode = scene->CreateChild();
     nanoNode->Translate({ 1.0f, -12.0f, 4.7f });
