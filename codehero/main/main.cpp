@@ -221,10 +221,6 @@ Error Main::Run() {
     auto shaderTexturedAlpha = rs->CreateShaderProgram();
     m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/shaderProgram_texturedAlpha.xml", *shaderTexturedAlpha.get());
 
-    auto skyboxNode = scene->CreateChild();
-    auto skyboxMdl = skyboxNode->CreateDrawable<Skybox>(m_pContext);
-    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/skybox.xml", *skyboxMdl);
-
     std::shared_ptr<Node> nanoNode = scene->CreateChild();
     nanoNode->Translate({ 1.0f, -12.0f, 4.7f });
     auto nanoMdl = nanoNode->CreateDrawable<Model>(m_pContext);

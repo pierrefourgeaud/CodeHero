@@ -1,6 +1,11 @@
 <Scene>
   <Node>
     <attribute name="Components">
+      <Skybox path="./resources/samples/skybox.xml" />
+    </attribute>
+  </Node>
+  <Node>
+    <attribute name="Components">
       <Light path="./resources/samples/dir_light1.xml" />
     </attribute>
   </Node>
