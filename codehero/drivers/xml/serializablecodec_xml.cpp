@@ -41,6 +41,23 @@ float ParseFloat(const std::string& iInput) {
     return res;
 }
 
+Vector2 ParseVector2(const std::string& iInput) {
+    Vector2 res;
+    auto nums = Split(iInput, ' ');
+    if (nums.size() != 2) {
+        LOGE << "[SerializableCodexXML]: Fail to parse Vector2 argument. Got " << nums.size() << " members, expected 2." << std::endl;
+        return res;
+    }
+    try {
+        res.SetX(ParseFloat(nums[0]));
+        res.SetY(ParseFloat(nums[1]));
+    } catch (const std::exception& e) {
+        LOGE << "[SerializableCodexXML]: Fail to parse Vector2 argument, got: " << e.what() << std::endl;
+    }
+
+    return res;
+}
+
 Vector3 ParseVector3(const std::string& iInput) {
     Vector3 res;
     auto nums = Split(iInput, ' ');
@@ -54,6 +71,22 @@ Vector3 ParseVector3(const std::string& iInput) {
         res.SetZ(ParseFloat(nums[2]));
     } catch (const std::exception& e) {
         LOGE << "XML: Fail to parse Vector3 argument, got: " << e.what() << std::endl;
+    }
+
+    return res;
+}
+
+Quaternion ParseQuaternion(const std::string& iInput) {
+    Quaternion res;
+    auto nums = Split(iInput, ' ');
+    if (nums.size() == 3) {
+        try {
+            res.FromEulerAngles(ParseFloat(nums[0]), ParseFloat(nums[1]), ParseFloat(nums[2]));
+        } catch (const std::exception& e) {
+            LOGE << "[SerializableCodexXML]: Fail to parse Quaternion argument, got: " << e.what() << std::endl;
+        }
+    } else {
+        LOGE << "[SerializableCodexXML]: Fail to parse Quaternion argument. Got " << nums.size() << " members." << std::endl;
     }
 
     return res;
@@ -165,8 +198,14 @@ Error SerializableCodecXML::_Load(const std::shared_ptr<ObjectDefinition>& iDefi
                 case Variant::Value::VVT_String:
                     attrInfo.GetAccessor()->Set(&oObject, Variant(std::string(attrVal)));
                     break;
+                case Variant::Value::VVT_Vector2:
+                    attrInfo.GetAccessor()->Set(&oObject, Variant(ParseVector2(attrVal)));
+                    break;
                 case Variant::Value::VVT_Vector3:
                     attrInfo.GetAccessor()->Set(&oObject, Variant(ParseVector3(attrVal)));
+                    break;
+                case Variant::Value::VVT_Quaternion:
+                    attrInfo.GetAccessor()->Set(&oObject, Variant(ParseQuaternion(attrVal)));
                     break;
                 case Variant::Value::VVT_Array:
                     attrInfo.GetAccessor()->Set(&oObject, Variant(ParseArray(it->children())));
