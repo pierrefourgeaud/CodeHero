@@ -137,16 +137,15 @@ SerializableCodecXML::~SerializableCodecXML() {}
 
 Error SerializableCodecXML::Load(FileAccess& iF, Serializable& oObject) {
     const int32_t size = iF.GetSize();
-    char* buffer = new char[size];
-    iF.Read(reinterpret_cast<uint8_t*>(buffer), size);
+    std::string content = iF.ReadAll();
 
     pugi::xml_document doc;
-    pugi::xml_parse_result result = doc.load_string(buffer);
+    pugi::xml_parse_result result = doc.load_string(content.c_str());
     
     if (!result) {
-        LOGE << "XML [" << buffer << "] parsed with errors, attr value: [" << doc.child("node").attribute("attr").value() << "]" << std::endl;
+        LOGE << "XML [" << content << "] parsed with errors, attr value: [" << doc.child("node").attribute("attr").value() << "]" << std::endl;
         LOGE << "Error description: " << result.description() << std::endl;
-        LOGE << "Error offset: " << result.offset << " (error at [..." << (buffer + result.offset) << "]" << std::endl;
+        LOGE << "Error offset: " << result.offset << " (error at [..." << (&content[result.offset]) << "]" << std::endl;
         return ERR_PARSING_FAILED;
     }
 
@@ -165,8 +164,6 @@ Error SerializableCodecXML::Load(FileAccess& iF, Serializable& oObject) {
     }
 
     Error loadResult = _Load(rootDef, root, oObject);
-
-    delete [] buffer;
 
     return loadResult;
 }
