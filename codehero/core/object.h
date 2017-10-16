@@ -34,6 +34,8 @@ public:
     const std::string& GetTypeName() const { return m_TypeName; }
     const std::shared_ptr<TypeInfo>& GetBaseTypeInfo() const { return m_BaseTypeInfo; }
 
+    bool IsA(const std::shared_ptr<TypeInfo>& iOther) const;
+
 private:
     const std::string m_TypeName;
     const std::shared_ptr<TypeInfo> m_BaseTypeInfo;
@@ -43,8 +45,14 @@ class Object {
 public:
     virtual ~Object() {}
 
-    Object(const std::shared_ptr<EngineContext>& iContext) : m_pContext(iContext) {}
-    virtual const std::string GetTypeName() = 0;
+    Object(const std::shared_ptr<EngineContext>& iContext);
+
+    bool IsInstanceOf(const std::shared_ptr<TypeInfo>& iType) const;
+
+    virtual const std::string GetTypeName() const = 0;
+    virtual const std::shared_ptr<TypeInfo>& GetTypeInfo() const {
+        return GetTypeInfoStatic();
+    }
 
     static const std::shared_ptr<TypeInfo>& GetTypeInfoStatic() {
         static const std::shared_ptr<TypeInfo> nullType = nullptr;
@@ -64,7 +72,8 @@ protected:
 } // namespace CodeHero
 
 #define OBJECT(className, baseClassName) \
-    const std::string GetTypeName() override { return GetTypeInfoStatic()->GetTypeName(); } \
+    const std::string GetTypeName() const override { return GetTypeInfoStatic()->GetTypeName(); } \
+    const std::shared_ptr<TypeInfo>& GetTypeInfo() const override { return GetTypeInfoStatic(); } \
     static const std::string& GetTypeNameStatic() { return GetTypeInfoStatic()->GetTypeName(); } \
     static const std::shared_ptr<TypeInfo>& GetTypeInfoStatic() { \
         static const auto typeInfoStatic = std::make_shared<TypeInfo>(#className, baseClassName::GetTypeInfoStatic()); \
@@ -72,7 +81,8 @@ protected:
     } \
 
 #define OBJECT_TEMPLATE(className, T, baseClassName) \
-    const std::string GetTypeName() override { return GetTypeInfoStatic()->GetTypeName(); } \
+    const std::string GetTypeName() const override { return GetTypeInfoStatic()->GetTypeName(); } \
+    const std::shared_ptr<TypeInfo>& GetTypeInfo() const override { return GetTypeInfoStatic(); } \
     static const std::string& GetTypeNameStatic() { return GetTypeInfoStatic()->GetTypeName(); } \
     static const std::shared_ptr<TypeInfo>& GetTypeInfoStatic() { \
         static const auto typeInfoStatic = std::make_shared<TypeInfo>(#className + T::GetTypeNameStatic(), baseClassName::GetTypeInfoStatic()); \
