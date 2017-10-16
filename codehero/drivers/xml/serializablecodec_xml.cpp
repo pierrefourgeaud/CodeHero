@@ -136,7 +136,6 @@ SerializableCodecXML::SerializableCodecXML(const std::shared_ptr<EngineContext>&
 SerializableCodecXML::~SerializableCodecXML() {}
 
 Error SerializableCodecXML::Load(FileAccess& iF, Serializable& oObject) {
-    const int32_t size = iF.GetSize();
     std::string content = iF.ReadAll();
 
     pugi::xml_document doc;
