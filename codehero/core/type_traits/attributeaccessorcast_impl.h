@@ -9,6 +9,11 @@
 #include "core/type_traits/attributeaccessor.h"
 #include "core/variant.h"
 
+// TODO(pierre) It seems that the GetTypeInfoStatic call will require including everyone of the
+// header declaring the type use there.
+// We should find a way to avoid this !!
+#include "graphics/mesh.h"
+
 namespace CodeHero {
 
 // This is a special class. This requires that:
@@ -30,9 +35,7 @@ public:
 
     void Set(Serializable* iPtr, const Variant& iValue) override {
         CH_ASSERT(iPtr);
-        // TODO(pierre) It would be nice to make it safe
-        //   One way would be to use the information that we have on our type
-        //   i.e: "Shader" IsTypeOf "Serializable"
+        CH_ASSERT(iValue.Get<Type>()->IsInstanceOf(CastTo::GetTypeInfoStatic()));
         Class* classPtr = static_cast<Class*>(iPtr);
         (classPtr->*m_pSet)(std::static_pointer_cast<CastTo>(iValue.Get<Type>()));
     }
@@ -55,9 +58,7 @@ public:
 
     void Set(Serializable* iPtr, const Variant& iValue) override {
         CH_ASSERT(iPtr);
-        // TODO(pierre) It would be nice to make it safe
-        //   One way would be to use the information that we have on our type
-        //   i.e: "Shader" IsTypeOf "Serializable"
+        CH_ASSERT(iValue.Get<Type>()->IsInstanceOf(CastTo::GetTypeInfoStatic()));
         Class* classPtr = static_cast<Class*>(iPtr);
         (classPtr->*m_pSet)(std::static_pointer_cast<CastTo>(iValue.Get<Type>()));
     }
