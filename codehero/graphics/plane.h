@@ -12,10 +12,13 @@ namespace CodeHero {
 
 class Plane : public Mesh {
 public:
+    OBJECT(Plane, Mesh)
+
     Plane(const std::shared_ptr<EngineContext>& iContext);
     ~Plane();
 
-private:
+    static void RegisterObject(const std::shared_ptr<EngineContext>& iContext);
+    static std::shared_ptr<Plane> Create(const std::shared_ptr<EngineContext>& iContext);
 };
 
 } // namespace CodeHero

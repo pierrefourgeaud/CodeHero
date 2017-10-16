@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "graphics/plane.h"
+#include "core/type_traits/objectdefinition.h"
 #include "graphics/rendersystem.h"
 #include "graphics/vertexbuffer.h"
 
@@ -28,6 +29,14 @@ Plane::Plane(const std::shared_ptr<EngineContext>& iContext)
 }
 
 Plane::~Plane() {
+}
+
+void Plane::RegisterObject(const std::shared_ptr<EngineContext>& iContext) {
+    CH_REGISTER_OBJECT(Plane);
+}
+
+std::shared_ptr<Plane> Plane::Create(const std::shared_ptr<EngineContext>& iContext) {
+    return std::make_shared<Plane>(iContext);
 }
 
 } // namespace CodeHero

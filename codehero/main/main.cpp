@@ -99,6 +99,7 @@ Error Main::Start() {
     Skybox::RegisterObject(m_pContext);
     Model::RegisterObject(m_pContext);
     Mesh::RegisterObject(m_pContext);
+    Plane::RegisterObject(m_pContext);
 
     // Initialize the time as soon as possible
     Time* time = new Time(m_pContext);
@@ -176,12 +177,6 @@ Error Main::Run() {
 
     auto crateSpecular = rs->CreateTexture();
     crateSpecular->Load("./resources/images/container2_specular.png");
-
-    // Floor texture
-    auto floorDiffuse = rs->CreateTexture();
-    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/texture_FloorDiffuse.xml", *floorDiffuse.get());
-    auto floorSpecular = rs->CreateTexture();
-    floorSpecular->Load("./resources/images/floor_specular.PNG");
 
     auto grassDiffuse = rs->CreateTexture();
     grassDiffuse->SetWrapMode(TC_U, TWM_ClampEdge);
@@ -286,20 +281,6 @@ Error Main::Run() {
     float yaw = 0.0f;
     float pitch = 15.0f;
     cameraNode->SetRotation(Quaternion(pitch, yaw, 0.0f));
-
-    std::shared_ptr<Node> planeNode = scene->CreateChild();
-    auto planeMdl = planeNode->CreateDrawable<Model>(m_pContext);
-    auto floorMaterial = std::make_shared<Material>(m_pContext);
-    floorMaterial->SetTexture(TU_Diffuse, std::shared_ptr<Texture>(floorDiffuse));
-    floorMaterial->SetTexture(TU_Specular, std::shared_ptr<Texture>(floorSpecular));
-    floorMaterial->SetShaderProgram(shaderTexturedNoAlpha);
-    floorMaterial->SetTextureCoordsOffset(5.0f, 5.0f);
-    auto planePtr = std::make_shared<Plane>(m_pContext);
-    planePtr->SetMaterial(floorMaterial);
-    planeMdl->AddMesh(planePtr);
-    planeNode->Scale({ 100.0f, 100.0f, 1.0f });
-    planeNode->Translate({ 0, -12.1f, 0.0f });
-    planeNode->Rotate(Quaternion(70.0f, 0.0f, 0.0f));
 
     auto cube = std::make_shared<Cube>(m_pContext);
     auto crateMaterial = std::make_shared<Material>(m_pContext);
