@@ -59,7 +59,7 @@ void ModelCodecAssimp::_ProcessNode(aiNode* iNode, const aiScene* iScene, Model&
 }
 
 std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh, const aiScene* iScene) {
-    std::shared_ptr<Mesh> mesh(new Mesh);
+    auto mesh = std::make_shared<Mesh>(m_pContext);
 
     std::shared_ptr<VertexBuffer> vertex(m_pContext->GetSubsystem<RenderSystem>()->CreateVertexBuffer());
     // Set data first with nullptr in order to get the size of a vertex calculated from the mask
