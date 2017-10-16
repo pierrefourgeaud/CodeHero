@@ -21,6 +21,9 @@ public:
     explicit Model(const std::shared_ptr<EngineContext>& iContext);
     virtual ~Model();
 
+    static void RegisterObject(const std::shared_ptr<EngineContext>& iContext);
+    static std::shared_ptr<Model> Create(const std::shared_ptr<EngineContext>& iContext);
+
     void AddMesh(const std::shared_ptr<Mesh>& iMesh);
     const std::vector<std::shared_ptr<Mesh>>& GetMeshes() const { return m_Meshes; }
 

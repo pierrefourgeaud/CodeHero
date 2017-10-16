@@ -8,7 +8,8 @@
 
 namespace CodeHero {
 
-Cube::Cube(const std::shared_ptr<EngineContext>& iContext) {
+Cube::Cube(const std::shared_ptr<EngineContext>& iContext)
+    : Mesh(iContext) {
     float vertices[] = {
         // Positions          // Normals           // Texture Coords
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,

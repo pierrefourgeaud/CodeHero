@@ -97,6 +97,8 @@ Error Main::Start() {
     Texture::RegisterObject(m_pContext);
     Material::RegisterObject(m_pContext);
     Skybox::RegisterObject(m_pContext);
+    Model::RegisterObject(m_pContext);
+    Mesh::RegisterObject(m_pContext);
 
     // Initialize the time as soon as possible
     Time* time = new Time(m_pContext);

@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <unordered_map>
+#include "core/serializable.h"
 
 namespace CodeHero {
 
@@ -16,10 +17,15 @@ class VertexBuffer;
 class Material;
 class RenderSystem;
 
-class Mesh {
+class Mesh : public Serializable {
 public:
-    Mesh();
+    OBJECT(Mesh, Serializable)
+
+    Mesh(const std::shared_ptr<EngineContext>& iContext);
     virtual ~Mesh();
+
+    static void RegisterObject(const std::shared_ptr<EngineContext>& iContext);
+    static std::shared_ptr<Mesh> Create(const std::shared_ptr<EngineContext>& iContext);
 
     void Draw(RenderSystem& iRS) const;
 

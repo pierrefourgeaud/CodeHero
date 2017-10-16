@@ -3,14 +3,28 @@
 // found in the LICENSE file.
 
 #include "graphics/mesh.h"
+#include "core/type_traits/attributeaccessor.h"
+#include "core/type_traits/objectdefinition.h"
 #include "graphics/indexbuffer.h"
-#include "graphics/vertexbuffer.h"
+#include "graphics/material.h"
 #include "graphics/rendersystem.h"
+#include "graphics/vertexbuffer.h"
 
 namespace CodeHero {
 
-Mesh::Mesh() {}
+Mesh::Mesh(const std::shared_ptr<EngineContext>& iContext)
+    : Serializable(iContext) {}
 Mesh::~Mesh() {}
+
+void Mesh::RegisterObject(const std::shared_ptr<EngineContext>& iContext) {
+    CH_REGISTER_OBJECT(Mesh);
+
+    CH_OBJECT_ATTRIBUTE_CAST(Mesh, "Material", std::shared_ptr<Serializable>, Material, Variant::Value::VVT_SerializablePtr, &Mesh::GetMaterial, &Mesh::SetMaterial);
+}
+
+std::shared_ptr<Mesh> Mesh::Create(const std::shared_ptr<EngineContext>& iContext) {
+    return std::make_shared<Mesh>(iContext);
+}
 
 void Mesh::Draw(RenderSystem& iRS) const {
     m_pVertices->Use();

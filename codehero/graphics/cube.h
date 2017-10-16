@@ -10,7 +10,7 @@
 
 namespace CodeHero {
 
-class Cube : public Mesh{
+class Cube : public Mesh {
 public:
     Cube(const std::shared_ptr<EngineContext>& iContext);
     ~Cube();
