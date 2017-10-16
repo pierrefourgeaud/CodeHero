@@ -211,15 +211,8 @@ Error Main::Run() {
     std::shared_ptr<Scene> scene = std::make_shared<Scene>(m_pContext);
     m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/scene_test1.xml", *scene);
 
-    auto texturedShaderVert = rs->CreateShader();
-    texturedShaderVert->Load("./codehero/shaders/textured.vert").Compile();
-    auto texturedShaderNoAlphaFrag = rs->CreateShader();
-    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/shader_texturedFragNoAlpha.xml", *texturedShaderNoAlphaFrag.get());
-    auto crateShader = rs->CreateShaderProgram();
-    crateShader->Attach(texturedShaderVert)
-                .Attach(texturedShaderNoAlphaFrag)
-                .Link();
-
+    auto shaderTexturedNoAlpha = rs->CreateShaderProgram();
+    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/shaderProgram_texturedNoAlpha.xml", *shaderTexturedNoAlpha.get());
     auto shaderTexturedAlpha = rs->CreateShaderProgram();
     m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/shaderProgram_texturedAlpha.xml", *shaderTexturedAlpha.get());
 
@@ -229,7 +222,7 @@ Error Main::Run() {
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/nanosuit/nanosuit.obj", *nanoMdl.get());
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : nanoMdl->GetMeshes()) {
-        mesh->GetMaterial()->SetShaderProgram(crateShader);
+        mesh->GetMaterial()->SetShaderProgram(shaderTexturedNoAlpha);
         mesh->GetMaterial()->SetCullEnabled(true);
     }
 
@@ -250,7 +243,7 @@ Error Main::Run() {
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/rock/rock.obj", *rockMdl.get());
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : rockMdl->GetMeshes()) {
-        mesh->GetMaterial()->SetShaderProgram(crateShader);
+        mesh->GetMaterial()->SetShaderProgram(shaderTexturedNoAlpha);
         mesh->GetMaterial()->SetCullEnabled(true);
     }
 
@@ -260,7 +253,7 @@ Error Main::Run() {
     m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/planet/planet.obj", *planetMdl.get());
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : planetMdl->GetMeshes()) {
-        mesh->GetMaterial()->SetShaderProgram(crateShader);
+        mesh->GetMaterial()->SetShaderProgram(shaderTexturedNoAlpha);
         mesh->GetMaterial()->SetCullEnabled(true);
     }
 
@@ -276,7 +269,7 @@ Error Main::Run() {
     chestSpecular->Load("./resources/models/treasure-chest/Chest_M.png");
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : treasureChestMdl->GetMeshes()) {
-        mesh->GetMaterial()->SetShaderProgram(crateShader);
+        mesh->GetMaterial()->SetShaderProgram(shaderTexturedNoAlpha);
         mesh->GetMaterial()->SetTexture(TextureUnit::TU_Diffuse, chestDiffuse);
         mesh->GetMaterial()->SetTexture(TextureUnit::TU_Specular, chestSpecular);
         mesh->GetMaterial()->SetCullEnabled(true);
@@ -299,7 +292,7 @@ Error Main::Run() {
     auto floorMaterial = std::make_shared<Material>(m_pContext);
     floorMaterial->SetTexture(TU_Diffuse, std::shared_ptr<Texture>(floorDiffuse));
     floorMaterial->SetTexture(TU_Specular, std::shared_ptr<Texture>(floorSpecular));
-    floorMaterial->SetShaderProgram(crateShader);
+    floorMaterial->SetShaderProgram(shaderTexturedNoAlpha);
     floorMaterial->SetTextureCoordsOffset(5.0f, 5.0f);
     auto planePtr = std::make_shared<Plane>(m_pContext);
     planePtr->SetMaterial(floorMaterial);
@@ -312,7 +305,7 @@ Error Main::Run() {
     auto crateMaterial = std::make_shared<Material>(m_pContext);
     crateMaterial->SetTexture(TU_Diffuse, std::shared_ptr<Texture>(crateDiffuse));
     crateMaterial->SetTexture(TU_Specular, std::shared_ptr<Texture>(crateSpecular));
-    crateMaterial->SetShaderProgram(crateShader);
+    crateMaterial->SetShaderProgram(shaderTexturedNoAlpha);
     cube->SetMaterial(crateMaterial);
     for (auto& pos : cubePositions) {
         auto cubeNode = scene->CreateChild();
