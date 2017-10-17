@@ -16,7 +16,7 @@ bool TypeInfo::IsA(const std::shared_ptr<TypeInfo>& iOther) const {
     // If the two types are not equal, let's look at the parent
     if (!res) {
         auto parent = this->GetBaseTypeInfo();
-        res = parent ? parent->IsA(iOther) : nullptr;
+        res = parent ? parent->IsA(iOther) : false;
     }
 
     return res;
