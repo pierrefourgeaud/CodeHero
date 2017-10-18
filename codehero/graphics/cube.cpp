@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "graphics/cube.h"
+#include "core/type_traits/objectdefinition.h"
 #include "graphics/rendersystem.h"
 #include "graphics/vertexbuffer.h"
 
@@ -63,6 +64,14 @@ Cube::Cube(const std::shared_ptr<EngineContext>& iContext)
 }
 
 Cube::~Cube() {
+}
+
+void Cube::RegisterObject(const std::shared_ptr<EngineContext>& iContext) {
+    CH_REGISTER_OBJECT(Cube);
+}
+
+std::shared_ptr<Cube> Cube::Create(const std::shared_ptr<EngineContext>& iContext) {
+    return std::make_shared<Cube>(iContext);
 }
 
 } // namespace CodeHero

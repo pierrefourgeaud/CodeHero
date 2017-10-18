@@ -22,6 +22,41 @@
     </attribute>
   </Node>
   <Node>
+    <attribute name="Scale" value="3.0 3.0 3.0" />
+    <attribute name="Position" value="10.0 -10.5 10.0" />
+    <attribute name="Components">
+      <Model path="./resources/samples/crate.xml" />
+    </attribute>
+  </Node>
+  <Node>
+    <attribute name="Scale" value="3.0 3.0 3.0" />
+    <attribute name="Position" value="2.0 -10.5 15.0" />
+    <attribute name="Components">
+      <Model path="./resources/samples/crate.xml" />
+    </attribute>
+  </Node>
+  <Node>
+    <attribute name="Scale" value="3.0 3.0 3.0" />
+    <attribute name="Position" value="-6.5 -10.5 5.5" />
+    <attribute name="Components">
+      <Model path="./resources/samples/crate.xml" />
+    </attribute>
+  </Node>
+  <Node>
+    <attribute name="Scale" value="3.0 3.0 3.0" />
+    <attribute name="Position" value="7.5 -10.5 0.0" />
+    <attribute name="Components">
+      <Model path="./resources/samples/crate.xml" />
+    </attribute>
+  </Node>
+  <Node>
+    <attribute name="Scale" value="3.0 3.0 3.0" />
+    <attribute name="Position" value="6.3 -10.5 5.5" />
+    <attribute name="Components">
+      <Model path="./resources/samples/crate.xml" />
+    </attribute>
+  </Node>
+  <Node>
     <attribute name="Scale" value="100.0 100.0 1.0" />
     <attribute name="Position" value="0.0 -12.1 0.0" />
     <attribute name="Rotation" value="90.0 0.0 0.0" />

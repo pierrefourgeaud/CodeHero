@@ -1,0 +1,23 @@
+<Model>
+  <attribute name="Meshes">
+    <Cube>
+      <Material>
+        <ShaderProgram path="./resources/samples/shaderProgram_texturedNoAlpha.xml" />
+        <attribute name="Texture Diffuse">
+          <Texture>
+            <attribute name="Faces">
+              <subattribute value="./resources/images/container2.png" />
+            </attribute>
+          </Texture>
+        </attribute>
+        <attribute name="Texture Specular">
+          <Texture>
+            <attribute name="Faces">
+              <subattribute value="./resources/images/container2_specular.png" />
+            </attribute>
+          </Texture>
+        </attribute>
+      </Material>
+    </Cube>
+  </attribute>
+</Model>

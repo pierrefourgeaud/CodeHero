@@ -100,6 +100,7 @@ Error Main::Start() {
     Model::RegisterObject(m_pContext);
     Mesh::RegisterObject(m_pContext);
     Plane::RegisterObject(m_pContext);
+    Cube::RegisterObject(m_pContext);
 
     // Initialize the time as soon as possible
     Time* time = new Time(m_pContext);
@@ -171,25 +172,10 @@ Error Main::Run() {
     Matrix4 ortho = Matrix4::MakeProjectionOrtho(0, g_Width, 0, g_Height);
     rs->SetShaderParameter("projection", ortho);
 
-    // Load and create a texture
-    auto crateDiffuse = rs->CreateTexture();
-    crateDiffuse->Load("./resources/images/container2.png");
-
-    auto crateSpecular = rs->CreateTexture();
-    crateSpecular->Load("./resources/images/container2_specular.png");
-
     auto grassDiffuse = rs->CreateTexture();
     grassDiffuse->SetWrapMode(TC_U, TWM_ClampEdge);
     grassDiffuse->SetWrapMode(TC_V, TWM_ClampEdge);
     grassDiffuse->Load("./resources/images/grass.png");
-
-    Vector3 cubePositions[] = {
-        { 10.0f,  -10.5f, 10.0f},
-        { 2.0f,  -10.5f, 15.0f},
-        {-6.5f,  -10.5f, 5.5f},
-        { 7.5f,  -10.5f, 0.0f},
-        { 6.3f,  -10.5f, 5.5f}
-    };
 
     Vector3 vegetationPositions[] = {
         {-2.5f, -10.0f, -0.48f},
@@ -281,20 +267,6 @@ Error Main::Run() {
     float yaw = 0.0f;
     float pitch = 15.0f;
     cameraNode->SetRotation(Quaternion(pitch, yaw, 0.0f));
-
-    auto cube = std::make_shared<Cube>(m_pContext);
-    auto crateMaterial = std::make_shared<Material>(m_pContext);
-    crateMaterial->SetTexture(TU_Diffuse, std::shared_ptr<Texture>(crateDiffuse));
-    crateMaterial->SetTexture(TU_Specular, std::shared_ptr<Texture>(crateSpecular));
-    crateMaterial->SetShaderProgram(shaderTexturedNoAlpha);
-    cube->SetMaterial(crateMaterial);
-    for (auto& pos : cubePositions) {
-        auto cubeNode = scene->CreateChild();
-        cubeNode->Scale(3.0f);
-        auto cubeMdl = cubeNode->CreateDrawable<Model>(m_pContext);
-        cubeMdl->AddMesh(cube);
-        cubeNode->SetPosition(pos);
-    }
 
     auto grass = std::make_shared<Plane>(m_pContext);
     auto grassMaterial = std::make_shared<Material>(m_pContext);
