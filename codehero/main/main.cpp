@@ -172,19 +172,6 @@ Error Main::Run() {
     Matrix4 ortho = Matrix4::MakeProjectionOrtho(0, g_Width, 0, g_Height);
     rs->SetShaderParameter("projection", ortho);
 
-    auto grassDiffuse = rs->CreateTexture();
-    grassDiffuse->SetWrapMode(TC_U, TWM_ClampEdge);
-    grassDiffuse->SetWrapMode(TC_V, TWM_ClampEdge);
-    grassDiffuse->Load("./resources/images/grass.png");
-
-    Vector3 vegetationPositions[] = {
-        {-2.5f, -10.0f, -0.48f},
-        { 2.5f, -10.0f,  0.51f},
-        { 0.0f, -10.0f,  0.7f},
-        {-0.3f, -10.0f, -2.3f},
-        { 1.0f, -10.0f, -0.6f}
-    };
-
     auto lastTime = time->GetTimeMilliseconds();
     int nbFrames = 0;
     int fps = 0;
@@ -267,19 +254,6 @@ Error Main::Run() {
     float yaw = 0.0f;
     float pitch = 15.0f;
     cameraNode->SetRotation(Quaternion(pitch, yaw, 0.0f));
-
-    auto grass = std::make_shared<Plane>(m_pContext);
-    auto grassMaterial = std::make_shared<Material>(m_pContext);
-    grassMaterial->SetTexture(TU_Diffuse, std::shared_ptr<Texture>(grassDiffuse));
-    grassMaterial->SetShaderProgram(shaderTexturedAlpha);
-    grass->SetMaterial(grassMaterial);
-    for (auto& pos : vegetationPositions) {
-        auto grassNode = scene->CreateChild();
-        auto grassMdl = grassNode->CreateDrawable<Model>(m_pContext);
-        grassMdl->AddMesh(grass);
-        grassNode->SetPosition(pos);
-        grassNode->Scale({ 5.0f, 5.0f, 0.0f });
-    }
 
     auto mainViewport = std::make_shared<Viewport>(0, 0, g_Width, g_Height);
     mainViewport->SetCamera(camera);

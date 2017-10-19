@@ -1,0 +1,18 @@
+<Model>
+  <attribute name="Meshes">
+    <Plane>
+      <Material>
+        <ShaderProgram path="./resources/samples/shaderProgram_texturedAlpha.xml" />
+        <attribute name="Texture Diffuse">
+          <Texture>
+            <attribute name="WrapMode U" value="TWM_ClampEdge" />
+            <attribute name="WrapMode V" value="TWM_ClampEdge" />
+            <attribute name="Faces">
+              <subattribute value="./resources/images/grass.png" />
+            </attribute>
+          </Texture>
+        </attribute>
+      </Material>
+    </Plane>
+  </attribute>
+</Model>
