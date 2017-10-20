@@ -116,20 +116,16 @@ std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh, const aiScen
     }
     std::shared_ptr<IndexBuffer> indexBuffer(m_pContext->GetSubsystem<RenderSystem>()->CreateIndexBuffer());
     indexBuffer->SetData(&indices[0], indices.size());
-    // Process material
-    // It seems that condition is not needed. I am removing it. We can add it back if I am wrong
-    // if (iMesh->mMaterialIndex >= 0) {
+
     aiMaterial* aMaterial = iScene->mMaterials[iMesh->mMaterialIndex];
     auto material = std::make_shared<Material>(m_pContext);
     material->SetTexture(TU_Diffuse, _LoadMaterialTextures(aMaterial, aiTextureType_DIFFUSE));
     material->SetTexture(TU_Specular, _LoadMaterialTextures(aMaterial, aiTextureType_SPECULAR));
-    // }
 
     mesh->AddVertexBuffer(vertex);
     mesh->AddIndexBuffer(indexBuffer);
     mesh->SetMaterial(material);
 
-    //return Mesh(vertices, indices, textures);
     return std::move(mesh);
 }
 
