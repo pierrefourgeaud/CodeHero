@@ -14,7 +14,7 @@ namespace CodeHero {
 
 ImageCodecJPG::ImageCodecJPG(const std::shared_ptr<EngineContext>& iContext)
     : ResourceCodec<Image>(iContext) {
-    std::vector<std::string> ext{"jpg", "JPG", "jpeg", "JPEG"};
+    std::vector<std::string> ext{"jpg", "jpeg"};
     for (auto& e : ext) {
         _AddExtension(e);
     }

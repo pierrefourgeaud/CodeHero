@@ -127,7 +127,7 @@ VariantHashMap ParseHashMap(const pugi::xml_object_range<pugi::xml_node_iterator
 
 SerializableCodecXML::SerializableCodecXML(const std::shared_ptr<EngineContext>& iContext)
     : ResourceCodec<Serializable>(iContext) {
-    std::vector<std::string> ext{"xml", "XML"};
+    std::vector<std::string> ext{"xml"};
     for (auto& e : ext) {
         _AddExtension(e);
     }

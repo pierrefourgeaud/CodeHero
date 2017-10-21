@@ -63,6 +63,9 @@ inline void Trim(std::string& ioS) {
     RTrim(ioS);
 }
 
+void ToLowerCase(std::string& oS);
+std::string LowerCased(const std::string& iS);
+
 std::string Join(std::vector<std::string>& iA, char iDelim);
 
 template <class T>

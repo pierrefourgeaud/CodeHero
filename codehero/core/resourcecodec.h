@@ -28,7 +28,7 @@ public:
 
     bool RecognizeExt(const std::string& iFilePath) {
         for (size_t i = 0; i < m_Extensions.size(); ++i) {
-            if (EndsWith(iFilePath, m_Extensions[i])) {
+            if (EndsWith(LowerCased(iFilePath), LowerCased(m_Extensions[i]))) {
                 return true;
             }
         }

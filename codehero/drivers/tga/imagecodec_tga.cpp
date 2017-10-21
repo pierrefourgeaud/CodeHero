@@ -57,7 +57,7 @@ struct TGAHeader {
 
 ImageCodecTGA::ImageCodecTGA(const std::shared_ptr<EngineContext>& iContext)
     : ResourceCodec<Image>(iContext) {
-    std::vector<std::string> ext{"tga", "TGA"};
+    std::vector<std::string> ext{"tga"};
     for (auto& e : ext) {
         _AddExtension(e);
     }
