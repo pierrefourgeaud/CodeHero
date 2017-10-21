@@ -128,7 +128,6 @@ std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh, const aiScen
     mesh->SetMaterial(material);
 
     // Bone loading
-    LOGE << "Bones: " << iMesh->mNumBones << std::endl;
     for (uint32_t i = 0; i < iMesh->mNumBones; ++i) {
         aiBone* bone = iMesh->mBones[i];
 
