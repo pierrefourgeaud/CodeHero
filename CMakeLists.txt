@@ -309,8 +309,16 @@ if (${_CODEHERO_DRIVER_ASSIMP})
     set (ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
     set (ASSIMP_BUILD_SAMPLES OFF CACHE BOOL "" FORCE)
     set (ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
+    set (ASSIMP_NO_EXPORT OFF CACHE BOOL "" FORCE)
+    set (ASSIMP_INSTALL_PDB OFF CACHE BOOL "" FORCE)
+
     add_subdirectory (${VENDORS_PATH}/assimp)
-    include_directories (SYSTEM ${VENDORS_PATH}/assimp/include)
+    include_directories (
+        SYSTEM ${VENDORS_PATH}/assimp/include
+        # This is a hack because the new Assimp build is somehow a bit stupid on that...
+        SYSTEM ${CMAKE_BINARY_DIR}/vendor/assimp/include
+    )
+
     set (SOURCES ${SOURCES}
          ${SRCS_PATH}/drivers/assimp/modelcodec_assimp.cpp
          ${SRCS_PATH}/drivers/assimp/iosystem.cpp
@@ -320,26 +328,6 @@ if (${_CODEHERO_DRIVER_ASSIMP})
          ${SRCS_PATH}/drivers/assimp/modelcodec_assimp.h
          ${SRCS_PATH}/drivers/assimp/iosystem.h
     )
-
-    if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-        set_source_files_properties(${VENDORS_PATH}/assimp/code/AssbinExporter.cpp PROPERTIES COMPILE_FLAGS "-Wno-strict-aliasing")
-        set_source_files_properties(${VENDORS_PATH}/assimp/code/AssbinLoader.cpp PROPERTIES COMPILE_FLAGS "-Wno-unused-variable")
-        set_source_files_properties(${VENDORS_PATH}/assimp/code/AssxmlExporter.cpp PROPERTIES COMPILE_FLAGS "-Wno-unused-variable")
-        set_source_files_properties(${VENDORS_PATH}/assimp/code/ColladaParser.cpp PROPERTIES COMPILE_FLAGS "-Wno-unused-variable")
-        set_source_files_properties(${VENDORS_PATH}/assimp/code/ColladaExporter.cpp PROPERTIES COMPILE_FLAGS "-Wno-switch")
-        set_source_files_properties(${VENDORS_PATH}/assimp/code/OpenGEXImporter.cpp PROPERTIES COMPILE_FLAGS "-Wno-char-subscripts")
-        set_source_files_properties(${VENDORS_PATH}/assimp/code/BlenderScene.cpp PROPERTIES COMPILE_FLAGS "-Wno-strict-aliasing")
-        set_source_files_properties(${VENDORS_PATH}/assimp/code/FBXConverter.cpp PROPERTIES COMPILE_FLAGS "-Wno-unused-function")
-        set_source_files_properties(${VENDORS_PATH}/assimp/code/FBXDocument.cpp PROPERTIES COMPILE_FLAGS "-Wno-unused-function")
-        set_source_files_properties(${VENDORS_PATH}/assimp/code/SIBImporter.cpp PROPERTIES COMPILE_FLAGS "-Wno-unused-function")
-        set_source_files_properties(${VENDORS_PATH}/assimp/code/glTFImporter.cpp PROPERTIES COMPILE_FLAGS "-Wno-sign-compare")
-        set_source_files_properties(${VENDORS_PATH}/assimp/code/glTFExporter.cpp PROPERTIES COMPILE_FLAGS "-Wno-sign-compare")
-        set_source_files_properties(${VENDORS_PATH}/assimp/contrib/irrXML/irrXML.cpp PROPERTIES COMPILE_FLAGS "-Wno-strict-overflow")
-        set_source_files_properties(${VENDORS_PATH}/assimp/contrib/unzip/unzip.c PROPERTIES COMPILE_FLAGS "-Wno-incompatible-pointer-types")
-        set_source_files_properties(${VENDORS_PATH}/assimp/contrib/openddlparser/code/OpenDDLParser.cpp PROPERTIES COMPILE_FLAGS "-Wno-char-subscripts")
-        set_source_files_properties(${VENDORS_PATH}/assimp/contrib/openddlparser/code/DDLNode.cpp PROPERTIES COMPILE_FLAGS "-Wno-char-subscripts")
-        set_source_files_properties(${VENDORS_PATH}/assimp/contrib/openddlparser/code/OpenDDLExport.cpp PROPERTIES COMPILE_FLAGS "-Wno-char-subscripts")
-    endif ()
 
     add_definitions (-DDRIVER_ASSIMP)
     set (ADDITIONAL_LIBRARIES ${ADDITIONAL_LIBRARIES} assimp)
