@@ -14,10 +14,11 @@
 #include "core/math/vector2.h"
 #include "core/math/vector3.h"
 #include "drivers/assimp/iosystem.h"
-#include "graphics/rendersystem.h"
+#include "graphics/bone.h"
+#include "graphics/indexbuffer.h"
 #include "graphics/material.h"
 #include "graphics/mesh.h"
-#include "graphics/indexbuffer.h"
+#include "graphics/rendersystem.h"
 #include "graphics/vertexbuffer.h"
 
 namespace CodeHero {
@@ -125,6 +126,31 @@ std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh, const aiScen
     mesh->AddVertexBuffer(vertex);
     mesh->AddIndexBuffer(indexBuffer);
     mesh->SetMaterial(material);
+
+    // Bone loading
+    LOGE << "Bones: " << iMesh->mNumBones << std::endl;
+    for (uint32_t i = 0; i < iMesh->mNumBones; ++i) {
+        aiBone* bone = iMesh->mBones[i];
+
+        Bone newBone;
+        newBone.SetName(bone->mName.C_Str());
+
+        aiMatrix4x4* offset = &bone->mOffsetMatrix;
+        newBone.SetOffsetMatrix({
+            offset->a1, offset->a2, offset->a3, offset->a4,
+            offset->b1, offset->b2, offset->b3, offset->b4,
+            offset->c1, offset->c2, offset->c3, offset->c4,
+            offset->d1, offset->d2, offset->d3, offset->d4,
+        });
+
+        // WeightsPerVertex
+        for (uint32_t j = 0; j < bone->mNumWeights; ++j) {
+            aiVertexWeight* vw = &bone->mWeights[j];
+            newBone.AddWeightPerVertex({ vw->mWeight, vw->mVertexId });
+        }
+
+        mesh->AddBone(std::move(newBone));
+    }
 
     return std::move(mesh);
 }

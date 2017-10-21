@@ -111,6 +111,7 @@ set (SOURCES
      ${SRCS_PATH}/ui/uibatch.cpp
      ${SRCS_PATH}/ui/uielement.cpp
      # Graphics
+     ${SRCS_PATH}/graphics/bone.cpp
      ${SRCS_PATH}/graphics/batch.cpp
      ${SRCS_PATH}/graphics/camera.cpp
      ${SRCS_PATH}/graphics/cube.cpp
@@ -187,6 +188,7 @@ set (HEADERS
      ${SRCS_PATH}/ui/uielement.h
      # Graphics
      ${SRCS_PATH}/graphics/batch.h
+     ${SRCS_PATH}/graphics/bone.h
      ${SRCS_PATH}/graphics/camera.h
      ${SRCS_PATH}/graphics/cube.h
      ${SRCS_PATH}/graphics/drawable.h

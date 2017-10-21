@@ -5,6 +5,7 @@
 #include "graphics/mesh.h"
 #include "core/type_traits/attributeaccessor.h"
 #include "core/type_traits/objectdefinition.h"
+#include "graphics/bone.h"
 #include "graphics/indexbuffer.h"
 #include "graphics/material.h"
 #include "graphics/rendersystem.h"
@@ -47,6 +48,27 @@ void Mesh::AddIndexBuffer(const std::shared_ptr<IndexBuffer>& iBuffer) {
 
 void Mesh::SetMaterial(const std::shared_ptr<Material> iMaterial) {
     m_pMaterial = iMaterial;
+}
+
+void Mesh::AddBone(const Bone&& iBone) {
+    m_Bones.push_back(iBone);
+}
+
+Bone* Mesh::GetByIndex(size_t iIndex) {
+    return iIndex < m_Bones.size() ? &m_Bones[iIndex] : nullptr;
+}
+size_t Mesh::BoneSize() const {
+    return m_Bones.size();
+}
+Bone* Mesh::GetByName(const std::string& iName) {
+    size_t len = m_Bones.size();
+    for (size_t i = 0; i < len; ++i) {
+        if (m_Bones[i].GetName() == iName) {
+            return &m_Bones[i];
+        }
+    }
+
+    return nullptr;
 }
 
 } // namespace CodeHero
