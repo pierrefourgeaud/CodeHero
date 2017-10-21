@@ -19,10 +19,16 @@ to do so:
 ### Features (to be completed of course)
 * Skybox
 
+### Working on...
+* Adding slowly a full scene system (and serialization over XML/JSON)
+* Basic animation system
+* UI for Editor + In-Game: The idea is devided in two
+  * Editor: Less performing containing very complete widget and SVG based for high quality editor
+  * In-Game: Based on Sprites to compose your own UI (Low/High DPI capable) - more performing.
+
 ### Very high level roadmap
 * Continue to push support for modern OpenGL
 * More effect (Fog, Toon shading, PBR, ...)
-* UI (for Editor and In-Game)
 * Integrate a physics engine
 * Add support for Audio
 * Particle system
