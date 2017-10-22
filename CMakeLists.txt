@@ -86,6 +86,7 @@ source_group ("Vendors" FILES ${VENDORS_SOURCES})
 set (SOURCES
      ${VENDORS_SOURCES}
      ${SRCS_PATH}/main/main.cpp
+     ${SRCS_PATH}/core/color.cpp
      ${SRCS_PATH}/core/enginecontext.cpp
      ${SRCS_PATH}/core/fileaccess.cpp
      ${SRCS_PATH}/core/filesystem.cpp
@@ -148,6 +149,7 @@ set (SOURCES
 set (HEADERS
      ${SRCS_PATH}/main/main.h
      ${SRCS_PATH}/core/assert.h
+     ${SRCS_PATH}/core/color.h
      ${SRCS_PATH}/core/enginecontext.h
      ${SRCS_PATH}/core/errors.h
      ${SRCS_PATH}/core/object.h
