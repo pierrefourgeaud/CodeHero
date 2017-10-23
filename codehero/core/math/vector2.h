@@ -22,7 +22,10 @@ public:
     void SetY(float iY) { m_Vec[1] = iY; }
 
     float Length() const;
-    void Normalize();
+    // Modify the current object and can be chained
+    Vector2& Normalize();
+    // Return a new vector being the current vector normalized
+    Vector2 Normalized() const;
 
     const float* Data() const { return m_Vec; }
 
@@ -46,7 +49,10 @@ public:
     int32_t y() const { return m_Vec[1]; }
 
     float Length() const;
-    void Normalize();
+    // Modify the current object and can be chained
+    IntVector2& Normalize();
+    // Return a new vector being the current vector normalized
+    IntVector2 Normalized() const;
 
     const int32_t* Data() const { return m_Vec; }
 

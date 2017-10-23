@@ -18,7 +18,7 @@ float Vector2::Length() const {
     return sqrt(x() * x() + y() * y());
 }
 
-void Vector2::Normalize() {
+Vector2& Vector2::Normalize() {
     float l = Length();
 
     if (FloatEqu(l, 0.0f)) {
@@ -26,6 +26,18 @@ void Vector2::Normalize() {
     } else {
         m_Vec[0] /= l;
         m_Vec[1] /= l;
+    }
+
+    return *this;
+}
+
+Vector2 Vector2::Normalized() const {
+    float l = Length();
+
+    if (l == 0) {
+        return Vector2();
+    } else {
+        return Vector2(m_Vec[0] / l, m_Vec[1] / l);
     }
 }
 
@@ -44,7 +56,7 @@ float IntVector2::Length() const {
     return sqrt(x() * x() + y() * y());
 }
 
-void IntVector2::Normalize() {
+IntVector2& IntVector2::Normalize() {
     float l = Length();
 
     if (FloatEqu(l, 0.0f)) {
@@ -52,6 +64,18 @@ void IntVector2::Normalize() {
     } else {
         m_Vec[0] /= l;
         m_Vec[1] /= l;
+    }
+
+    return *this;
+}
+
+IntVector2 IntVector2::Normalized() const {
+    float l = Length();
+
+    if (l == 0) {
+        return IntVector2();
+    } else {
+        return IntVector2(m_Vec[0] / l, m_Vec[1] / l);
     }
 }
 

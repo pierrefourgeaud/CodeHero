@@ -40,7 +40,7 @@ go_bandit([]() {
             });
         });
 
-        describe("::Normalize", [] {
+        describe("::Normalize / :Normalized", [] {
             it("should compute the normalized vector", [] {
                 Vector2 test(1.0f, 1.0f);
 
@@ -48,6 +48,18 @@ go_bandit([]() {
                 test.Normalize();
                 AssertThat(test.x(), Equals(res));
                 AssertThat(test.y(), Equals(res));
+            });
+
+            it("should compute a new normalize network and not touch the initial one", [] {
+                float base = 1.0f;
+                Vector2 test(base, base);
+
+                float res = 0.70710678118f;
+                Vector2 result = test.Normalized();
+                AssertThat(test.x(), Equals(base));
+                AssertThat(test.y(), Equals(base));
+                AssertThat(result.x(), Equals(res));
+                AssertThat(result.y(), Equals(res));
             });
         });
 
