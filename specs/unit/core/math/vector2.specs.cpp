@@ -88,5 +88,15 @@ go_bandit([]() {
                 AssertThat(lhs - rhs, Equals(result));
             });
         });
+
+        describe("::operator+", [] {
+            it("should add properly two vectors", [] {
+                Vector2 lhs(1.0f, 2.0f);
+                Vector2 rhs(3.0f, 4.0f);
+                Vector2 result(4.0f, 6.0f);
+
+                AssertThat(lhs + rhs, Equals(result));
+            });
+        });
     });
 });
