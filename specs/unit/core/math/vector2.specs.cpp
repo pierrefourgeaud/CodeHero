@@ -98,5 +98,15 @@ go_bandit([]() {
                 AssertThat(lhs + rhs, Equals(result));
             });
         });
+
+        describe("::operator*", [] {
+            it("should multiply properly a vector and a scalar", [] {
+                Vector2 lhs(1.0f, 2.0f);
+                float rhs = 2.0f;
+                Vector2 result(2.0f, 4.0f);
+
+                AssertThat(lhs * rhs, Equals(result));
+            });
+        });
     });
 });

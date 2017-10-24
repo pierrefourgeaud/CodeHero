@@ -39,6 +39,10 @@ public:
         return Vector2(m_Vec[0] + iRhs.m_Vec[0], m_Vec[1] + iRhs.m_Vec[1]);
     }
 
+    Vector2 operator*(const float iScalar) const {
+        return Vector2(m_Vec[0] * iScalar, m_Vec[1] * iScalar);
+    }
+
 private:
     float m_Vec[2] = {0};
 };
