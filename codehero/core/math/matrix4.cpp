@@ -117,10 +117,10 @@ Matrix4 Matrix4::operator*(const Matrix4& iValue) const {
 
 Vector4 Matrix4::operator*(const Vector4& iVector) const {
     return {
-        iVector.x() * m[0][0] + iVector.y() * m[0][1] + iVector.w() * m[0][2] + iVector.w() * m[0][3],
-        iVector.x() * m[1][0] + iVector.y() * m[1][1] + iVector.w() * m[1][2] + iVector.w() * m[1][3],
-        iVector.x() * m[2][0] + iVector.y() * m[2][1] + iVector.w() * m[2][2] + iVector.w() * m[2][3],
-        iVector.x() * m[3][0] + iVector.y() * m[3][1] + iVector.w() * m[3][2] + iVector.w() * m[3][3]
+        iVector.x() * m[0][0] + iVector.y() * m[0][1] + iVector.z() * m[0][2] + iVector.w() * m[0][3],
+        iVector.x() * m[1][0] + iVector.y() * m[1][1] + iVector.z() * m[1][2] + iVector.w() * m[1][3],
+        iVector.x() * m[2][0] + iVector.y() * m[2][1] + iVector.z() * m[2][2] + iVector.w() * m[2][3],
+        iVector.x() * m[3][0] + iVector.y() * m[3][1] + iVector.z() * m[3][2] + iVector.w() * m[3][3]
     };
 }
 
