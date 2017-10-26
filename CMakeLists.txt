@@ -104,12 +104,14 @@ set (SOURCES
      ${SRCS_PATH}/core/variant.cpp
      ${SRCS_PATH}/core/type_traits/objectdefinition.cpp
      # UI
+     ${SRCS_PATH}/ui/button.cpp
      ${SRCS_PATH}/ui/font.cpp
      ${SRCS_PATH}/ui/fontface.cpp
      ${SRCS_PATH}/ui/fontface_freetype.cpp
      ${SRCS_PATH}/ui/text.cpp
      ${SRCS_PATH}/ui/ui.cpp
      ${SRCS_PATH}/ui/uibatch.cpp
+     ${SRCS_PATH}/ui/uidraw.cpp
      ${SRCS_PATH}/ui/uielement.cpp
      # Graphics
      ${SRCS_PATH}/graphics/bone.cpp
@@ -181,12 +183,14 @@ set (HEADERS
      ${SRCS_PATH}/core/type_traits/attributeinfo.h
      ${SRCS_PATH}/core/type_traits/objectdefinition.h
      # UI
+     ${SRCS_PATH}/ui/button.h
      ${SRCS_PATH}/ui/font.h
      ${SRCS_PATH}/ui/fontface.h
      ${SRCS_PATH}/ui/fontface_freetype.h
      ${SRCS_PATH}/ui/text.h
      ${SRCS_PATH}/ui/ui.h
      ${SRCS_PATH}/ui/uibatch.h
+     ${SRCS_PATH}/ui/uidraw.h
      ${SRCS_PATH}/ui/uielement.h
      # Graphics
      ${SRCS_PATH}/graphics/batch.h

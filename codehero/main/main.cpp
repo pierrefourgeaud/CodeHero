@@ -32,6 +32,7 @@
 
 #include "input/input.h"
 
+#include "ui/button.h"
 #include "ui/font.h"
 #include "ui/ui.h"
 #include "ui/text.h"
@@ -160,7 +161,12 @@ Error Main::Run() {
     t->SetFont(f);
     t->SetSize(38);
 
+    auto button = std::make_shared<Button>(m_pContext);
+    button->SetPosition(20.0f, g_Height - 125.0f);
+    button->SetSize({ 200.0f, 60.0f });
+
     ui.AddChild(t);
+    ui.AddChild(button);
 
     auto textShaderVert = rs->CreateShader();
     textShaderVert->Load("./codehero/shaders/text_basic.vert").Compile();
