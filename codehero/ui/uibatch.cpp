@@ -20,5 +20,9 @@ void UIBatch::SetVertexBuffer(
     m_pVertexBuffer = iVertexBuffer;
 }
 
+void UIBatch::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& iIndexBuffer) {
+    m_pIndexBuffer = iIndexBuffer;
+}
+
 } // namespace CodeHero
 

@@ -5,6 +5,7 @@
 #include "ui/ui.h"
 #include <queue>
 #include "core/enginecontext.h"
+#include "graphics/indexbuffer.h"
 #include "graphics/rendersystem.h"
 #include "graphics/vertexbuffer.h"
 
@@ -20,13 +21,34 @@ void UI::Update() {
 }
 
 void UI::Render() {
+    static std::shared_ptr<Texture> nullTexture = nullptr;
     RenderSystem* rs = m_pContext->GetSubsystem<RenderSystem>();
+
+    // TODO(pierre) Should be moved somewhere more appropriate
+    if (!nullTexture) {
+        nullTexture = rs->CreateTexture();
+        auto img = std::make_shared<Image>(m_pContext);
+        img->Create(1, 1, { 255 }, Image::Format::IFMT_Grayscale);
+        nullTexture->Load(img);
+    }
+
     size_t size = m_Batches.size();
     for (size_t i = 0; i < size; ++i) {
         UIBatch& batch = m_Batches[i];
         batch.GetVertexBuffer()->Use();
-        rs->SetTexture(0, *batch.GetTexture());
-        rs->Draw(PT_Triangles, batch.GetStart(), batch.GetCount());
+        auto texture = batch.GetTexture();
+        if (texture) {
+            rs->SetTexture(0, *texture);
+        } else {
+            rs->SetTexture(0, *nullTexture);
+        }
+        auto indices = batch.GetIndexBuffer();
+        if (indices) {
+            indices->Use();
+            rs->Draw(PT_Triangles, indices->GetSize());
+        } else {
+            rs->Draw(PT_Triangles, batch.GetStart(), batch.GetCount());
+        }
         batch.GetVertexBuffer()->Unuse();
     }
 }
