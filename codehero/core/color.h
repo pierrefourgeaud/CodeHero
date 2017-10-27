@@ -10,7 +10,7 @@ namespace CodeHero {
 class Color {
 public:
     Color();
-    Color(float iR, float iG, float iB, float iA = 0.0f);
+    Color(float iR, float iG, float iB, float iA = 1.0f);
     ~Color();
 
     float r() const { return m_Rgba[0]; }

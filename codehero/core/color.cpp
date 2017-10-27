@@ -16,7 +16,7 @@ Color::Color() {
     *this = Black;
 }
 
-Color::Color(float iR, float iG, float iB, float iA/* = 0.0f*/)
+Color::Color(float iR, float iG, float iB, float iA/* = 0.1f*/)
     : m_Rgba{iR, iG, iB, iA} {}
 
 Color::~Color() {}
