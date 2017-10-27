@@ -1,6 +1,7 @@
 
 #include "ui/uidraw.h"
 #include <algorithm>
+#include "core/color.h"
 #include "core/enginecontext.h"
 #include "core/math/vector2.h"
 #include "graphics/indexbuffer.h"
@@ -12,7 +13,8 @@ namespace CodeHero {
 
 void UIDraw::Path(const std::shared_ptr<EngineContext>& iContext,
                   std::vector<UIBatch>& oBatches,
-                  const std::vector<Vector2>& iPoints) {
+                  const std::vector<Vector2>& iPoints,
+                  const Color& iColor) {
     // Get normals
     size_t numPoints = iPoints.size();
     std::vector<Vector2> normals(numPoints);
@@ -52,13 +54,17 @@ void UIDraw::Path(const std::shared_ptr<EngineContext>& iContext,
 
     const size_t numVertex = numPoints * 3;
     std::shared_ptr<VertexBuffer> buffer(iContext->GetSubsystem<RenderSystem>()->CreateVertexBuffer());
-    buffer->SetData(nullptr, numVertex, VertexBuffer::MASK_Position | VertexBuffer::MASK_TexCoord, true);
+    buffer->SetData(nullptr, numVertex, VertexBuffer::MASK_Position | VertexBuffer::MASK_Color | VertexBuffer::MASK_TexCoord, true);
 
+    float r = iColor.r();
+    float g = iColor.g();
+    float b = iColor.b();
+    float a = iColor.a();
     for (size_t i = 0; i < numPoints; ++i) {
-        float vertices[3][5] = {
-            { iPoints[i].x(), iPoints[i].y(),                 0.0f, 0.5f, 0.5f },
-            { tempVtx[i * 2 + 0].x(), tempVtx[i * 2 + 0].y(), 0.0f, 0.5f, 0.5f },
-            { tempVtx[i * 2 + 1].x(), tempVtx[i * 2 + 1].y(), 0.0f, 0.5f, 0.5f },
+        float vertices[3][9] = {
+            { iPoints[i].x(), iPoints[i].y(),                 0.0f, r, g, b, a, 0.5f, 0.5f },
+            { tempVtx[i * 2 + 0].x(), tempVtx[i * 2 + 0].y(), 0.0f, r, g, b, a, 0.5f, 0.5f },
+            { tempVtx[i * 2 + 1].x(), tempVtx[i * 2 + 1].y(), 0.0f, r, g, b, a, 0.5f, 0.5f },
         };
         buffer->SetSubData(vertices, i * 3, 3);
     }

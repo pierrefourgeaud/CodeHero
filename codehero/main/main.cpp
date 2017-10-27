@@ -160,10 +160,14 @@ Error Main::Run() {
     t->SetPosition(20.0f, g_Height - 45.0f);
     t->SetFont(f);
     t->SetSize(38);
+    // #252C3F
+    t->SetColor({ 0.145f, 0.1725f, 0.247f, 1.0f });
 
     auto button = std::make_shared<Button>(m_pContext);
     button->SetPosition(20.0f, g_Height - 125.0f);
     button->SetSize({ 200.0f, 60.0f });
+    // #252C3F
+    button->SetNormalStrokeColor({0.145f, 0.1725f, 0.247f, 1.0f});
 
     ui.AddChild(t);
     ui.AddChild(button);
@@ -313,9 +317,7 @@ Error Main::Run() {
         cameraNode->SetRotation(Quaternion(pitch, yaw, 0.0f));
 
         t->SetText("FPS: " + std::to_string(fps));
-        Vector3 color(0.5, 0.8f, 0.2f);
         textShader->Use();
-        rs->SetShaderParameter("textColor", color);
         ui.Update();
         ui.Render();
 

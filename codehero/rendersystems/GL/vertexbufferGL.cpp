@@ -11,7 +11,7 @@ namespace CodeHero {
 const uint8_t VertexBufferGL::ElementSize[] = {
     3 * sizeof(GL_FLOAT), // Position
     3 * sizeof(GL_FLOAT), // Normal
-    4 * sizeof(GL_UNSIGNED_BYTE), // Color
+    4 * sizeof(GL_FLOAT), // Color
     2 * sizeof(GL_FLOAT), // TexCoord,
     3 * sizeof(GL_FLOAT), // Tangent
     3 * sizeof(GL_FLOAT) // Bitangent
@@ -20,7 +20,7 @@ const uint8_t VertexBufferGL::ElementSize[] = {
 const uint32_t VertexBufferGL::ElementType[] = {
     GL_FLOAT, // Position
     GL_FLOAT, // Normal
-    GL_UNSIGNED_BYTE, // Color
+    GL_FLOAT, // Color
     GL_FLOAT, // TexCoord
     GL_FLOAT, // Tangent
     GL_FLOAT // Bitangent

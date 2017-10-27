@@ -14,13 +14,15 @@ namespace CodeHero {
 class UIBatch;
 class Vector2;
 class EngineContext;
+class Color;
 
 class UIDraw {
 public:
     // Get batches from path
     static void Path(const std::shared_ptr<EngineContext>& iContext,
                      std::vector<UIBatch>& oBatches,
-                     const std::vector<Vector2>& iPoints);
+                     const std::vector<Vector2>& iPoints,
+                     const Color& iColor);
 
 private:
     UIDraw() = delete;
