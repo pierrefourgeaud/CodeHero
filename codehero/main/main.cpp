@@ -317,15 +317,16 @@ Error Main::Run() {
         cameraNode->SetRotation(Quaternion(pitch, yaw, 0.0f));
 
         t->SetText("FPS: " + std::to_string(fps));
-        textShader->Use();
-        ui.Update();
-        ui.Render();
 
         // TODO(pierre) This is for now, as we don't have a proper scene rendering
         // This should be removed ASAP
         cameraNode->Update();
 
         rs->Render();
+
+        textShader->Use();
+        ui.Update();
+        ui.Render();
 
         mainWindow->SwapBuffers();
 
