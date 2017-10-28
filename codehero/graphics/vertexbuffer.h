@@ -38,13 +38,11 @@ public:
     virtual ~VertexBuffer() {}
 
     virtual void SetData(const void* iData, uint32_t iVertexCount, uint32_t iMasks, bool iIsDynamic = false) {
-//        if (iData) {
         m_VertexCount = iVertexCount;
         m_Masks = iMasks;
         m_IsDynamic = iIsDynamic;
 
         _UpdateSizeImpl();
-        // m_VertexSize = 1;
 
         m_Data = MakeSharedArray<unsigned char>(iVertexCount * m_VertexSize);
         if (iData != nullptr) {
@@ -52,7 +50,6 @@ public:
         }
 
         _SetDataImpl();
-//        }
     }
 
     virtual void SetSubData(const void* iData, uint32_t iStart, uint32_t iCount) {
