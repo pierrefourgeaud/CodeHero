@@ -163,6 +163,7 @@ Matrix4 Matrix4::MakeProjectionOrtho(float iLeft, float iRight, float iBottom, f
     result.m[2][2] = -1.0f;
     result.m[3][0] = -(iRight + iLeft) / (iRight - iLeft);
     result.m[3][1] = -(iTop + iBottom) / (iTop - iBottom);
+    result.m[3][3] = 1.0f;
     return result;
 }
 
