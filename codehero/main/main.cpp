@@ -168,6 +168,7 @@ Error Main::Run() {
     button->SetSize({ 200.0f, 60.0f });
     // #252C3F
     button->SetNormalStrokeColor({0.145f, 0.1725f, 0.247f, 1.0f});
+    button->SetNormalBgColor({0.145f, 0.1725f, 0.247f, 0.85f});
 
     ui.AddChild(t);
     ui.AddChild(button);

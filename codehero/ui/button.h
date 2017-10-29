@@ -28,6 +28,7 @@ public:
     const Vector2& GetSize() const;
 
     void SetNormalStrokeColor(const Color& iColor);
+    void SetNormalBgColor(const Color& iColor);
 
     void GetBatches(std::vector<UIBatch>& oBatches) override;
 

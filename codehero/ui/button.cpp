@@ -26,6 +26,10 @@ void Button::SetNormalStrokeColor(const Color& iColor) {
     m_NormalStrokeColor = iColor;
 }
 
+void Button::SetNormalBgColor(const Color& iColor) {
+    m_NormalBgColor = iColor;
+}
+
 void Button::GetBatches(std::vector<UIBatch>& oBatches) {
     float x = m_Position.x();
     float y = m_Position.y();
@@ -37,7 +41,8 @@ void Button::GetBatches(std::vector<UIBatch>& oBatches) {
     Vector2 p4(x,     y + h);
 
     // Batch
-    UIDraw::Path(m_pContext, oBatches, {p1, p2, p3, p4}, m_NormalStrokeColor);
+    UIDraw::PathStoke(m_pContext, oBatches, { p4, p3, p2, p1 }, m_NormalStrokeColor);
+    UIDraw::PathFill(m_pContext, oBatches, { p4, p3, p2, p1 }, m_NormalBgColor);
 }
 
 } // namespace CodeHero

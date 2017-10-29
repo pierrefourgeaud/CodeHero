@@ -19,10 +19,14 @@ class Color;
 class UIDraw {
 public:
     // Get batches from path
-    static void Path(const std::shared_ptr<EngineContext>& iContext,
-                     std::vector<UIBatch>& oBatches,
-                     const std::vector<Vector2>& iPoints,
-                     const Color& iColor);
+    static void PathStoke(const std::shared_ptr<EngineContext>& iContext,
+                          std::vector<UIBatch>& oBatches,
+                          const std::vector<Vector2>& iPoints,
+                          const Color& iColor);
+    static void PathFill(const std::shared_ptr<EngineContext>& iContext,
+                         std::vector<UIBatch>& oBatches,
+                         const std::vector<Vector2>& iPoints,
+                         const Color& iColor);
 
 private:
     UIDraw() = delete;
