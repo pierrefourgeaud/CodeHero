@@ -175,7 +175,7 @@ Error Main::Run() {
     window->SetPosition(20.0f, 185.0f);
     window->SetSize({ 300.0f, 400.0f });
     // #252C3F
-    window->SetNormalStrokeColor({1.0f, 1.0f, 1.0f, 0.05f});
+    window->SetNormalStrokeColor({0.1137f, 0.1254f, 0.1607f, 1.0f});
     window->SetNormalBgColor({0.145f, 0.1725f, 0.247f, 1.0f});
 
     ui.AddChild(t);
