@@ -39,8 +39,8 @@ void UIDraw::PathStroke(const std::shared_ptr<EngineContext>& iContext,
             scale = (std::min)(100.0f, scale);
             dm = dm * scale;
         }
-        tempVtx[i2 * 2 + 0] = iPoints[i2] + dm;
-        tempVtx[i2 * 2 + 1] = iPoints[i2] - dm;
+        tempVtx[i2 * 2 + 0] = iPoints[i2] - dm;
+        tempVtx[i2 * 2 + 1] = iPoints[i2] + dm;
 
         indices[ids + 0] = (j2 + 0);
         indices[ids + 1] = (j + 0);

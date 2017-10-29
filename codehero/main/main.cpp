@@ -157,14 +157,14 @@ Error Main::Run() {
     std::shared_ptr<Font> f(new Font(m_pContext, "./resources/fonts/Roboto-Regular.ttf"));
     UI ui(m_pContext);
     std::shared_ptr<Text> t(new Text(m_pContext));
-    t->SetPosition(20.0f, g_Height - 45.0f);
+    t->SetPosition(20.0f, 20.0f);
     t->SetFont(f);
     t->SetSize(38);
     // #252C3F
     t->SetColor({ 0.145f, 0.1725f, 0.247f, 1.0f });
 
     auto button = std::make_shared<Button>(m_pContext);
-    button->SetPosition(20.0f, g_Height - 125.0f);
+    button->SetPosition(20.0f, 85.0f);
     button->SetSize({ 200.0f, 60.0f });
     // #252C3F
     button->SetNormalStrokeColor({0.145f, 0.1725f, 0.247f, 1.0f});
@@ -180,7 +180,7 @@ Error Main::Run() {
     auto textShader = rs->CreateShaderProgram();
     textShader->Attach(textShaderVert).Attach(textShaderFrag).Link();
     textShader->Use();
-    Matrix4 ortho = Matrix4::MakeProjectionOrtho(0, g_Width, 0, g_Height);
+    Matrix4 ortho = Matrix4::MakeProjectionOrtho(0, g_Width, g_Height, 0);
     rs->SetShaderParameter("projection", ortho);
 
     auto lastTime = time->GetTimeMilliseconds();
