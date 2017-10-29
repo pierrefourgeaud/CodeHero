@@ -113,6 +113,7 @@ set (SOURCES
      ${SRCS_PATH}/ui/uibatch.cpp
      ${SRCS_PATH}/ui/uidraw.cpp
      ${SRCS_PATH}/ui/uielement.cpp
+     ${SRCS_PATH}/ui/window.cpp
      # Graphics
      ${SRCS_PATH}/graphics/bone.cpp
      ${SRCS_PATH}/graphics/batch.cpp
@@ -192,6 +193,7 @@ set (HEADERS
      ${SRCS_PATH}/ui/uibatch.h
      ${SRCS_PATH}/ui/uidraw.h
      ${SRCS_PATH}/ui/uielement.h
+     ${SRCS_PATH}/ui/window.h
      # Graphics
      ${SRCS_PATH}/graphics/batch.h
      ${SRCS_PATH}/graphics/bone.h

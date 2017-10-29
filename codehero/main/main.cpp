@@ -36,6 +36,7 @@
 #include "ui/font.h"
 #include "ui/ui.h"
 #include "ui/text.h"
+#include "ui/window.h"
 
 #include "rendersystems/GL/rendersystemGL.h"
 #include "rendersystems/GL/textureGL.h"
@@ -170,8 +171,16 @@ Error Main::Run() {
     button->SetNormalStrokeColor({0.145f, 0.1725f, 0.247f, 1.0f});
     button->SetNormalBgColor({0.145f, 0.1725f, 0.247f, 0.85f});
 
+    auto window = std::make_shared<Window>(m_pContext);
+    window->SetPosition(20.0f, 185.0f);
+    window->SetSize({ 300.0f, 400.0f });
+    // #252C3F
+    window->SetNormalStrokeColor({1.0f, 1.0f, 1.0f, 0.05f});
+    window->SetNormalBgColor({0.145f, 0.1725f, 0.247f, 1.0f});
+
     ui.AddChild(t);
     ui.AddChild(button);
+    ui.AddChild(window);
 
     auto textShaderVert = rs->CreateShader();
     textShaderVert->Load("./codehero/shaders/text_basic.vert").Compile();
