@@ -11,10 +11,10 @@
 
 namespace CodeHero {
 
-void UIDraw::PathStoke(const std::shared_ptr<EngineContext>& iContext,
-                       std::vector<UIBatch>& oBatches,
-                       const std::vector<Vector2>& iPoints,
-                       const Color& iColor) {
+void UIDraw::PathStroke(const std::shared_ptr<EngineContext>& iContext,
+                        std::vector<UIBatch>& oBatches,
+                        const std::vector<Vector2>& iPoints,
+                        const Color& iColor) {
     // Get normals
     size_t numPoints = iPoints.size();
     std::vector<Vector2> normals(numPoints);

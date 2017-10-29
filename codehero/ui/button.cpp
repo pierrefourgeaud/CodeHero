@@ -41,7 +41,7 @@ void Button::GetBatches(std::vector<UIBatch>& oBatches) {
     Vector2 p4(x,     y + h);
 
     // Batch
-    UIDraw::PathStoke(m_pContext, oBatches, { p4, p3, p2, p1 }, m_NormalStrokeColor);
+    UIDraw::PathStroke(m_pContext, oBatches, { p4, p3, p2, p1 }, m_NormalStrokeColor);
     UIDraw::PathFill(m_pContext, oBatches, { p4, p3, p2, p1 }, m_NormalBgColor);
 }
 
