@@ -11,7 +11,7 @@ void main()
 {
     vec4 t = texture(text, TexCoords);
     float a = Color.w * t.r;
-    if (a < 0.1)
+    if (a < 0.01)
         discard;
     color = vec4(Color.xyz, a);
 }
