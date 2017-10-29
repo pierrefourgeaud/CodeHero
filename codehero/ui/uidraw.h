@@ -15,6 +15,7 @@ class UIBatch;
 class Vector2;
 class EngineContext;
 class Color;
+class FontFace;
 
 class UIDraw {
 public:
@@ -27,6 +28,13 @@ public:
                          std::vector<UIBatch>& oBatches,
                          const std::vector<Vector2>& iPoints,
                          const Color& iColor);
+
+    static void Text(const std::shared_ptr<EngineContext>& iContext,
+                     std::vector<UIBatch>& oBatches,
+                     const std::string& iText,
+                     const std::shared_ptr<FontFace>& iFontFace,
+                     const Vector2& iPosition,
+                     const Color& iColor);
 
 private:
     UIDraw() = delete;
