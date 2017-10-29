@@ -10,7 +10,8 @@ uniform sampler2D text;
 void main()
 {
     vec4 t = texture(text, TexCoords);
-    if (t.r < 0.1)
+    float a = Color.w * t.r;
+    if (a < 0.1)
         discard;
-    color = vec4(Color.xyz, Color.w * t.r);
+    color = vec4(Color.xyz, a);
 }
