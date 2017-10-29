@@ -34,8 +34,8 @@
 
 #include "ui/button.h"
 #include "ui/font.h"
+#include "ui/label.h"
 #include "ui/ui.h"
-#include "ui/text.h"
 #include "ui/window.h"
 
 #include "rendersystems/GL/rendersystemGL.h"
@@ -157,12 +157,12 @@ Error Main::Run() {
     std::shared_ptr<RenderWindow> mainWindow = rs->GetWindow();
     std::shared_ptr<Font> f(new Font(m_pContext, "./resources/fonts/Roboto-Regular.ttf"));
     UI ui(m_pContext);
-    std::shared_ptr<Text> t(new Text(m_pContext));
-    t->SetPosition(20.0f, 20.0f);
-    t->SetFont(f);
-    t->SetSize(38);
+    auto label = std::make_shared<Label>(m_pContext);
+    label->SetPosition(20.0f, 20.0f);
+    label->SetFont(f);
+    label->SetSize(38);
     // #252C3F
-    t->SetColor({ 0.145f, 0.1725f, 0.247f, 1.0f });
+    label->SetColor({ 0.145f, 0.1725f, 0.247f, 1.0f });
 
     auto button = std::make_shared<Button>(m_pContext);
     button->SetPosition(20.0f, 85.0f);
@@ -178,7 +178,7 @@ Error Main::Run() {
     window->SetNormalStrokeColor({0.1137f, 0.1254f, 0.1607f, 1.0f});
     window->SetNormalBgColor({0.145f, 0.1725f, 0.247f, 1.0f});
 
-    ui.AddChild(t);
+    ui.AddChild(label);
     ui.AddChild(button);
     ui.AddChild(window);
 
@@ -326,7 +326,7 @@ Error Main::Run() {
         // Construct new orientation for the camera scene node from yaw and pitch. Roll is fixed to zero
         cameraNode->SetRotation(Quaternion(pitch, yaw, 0.0f));
 
-        t->SetText("FPS: " + std::to_string(fps));
+        label->SetText("FPS: " + std::to_string(fps));
 
         // TODO(pierre) This is for now, as we don't have a proper scene rendering
         // This should be removed ASAP

@@ -2,8 +2,8 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
-#ifndef CODEHERO_UI_TEXT_H_
-#define CODEHERO_UI_TEXT_H_ 
+#ifndef CODEHERO_UI_LABEL_H_
+#define CODEHERO_UI_LABEL_H_ 
 
 #include <memory>
 #include <string>
@@ -17,9 +17,9 @@ class EngineContext;
 class Font;
 class UIBatch;
 
-class Text : public UIElement {
+class Label : public UIElement {
 public:
-    explicit Text(std::shared_ptr<EngineContext>& iContext);
+    explicit Label(std::shared_ptr<EngineContext>& iContext);
 
     void SetFont(const std::string& iFontName);
     void SetFont(std::shared_ptr<Font> iFont);
@@ -38,4 +38,4 @@ private:
 
 } // namespace CodeHero
 
-#endif // CODEHERO_UI_TEXT_H_
+#endif // CODEHERO_UI_LABEL_H_
