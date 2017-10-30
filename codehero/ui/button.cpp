@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "ui/button.h"
+#include "ui/stylesheet.h"
 #include "ui/uidraw.h"
 
 namespace CodeHero {
@@ -22,14 +23,6 @@ const Vector2& Button::GetSize() const {
     return m_Size;
 }
 
-void Button::SetNormalStrokeColor(const Color& iColor) {
-    m_NormalStrokeColor = iColor;
-}
-
-void Button::SetNormalBgColor(const Color& iColor) {
-    m_NormalBgColor = iColor;
-}
-
 void Button::GetBatches(std::vector<UIBatch>& oBatches) {
     float x = m_Position.x();
     float y = m_Position.y();
@@ -41,8 +34,8 @@ void Button::GetBatches(std::vector<UIBatch>& oBatches) {
     Vector2 p4(x,     y + h);
 
     // Batch
-    UIDraw::PathStroke(m_pContext, oBatches, { p1, p2, p3, p4 }, m_NormalStrokeColor);
-    UIDraw::PathFill(m_pContext, oBatches, { p1, p2, p3, p4 }, m_NormalBgColor);
+    UIDraw::PathStroke(m_pContext, oBatches, { p1, p2, p3, p4 }, m_pStyle->GetDefault().borderColor);
+    UIDraw::PathFill(m_pContext, oBatches, { p1, p2, p3, p4 }, m_pStyle->GetDefault().backgroundColor);
 }
 
 } // namespace CodeHero

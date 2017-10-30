@@ -155,32 +155,21 @@ Error Main::Run() {
     rs->SetCullMode(true);
 
     std::shared_ptr<RenderWindow> mainWindow = rs->GetWindow();
-    std::shared_ptr<Font> f(new Font(m_pContext, "./resources/fonts/Roboto-Regular.ttf"));
     UI ui(m_pContext);
     auto label = std::make_shared<Label>(m_pContext);
-    label->SetPosition(20.0f, 20.0f);
-    label->SetFont(f);
-    label->SetSize(38);
-    // #252C3F
-    label->SetColor({ 0.145f, 0.1725f, 0.247f, 1.0f });
+    label->SetPosition(15.0f, 15.0f);
 
     auto button = std::make_shared<Button>(m_pContext);
     button->SetPosition(20.0f, 85.0f);
     button->SetSize({ 200.0f, 60.0f });
-    // #252C3F
-    button->SetNormalStrokeColor({0.145f, 0.1725f, 0.247f, 1.0f});
-    button->SetNormalBgColor({0.145f, 0.1725f, 0.247f, 0.85f});
 
     auto window = std::make_shared<Window>(m_pContext);
     window->SetPosition(20.0f, 185.0f);
     window->SetSize({ 300.0f, 400.0f });
-    // #252C3F
-    window->SetNormalStrokeColor({0.1137f, 0.1254f, 0.1607f, 1.0f});
-    window->SetNormalBgColor({0.145f, 0.1725f, 0.247f, 1.0f});
 
-    ui.AddChild(label);
     ui.AddChild(button);
     ui.AddChild(window);
+    window->AddChild(label);
 
     auto textShaderVert = rs->CreateShader();
     textShaderVert->Load("./codehero/shaders/text_basic.vert").Compile();

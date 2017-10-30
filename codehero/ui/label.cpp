@@ -8,6 +8,7 @@
 #include "graphics/vertexbuffer.h"
 #include "ui/font.h"
 #include "ui/fontface.h"
+#include "ui/stylesheet.h"
 #include "ui/uidraw.h"
 
 namespace CodeHero {
@@ -15,31 +16,13 @@ namespace CodeHero {
 Label::Label(std::shared_ptr<EngineContext>& iContext)
     : UIElement(iContext) {}
 
-void Label::SetFont(const std::string& iFontName) {
-    (void)iFontName;
-}
-
-void Label::SetFont(std::shared_ptr<Font> iFont) {
-    m_pFont = iFont;
-}
-
-void Label::SetSize(uint32_t iSize) {
-    m_Size = iSize;
-}
-
 void Label::SetText(const std::string& iText) {
     m_Text = iText;
 }
 
-void Label::SetColor(const Color& iColor) {
-    m_Color = iColor;
-}
-
 void Label::GetBatches(std::vector<UIBatch>& oBatches) {
-    if (m_pFont.get() && m_Size != 0) {
-        std::shared_ptr<FontFace> fa = m_pFont->GetFace(m_Size);
-        UIDraw::Text(m_pContext, oBatches, m_Text, fa, m_Position, m_Color);
-    }
+    UIDraw::Text(m_pContext, oBatches, m_Text,
+                 m_pStyle->GetDefault().defaultFontFace, m_Position, m_pStyle->GetDefault().fontColor);
 }
 
 } // namespace CodeHero

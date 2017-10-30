@@ -21,19 +21,12 @@ class Label : public UIElement {
 public:
     explicit Label(std::shared_ptr<EngineContext>& iContext);
 
-    void SetFont(const std::string& iFontName);
-    void SetFont(std::shared_ptr<Font> iFont);
-    void SetSize(uint32_t iSize);
     void SetText(const std::string& iText);
-    void SetColor(const Color& iColor);
 
     void GetBatches(std::vector<UIBatch>& oBatches) override;
 
 private:
     std::string m_Text;
-    uint32_t m_Size;
-    std::shared_ptr<Font> m_pFont;
-    Color m_Color;
 };
 
 } // namespace CodeHero
