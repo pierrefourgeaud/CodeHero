@@ -8,12 +8,15 @@
 #include "graphics/indexbuffer.h"
 #include "graphics/rendersystem.h"
 #include "graphics/vertexbuffer.h"
+#include "ui/stylesheet.h"
 
 namespace CodeHero {
 
 UI::UI(std::shared_ptr<EngineContext>& iContext)
     : m_pContext(iContext)
-    , m_RootElement(new UIElement(iContext)) {}
+    , m_RootElement(new UIElement(iContext)) {
+    m_RootElement->SetStyle(std::make_shared<Stylesheet>(m_pContext));
+}
 
 void UI::Update() {
     m_Batches.clear();
@@ -65,8 +68,8 @@ void UI::_GetBatches(std::shared_ptr<UIElement> iElement) {
 
     // Going through the UI tree using a DFS algorithm
     for (size_t i = 0; i < size; ++i) {
-        children[i]->GetBatches(m_Batches);
         _GetBatches(children[i]);
+        children[i]->GetBatches(m_Batches);
     }
 }
 
