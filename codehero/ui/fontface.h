@@ -31,9 +31,15 @@ public:
 
     FontFaceGlyph& GetGlyph(char iC);
 
+    float GetAscender() const { return m_Ascender; }
+    float GetMaxHeight() const { return m_MaxHeight; }
+
 protected:
     Font& m_rFont;
     std::map<uint32_t, FontFaceGlyph> m_Glyphs;
+
+    float m_Ascender;
+    float m_MaxHeight;
 };
 
 } // namespace CodeHero

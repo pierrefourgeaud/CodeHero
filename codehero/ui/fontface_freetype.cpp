@@ -41,6 +41,8 @@ void FontFaceFreeType::_Load() {
     }
 
     {
+        m_Ascender = std::floorf((face->size->metrics.ascender >> 6) + 0.5f); // / 64
+        m_MaxHeight = std::floorf(((face->size->metrics.ascender - face->size->metrics.descender) >> 6) + 0.5f);
         // List all glyph
         uint32_t numGlyphs = static_cast<uint32_t>(face->num_glyphs);
         std::vector<uint32_t> charCodes(numGlyphs, 0);
