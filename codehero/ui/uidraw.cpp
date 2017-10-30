@@ -179,7 +179,7 @@ void UIDraw::Text(const std::shared_ptr<EngineContext>& iContext,
             FontFaceGlyph& ch = iFontFace->GetGlyph(iText[i]);
 
             float xpos = x + ch.left;
-            float ypos = iPosition.y() - (ch.height - ch.top);
+            float ypos = iPosition.y() + (iFontFace->GetAscender()) - ch.top;
 
             float w = ch.width;
             float h = ch.height;
