@@ -109,6 +109,7 @@ set (SOURCES
      ${SRCS_PATH}/ui/fontface.cpp
      ${SRCS_PATH}/ui/fontface_freetype.cpp
      ${SRCS_PATH}/ui/label.cpp
+     ${SRCS_PATH}/ui/stylesheet.cpp
      ${SRCS_PATH}/ui/ui.cpp
      ${SRCS_PATH}/ui/uibatch.cpp
      ${SRCS_PATH}/ui/uidraw.cpp
@@ -189,6 +190,7 @@ set (HEADERS
      ${SRCS_PATH}/ui/fontface.h
      ${SRCS_PATH}/ui/fontface_freetype.h
      ${SRCS_PATH}/ui/label.h
+     ${SRCS_PATH}/ui/stylesheet.h
      ${SRCS_PATH}/ui/ui.h
      ${SRCS_PATH}/ui/uibatch.h
      ${SRCS_PATH}/ui/uidraw.h
