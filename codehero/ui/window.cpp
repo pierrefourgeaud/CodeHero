@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "ui/window.h"
+#include <cmath>
 #include "ui/font.h"
 #include "ui/fontface.h"
 #include "ui/stylesheet.h"
@@ -46,7 +47,7 @@ void Window::GetBatches(std::vector<UIBatch>& oBatches) {
 
     // TODO(pierre) This should be save in a local style
     std::shared_ptr<FontFace> fa = m_pStyle->GetDefault().fontFamily->GetFace(24);
-    const float topH = std::floorf((headerHeight - fa->GetMaxHeight()) / 2.0f + 0.5f);
+    const float topH = std::floor((headerHeight - fa->GetMaxHeight()) / 2.0f + 0.5f);
 
     // Batch
     // Header
