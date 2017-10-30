@@ -97,6 +97,14 @@ go_bandit([]() {
 
                 AssertThat(lhs + rhs, Equals(result));
             });
+
+            it("should add properly a scalar", [] {
+                Vector2 lhs(1.0f, 2.0f);
+                float rhs = 3.0f;
+                Vector2 result(4.0f, 5.0f);
+
+                AssertThat(lhs + rhs, Equals(result));
+            });
         });
 
         describe("::operator*", [] {
