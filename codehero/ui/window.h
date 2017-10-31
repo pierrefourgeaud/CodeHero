@@ -20,8 +20,13 @@ class UIBatch;
 
 class Window : public UIElement {
 public:
+    enum Flags {
+        F_NoHeader = 0
+    };
+
     explicit Window(std::shared_ptr<EngineContext>& iContext);
 
+    void SetFlags(Flags iFlags) { m_Flags = iFlags; }
     void SetHeader(const std::string& iText);
 
     void SetSize(const Vector2& iSize);
@@ -34,6 +39,7 @@ public:
 private:
     Vector2 m_Size;
     std::string m_HeaderText;
+    Flags m_Flags;
 };
 
 } // namespace CodeHero
