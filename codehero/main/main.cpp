@@ -166,6 +166,7 @@ Error Main::Run() {
     auto window = std::make_shared<Window>(m_pContext);
     window->SetPosition(20.0f, 185.0f);
     window->SetSize({ 300.0f, 400.0f });
+    window->SetHeader("Info");
 
     ui.AddChild(button);
     ui.AddChild(window);
