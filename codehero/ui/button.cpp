@@ -33,9 +33,16 @@ void Button::GetBatches(std::vector<UIBatch>& oBatches) {
     Vector2 p3(x + w, y + h);
     Vector2 p4(x,     y + h);
 
+    std::vector<Vector2> points;
+    float radius = 10;
+    UIDraw::GetPointListArc(points, {x + radius, y + radius}, radius, 6, 9);
+    UIDraw::GetPointListArc(points, {p3.x() - radius, y + radius}, radius, 9, 12);
+    UIDraw::GetPointListArc(points, {p3.x() - radius, p3.y() - radius}, radius, 0, 3);
+    UIDraw::GetPointListArc(points, {x + radius, p3.y() - radius}, radius, 3, 6);
+
     // Batch
-    UIDraw::PathStroke(m_pContext, oBatches, { p1, p2, p3, p4 }, m_pStyle->GetDefault().borderColor);
-    UIDraw::PathFill(m_pContext, oBatches, { p1, p2, p3, p4 }, m_pStyle->GetDefault().backgroundColor);
+    UIDraw::PathStroke(m_pContext, oBatches, points, m_pStyle->GetDefault().borderColor);
+    UIDraw::PathFill(m_pContext, oBatches, points, m_pStyle->GetDefault().backgroundColor);
 }
 
 } // namespace CodeHero

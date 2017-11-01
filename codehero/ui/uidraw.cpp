@@ -4,6 +4,7 @@
 #include "core/assert.h"
 #include "core/color.h"
 #include "core/enginecontext.h"
+#include "core/math/utils.h"
 #include "core/math/vector2.h"
 #include "graphics/indexbuffer.h"
 #include "graphics/rendersystem.h"
@@ -12,6 +13,16 @@
 #include "ui/uibatch.h"
 
 namespace CodeHero {
+
+std::array<Vector2, 12> UIDraw::m_CircleVertex;
+
+void UIDraw::Init() {
+    size_t vtxSize = m_CircleVertex.size();
+    for (size_t i = 0; i < vtxSize; ++i) {
+        const float a = static_cast<float>(i) / static_cast<float>(vtxSize) * 2 * PI;
+        m_CircleVertex[i] = { static_cast<float>(std::cosf(a)), static_cast<float>(std::sinf(a)) };
+    }
+}
 
 void UIDraw::PathStroke(const std::shared_ptr<EngineContext>& iContext,
                         std::vector<UIBatch>& oBatches,
@@ -203,6 +214,24 @@ void UIDraw::Text(const std::shared_ptr<EngineContext>& iContext,
             oBatches.push_back(batch);
 
             x += (ch.advanceX >> 6); // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
+        }
+    }
+}
+
+void UIDraw::GetPointListArc(std::vector<Vector2>& oPoints, 
+                             const Vector2& iCenter,
+                             float iRadius,
+                             int iMin,
+                             int iMax) {
+    CH_ASSERT(iMin <= iMax);
+
+    if (iMin <= iMax) {
+        const size_t vtxSize = m_CircleVertex.size();
+        for (int a = iMin; a <= iMax; ++a) {
+            Vector2 c = m_CircleVertex[a % vtxSize];
+            float x = iCenter.x() + c.x() * iRadius;
+            float y = iCenter.y() + c.y() * iRadius;
+            oPoints.push_back({x, y});
         }
     }
 }

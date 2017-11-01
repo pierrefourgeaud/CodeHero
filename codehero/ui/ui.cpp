@@ -9,12 +9,14 @@
 #include "graphics/rendersystem.h"
 #include "graphics/vertexbuffer.h"
 #include "ui/stylesheet.h"
+#include "ui/uidraw.h"
 
 namespace CodeHero {
 
 UI::UI(std::shared_ptr<EngineContext>& iContext)
     : m_pContext(iContext)
     , m_RootElement(new UIElement(iContext)) {
+    UIDraw::Init();
     m_RootElement->SetStyle(std::make_shared<Stylesheet>(m_pContext));
 }
 

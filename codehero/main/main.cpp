@@ -160,17 +160,17 @@ Error Main::Run() {
     label->SetPosition(15.0f, 15.0f);
 
     auto button = std::make_shared<Button>(m_pContext);
-    button->SetPosition(20.0f, 85.0f);
-    button->SetSize({ 200.0f, 60.0f });
+    button->SetPosition(15.0f, 55.0f);
+    button->SetSize({ 150.0f, 50.0f });
 
     auto window = std::make_shared<Window>(m_pContext);
     window->SetPosition(20.0f, 185.0f);
     window->SetSize({ 300.0f, 400.0f });
     window->SetHeader("Info");
 
-    ui.AddChild(button);
     ui.AddChild(window);
     window->AddChild(label);
+    window->AddChild(button);
 
     auto textShaderVert = rs->CreateShader();
     textShaderVert->Load("./codehero/shaders/text_basic.vert").Compile();

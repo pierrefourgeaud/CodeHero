@@ -5,6 +5,7 @@
 #ifndef CODEHERO_UI_UIDRAW_H_
 #define CODEHERO_UI_UIDRAW_H_
 
+#include <array>
 #include <memory>
 #include <vector>
 
@@ -19,6 +20,8 @@ class FontFace;
 
 class UIDraw {
 public:
+    static void Init();
+
     // Get batches from path
     static void PathStroke(const std::shared_ptr<EngineContext>& iContext,
                            std::vector<UIBatch>& oBatches,
@@ -35,6 +38,12 @@ public:
                      const std::shared_ptr<FontFace>& iFontFace,
                      const Vector2& iPosition,
                      const Color& iColor);
+    
+    static void GetPointListArc(std::vector<Vector2>& oPoints, 
+                                const Vector2& iCenter,
+                                float iRadius,
+                                int iMin,
+                                int iMax);
 
 private:
     UIDraw() = delete;
@@ -42,6 +51,9 @@ private:
     UIDraw(const UIDraw&) = delete;
     UIDraw(const UIDraw&&) = delete;
     UIDraw& operator=(const UIDraw&) = delete;
+
+    // Pre computed fast/simple vertex for circle
+    static std::array<Vector2, 12> m_CircleVertex;
 };
 
 } // namespace CodeHero
