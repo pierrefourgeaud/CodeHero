@@ -20,7 +20,7 @@ void UIDraw::Init() {
     size_t vtxSize = m_CircleVertex.size();
     for (size_t i = 0; i < vtxSize; ++i) {
         const float a = static_cast<float>(i) / static_cast<float>(vtxSize) * 2 * PI;
-        m_CircleVertex[i] = { static_cast<float>(std::cosf(a)), static_cast<float>(std::sinf(a)) };
+        m_CircleVertex[i] = { std::cos(a), std::sin(a) };
     }
 }
 
