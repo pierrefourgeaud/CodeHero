@@ -42,6 +42,10 @@ to do so:
 * Documentation: How to compile, how to create project, how to contribute, general architecture, ...
 * Better window/input management. Probably moving from GLFW to in-house drivers.
 
+### Compilation
+
+[See here](./docs/compilation.md)
+
 ### Credits
 
 * Special thanks to Joey for his awesome tutorials on OpenGL that made me even more motivated to start that project: [learnopengl.com](https://learnopengl.com)
