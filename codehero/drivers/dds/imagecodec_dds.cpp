@@ -98,12 +98,13 @@ std::string FourCC(uint32_t iEnc) {
     return fourcc;
 }
 
-Error ImageCodecDDS::Load(FileAccess& iF, Image& oImage) {
+std::shared_ptr<Image> ImageCodecDDS::Load(FileAccess& iF, const std::string& iTypeName) {
+    (void)iTypeName;
     // Confirm that the file seems to be DDS
     uint32_t magic = iF.Read32();
     if (FourCC(magic) != "DDS ") {
         LOGE << "DDS: Format of texture does not seem to be valid." << std::endl;
-        return Error::ERR_IMAGE_INVALID;
+        return nullptr;
     }
 
     // Read DDS HEADER
@@ -129,7 +130,7 @@ Error ImageCodecDDS::Load(FileAccess& iF, Image& oImage) {
         default:
             LOGE << "DDS: Unknown texture compression '"
                  << FourCC(header.ddspf.dwFourCC) << "'" << std::endl;
-            return Error::ERR_IMAGE_INVALID;
+            return nullptr;
         }
     } else if (header.ddspf.dwFlags & DDSPFF_RGB) {
         if (header.ddspf.dwRGBBitCount == 24 &&
@@ -160,7 +161,7 @@ Error ImageCodecDDS::Load(FileAccess& iF, Image& oImage) {
         }
     } else {
         LOGE << "DDS: Unrecognized texture format." << std::endl;
-        return Error::ERR_IMAGE_FORMAT_UNRECOGNIZED;
+        return nullptr;
     }
 
     bool compressed = IsCompressed(ddsFormat);
@@ -176,12 +177,13 @@ Error ImageCodecDDS::Load(FileAccess& iF, Image& oImage) {
     ImageData dest(size);
     iF.Read(&dest[0], size);
 
-    oImage.Create(width, height, dest, formatMapping[ddsFormat]);
+    auto image = std::make_shared<Image>(m_pContext);
+    image->Create(width, height, dest, formatMapping[ddsFormat]);
 
     // TODO(pierre) The mipmaps are not generated and or used here. It should probably be...
     // TODO(pierre) The format BGRA... are not compatible, we should convert them somehow...
 
-    return OK;
+    return image;
 }
 
 }  // namespace CodeHero

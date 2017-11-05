@@ -135,42 +135,42 @@ SerializableCodecXML::SerializableCodecXML(const std::shared_ptr<EngineContext>&
 
 SerializableCodecXML::~SerializableCodecXML() {}
 
-Error SerializableCodecXML::Load(FileAccess& iF, Serializable& oObject) {
+std::shared_ptr<Serializable> SerializableCodecXML::Load(FileAccess& iF, const std::string& iTypeName) {
     std::string content = iF.ReadAll();
 
     pugi::xml_document doc;
     pugi::xml_parse_result result = doc.load_string(content.c_str());
-    
+
     if (!result) {
         LOGE << "XML [" << content << "] parsed with errors, attr value: [" << doc.child("node").attribute("attr").value() << "]" << std::endl;
         LOGE << "Error description: " << result.description() << std::endl;
         LOGE << "Error offset: " << result.offset << " (error at [..." << (&content[result.offset]) << "]" << std::endl;
-        return ERR_PARSING_FAILED;
+        return nullptr;
     }
 
-    const std::string rootTypeName = oObject.GetTypeName();
-    pugi::xml_node root = doc.child(rootTypeName.c_str());
+    pugi::xml_node root = doc.child(iTypeName.c_str());
 
     if (!root) {
-        LOGE << "Failed to find node " << rootTypeName << ". Object not imported." << std::endl;
-        return ERR_PARSING_FAILED;
+        LOGE << "SerializableCodecXML: Failed to find node " << iTypeName << ". Object not imported." << std::endl;
+        return nullptr;
     }
 
-    auto rootDef = Object::GetDefinition(rootTypeName);
+    auto rootDef = Object::GetDefinition(iTypeName);
     if (!rootDef) {
-        LOGE << "No definition was declared for object '" << rootTypeName << "'. Object not imported." << std::endl;
-        return ERR_INVALID_PARAMETER;
+        LOGE << "SerializableCodecXML: No definition was declared for object '" << iTypeName
+             << "'. Object not imported." << std::endl;
+        return nullptr;
     }
 
-    Error loadResult = _Load(rootDef, root, oObject);
-
-    return loadResult;
+    return _Load(rootDef, root);
 }
 
-Error SerializableCodecXML::_Load(const std::shared_ptr<ObjectDefinition>& iDefinition,
-                                  const pugi::xml_node& iNode,
-                                  Serializable& oObject) const {
-    oObject.BeginLoad();
+std::shared_ptr<Serializable> SerializableCodecXML::_Load(const std::shared_ptr<ObjectDefinition>& iDefinition,
+                                                          const pugi::xml_node& iNode) const {
+    // TODO(pierre) At that point we are fairly confident the obj is Serializable,
+    // we should make it more sure in the future.
+    auto obj = std::static_pointer_cast<Serializable>(iDefinition->Create());
+    obj->BeginLoad();
 
     for (pugi::xml_node_iterator it = iNode.begin(); it != iNode.end(); ++it) {
         // If the current node is attribute, then it is an attribute for the current object
@@ -181,42 +181,42 @@ Error SerializableCodecXML::_Load(const std::shared_ptr<ObjectDefinition>& iDefi
             std::string attrVal = it->attribute("value").as_string();
             auto attrInfo = iDefinition->GetAttribute(attr);
             if (attrInfo.IsNull()) {
-                LOGE << "Attribute '" << attr << "' not registered for object '" << iDefinition->GetName()
-                     << "', ignored." << std::endl;
+                LOGE << "SerializableCodecXML: Attribute '" << attr << "' not registered for object '"
+                     << iDefinition->GetName() << "', ignored." << std::endl;
             } else {
                 switch (attrInfo.GetType()) {
                 case Variant::Value::VVT_Bool:
-                    attrInfo.GetAccessor()->Set(&oObject, Variant(ParseBool(attrVal)));
+                    attrInfo.GetAccessor()->Set(obj.get(), Variant(ParseBool(attrVal)));
                     break;
                 case Variant::Value::VVT_Float:
-                    attrInfo.GetAccessor()->Set(&oObject, Variant(ParseFloat(attrVal)));
+                    attrInfo.GetAccessor()->Set(obj.get(), Variant(ParseFloat(attrVal)));
                     break;
                 case Variant::Value::VVT_String:
-                    attrInfo.GetAccessor()->Set(&oObject, Variant(std::string(attrVal)));
+                    attrInfo.GetAccessor()->Set(obj.get(), Variant(std::string(attrVal)));
                     break;
                 case Variant::Value::VVT_Vector2:
-                    attrInfo.GetAccessor()->Set(&oObject, Variant(ParseVector2(attrVal)));
+                    attrInfo.GetAccessor()->Set(obj.get(), Variant(ParseVector2(attrVal)));
                     break;
                 case Variant::Value::VVT_Vector3:
-                    attrInfo.GetAccessor()->Set(&oObject, Variant(ParseVector3(attrVal)));
+                    attrInfo.GetAccessor()->Set(obj.get(), Variant(ParseVector3(attrVal)));
                     break;
                 case Variant::Value::VVT_Quaternion:
-                    attrInfo.GetAccessor()->Set(&oObject, Variant(ParseQuaternion(attrVal)));
+                    attrInfo.GetAccessor()->Set(obj.get(), Variant(ParseQuaternion(attrVal)));
                     break;
                 case Variant::Value::VVT_Array:
-                    attrInfo.GetAccessor()->Set(&oObject, Variant(ParseArray(it->children())));
+                    attrInfo.GetAccessor()->Set(obj.get(), Variant(ParseArray(it->children())));
                     break;
                 case Variant::Value::VVT_HashMap:
                     // HashMap in variant for now does support only <string, string>
                     // When the type will evolve in a more complicated/complete version
                     // we will need to revise this parsing
-                    attrInfo.GetAccessor()->Set(&oObject, Variant(ParseHashMap(it->children())));
+                    attrInfo.GetAccessor()->Set(obj.get(), Variant(ParseHashMap(it->children())));
                     break;
                 case Variant::Value::VVT_SerializablePtr:
                     // If the tag is attribute and the type is shared_ptr<Serializable>
                     // we consider that we expect a collection of SerializablePtr object
                     // the attribute tag being a way to group those elements together
-                    if (_ParseCollection(it->children(), attrInfo, oObject) != Error::OK) {
+                    if (_ParseCollection(it->children(), attrInfo, *obj) != Error::OK) {
                         LOGE << "[SerializableCodeXML]: Failed to parse collection '" << attr << "'." << std::endl;
                     }
                     break;
@@ -229,18 +229,18 @@ Error SerializableCodecXML::_Load(const std::shared_ptr<ObjectDefinition>& iDefi
         } else {
             auto attrInfo = iDefinition->GetAttribute(it->name());
             if (attrInfo.IsNull()) {
-                LOGE << "Attribute '" << it->name() << "' not registered for object '" << iDefinition->GetName()
-                    << "', ignored." << std::endl;
+                LOGE << "SerializableCodecXML: Attribute '" << it->name() << "' not registered for object '"
+                     << iDefinition->GetName() << "', ignored." << std::endl;
                 continue;
             }
 
-            _LoadObject(it, attrInfo, oObject);
+            _LoadObject(it, attrInfo, *obj);
         }
     }
 
-    oObject.EndLoad();
+    obj->EndLoad();
 
-    return OK;
+    return obj;
 }
 
 Error SerializableCodecXML::_ParseCollection(const pugi::xml_object_range<pugi::xml_node_iterator>& iChildren,
@@ -270,19 +270,19 @@ Error SerializableCodecXML::_LoadObject(const pugi::xml_node_iterator& iNode, co
     auto attr = iNode->attribute("path");
 
     // Whatever path we take next, we will need this object
-    std::shared_ptr<Serializable> obj = std::static_pointer_cast<Serializable>(def->Create());
+    std::shared_ptr<Serializable> obj;
 
     // If it has a path to file, we use the resource loader
     if (attr) {
-        m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load(attr.as_string(), *obj.get());
+        obj = m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load(attr.as_string(), iNode->name());
     } else { // Or we load it here
         // TODO(pierre) All object here can be serializable
         // but we should add a test. We can at least do a IsA (to be added soon)
-        Error res = _Load(def, *iNode, *obj.get());
-        if (res != Error::OK) {
+        obj = _Load(def, *iNode);
+        if (obj == nullptr) {
             LOGE << "[SerializableCodecXML]: Failed to import " << iNode->name() << " object. Continuing..."
                  << std::endl;
-            return res;
+            return Error::FAILED;
         }
     }
 

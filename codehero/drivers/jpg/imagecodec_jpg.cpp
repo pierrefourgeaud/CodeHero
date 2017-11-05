@@ -22,7 +22,8 @@ ImageCodecJPG::ImageCodecJPG(const std::shared_ptr<EngineContext>& iContext)
 
 ImageCodecJPG::~ImageCodecJPG() {}
 
-Error ImageCodecJPG::Load(FileAccess& iF, Image& oImage) {
+std::shared_ptr<Image> ImageCodecJPG::Load(FileAccess& iF, const std::string& iTypeName) {
+    (void)iTypeName;
     const int32_t size = iF.GetSize();
     ImageData buffer(size);
     iF.Read(&buffer[0], size);
@@ -32,7 +33,7 @@ Error ImageCodecJPG::Load(FileAccess& iF, Image& oImage) {
 
     if (decoder.get_error_code() != jpgd::JPGD_SUCCESS) {
         LOGE << "JPG: Failed to initialize decoder..." << std::endl;
-        return Error::ERR_CANT_OPEN;
+        return nullptr;
     }
 
     const int32_t width = decoder.get_width();
@@ -45,7 +46,7 @@ Error ImageCodecJPG::Load(FileAccess& iF, Image& oImage) {
 
     if (decoder.begin_decoding() != jpgd::JPGD_SUCCESS) {
         LOGE << "JPG: Failed to start decoding" << std::endl;
-        return Error::ERR_IMAGE_INVALID;
+        return nullptr;
     }
 
     const int32_t dstBpl = width * comps;
@@ -59,7 +60,7 @@ Error ImageCodecJPG::Load(FileAccess& iF, Image& oImage) {
         jpgd::uint lineLen;
         if (decoder.decode((const void**)&line, &lineLen) != jpgd::JPGD_SUCCESS) {
             LOGE << "JPG: Error during decoding, image invalid" << std::endl;
-            return ERR_IMAGE_INVALID;
+            return nullptr;
         }
 
         jpgd::uint8* dst = imageData + y * dstBpl;
@@ -73,9 +74,10 @@ Error ImageCodecJPG::Load(FileAccess& iF, Image& oImage) {
         fmt = Image::Format::IFMT_RGBA;
     }
 
-    oImage.Create(width, height, dest, fmt);
+    auto image = std::make_shared<Image>(m_pContext);
+    image->Create(width, height, dest, fmt);
 
-    return OK;
+    return image;
 }
 
 }  // namespace CodeHero

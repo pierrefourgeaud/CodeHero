@@ -31,19 +31,21 @@ ModelCodecAssimp::ModelCodecAssimp(const std::shared_ptr<EngineContext>& iContex
     }
 }
 
-Error ModelCodecAssimp::Load(FileAccess& iF, Model& oModel) {
+std::shared_ptr<Model> ModelCodecAssimp::Load(FileAccess& iF, const std::string& iTypeName) {
+    (void)iTypeName;
     Assimp::Importer import;
     import.SetIOHandler(new IOSystem(&iF));
     const aiScene* scene = import.ReadFile(iF.GetName(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_ConvertToLeftHanded);
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-        LOGE << "ModelCodecAssimp: " << import.GetErrorString() << std::endl;
-        return FAILED;
+        LOGE << "[ModelCodecAssimp]: " << import.GetErrorString() << std::endl;
+        return nullptr;
     }
     m_ModelDirectory = iF.GetName().substr(0, iF.GetName().find_last_of('/'));
 
-    _ProcessNode(scene->mRootNode, scene, oModel);
-    return OK;
+    auto model = std::make_shared<Model>(m_pContext);
+    _ProcessNode(scene->mRootNode, scene, *model);
+    return model;
 }
 
 void ModelCodecAssimp::_ProcessNode(aiNode* iNode, const aiScene* iScene, Model& oModel) {

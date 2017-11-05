@@ -22,18 +22,17 @@ public:
     ImageCodecTGA(const std::shared_ptr<EngineContext>& iContext);
     ~ImageCodecTGA();
 
-    Error Load(FileAccess& iF, Image& oImage) override;
+    std::shared_ptr<Image> Load(FileAccess& iF, const std::string& iTypeName) override;
 
 private:
     void _DecodeTGARle(const std::vector<uint8_t>& iCompressedBuffer,
                        size_t iPixelSize,
                        std::vector<uint8_t>& oUncompressedBuffer,
                        size_t iOutputSize);
-    Error _ConvertToImage(Image& oImage,
-                          const uint8_t* iBuffer,
-                          const TGAHeader& iHeader,
-                          const std::vector<uint8_t>& iPalette,
-                          bool iIsMonochrome);
+    std::shared_ptr<Image> _ConvertToImage(const uint8_t* iBuffer,
+                                           const TGAHeader& iHeader,
+                                           const std::vector<uint8_t>& iPalette,
+                                           bool iIsMonochrome);
 };
 
 }  // namespace CodeHero

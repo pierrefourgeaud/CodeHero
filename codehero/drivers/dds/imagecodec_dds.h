@@ -20,7 +20,7 @@ public:
     ImageCodecDDS(const std::shared_ptr<EngineContext>& iContext);
     ~ImageCodecDDS();
 
-    Error Load(FileAccess& iF, Image& oImage) override;
+    std::shared_ptr<Image> Load(FileAccess& iF, const std::string& iTypeName) override;
 private:
 };
 

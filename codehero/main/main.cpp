@@ -186,18 +186,18 @@ Error Main::Run() {
     int nbFrames = 0;
     int fps = 0;
 
-    std::shared_ptr<Scene> scene = std::make_shared<Scene>(m_pContext);
-    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/scene_test1.xml", *scene);
+    std::shared_ptr<Scene> scene =
+        m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load<Scene>("./resources/samples/scene_test1.xml");
 
-    auto shaderTexturedNoAlpha = rs->CreateShaderProgram();
-    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/shaderProgram_texturedNoAlpha.xml", *shaderTexturedNoAlpha.get());
-    auto shaderTexturedAlpha = rs->CreateShaderProgram();
-    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load("./resources/samples/shaderProgram_texturedAlpha.xml", *shaderTexturedAlpha.get());
+    auto shaderTexturedNoAlpha = m_pContext->GetSubsystem<ResourceLoader<Serializable>>()
+            ->Load<ShaderProgram>("./resources/samples/shaderProgram_texturedNoAlpha.xml");
+    auto shaderTexturedAlpha = m_pContext->GetSubsystem<ResourceLoader<Serializable>>()
+            ->Load<ShaderProgram>("./resources/samples/shaderProgram_texturedAlpha.xml");
 
     std::shared_ptr<Node> nanoNode = scene->CreateChild();
     nanoNode->Translate({ 1.0f, -12.0f, 4.7f });
-    auto nanoMdl = nanoNode->CreateDrawable<Model>(m_pContext);
-    m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/nanosuit/nanosuit.obj", *nanoMdl.get());
+    auto nanoMdl = m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/nanosuit/nanosuit.obj");
+    nanoNode->AddDrawable(nanoMdl);
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : nanoMdl->GetMeshes()) {
         mesh->GetMaterial()->SetShaderProgram(shaderTexturedNoAlpha);
@@ -207,8 +207,9 @@ Error Main::Run() {
     std::shared_ptr<Node> houseNode = scene->CreateChild();
     houseNode->Translate({ -15.0f, 0.0f, 5.0f });
     houseNode->SetRotation(Quaternion(0.0f, 180.0f, 0.0f));
-    auto houseMdl = houseNode->CreateDrawable<Model>(m_pContext);
-    m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/small-house-diorama/Dio.obj", *houseMdl.get());
+    auto houseMdl =
+        m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/small-house-diorama/Dio.obj");
+    houseNode->AddDrawable(houseMdl);
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : houseMdl->GetMeshes()) {
         mesh->GetMaterial()->SetShaderProgram(shaderTexturedAlpha);
@@ -217,8 +218,8 @@ Error Main::Run() {
 
     std::shared_ptr<Node> rockNode = scene->CreateChild();
     rockNode->Translate({ -2.8f, -12.0f, 3.2f });
-    auto rockMdl = rockNode->CreateDrawable<Model>(m_pContext);
-    m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/rock/rock.obj", *rockMdl.get());
+    auto rockMdl = m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/rock/rock.obj");
+    rockNode->AddDrawable(rockMdl);
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : rockMdl->GetMeshes()) {
         mesh->GetMaterial()->SetShaderProgram(shaderTexturedNoAlpha);
@@ -227,8 +228,8 @@ Error Main::Run() {
 
     std::shared_ptr<Node> planetNode = scene->CreateChild();
     planetNode->Translate({ 12.8f, 12.0f, 23.2f });
-    auto planetMdl = planetNode->CreateDrawable<Model>(m_pContext);
-    m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/planet/planet.obj", *planetMdl.get());
+    auto planetMdl = m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/planet/planet.obj");
+    planetNode->AddDrawable(planetMdl);
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : planetMdl->GetMeshes()) {
         mesh->GetMaterial()->SetShaderProgram(shaderTexturedNoAlpha);
@@ -239,8 +240,9 @@ Error Main::Run() {
     treasureChestNode->Translate({ -5.0f, -12.0f, 12.0f });
     treasureChestNode->Scale(0.015f);
     treasureChestNode->Rotate(Quaternion({ 0.0f, -45.0f, 0.0f }));
-    auto treasureChestMdl = treasureChestNode->CreateDrawable<Model>(m_pContext);
-    m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/treasure-chest/Chest.obj", *treasureChestMdl.get());
+    auto treasureChestMdl =
+        m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/treasure-chest/Chest.obj");
+    treasureChestNode->AddDrawable(treasureChestMdl);
     std::shared_ptr<Texture> chestDiffuse(rs->CreateTexture());
     chestDiffuse->Load("./resources/models/treasure-chest/Chest_C.png");
     std::shared_ptr<Texture> chestSpecular(rs->CreateTexture());

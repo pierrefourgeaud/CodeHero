@@ -85,8 +85,7 @@ bool Texture::Load(const std::shared_ptr<Image>& iImage) {
 bool Texture::Load(const std::string& iImage) {
     CH_ASSERT(m_Type == T_2D);
 
-    m_Images[0] = std::make_shared<Image>(m_pContext);
-    m_pContext->GetSubsystem<ResourceLoader<Image>>()->Load(iImage, *m_Images[0]);
+    m_Images[0] = m_pContext->GetSubsystem<ResourceLoader<Image>>()->Load(iImage);
 
     return _CreateImpl();
 }
@@ -102,8 +101,7 @@ bool Texture::Load(TextureFace iFace, const std::shared_ptr<Image>& iImage) {
 bool Texture::Load(TextureFace iFace, const std::string& iImage) {
     CH_ASSERT(numberTextureFaces[m_Type] > iFace);
 
-    m_Images[iFace] = std::make_shared<Image>(m_pContext);
-    m_pContext->GetSubsystem<ResourceLoader<Image>>()->Load(iImage, *m_Images[iFace]);
+    m_Images[iFace] = m_pContext->GetSubsystem<ResourceLoader<Image>>()->Load(iImage);
 
     return _CreateImpl();
 }
@@ -121,8 +119,7 @@ bool Texture::Load(const std::vector<std::string>& iImages) {
 
     size_t nbImages = iImages.size();
     for (size_t i = 0; i < nbImages; ++i) {
-        m_Images[i] = std::make_shared<Image>(m_pContext);
-        m_pContext->GetSubsystem<ResourceLoader<Image>>()->Load(iImages[i], *m_Images[i]);
+        m_Images[i] = m_pContext->GetSubsystem<ResourceLoader<Image>>()->Load(iImages[i]);
     }
 
     return _CreateImpl();

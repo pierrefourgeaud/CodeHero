@@ -6,6 +6,7 @@
 #define CODEHERO_DRIVERS_XML_SERIALIZABLECODEC_XML_H_
 
 #include <pugixml.hpp>
+#include <memory>
 #include "core/errors.h"
 #include "core/resourcecodec.h"
 
@@ -24,12 +25,11 @@ public:
     SerializableCodecXML(const std::shared_ptr<EngineContext>& iContext);
     ~SerializableCodecXML();
 
-    Error Load(FileAccess& iF, Serializable& oObject) override;
+    std::shared_ptr<Serializable> Load(FileAccess& iF, const std::string& iTypeName) override;
 
 private:
-    Error _Load(const std::shared_ptr<ObjectDefinition>& iDefinition,
-                const pugi::xml_node& iNode,
-                Serializable& oObject) const;
+    std::shared_ptr<Serializable> _Load(const std::shared_ptr<ObjectDefinition>& iDefinition,
+                                        const pugi::xml_node& iNode) const;
     Error _ParseCollection(const pugi::xml_object_range<pugi::xml_node_iterator>& iChildren,
                            const AttributeInfo& iAttrInfo,
                            Serializable& oObject) const;

@@ -29,7 +29,7 @@ public:
     OBJECT(ModelCodecAssimp, ResourceCodec<Model>)
     ModelCodecAssimp(const std::shared_ptr<EngineContext>& iContext);
 
-    Error Load(FileAccess& iF, Model& oModel) override;
+    std::shared_ptr<Model> Load(FileAccess& iF, const std::string& iTypeName) override;
 
 private:
     void _ProcessNode(aiNode* iNode, const aiScene* iScene, Model& oModel);

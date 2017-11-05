@@ -65,12 +65,14 @@ ImageCodecTGA::ImageCodecTGA(const std::shared_ptr<EngineContext>& iContext)
 
 ImageCodecTGA::~ImageCodecTGA() {}
 
-Error ImageCodecTGA::Load(FileAccess& iF, Image& oImage) {
+std::shared_ptr<Image> ImageCodecTGA::Load(FileAccess& iF, const std::string& iTypeName) {
+    (void)iTypeName;
     std::vector<uint8_t> srcImage;
     size_t srcImageLen = iF.GetSize();
 
     if (srcImageLen == 0 || srcImageLen < sizeof(TGAHeader)) {
-        return Error::ERR_IMAGE_INVALID;
+        LOGE << "ImageCodecTGA: Impossible to read image..." << std::endl;
+        return nullptr;
     }
 
     srcImage.resize(srcImageLen);
@@ -94,25 +96,31 @@ Error ImageCodecTGA::Load(FileAccess& iF, Image& oImage) {
     bool isMonochrome = (tgaHeader.type == TGAT_RLEMonochrome || tgaHeader.type == TGAT_Monochrome);
 
     if (tgaHeader.type == TGAT_NoData) {
-        return FAILED;
+        LOGE << "ImageCodecTGA: No data detected..." << std::endl;
+        return nullptr;
     }
 
     if (hasColorMap) {
         if (tgaHeader.colorMapLength > 256 || (tgaHeader.colorMapDepth != 24) || tgaHeader.colorMapType != 1) {
-            return FAILED;
+            LOGE << "ImageCodecTGA: Wrong color map..." << std::endl;
+            return nullptr;
         }
-    } else { 
+    } else {
         if (tgaHeader.colorMapType) {
-            return FAILED;
+            LOGE << "ImageCodecTGA: Wrong color map..." << std::endl;
+            return nullptr;
         }
     }
 
     if (tgaHeader.width <= 0 || tgaHeader.height <= 0) {
-        return FAILED;
+        LOGE << "ImageCodecTGA: Image size not detected properly: width: " << tgaHeader.width << " height: "
+             << tgaHeader.height << std::endl;
+        return nullptr;
     }
 
     if (tgaHeader.pixelDepth != 8 && tgaHeader.pixelDepth != 24 && tgaHeader.pixelDepth != 32) {
-        return FAILED;
+        LOGE << "ImageCodecTGA: Wrong pixelDepth detected: " << tgaHeader.pixelDepth << std::endl;
+        return nullptr;
     }
 
     iF.Seek(iF.GetPos() + tgaHeader.idLength);
@@ -143,11 +151,9 @@ Error ImageCodecTGA::Load(FileAccess& iF, Image& oImage) {
         buffer = &srcImage[0];
     }
 
-    Error err = _ConvertToImage(oImage, buffer, tgaHeader, palette, isMonochrome);
-
     iF.Close();
 
-    return err;
+    return _ConvertToImage(buffer, tgaHeader, palette, isMonochrome);
 }
 
 void ImageCodecTGA::_DecodeTGARle(const std::vector<uint8_t>& iCompressedBuffer,
@@ -189,11 +195,10 @@ void ImageCodecTGA::_DecodeTGARle(const std::vector<uint8_t>& iCompressedBuffer,
     }
 }
 
-Error ImageCodecTGA::_ConvertToImage(Image& oImage,
-                                     const uint8_t* iBuffer,
-                                     const TGAHeader& iHeader,
-                                     const std::vector<uint8_t>& iPalette,
-                                     bool iIsMonochrome) {
+std::shared_ptr<Image> ImageCodecTGA::_ConvertToImage(const uint8_t* iBuffer,
+                                                      const TGAHeader& iHeader,
+                                                      const std::vector<uint8_t>& iPalette,
+                                                      bool iIsMonochrome) {
     uint32_t width = iHeader.width;
     uint32_t height = iHeader.height;
     TGAOrigin origin = static_cast<TGAOrigin>((iHeader.imageDescriptor & TGAO_Mask) >> TGAO_Shift);
@@ -261,9 +266,10 @@ Error ImageCodecTGA::_ConvertToImage(Image& oImage,
                         r = (iPalette[(index * 3) + 0]);
                         g = (iPalette[(index * 3) + 1]);
                         b = (iPalette[(index * 3) + 2]);
-                    }
-                    else {
-                        return ERR_IMAGE_INVALID;
+                    } else {
+                        LOGE << "ImageCodecTGA: Wrong color depth: " << iHeader.colorMapDepth << ", expected 24."
+                             << std::endl;
+                        return nullptr;
                     }
 
                     TGA_PUT_PIXEL(imageData, r, g, b, a)
@@ -308,9 +314,10 @@ Error ImageCodecTGA::_ConvertToImage(Image& oImage,
         }
     }
 
-    oImage.Create(width, height, imageData, Image::IFMT_RGBA);
+    auto image = std::make_shared<Image>(m_pContext);
+    image->Create(width, height, imageData, Image::IFMT_RGBA);
 
-    return OK;
+    return image;
 }
 
 }  // namespace CodeHero

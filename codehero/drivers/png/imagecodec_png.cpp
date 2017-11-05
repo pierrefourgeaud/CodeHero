@@ -35,7 +35,8 @@ ImageCodecPNG::ImageCodecPNG(const std::shared_ptr<EngineContext>& iContext)
 
 ImageCodecPNG::~ImageCodecPNG() {}
 
-Error ImageCodecPNG::Load(FileAccess& iF, Image& oImage) {
+std::shared_ptr<Image> ImageCodecPNG::Load(FileAccess& iF, const std::string& iTypeName) {
+    (void)iTypeName;
     png_structp png;
     png_infop info;
 
@@ -45,18 +46,21 @@ Error ImageCodecPNG::Load(FileAccess& iF, Image& oImage) {
                 PngErrorFunction, PngWarnFunction);
 
     if (png == nullptr) {
-        return ERR_CANT_CREATE;
+        LOGE << "ImageCodecPNG: Could not create read structure." << std::endl;
+        return nullptr;
     }
 
     info = png_create_info_struct(png);
     if (info == nullptr) {
         png_destroy_read_struct(&png, nullptr, nullptr);
-        return ERR_CANT_CREATE;
+        LOGE << "ImageCodecPNG: Could not create info structure." << std::endl;
+        return nullptr;
     }
 
     if (setjmp(png_jmpbuf(png))) {
         png_destroy_read_struct(&png, &info, nullptr);
-        return FAILED;
+        LOGE << "ImageCodecPNG: Could not initialize buffer." << std::endl;
+        return nullptr;
     }
 
     png_set_read_fn(png, (void *)&iF, PngReadFunction);
@@ -103,9 +107,9 @@ Error ImageCodecPNG::Load(FileAccess& iF, Image& oImage) {
 
         } break;
     default:
-        LOGE << "ImageCodec_PNG: Invalid PNG type." << std::endl;
+        LOGE << "ImageCodecPNG: Invalid PNG type." << std::endl;
         png_destroy_read_struct(&png, &info, nullptr);
-        return ERR_IMAGE_INVALID;
+        return nullptr;
     }
     components = Image::GetComponentsFromFormat(fmt);
 
@@ -123,12 +127,13 @@ Error ImageCodecPNG::Load(FileAccess& iF, Image& oImage) {
 
     // TODO(pierre) Manipulations to do with palette here, for later
 
-    oImage.Create(width, height, dest, fmt);
+    auto image = std::make_shared<Image>(m_pContext);
+    image->Create(width, height, dest, fmt);
 
     delete [] rows;
     png_destroy_read_struct(&png, &info, nullptr);
 
-    return OK;
+    return image;
 }
 
 }  // namespace CodeHero

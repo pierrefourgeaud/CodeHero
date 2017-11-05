@@ -36,7 +36,7 @@ public:
         return false;
     }
 
-    virtual Error Load(FileAccess& iF, T& oResource) = 0;
+    virtual std::shared_ptr<T> Load(FileAccess& iF, const std::string& iTypeName) = 0;
 
 protected:
     void _AddExtension(const std::string& iExtension) {

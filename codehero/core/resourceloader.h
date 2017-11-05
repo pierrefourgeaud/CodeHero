@@ -17,6 +17,10 @@ namespace CodeHero {
 
 template <class T>
 class ResourceLoader : public System {
+    static_assert(
+            std::is_base_of<Object, T>::value,
+            "The instance to be loaded must be of type Object.");
+
     enum {
         MAX_CODECS = 8
     };
@@ -33,12 +37,14 @@ public:
     Error Initialize() override { return OK; }
     Error Cleanup() override { return OK; }
 
-    Error Load(const std::string& iFilePath, T& oResource) {
+    std::shared_ptr<T> Load(const std::string& iFilePath, const std::string& iTypeName = T::GetTypeNameStatic()) const {
+        // TODO(pierre) Do a check in the cache here.
+
         FileAccess f;
         // TODO(pierre) improve error management here
         if (f.Open(iFilePath, FileAccess::READ) == ERR_FILE_NOT_FOUND) {
-            LOGE << "ResourceLoader: File not found." << std::endl;
-            return ERR_FILE_NOT_FOUND;
+            LOGE << "[ResourceLoader]: File not found." << std::endl;
+            return nullptr;
         }
 
         for (int i = 0; i < m_CodecsCount; i++) {
@@ -46,16 +52,31 @@ public:
                 continue;
             }
 
-            Error err = m_Codecs[i]->Load(f, oResource);
+            auto resource = m_Codecs[i]->Load(f, iTypeName);
 
-            // Started to load but an error different than bad image format occured.
-            if (err != ERR_IMAGE_FORMAT_UNRECOGNIZED) {
-                return err;
+            if (resource) {
+                // TODO(pierre) Add the resource to the cache.
+                return resource;
+            } else {
+                LOGE << "[ResourceLoader]: An unexpected error occurred, resource not loaded." << std::endl;
+                return nullptr;
             }
         }
 
         LOGE << "ResourceLoader: File extension not recognized." << std::endl;
-        return ERR_IMAGE_FORMAT_UNRECOGNIZED;
+        return nullptr;
+    }
+
+    template <class U>
+    std::shared_ptr<U> Load(const std::string& iFilePath) const {
+        // TODO(pierre) Do a better job with the error message here...
+        static_assert(std::is_base_of<T, U>::value, "T is not base of U.");
+        auto res = Load(iFilePath, U::GetTypeNameStatic());
+        if (res) {
+            return std::static_pointer_cast<U>(res);
+        }
+
+        return nullptr;
     }
 
     bool  AddCodec(ResourceCodec<T>* iCodec) {
