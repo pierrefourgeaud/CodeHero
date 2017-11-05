@@ -124,6 +124,7 @@ std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh, const aiScen
     auto material = std::make_shared<Material>(m_pContext);
     material->SetTexture(TU_Diffuse, _LoadMaterialTextures(aMaterial, aiTextureType_DIFFUSE));
     material->SetTexture(TU_Specular, _LoadMaterialTextures(aMaterial, aiTextureType_SPECULAR));
+    material->SetCullEnabled(true);
 
     mesh->AddVertexBuffer(vertex);
     mesh->AddIndexBuffer(indexBuffer);

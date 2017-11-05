@@ -201,7 +201,6 @@ Error Main::Run() {
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : nanoMdl->GetMeshes()) {
         mesh->GetMaterial()->SetShaderProgram(shaderTexturedNoAlpha);
-        mesh->GetMaterial()->SetCullEnabled(true);
     }
 
     std::shared_ptr<Node> houseNode = scene->CreateChild();
@@ -213,7 +212,6 @@ Error Main::Run() {
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : houseMdl->GetMeshes()) {
         mesh->GetMaterial()->SetShaderProgram(shaderTexturedAlpha);
-        mesh->GetMaterial()->SetCullEnabled(true);
     }
 
     std::shared_ptr<Node> rockNode = scene->CreateChild();
@@ -223,7 +221,6 @@ Error Main::Run() {
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : rockMdl->GetMeshes()) {
         mesh->GetMaterial()->SetShaderProgram(shaderTexturedNoAlpha);
-        mesh->GetMaterial()->SetCullEnabled(true);
     }
 
     std::shared_ptr<Node> planetNode = scene->CreateChild();
@@ -233,7 +230,6 @@ Error Main::Run() {
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : planetMdl->GetMeshes()) {
         mesh->GetMaterial()->SetShaderProgram(shaderTexturedNoAlpha);
-        mesh->GetMaterial()->SetCullEnabled(true);
     }
 
     std::shared_ptr<Node> treasureChestNode = scene->CreateChild();
@@ -252,7 +248,6 @@ Error Main::Run() {
         mesh->GetMaterial()->SetShaderProgram(shaderTexturedNoAlpha);
         mesh->GetMaterial()->SetTexture(TextureUnit::TU_Diffuse, chestDiffuse);
         mesh->GetMaterial()->SetTexture(TextureUnit::TU_Specular, chestSpecular);
-        mesh->GetMaterial()->SetCullEnabled(true);
     }
 
     auto camera = std::make_shared<Camera>(m_pContext);
