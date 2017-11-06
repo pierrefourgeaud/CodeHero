@@ -9,7 +9,9 @@
 #include <string>
 #include "core/errors.h"
 #include "core/object.h"
+#include "core/serializable.h"
 #include "core/system.h"
+#include "core/resourcecache.h"
 #include "core/resourcecodec.h"
 #include "core/fileaccess.h"
 
@@ -38,7 +40,17 @@ public:
     Error Cleanup() override { return OK; }
 
     std::shared_ptr<T> Load(const std::string& iFilePath, const std::string& iTypeName = T::GetTypeNameStatic()) const {
-        // TODO(pierre) Do a check in the cache here.
+        auto resourceCache = m_pContext->GetSubsystem<ResourceCache>();
+        auto resource = resourceCache->Get(iFilePath);
+        if (resource) {
+            if (resource->IsInstanceOf(T::GetTypeInfoStatic())) {
+                return std::static_pointer_cast<T>(resource);
+            } else {
+                LOGE << "[ResourceLoader]: Impossible to cast " << resource->GetTypeName() << " to "
+                     << T::GetTypeNameStatic() << "." << std::endl;
+                return nullptr;
+            }
+        }
 
         FileAccess f;
         // TODO(pierre) improve error management here
@@ -52,11 +64,11 @@ public:
                 continue;
             }
 
-            auto resource = m_Codecs[i]->Load(f, iTypeName);
+            auto newResource = m_Codecs[i]->Load(f, iTypeName);
 
-            if (resource) {
-                // TODO(pierre) Add the resource to the cache.
-                return resource;
+            if (newResource) {
+                resourceCache->Set(iFilePath, newResource);
+                return newResource;
             } else {
                 LOGE << "[ResourceLoader]: An unexpected error occurred, resource not loaded." << std::endl;
                 return nullptr;

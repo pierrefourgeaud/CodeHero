@@ -12,6 +12,8 @@ namespace CodeHero {
 
 class System : public Object {
 public:
+    OBJECT(System, Object);
+
     System(const std::shared_ptr<EngineContext>& iContext) : Object(iContext) {}
     virtual ~System() {}
 

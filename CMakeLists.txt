@@ -99,6 +99,7 @@ set (SOURCES
      ${SRCS_PATH}/core/math/matrix3.cpp
      ${SRCS_PATH}/core/math/matrix4.cpp
      ${SRCS_PATH}/core/math/quaternion.cpp
+     ${SRCS_PATH}/core/resourcecache.cpp
      ${SRCS_PATH}/core/serializable.cpp
      ${SRCS_PATH}/core/utils.cpp
      ${SRCS_PATH}/core/variant.cpp
@@ -173,6 +174,7 @@ set (HEADERS
      ${SRCS_PATH}/core/math/matrix4.h
      ${SRCS_PATH}/core/math/quaternion.h
      ${SRCS_PATH}/core/math/utils.h
+     ${SRCS_PATH}/core/resourcecache.h
      ${SRCS_PATH}/core/resourcecodec.h
      ${SRCS_PATH}/core/resourceloader.h
      ${SRCS_PATH}/core/serializable.h

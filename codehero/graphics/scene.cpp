@@ -30,13 +30,9 @@ std::shared_ptr<Scene> Scene::Create(const std::shared_ptr<EngineContext>& iCont
 }
 
 void Scene::RegisterSceneLight(const std::shared_ptr<Light>& iLight) {
-    // Check if the light in question is not registered already
-    auto light = std::find(m_Lights.begin(), m_Lights.end(), iLight);
-    if (light != std::end(m_Lights)) {
-        // Light exist, log a warning and return
-        LOGW << "Scene: Registration of light failed. Object already registered." << std::endl;
-        return;
-    }
+    // TODO(pierre) We might need to check for multiple add of the same light
+    //
+    // By same light we mean, the same object but also at the same position with the same ID too...
 
     m_Lights.push_back(iLight);
 }
@@ -89,7 +85,7 @@ std::vector<Batch> Scene::GetBatches() {
     while (!m_NodesToProcess.empty()) {
         Node* node = m_NodesToProcess.front();
         m_NodesToProcess.pop();
-        
+
         // Add the children to the nodes to process
         auto children = node->GetChildren();
         size_t childrenSize = children.size();

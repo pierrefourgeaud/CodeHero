@@ -8,7 +8,7 @@
 #include <consolelogger.h>
 
 #include "core/enginecontext.h"
-
+#include "core/resourcecache.h"
 #include "core/resourceloader.h"
 #include "core/image.h"
 #include "core/time.h"
@@ -109,6 +109,10 @@ Error Main::Start() {
     time->Initialize();
     m_pContext->RegisterSubsystem(time);
 
+    ResourceCache* rc = new ResourceCache(m_pContext);
+    rc->Initialize();
+    m_pContext->RegisterSubsystem(rc);
+
     ResourceLoader<Image>* rlImage = new ResourceLoader<Image>(m_pContext);
     rlImage->Initialize();
     m_pContext->RegisterSubsystem(rlImage);
@@ -186,13 +190,13 @@ Error Main::Run() {
     int nbFrames = 0;
     int fps = 0;
 
-    std::shared_ptr<Scene> scene =
-        m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load<Scene>("./resources/samples/scene_test1.xml");
-
     auto shaderTexturedNoAlpha = m_pContext->GetSubsystem<ResourceLoader<Serializable>>()
             ->Load<ShaderProgram>("./resources/samples/shaderProgram_texturedNoAlpha.xml");
     auto shaderTexturedAlpha = m_pContext->GetSubsystem<ResourceLoader<Serializable>>()
             ->Load<ShaderProgram>("./resources/samples/shaderProgram_texturedAlpha.xml");
+
+    std::shared_ptr<Scene> scene =
+        m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load<Scene>("./resources/samples/scene_test1.xml");
 
     std::shared_ptr<Node> nanoNode = scene->CreateChild();
     nanoNode->Translate({ 1.0f, -12.0f, 4.7f });
