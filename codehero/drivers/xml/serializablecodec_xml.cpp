@@ -142,7 +142,8 @@ std::shared_ptr<Serializable> SerializableCodecXML::Load(FileAccess& iF, const s
     pugi::xml_parse_result result = doc.load_string(content.c_str());
 
     if (!result) {
-        LOGE << "XML [" << content << "] parsed with errors, attr value: [" << doc.child("node").attribute("attr").value() << "]" << std::endl;
+        LOGE << "XML [" << content << "] parsed with errors, attr value: ["
+             << doc.child("node").attribute("attr").value() << "]" << std::endl;
         LOGE << "Error description: " << result.description() << std::endl;
         LOGE << "Error offset: " << result.offset << " (error at [..." << (&content[result.offset]) << "]" << std::endl;
         return nullptr;
