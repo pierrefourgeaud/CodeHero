@@ -43,4 +43,38 @@ go_bandit([]() {
             AssertThat(EndsWith("This is a test", "zest"), IsFalse());
         });
     });
+
+    describe("::Trim", [] {
+        it("should trim on the left side", [] {
+            std::string test("  \t This is a test");
+            std::string result("This is a test");
+
+            Trim(test);
+            AssertThat(test, Equals(result));
+        });
+
+        it("should trim on the right side", [] {
+            std::string test("This is a test    \t   ");
+            std::string result("This is a test");
+
+            Trim(test);
+            AssertThat(test, Equals(result));
+        });
+
+        it("should trim on the both side", [] {
+            std::string test("  \t This is a test    \t   ");
+            std::string result("This is a test");
+
+            Trim(test);
+            AssertThat(test, Equals(result));
+        });
+
+        it("should not modify the string if not needed", [] {
+            std::string test("This is a test");
+            std::string result = test;
+
+            Trim(test);
+            AssertThat(test, Equals(result));
+        });
+    });
 });
