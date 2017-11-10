@@ -77,4 +77,22 @@ go_bandit([]() {
             AssertThat(test, Equals(result));
         });
     });
+
+    describe("::ToLowerCase", [] {
+        it("should lower case properly a string regardless of special chars", [] {
+            std::string test("Th1s 1S pr377Y W31RD !!@#$   ");
+            std::string result("th1s 1s pr377y w31rd !!@#$   ");
+
+            ToLowerCase(test);
+            AssertThat(test, Equals(result));
+        });
+
+        it("should not do anything on an empty string", [] {
+            std::string test;
+            std::string result;
+
+            ToLowerCase(test);
+            AssertThat(test, Equals(result));
+        });
+    });
 });
