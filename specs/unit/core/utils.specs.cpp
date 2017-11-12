@@ -113,4 +113,27 @@ go_bandit([]() {
             AssertThat(test, Equals(result));
         });
     });
+
+    describe("::Join", [] {
+        it("should return empty string if the input vector is empty", [] {
+            std::string test = Join({});
+            std::string result;
+
+            AssertThat(test, Equals(result));
+        });
+
+        it("should return the proper string if delimiter wasn't passed", [] {
+            std::string test = Join({"This", "is", "a", "test."});
+            std::string result = "This is a test.";
+
+            AssertThat(test, Equals(result));
+        });
+
+        it("should properly join the vector into a string with correct delimiter", [] {
+            std::string test = Join({"This", "is", "a", "test."}, ' ');
+            std::string result = "This is a test.";
+
+            AssertThat(test, Equals(result));
+        });
+    });
 });
