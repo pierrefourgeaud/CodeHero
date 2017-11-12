@@ -66,7 +66,7 @@ inline void Trim(std::string& ioS) {
 void ToLowerCase(std::string& oS);
 std::string LowerCased(const std::string& iS);
 
-std::string Join(std::vector<std::string>& iA, char iDelim = ' ');
+std::string Join(const std::vector<std::string>& iA, char iDelim = ' ');
 
 template <class T>
 bool IsIn(const T& iToFind, const std::vector<T>& iArray) {

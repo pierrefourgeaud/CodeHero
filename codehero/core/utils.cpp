@@ -29,7 +29,7 @@ std::string LowerCased(const std::string& iS) {
     return std::move(s);
 }
 
-std::string Join(std::vector<std::string>& iA, char iDelim /* = ' '*/) {
+std::string Join(const std::vector<std::string>& iA, char iDelim /* = ' '*/) {
     std::string res;
     size_t size = iA.size();
     for (size_t i = 0; i < size; ++i) {
