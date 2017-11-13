@@ -139,15 +139,21 @@ go_bandit([]() {
 
     describe("::IsIn", [] {
         it("should return true if the searched term is inside the array", [] {
-            AssertThat(IsIn("test", {"test", "is", "in"}), IsTrue());
+            std::string toFind = "test";
+            std::vector<std::string> list = {"test", "is", "in"};
+            AssertThat(IsIn(toFind, list), IsTrue());
         });
 
         it("should return false if the searched term is not in the array", [] {
-            AssertThat(IsIn("test", {"is", "not", "in"}), IsFalse());
+            std::string toFind = "test";
+            std::vector<std::string> list = {"is", "not", "in"};
+            AssertThat(IsIn(toFind, list), IsFalse());
         });
 
         it("should return false if the array is empty", [] {
-            AssertThat(IsIn("test", {}), IsFalse());
+            std::string toFind = "test";
+            std::vector<std::string> list = {};
+            AssertThat(IsIn(toFind, list), IsFalse());
         });
     });
 });
