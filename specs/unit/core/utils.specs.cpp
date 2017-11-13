@@ -136,4 +136,18 @@ go_bandit([]() {
             AssertThat(test, Equals(result));
         });
     });
+
+    describe("::IsIn", [] {
+        it("should return true if the searched term is inside the array", [] {
+            AssertThat(IsIn("test", {"test", "is", "in"}), IsTrue());
+        });
+
+        it("should return false if the searched term is not in the array", [] {
+            AssertThat(IsIn("test", {"is", "not", "in"}), IsFalse());
+        });
+
+        it("should return false if the array is empty", [] {
+            AssertThat(IsIn("test", {}), IsFalse());
+        });
+    });
 });
