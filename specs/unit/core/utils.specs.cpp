@@ -44,6 +44,32 @@ go_bandit([]() {
         });
     });
 
+    describe("::Split", [] {
+        it("should split the string normally", [] {
+            std::string test = "This|is|a|test";
+            auto result = Split(test, '|');
+            std::vector<std::string> expected = {"This", "is", "a", "test"};
+
+            AssertThat(result, Equals(expected));
+        });
+
+        it("should split the string normally if no delimiter are passed and use default", [] {
+            std::string test = "This is a test";
+            auto result = Split(test);
+            std::vector<std::string> expected = {"This", "is", "a", "test"};
+
+            AssertThat(result, Equals(expected));
+        });
+
+        it("should return empty vector if empty string is passed", [] {
+            std::string test = "";
+            auto result = Split(test);
+            std::vector<std::string> expected;
+
+            AssertThat(result, Equals(expected));
+        });
+    });
+
     describe("::Trim", [] {
         it("should trim on the left side", [] {
             std::string test("  \t This is a test");
