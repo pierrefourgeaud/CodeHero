@@ -7,7 +7,7 @@
 
 namespace CodeHero {
 
-std::vector<std::string> Split(const std::string& iS, char iDelim) {
+std::vector<std::string> Split(const std::string& iS, char iDelim /* = ' ' */) {
     std::vector<std::string> elems;
     Split(iS, iDelim, std::back_inserter(elems));
     return elems;

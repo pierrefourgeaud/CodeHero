@@ -41,7 +41,7 @@ void Split(const std::string& iS, char iDelim, Out oResult) {
     }
 }
 
-std::vector<std::string> Split(const std::string& iS, char iDelim);
+std::vector<std::string> Split(const std::string& iS, char iDelim = ' ');
 
 // trim from start (in place)
 inline void LTrim(std::string& ioS) {
