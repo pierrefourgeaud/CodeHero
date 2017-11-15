@@ -17,8 +17,8 @@ class Quaternion {
 public:
     Quaternion()
         : m_W(1.0f)
-        , m_X(0.0f) 
-        , m_Y(0.0f) 
+        , m_X(0.0f)
+        , m_Y(0.0f)
         , m_Z(0.0f) {} // identity quaternion
 
     Quaternion(const Quaternion& iRhs)
@@ -93,7 +93,7 @@ public:
     // Return a new vector being the current vector normalized
     Quaternion Normalized() const;
 
-    float LengthSquared() const { return m_W * m_W + m_X * m_X * m_Y * m_Y + m_Z * m_Z; }
+    float LengthSquared() const { return m_W * m_W + m_X * m_X + m_Y * m_Y + m_Z * m_Z; }
     float Length() const { return sqrtf(LengthSquared()); }
 
     // Accessors
