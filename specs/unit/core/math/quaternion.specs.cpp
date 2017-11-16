@@ -12,7 +12,7 @@ using namespace CodeHero;
 
 go_bandit([]() {
     describe("Quaternion", []() {
-        describe("LengthSquared", [] {
+        describe("::LengthSquared", [] {
             it("should properly calculate the length squared", [] {
                 Quaternion test(1.0f, 2.0f, 3.0f, 4.0f);
 
@@ -20,5 +20,12 @@ go_bandit([]() {
             });
         });
 
+        describe("::Length", [] {
+            it("should properly calculate the length", [] {
+                Quaternion test(2.0f, 2.0f, 2.0f, 2.0f);
+
+                AssertThat(test.Length(), Equals(4.0f));
+            });
+        });
     });
 });
