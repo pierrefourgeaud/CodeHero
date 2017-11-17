@@ -7,7 +7,7 @@
 
 #include <memory>
 #include <string>
-#include <unordered_map>
+#include <map>
 #include <vector>
 #include "core/math/vector2.h"
 #include "core/math/vector3.h"
@@ -20,7 +20,8 @@ class EngineContext;
 class Serializable;
 
 // TODO(pierre) Should the value be a Variant ?
-using VariantHashMap = std::unordered_map<std::string, std::string>;
+// TODO(pierre) Should we reconcider the name for this ?
+using VariantHashMap = std::map<std::string, std::string>;
 // TODO(pierre) Should the elements be Variant ?
 using VariantArray = std::vector<std::string>;
 

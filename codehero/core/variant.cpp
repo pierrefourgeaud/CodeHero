@@ -14,7 +14,7 @@ Variant::Variant() {
 Variant::~Variant() {
     using std::string;
     using std::vector;
-    using std::unordered_map;
+    using std::map;
     using std::shared_ptr;
     switch (m_Type) {
     case Value::VVT_String:
@@ -33,7 +33,7 @@ Variant::~Variant() {
         m_Value.m_Array.~vector();
         break;
     case Value::VVT_HashMap:
-        m_Value.m_HashMap.~unordered_map();
+        m_Value.m_HashMap.~map();
         break;
     case Value::VVT_SerializablePtr:
         m_Value.m_SerializablePtr.~shared_ptr();
