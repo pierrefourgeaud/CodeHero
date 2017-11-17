@@ -6,8 +6,7 @@
 #include "core/texture.h"
 #include "core/type_traits/attributeaccessor.h"
 #include "core/type_traits/objectdefinition.h"
-#include "graphics/rendersystem.h"
-#include "graphics/shaderprogram.h"
+#include "graphics/technique.h"
 
 namespace CodeHero {
 
@@ -22,7 +21,7 @@ void Material::RegisterObject(const std::shared_ptr<EngineContext>& iContext) {
     CH_OBJECT_ATTRIBUTE(Material, "Coordinate Offset", Vector2, Variant::Value::VVT_Vector2, nullptr, static_cast<void(Material::*)(const Vector2&)>(&Material::SetTextureCoordsOffset));
     CH_OBJECT_ATTRIBUTE(Material, "Cull Enabled", bool, Variant::Value::VVT_Bool, &Material::GetCullEnabled, &Material::SetCullEnabled);
     CH_OBJECT_ATTRIBUTE(Material, "Depth Test Enabled", bool, Variant::Value::VVT_Bool, &Material::GetDepthTest, &Material::SetDepthTest);
-    CH_OBJECT_ATTRIBUTE_CAST(Material, "ShaderProgram", std::shared_ptr<Serializable>, ShaderProgram, Variant::Value::VVT_SerializablePtr, &Material::GetShaderProgram, &Material::SetShaderProgram);
+    CH_OBJECT_ATTRIBUTE_CAST(Material, "Technique", std::shared_ptr<Serializable>, Technique, Variant::Value::VVT_SerializablePtr, &Material::GetTechnique, &Material::SetTechnique);
 
     auto setTexture = [](Material* iPtr, TextureUnit iTU, const std::shared_ptr<Serializable>& iTexture) {
         auto texture = std::static_pointer_cast<Texture>(iTexture);
@@ -42,26 +41,6 @@ std::shared_ptr<Material> Material::Create(const std::shared_ptr<EngineContext>&
     return std::make_shared<Material>(iContext);
 }
 
-void Material::Use(RenderSystem& iRS) {
-    if (HasShaderProgram()) {
-        // Bind the shader first, now we can bind the textures
-        m_pShaderProgram->Use();
-
-        if (HasTexture(TU_Diffuse)) {
-            GetTexture(TU_Diffuse)->Bind(0);
-            iRS.SetShaderParameter("material.diffuse", 0);
-        }
-
-        if (HasTexture(TU_Specular)) {
-            GetTexture(TU_Specular)->Bind(1);
-            iRS.SetShaderParameter("material.specular", 1);
-        }
-
-        iRS.SetShaderParameter("material.shininess", 32.0f);
-        iRS.SetShaderParameter("material.textureCoordsOffset", m_TextureCoordsOffset);
-    }
-}
-
 void Material::SetTextures(const TextureUnitsMaps& iTextures) {
     m_Textures = iTextures;
 }
@@ -74,8 +53,8 @@ void Material::SetTexture(TextureUnit iUnit, const std::shared_ptr<Texture>& iTe
     m_Textures[iUnit] = iTexture;
 }
 
-void Material::SetShaderProgram(const std::shared_ptr<ShaderProgram>& iProgram) {
-    m_pShaderProgram = iProgram;
+void Material::SetTechnique(const std::shared_ptr<Technique>& iTechnique) {
+    m_pTechnique = iTechnique;
 }
 
 void Material::SetTextureCoordsOffset(float iXOffset, float iYOffset) {

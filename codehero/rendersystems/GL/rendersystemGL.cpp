@@ -11,7 +11,7 @@
 #include "graphics/viewport.h"
 #include "rendersystems/GL/rendersystemGL.h"
 #include "rendersystems/GL/renderwindowGL.h"
-#include "rendersystems/GL/shaderGL.h"
+#include "rendersystems/GL/shaderinstanceGL.h"
 #include "rendersystems/GL/shaderprogramGL.h"
 #include "rendersystems/GL/textureGL.h"
 #include "rendersystems/GL/indexbufferGL.h"
@@ -321,8 +321,8 @@ std::shared_ptr<Texture> RenderSystemGL::CreateTexture() {
     return std::make_shared<TextureGL>(m_pContext);
 }
 
-std::shared_ptr<Shader> RenderSystemGL::CreateShader() {
-    return std::make_shared<ShaderGL>(m_pContext);
+std::shared_ptr<ShaderInstance> RenderSystemGL::CreateShaderInstance() {
+    return std::make_shared<ShaderInstanceGL>(m_pContext);
 }
 
 std::shared_ptr<ShaderProgram> RenderSystemGL::CreateShaderProgram() {

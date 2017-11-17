@@ -1,14 +1,7 @@
 <Skybox>
   <Material>
     <attribute name="Depth Test Enabled" value="false" />
-    <ShaderProgram>
-      <Shader>
-        <attribute name="File" value="./codehero/shaders/skybox.frag" />
-      </Shader>
-      <Shader>
-        <attribute name="File" value="./codehero/shaders/skybox.vert" />
-      </Shader>
-    </ShaderProgram>
+    <Technique path="./resources/samples/technique_skybox.xml" />
     <attribute name="Texture Diffuse">
       <Texture>
         <attribute name="Type" value="T_Cube" />

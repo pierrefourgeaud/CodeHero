@@ -133,12 +133,13 @@ set (SOURCES
      ${SRCS_PATH}/graphics/renderwindow.cpp
      ${SRCS_PATH}/graphics/scene.cpp
      ${SRCS_PATH}/graphics/shader.cpp
-     ${SRCS_PATH}/graphics/shaderprogram.cpp
+     ${SRCS_PATH}/graphics/shaderinstance.cpp
      ${SRCS_PATH}/graphics/skybox.cpp
+     ${SRCS_PATH}/graphics/technique.cpp
      ${SRCS_PATH}/core/texturemanager.cpp
      ${SRCS_PATH}/core/texture.cpp
      ${SRCS_PATH}/graphics/viewport.cpp
-     ${SRCS_PATH}/rendersystems/GL/shaderGL.cpp
+     ${SRCS_PATH}/rendersystems/GL/shaderinstanceGL.cpp
      ${SRCS_PATH}/rendersystems/GL/shaderprogramGL.cpp
      ${SRCS_PATH}/rendersystems/GL/rendersystemGL.cpp
      ${SRCS_PATH}/rendersystems/GL/renderwindowGL.cpp
@@ -215,14 +216,16 @@ set (HEADERS
      ${SRCS_PATH}/graphics/renderwindow.h
      ${SRCS_PATH}/graphics/scene.h
      ${SRCS_PATH}/graphics/shader.h
+     ${SRCS_PATH}/graphics/shaderinstance.h
      ${SRCS_PATH}/graphics/shaderprogram.h
      ${SRCS_PATH}/graphics/skybox.h
+     ${SRCS_PATH}/graphics/technique.h
      ${SRCS_PATH}/core/texturemanager.h
      ${SRCS_PATH}/core/texture.h
      ${SRCS_PATH}/graphics/vertexbuffer.h
      ${SRCS_PATH}/graphics/viewport.h
      ${SRCS_PATH}/rendersystems/GL/rendersystemGL.h
-     ${SRCS_PATH}/rendersystems/GL/shaderGL.h
+     ${SRCS_PATH}/rendersystems/GL/shaderinstanceGL.h
      ${SRCS_PATH}/rendersystems/GL/shaderprogramGL.h
      ${SRCS_PATH}/rendersystems/GL/renderwindowGL.h
      ${SRCS_PATH}/rendersystems/GL/texturemanagerGL.h

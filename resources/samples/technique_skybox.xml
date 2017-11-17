@@ -1,0 +1,4 @@
+<Technique>
+    <attribute name="VertexShader" value="./codehero/shaders/skybox.vert" />
+    <attribute name="FragmentShader" value="./codehero/shaders/skybox.frag" />
+</Technique>

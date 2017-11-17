@@ -17,7 +17,7 @@ namespace CodeHero {
 // Forward declaration
 class TextureManager;
 class RenderWindow;
-class Shader;
+class ShaderInstance;
 class ShaderProgram;
 class Matrix4;
 class Vector3;
@@ -139,7 +139,7 @@ public:
 #endif
     virtual std::shared_ptr<RenderWindow> CreateWindow(uint32_t iWidth, uint32_t iHeight) = 0;
     virtual std::shared_ptr<Texture> CreateTexture() = 0;
-    virtual std::shared_ptr<Shader> CreateShader() = 0;
+    virtual std::shared_ptr<ShaderInstance> CreateShaderInstance() = 0;
     virtual std::shared_ptr<ShaderProgram> CreateShaderProgram() = 0;
     virtual VertexBuffer* CreateVertexBuffer() = 0;
     virtual IndexBuffer* CreateIndexBuffer() = 0;
@@ -157,7 +157,7 @@ private:
     std::shared_ptr<Viewport> m_pActiveViewport = nullptr;
 
     std::vector<std::shared_ptr<Viewport>> m_RegisteredViewports;
-    
+
     Vector2 m_PixelScalling{1.0f, 1.0f};
 };
 

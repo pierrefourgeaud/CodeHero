@@ -2,7 +2,7 @@
   <attribute name="Meshes">
     <Plane>
       <Material>
-        <ShaderProgram path="./resources/samples/shaderProgram_texturedAlpha.xml" />
+        <Technique path="./resources/samples/technique_texturedAlpha.xml" />
         <attribute name="Texture Diffuse">
           <Texture>
             <attribute name="WrapMode U" value="TWM_ClampEdge" />

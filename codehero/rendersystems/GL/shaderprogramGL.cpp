@@ -6,10 +6,9 @@
 #include <string>
 #include "core/assert.h"
 #include "core/enginecontext.h"
-#include "graphics/shader.h"
+#include "graphics/shaderinstance.h"
 #include "graphics/rendersystem.h"
 #include "rendersystems/GL/shaderprogramGL.h"
-#include <logger.h>
 
 namespace CodeHero {
 
@@ -22,7 +21,7 @@ ShaderProgramGL::~ShaderProgramGL() {
     glDeleteProgram(GetGPUObject().intHandle);
 }
 
-ShaderProgram& ShaderProgramGL::Attach(const std::shared_ptr<Shader>& iShader) {
+ShaderProgram& ShaderProgramGL::Attach(const std::shared_ptr<ShaderInstance>& iShader) {
     CH_ASSERT(iShader != nullptr);
 
     if (iShader->IsCompiled()) {

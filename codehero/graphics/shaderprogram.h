@@ -13,22 +13,17 @@ namespace CodeHero {
 
 // Forward declaration
 class EngineContext;
-class Shader;
+class ShaderInstance;
 
-class ShaderProgram : public Serializable, public GPUObject {
+class ShaderProgram : public Object, public GPUObject {
 public:
-    OBJECT(ShaderProgram, Serializable)
+    OBJECT(ShaderProgram, Object)
 
     ShaderProgram(const std::shared_ptr<EngineContext>& iContext)
-        : Serializable(iContext) {}
+        : Object(iContext) {}
     virtual ~ShaderProgram() {}
 
-    static void RegisterObject(const std::shared_ptr<EngineContext>& iContext);
-    static std::shared_ptr<ShaderProgram> Create(const std::shared_ptr<EngineContext>& iContext);
-
-    void EndLoad() override { Link(); }
-
-    virtual ShaderProgram& Attach(const std::shared_ptr<Shader>& iShader) = 0;
+    virtual ShaderProgram& Attach(const std::shared_ptr<ShaderInstance>& iShader) = 0;
     virtual ShaderProgram& Link() = 0;
 
     virtual void Use() = 0;

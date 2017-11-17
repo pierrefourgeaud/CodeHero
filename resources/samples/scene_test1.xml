@@ -101,7 +101,7 @@
           <Plane>
             <Material>
               <attribute name="Coordinate Offset" value="5.0 5.0" />
-              <ShaderProgram path="./resources/samples/shaderProgram_texturedNoAlpha.xml" />
+              <Technique path="./resources/samples/technique_texturedNoAlpha.xml" />
               <attribute name="Texture Diffuse">
                 <Texture>
                   <attribute name="Faces">

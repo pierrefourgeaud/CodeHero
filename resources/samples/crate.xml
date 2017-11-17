@@ -2,7 +2,7 @@
   <attribute name="Meshes">
     <Cube>
       <Material>
-        <ShaderProgram path="./resources/samples/shaderProgram_texturedNoAlpha.xml" />
+        <Technique path="./resources/samples/technique_texturedNoAlpha.xml" />
         <attribute name="Texture Diffuse">
           <Texture>
             <attribute name="Faces">

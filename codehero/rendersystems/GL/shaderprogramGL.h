@@ -22,7 +22,7 @@ public:
     ShaderProgramGL(const std::shared_ptr<EngineContext>& iContext);
     ~ShaderProgramGL();
 
-    ShaderProgram& Attach(const std::shared_ptr<Shader>& iShader) override;
+    ShaderProgram& Attach(const std::shared_ptr<ShaderInstance>& iShader) override;
     ShaderProgram& Link() override;
 
     void Use() override;

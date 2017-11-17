@@ -3,15 +3,50 @@
 // found in the LICENSE file.
 
 #include "graphics/batch.h"
+#include <logger.h>
 #include "graphics/camera.h"
 #include "graphics/material.h"
 #include "graphics/mesh.h"
 #include "graphics/rendersystem.h"
+#include "graphics/shaderprogram.h"
+#include "graphics/technique.h"
 
 namespace CodeHero {
 
 void Batch::Draw(RenderSystem& iRS, const std::shared_ptr<Camera>& iCamera) {
-    m_pMaterial->Use(iRS);
+    if (m_pMaterial->HasTechnique()) {
+        auto technique = m_pMaterial->GetTechnique();
+        auto shaderProgram = technique->GetCachedShaderProgram();
+        if (!shaderProgram) {
+            auto vtxShader =
+                technique->GetShader(Shader::T_Vertex)->GetInstance(technique->GetShaderDefines(Shader::T_Vertex));
+            auto fragShader =
+                technique->GetShader(Shader::T_Fragment)->GetInstance(technique->GetShaderDefines(Shader::T_Fragment));
+            // TODO(pierre) Could be also cached in the RS to avoid recompilation ?
+            shaderProgram = iRS.CreateShaderProgram();
+            shaderProgram->Attach(vtxShader).Attach(fragShader).Link();
+            technique->SetCachedShaderProgram(shaderProgram);
+        }
+        shaderProgram->Use();
+
+        if (m_pMaterial->HasTexture(TU_Diffuse)) {
+            m_pMaterial->GetTexture(TU_Diffuse)->Bind(0);
+            iRS.SetShaderParameter("material.diffuse", 0);
+        }
+
+        if (m_pMaterial->HasTexture(TU_Specular)) {
+            m_pMaterial->GetTexture(TU_Specular)->Bind(1);
+            iRS.SetShaderParameter("material.specular", 1);
+        }
+
+        // TODO(pierre) Shininess should be a variable parameter, not a constant.
+        iRS.SetShaderParameter("material.shininess", 32.0f);
+        iRS.SetShaderParameter("material.textureCoordsOffset", m_pMaterial->GetTextureCoordsOffset());
+    } else {
+        // TODO(pierre) Provide default technique if none was set (or set a default one automatically)
+        LOGW << "[Batch::Draw]: Your material does not have a technique, it is very "
+             << "unlikely that the object will be rendered." << std::endl;
+    }
 
     // View
     iRS.SetShaderParameter("view", iCamera->GetView());
