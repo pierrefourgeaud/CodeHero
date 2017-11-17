@@ -12,8 +12,6 @@
 #include "core/resourceloader.h"
 #include "core/image.h"
 #include "core/time.h"
-#include "core/scopecleaner.h"
-#include "core/serializable.h"
 
 #include "graphics/renderwindow.h"
 #include "graphics/viewport.h"
@@ -29,6 +27,7 @@
 #include "graphics/shader.h"
 #include "graphics/shaderprogram.h"
 #include "graphics/skybox.h"
+#include "graphics/technique.h"
 
 #include "input/input.h"
 
@@ -95,8 +94,8 @@ Error Main::Start() {
     Node::RegisterObject(m_pContext);
     Light::RegisterObject(m_pContext);
     Shader::RegisterObject(m_pContext);
-    ShaderProgram::RegisterObject(m_pContext);
     Texture::RegisterObject(m_pContext);
+    Technique::RegisterObject(m_pContext);
     Material::RegisterObject(m_pContext);
     Skybox::RegisterObject(m_pContext);
     Model::RegisterObject(m_pContext);
@@ -176,12 +175,15 @@ Error Main::Run() {
     window->AddChild(label);
     window->AddChild(button);
 
-    auto textShaderVert = rs->CreateShader();
-    textShaderVert->Load("./codehero/shaders/text_basic.vert").Compile();
-    auto textShaderFrag = rs->CreateShader();
-    textShaderFrag->Load("./codehero/shaders/text_basic.frag").Compile();
+    // We should be checking for the return values here. Being an example code, we will skip that for now
+    auto textShaderVert = Shader::Create(m_pContext);
+    textShaderVert->Load("./codehero/shaders/text_basic.vert");
+    auto textShaderVertInst = textShaderVert->GetInstance({});
+    auto textShaderFrag = Shader::Create(m_pContext);
+    textShaderFrag->Load("./codehero/shaders/text_basic.frag");
+    auto textShaderFragInst = textShaderFrag->GetInstance({});
     auto textShader = rs->CreateShaderProgram();
-    textShader->Attach(textShaderVert).Attach(textShaderFrag).Link();
+    textShader->Attach(textShaderVert->GetInstance({})).Attach(textShaderFrag->GetInstance({})).Link();
     textShader->Use();
     Matrix4 ortho = Matrix4::MakeProjectionOrtho(0, g_Width, g_Height, 0);
     rs->SetShaderParameter("projection", ortho);
@@ -190,10 +192,10 @@ Error Main::Run() {
     int nbFrames = 0;
     int fps = 0;
 
-    auto shaderTexturedNoAlpha = m_pContext->GetSubsystem<ResourceLoader<Serializable>>()
-            ->Load<ShaderProgram>("./resources/samples/shaderProgram_texturedNoAlpha.xml");
-    auto shaderTexturedAlpha = m_pContext->GetSubsystem<ResourceLoader<Serializable>>()
-            ->Load<ShaderProgram>("./resources/samples/shaderProgram_texturedAlpha.xml");
+    auto techniqueNoAlpha = m_pContext->GetSubsystem<ResourceLoader<Serializable>>()
+            ->Load<Technique>("./resources/samples/technique_texturedNoAlpha.xml");
+    auto techniqueAlpha = m_pContext->GetSubsystem<ResourceLoader<Serializable>>()
+            ->Load<Technique>("./resources/samples/technique_texturedAlpha.xml");
 
     std::shared_ptr<Scene> scene =
         m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load<Scene>("./resources/samples/scene_test1.xml");
@@ -204,7 +206,7 @@ Error Main::Run() {
     nanoNode->AddDrawable(nanoMdl);
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : nanoMdl->GetMeshes()) {
-        mesh->GetMaterial()->SetShaderProgram(shaderTexturedNoAlpha);
+        mesh->GetMaterial()->SetTechnique(techniqueNoAlpha);
     }
 
     std::shared_ptr<Node> houseNode = scene->CreateChild();
@@ -215,7 +217,7 @@ Error Main::Run() {
     houseNode->AddDrawable(houseMdl);
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : houseMdl->GetMeshes()) {
-        mesh->GetMaterial()->SetShaderProgram(shaderTexturedAlpha);
+        mesh->GetMaterial()->SetTechnique(techniqueAlpha);
     }
 
     std::shared_ptr<Node> rockNode = scene->CreateChild();
@@ -224,7 +226,7 @@ Error Main::Run() {
     rockNode->AddDrawable(rockMdl);
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : rockMdl->GetMeshes()) {
-        mesh->GetMaterial()->SetShaderProgram(shaderTexturedNoAlpha);
+        mesh->GetMaterial()->SetTechnique(techniqueNoAlpha);
     }
 
     std::shared_ptr<Node> planetNode = scene->CreateChild();
@@ -233,7 +235,7 @@ Error Main::Run() {
     planetNode->AddDrawable(planetMdl);
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : planetMdl->GetMeshes()) {
-        mesh->GetMaterial()->SetShaderProgram(shaderTexturedNoAlpha);
+        mesh->GetMaterial()->SetTechnique(techniqueNoAlpha);
     }
 
     std::shared_ptr<Node> treasureChestNode = scene->CreateChild();
@@ -249,7 +251,7 @@ Error Main::Run() {
     chestSpecular->Load("./resources/models/treasure-chest/Chest_M.png");
     // TODO(pierre) This should be moved when we initialize the model hopefully
     for (auto& mesh : treasureChestMdl->GetMeshes()) {
-        mesh->GetMaterial()->SetShaderProgram(shaderTexturedNoAlpha);
+        mesh->GetMaterial()->SetTechnique(techniqueNoAlpha);
         mesh->GetMaterial()->SetTexture(TextureUnit::TU_Diffuse, chestDiffuse);
         mesh->GetMaterial()->SetTexture(TextureUnit::TU_Specular, chestSpecular);
     }
