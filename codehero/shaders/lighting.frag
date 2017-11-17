@@ -43,13 +43,13 @@ vec4 CalcLightBase(BaseLight light, vec3 lightDir, vec3 normal, vec3 viewDir) {
     // Combine results
     vec4 diffTex = texture(material.diffuse, GetTexCoords(material.textureCoordsOffset));
     #ifdef ALPHAMASK
-        if (diffTex.a < 0.1) {
+        if (diffTex.a < 0.01) {
             discard;
         }
     #endif
     vec4 specTex = texture(material.specular, GetTexCoords(material.textureCoordsOffset));
     #ifdef ALPHAMASK
-        if (specTex.a < 0.1) {
+        if (specTex.a < 0.01) {
             discard;
         }
     #endif
