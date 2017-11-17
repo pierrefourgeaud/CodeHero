@@ -12,6 +12,22 @@ using namespace CodeHero;
 
 go_bandit([]() {
     describe("Quaternion", []() {
+        describe("::operator==", [] {
+            it("should return true if the quaternions are equal", [] {
+                Quaternion lhs(1.0f, 2.0f, 3.0f, 4.0f);
+                Quaternion rhs(1.0f, 2.0f, 3.0f, 4.0f);
+
+                AssertThat(lhs == rhs, IsTrue());
+            });
+
+            it("should return false if the quaternions are not equal", [] {
+                Quaternion lhs(1.0f, 2.0f, 3.0f, 4.0f);
+                Quaternion rhs(1.0f, 4.0f, 3.0f, 4.0f);
+
+                AssertThat(lhs == rhs, IsFalse());
+            });
+        });
+
         describe("::LengthSquared", [] {
             it("should properly calculate the length squared", [] {
                 Quaternion test(1.0f, 2.0f, 3.0f, 4.0f);
