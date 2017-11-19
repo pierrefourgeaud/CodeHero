@@ -38,13 +38,6 @@
 #include "ui/window.h"
 
 #include "rendersystems/GL/rendersystemGL.h"
-#include "rendersystems/GL/textureGL.h"
-
-#include "core/math/vector3.h"
-#include "core/math/matrix4.h"
-
-#include "graphics/indexbuffer.h"
-#include "graphics/vertexbuffer.h"
 
 #ifdef DRIVER_PNG
 # include "drivers/png/imagecodec_png.h"
