@@ -10,13 +10,6 @@
 
 // Inspired from GODOT Game Engine TGA Codec
 
-#define TGA_PUT_PIXEL(in, r, g, b, a) \
-    int image_data_ofs = ((y * width) + x); \
-    in[image_data_ofs * 4 + 0] = r; \
-    in[image_data_ofs * 4 + 1] = g; \
-    in[image_data_ofs * 4 + 2] = b; \
-    in[image_data_ofs * 4 + 3] = a;
-
 namespace CodeHero {
 
 enum TGAType {
@@ -232,8 +225,8 @@ std::shared_ptr<Image> ImageCodecTGA::_ConvertToImage(const uint8_t* iBuffer,
         yEnd = 0;
     }
 
+    Image::Format destFormat = Image::Format::IFMT_RGBA;
     std::vector<uint8_t> imageData;
-    imageData.resize(width * height * sizeof(uint32_t));
 
     size_t i = 0;
     uint32_t x = xStart;
@@ -241,11 +234,13 @@ std::shared_ptr<Image> ImageCodecTGA::_ConvertToImage(const uint8_t* iBuffer,
 
     if (iHeader.pixelDepth == 8) {
         if (iIsMonochrome) {
+            destFormat = Image::Format::IFMT_Grayscale;
+            imageData.resize(width * height);
             while (y != yEnd) {
                 while (x != xEnd) {
                     uint8_t shade = iBuffer[i];
 
-                    TGA_PUT_PIXEL(imageData, shade, shade, shade, 0xff)
+                    imageData[((y * width) + x)] = shade;
 
                         x += xStep;
                     i += 1;
@@ -254,13 +249,14 @@ std::shared_ptr<Image> ImageCodecTGA::_ConvertToImage(const uint8_t* iBuffer,
                 y += yStep;
             }
         } else {
+            destFormat = Image::Format::IFMT_RGB;
+            imageData.resize(width * height * 3);
             while (y != yEnd) {
                 while (x != xEnd) {
                     uint8_t index = iBuffer[i];
                     uint8_t r = 0x00;
                     uint8_t g = 0x00;
                     uint8_t b = 0x00;
-                    uint8_t a = 0xff;
 
                     if (iHeader.colorMapDepth == 24) {
                         r = (iPalette[(index * 3) + 0]);
@@ -272,7 +268,9 @@ std::shared_ptr<Image> ImageCodecTGA::_ConvertToImage(const uint8_t* iBuffer,
                         return nullptr;
                     }
 
-                    TGA_PUT_PIXEL(imageData, r, g, b, a)
+                    imageData[((y * width) + x) * 3 + 0] = r;
+                    imageData[((y * width) + x) * 3 + 1] = g;
+                    imageData[((y * width) + x) * 3 + 2] = b;
 
                         x += xStep;
                     i += 1;
@@ -282,13 +280,17 @@ std::shared_ptr<Image> ImageCodecTGA::_ConvertToImage(const uint8_t* iBuffer,
             }
         }
     } else if (iHeader.pixelDepth == 24) {
+        destFormat = Image::Format::IFMT_RGB;
+        imageData.resize(width * height * 3);
         while (y != yEnd) {
             while (x != xEnd) {
                 uint8_t r = iBuffer[i + 2];
                 uint8_t g = iBuffer[i + 1];
                 uint8_t b = iBuffer[i + 0];
 
-                TGA_PUT_PIXEL(imageData, r, g, b, 0xff)
+                imageData[((y * width) + x) * 3 + 0] = r;
+                imageData[((y * width) + x) * 3 + 1] = g;
+                imageData[((y * width) + x) * 3 + 2] = b;
 
                     x += xStep;
                 i += 3;
@@ -297,6 +299,7 @@ std::shared_ptr<Image> ImageCodecTGA::_ConvertToImage(const uint8_t* iBuffer,
             y += yStep;
         }
     } else if (iHeader.pixelDepth == 32) {
+        imageData.resize(width * height * 4);
         while (y != yEnd) {
             while (x != xEnd) {
                 uint8_t a = iBuffer[i + 3];
@@ -304,7 +307,10 @@ std::shared_ptr<Image> ImageCodecTGA::_ConvertToImage(const uint8_t* iBuffer,
                 uint8_t g = iBuffer[i + 1];
                 uint8_t b = iBuffer[i + 0];
 
-                TGA_PUT_PIXEL(imageData, r, g, b, a)
+                imageData[((y * width) + x) * 4 + 0] = r;
+                imageData[((y * width) + x) * 4 + 1] = g;
+                imageData[((y * width) + x) * 4 + 2] = b;
+                imageData[((y * width) + x) * 4 + 3] = a;
 
                     x += xStep;
                 i += 4;
@@ -315,7 +321,7 @@ std::shared_ptr<Image> ImageCodecTGA::_ConvertToImage(const uint8_t* iBuffer,
     }
 
     auto image = std::make_shared<Image>(m_pContext);
-    image->Create(width, height, imageData, Image::IFMT_RGBA);
+    image->Create(width, height, imageData, destFormat);
 
     return image;
 }
