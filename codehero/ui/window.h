@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 #ifndef CODEHERO_UI_WINDOW_H_
-#define CODEHERO_UI_WINDOW_H_ 
+#define CODEHERO_UI_WINDOW_H_
 
 #include "ui/uielement.h"
 #include <memory>
@@ -21,7 +21,8 @@ class UIBatch;
 class Window : public UIElement {
 public:
     enum Flags {
-        F_NoHeader = 0
+        F_NoFlags = 0x0,
+        F_NoHeader = 0x1
     };
 
     explicit Window(std::shared_ptr<EngineContext>& iContext);
@@ -39,7 +40,7 @@ public:
 private:
     Vector2 m_Size;
     std::string m_HeaderText;
-    Flags m_Flags;
+    Flags m_Flags = F_NoFlags;
 };
 
 } // namespace CodeHero
