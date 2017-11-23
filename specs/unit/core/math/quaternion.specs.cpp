@@ -44,6 +44,17 @@ go_bandit([]() {
             });
         });
 
+        describe("::operator+=", [] {
+            it("should add the second quaternion to the initial object", [] {
+                Quaternion lhs(1.0f, 2.0f, 3.0f, 4.0f);
+                Quaternion rhs(1.0f, 2.0f, 3.0f, 4.0f);
+
+                lhs += rhs;
+                Quaternion result(2.0f, 4.0f, 6.0f, 8.0f);
+                AssertThat(lhs, Equals(result));
+            });
+        });
+
         describe("::LengthSquared", [] {
             it("should properly calculate the length squared", [] {
                 Quaternion test(1.0f, 2.0f, 3.0f, 4.0f);
