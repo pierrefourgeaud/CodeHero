@@ -61,7 +61,7 @@ vec4 CalcLightBase(BaseLight light, vec3 lightDir, vec3 normal, vec3 viewDir) {
     #ifdef SPECULARMAP
         vec4 specTex = texture(material.specular, GetTexCoords(material.textureCoordsOffset));
     #else
-        vec4 specTex = vec4(1.0, 1.0, 1.0, 1.0);
+        vec4 specTex = vec4(0.0, 0.0, 0.0, 1.0);
     #endif
 
     vec4 specular = light[2] * spec * specTex;
