@@ -4,18 +4,26 @@
 
 **_Moreover, this is a learning project as well and might contains not accurate and/or optimal things. Feel free to create an issue if you detect one or to contribute_**
 
-**:exclamation::exclamation::exclamation: Update on Feb 17th, 2019 :exclamation::exclamation::exclamation:**
-
-> Missing time, I had to park that project on the side unfortunately for the last year. I can finally come back to it and start again. I would like to start with a refactoring of some part of the code:
->  * I would like to modulerize the project. All major components will be shared library loaded at runtime. This will help with debugging and other things.
->  * I would like to lighten up the 3D renderer part. I went maybe too far too fast, I want to list what it is capable to do right now, and what I would it to be doing.
->  * Talking with a friends, we had an idea of a very small number of 2D and 3D demos that we could to have fun with the game engine (along with incorporating a proper 2D renderer). I think we will be focusing a bit on that part for the next couple of months.
-
 Many things that are developped in this project could be using libraries, but there is a choice not
 to do so:
   * As part of the learning, looking at the lower level API help understand the mechanism
   * Better control over things
   * Fun !
+
+### Immediate TODO
+Now that I fixed the couple of issues related to simple rendering:
+* Fix the alpha blending by sorting objects
+* :exclamation: Rendering performance got considerably worse on the last change due
+  to the fact that we now use different techniques for every objects and therefore
+  quite often different shader variation. Uploading different shader programs constantly
+  has a huge performance implication. While fixing the alpha blending with reordering
+  rendering objects, we should take that into account.
+* Find a solution to pass the lights to the shaders without having to have
+  them as defines of the fragment shader
+* Try to get the Alpha Blending and Culling as parameters of an object loaded
+  and now for all.
+* Investigate corners of the skybox beeing visiable for some reason.
+* [Less immediate] Modularize the project into shared library loaded at runtime.
 
 ### Global
 

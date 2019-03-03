@@ -13,7 +13,10 @@
 
 struct Material {
     sampler2D diffuse;
-    sampler2D specular;
+    #ifdef SPECULARMAP
+        sampler2D specular;
+    #endif
+    sampler2D opacity;
     float shininess;
     vec2 textureCoordsOffset;
 };
@@ -41,20 +44,26 @@ vec4 CalcLightBase(BaseLight light, vec3 lightDir, vec3 normal, vec3 viewDir) {
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     // Combine results
-    vec4 diffTex = texture(material.diffuse, GetTexCoords(material.textureCoordsOffset));
-    #ifdef ALPHAMASK
-        if (diffTex.a < 0.01) {
-            discard;
-        }
-    #endif
-    vec4 specTex = texture(material.specular, GetTexCoords(material.textureCoordsOffset));
-    #ifdef ALPHAMASK
-        if (specTex.a < 0.01) {
-            discard;
-        }
+    #ifdef DIFFUSEMAP
+        vec4 diffTex = texture(material.diffuse, GetTexCoords(material.textureCoordsOffset));
+        #ifdef ALPHAMASK
+            if (diffTex.a < 0.01) {
+                discard;
+            }
+        #endif
+    #else
+        // TODO(pierre): We should support diffuse color when loading material
+        vec4 diffTex = vec4(1.0, 1.0, 1.0, 1.0);
     #endif
     vec4 ambient = light[0] * diffTex;
     vec4 diffuse = light[1] * diff * diffTex;
+
+    #ifdef SPECULARMAP
+        vec4 specTex = texture(material.specular, GetTexCoords(material.textureCoordsOffset));
+    #else
+        vec4 specTex = vec4(1.0, 1.0, 1.0, 1.0);
+    #endif
+
     vec4 specular = light[2] * spec * specTex;
     return (ambient + diffuse + specular);
 }

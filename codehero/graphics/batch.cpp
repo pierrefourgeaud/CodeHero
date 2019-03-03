@@ -39,6 +39,11 @@ void Batch::Draw(RenderSystem& iRS, const std::shared_ptr<Camera>& iCamera) {
             iRS.SetShaderParameter("material.specular", 1);
         }
 
+        if (m_pMaterial->HasTexture(TU_Opacity)) {
+            m_pMaterial->GetTexture(TU_Opacity)->Bind(2);
+            iRS.SetShaderParameter("material.opacity", 2);
+        }
+
         // TODO(pierre) Shininess should be a variable parameter, not a constant.
         iRS.SetShaderParameter("material.shininess", 32.0f);
         iRS.SetShaderParameter("material.textureCoordsOffset", m_pMaterial->GetTextureCoordsOffset());

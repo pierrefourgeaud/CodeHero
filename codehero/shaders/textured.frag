@@ -32,5 +32,10 @@ void main()
 #endif
     // result += CalcSpotLight(spotLight, norm, FragPos, viewDir);
 
+#ifdef ALPHAMAP
+    vec4 opacityTex = texture(material.opacity, GetTexCoords(material.textureCoordsOffset));
+    color = result * opacityTex;
+#else
     color = result;
+#endif
 }

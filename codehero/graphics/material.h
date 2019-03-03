@@ -19,7 +19,8 @@ class Texture;
 
 enum TextureUnit {
     TU_Diffuse = 0,
-    TU_Specular
+    TU_Specular,
+    TU_Opacity
 };
 using TextureUnitsMaps = std::unordered_map<TextureUnit, std::shared_ptr<Texture>>;
 

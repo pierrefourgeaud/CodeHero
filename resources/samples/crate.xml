@@ -2,7 +2,7 @@
   <attribute name="Meshes">
     <Cube>
       <Material>
-        <Technique path="./resources/samples/technique_texturedNoAlpha.xml" />
+        <Technique path="./resources/samples/technique_DiffuseSpecular.xml" />
         <attribute name="Texture Diffuse">
           <Texture>
             <attribute name="Faces">

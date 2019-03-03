@@ -1,0 +1,10 @@
+<Technique>
+    <attribute name="VertexShader" value="./codehero/shaders/textured.vert" />
+    <attribute name="FragmentShader" value="./codehero/shaders/textured.frag" />
+    <attribute name="FragmentDefines">
+        <subattribute name="NB_DIRECTIONAL_LIGHTS" value="1" />
+        <subattribute name="NB_POINT_LIGHTS" value="2" />
+        <subattribute name="DIFFUSEMAP" value="" />
+        <subattribute name="ALPHAMAP" value="" />
+    </attribute>
+</Technique>

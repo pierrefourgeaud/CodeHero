@@ -7,18 +7,18 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#include "graphics/model.h"
 #include "core/enginecontext.h"
 #include "core/fileaccess.h"
+#include "core/resourceloader.h"
 #include "core/texture.h"
-#include "core/math/vector2.h"
-#include "core/math/vector3.h"
 #include "drivers/assimp/iosystem.h"
 #include "graphics/bone.h"
 #include "graphics/indexbuffer.h"
 #include "graphics/material.h"
 #include "graphics/mesh.h"
+#include "graphics/model.h"
 #include "graphics/rendersystem.h"
+#include "graphics/technique.h"
 #include "graphics/vertexbuffer.h"
 
 namespace CodeHero {
@@ -122,9 +122,36 @@ std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh, const aiScen
 
     aiMaterial* aMaterial = iScene->mMaterials[iMesh->mMaterialIndex];
     auto material = std::make_shared<Material>(m_pContext);
-    material->SetTexture(TU_Diffuse, _LoadMaterialTextures(aMaterial, aiTextureType_DIFFUSE));
-    material->SetTexture(TU_Specular, _LoadMaterialTextures(aMaterial, aiTextureType_SPECULAR));
+    auto diffuse = _LoadMaterialTextures(aMaterial, aiTextureType_DIFFUSE);
+    material->SetTexture(TU_Diffuse, diffuse);
+    auto specular = _LoadMaterialTextures(aMaterial, aiTextureType_SPECULAR);
+    material->SetTexture(TU_Specular, specular);
+    auto opacity = _LoadMaterialTextures(aMaterial, aiTextureType_OPACITY);
+    material->SetTexture(TU_Opacity, opacity);
+
+    // TODO(pierre) Could we know that when we load the model? It doesn't seem right to
+    // enable Culling for all models loaded with Assimp.
     material->SetCullEnabled(true);
+
+    std::string techniqueName = "NoTexture";
+    if (diffuse) {
+        techniqueName = "Diffuse";
+
+        if (specular) {
+            techniqueName += "Specular";
+        }
+    }
+
+    // TODO(pierre) I am not completely sure this can be standalone. Can this one be
+    // without a diffuse map? At first sight I would say yes, but I will need to refresh
+    // my knowledge on all of that to be sure.
+    if (opacity) {
+        techniqueName += "Opacity";
+    }
+
+    auto technique = m_pContext->GetSubsystem<ResourceLoader<Serializable>>()
+        ->Load<Technique>("./resources/samples/technique_" + techniqueName + ".xml");
+    material->SetTechnique(technique);
 
     mesh->AddVertexBuffer(vertex);
     mesh->AddIndexBuffer(indexBuffer);
@@ -165,6 +192,7 @@ std::shared_ptr<Texture> ModelCodecAssimp::_LoadMaterialTextures(aiMaterial* iMa
     for (uint32_t i = 0; i < iMat->GetTextureCount(iType) && i < 1; ++i) {
         aiString str;
         iMat->GetTexture(static_cast<aiTextureType>(iType), i, &str);
+
         // str should be parsed in case that it is with full path,
         // it should be converted to relative path
         auto path = Split(str.C_Str(), '/');
