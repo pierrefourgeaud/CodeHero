@@ -10,15 +10,33 @@
     </attribute>
   </Node>
   <Node>
-    <attribute name="Position" value="-4.0 2.0 12.0" />
+    <attribute name="Position" value="15.0 15.0 0.0" />
     <attribute name="Components">
       <Light path="./resources/samples/point_light1.xml" />
+      <Model>
+        <attribute name="Meshes">
+          <Cube>
+            <Material>
+              <Technique path="./resources/samples/technique_NoTexture.xml" />
+            </Material>
+          </Cube>
+        </attribute>
+      </Model>
     </attribute>
   </Node>
   <Node>
-    <attribute name="Position" value="0.0 3.0 3.0" />
+    <attribute name="Position" value="-15.0 15.0 0.0" />
     <attribute name="Components">
       <Light path="./resources/samples/point_light1.xml" />
+      <Model>
+        <attribute name="Meshes">
+          <Cube>
+            <Material>
+              <Technique path="./resources/samples/technique_NoTexture.xml" />
+            </Material>
+          </Cube>
+        </attribute>
+      </Model>
     </attribute>
   </Node>
   <Node>
