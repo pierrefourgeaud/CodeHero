@@ -185,11 +185,6 @@ Error Main::Run() {
     int nbFrames = 0;
     int fps = 0;
 
-    auto techniqueNoAlpha = m_pContext->GetSubsystem<ResourceLoader<Serializable>>()
-            ->Load<Technique>("./resources/samples/technique_texturedNoAlpha.xml");
-    auto techniqueAlpha = m_pContext->GetSubsystem<ResourceLoader<Serializable>>()
-            ->Load<Technique>("./resources/samples/technique_texturedAlpha.xml");
-
     std::shared_ptr<Scene> scene =
         m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load<Scene>("./resources/samples/scene_test1.xml");
 
@@ -197,10 +192,6 @@ Error Main::Run() {
     nanoNode->Translate({ 1.0f, -12.0f, 4.7f });
     auto nanoMdl = m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/nanosuit/nanosuit.obj");
     nanoNode->AddDrawable(nanoMdl);
-    // TODO(pierre) This should be moved when we initialize the model hopefully
-    for (auto& mesh : nanoMdl->GetMeshes()) {
-        mesh->GetMaterial()->SetTechnique(techniqueNoAlpha);
-    }
 
     std::shared_ptr<Node> houseNode = scene->CreateChild();
     houseNode->Translate({ -15.0f, 0.0f, 5.0f });
@@ -208,46 +199,16 @@ Error Main::Run() {
     auto houseMdl =
         m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/small-house-diorama/Dio.obj");
     houseNode->AddDrawable(houseMdl);
-    // TODO(pierre) This should be moved when we initialize the model hopefully
-    for (auto& mesh : houseMdl->GetMeshes()) {
-        mesh->GetMaterial()->SetTechnique(techniqueAlpha);
-    }
 
     std::shared_ptr<Node> rockNode = scene->CreateChild();
     rockNode->Translate({ -2.8f, -12.0f, 3.2f });
     auto rockMdl = m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/rock/rock.obj");
     rockNode->AddDrawable(rockMdl);
-    // TODO(pierre) This should be moved when we initialize the model hopefully
-    for (auto& mesh : rockMdl->GetMeshes()) {
-        mesh->GetMaterial()->SetTechnique(techniqueNoAlpha);
-    }
 
     std::shared_ptr<Node> planetNode = scene->CreateChild();
     planetNode->Translate({ 12.8f, 12.0f, 23.2f });
     auto planetMdl = m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/planet/planet.obj");
     planetNode->AddDrawable(planetMdl);
-    // TODO(pierre) This should be moved when we initialize the model hopefully
-    for (auto& mesh : planetMdl->GetMeshes()) {
-        mesh->GetMaterial()->SetTechnique(techniqueNoAlpha);
-    }
-
-    std::shared_ptr<Node> treasureChestNode = scene->CreateChild();
-    treasureChestNode->Translate({ -5.0f, -12.0f, 12.0f });
-    treasureChestNode->Scale(0.015f);
-    treasureChestNode->Rotate(Quaternion({ 0.0f, -45.0f, 0.0f }));
-    auto treasureChestMdl =
-        m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/treasure-chest/Chest.obj");
-    treasureChestNode->AddDrawable(treasureChestMdl);
-    std::shared_ptr<Texture> chestDiffuse(rs->CreateTexture());
-    chestDiffuse->Load("./resources/models/treasure-chest/Chest_C.png");
-    std::shared_ptr<Texture> chestSpecular(rs->CreateTexture());
-    chestSpecular->Load("./resources/models/treasure-chest/Chest_M.png");
-    // TODO(pierre) This should be moved when we initialize the model hopefully
-    for (auto& mesh : treasureChestMdl->GetMeshes()) {
-        mesh->GetMaterial()->SetTechnique(techniqueNoAlpha);
-        mesh->GetMaterial()->SetTexture(TextureUnit::TU_Diffuse, chestDiffuse);
-        mesh->GetMaterial()->SetTexture(TextureUnit::TU_Specular, chestSpecular);
-    }
 
     auto camera = std::make_shared<Camera>(m_pContext);
     camera->SetFov(45.0f);
