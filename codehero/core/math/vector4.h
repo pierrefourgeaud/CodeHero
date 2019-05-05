@@ -10,7 +10,7 @@
 namespace CodeHero {
 
 class Vector4 {
-public:
+   public:
     Vector4() {}
     Vector4(float iX, float iY, float iZ, float iW);
     Vector4(const float iVec[4]);
@@ -40,7 +40,7 @@ public:
 
     const float* Data() const { return m_Vec; }
 
-private:
+   private:
     float m_Vec[4] = {0};
 };
 

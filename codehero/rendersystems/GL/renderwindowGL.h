@@ -14,7 +14,7 @@ struct GLFWwindow;
 namespace CodeHero {
 
 class RenderWindowGL : public RenderWindow {
-public:
+   public:
     explicit RenderWindowGL(RenderSystem& iRenderSystem);
     virtual ~RenderWindowGL() {}
 
@@ -28,10 +28,14 @@ public:
     bool ShouldClose() const override;
     void SwapBuffers() override;
 
-private:
+   private:
     GLFWwindow* m_pWindow = nullptr;
 
-    static void _HandleKey(GLFWwindow* iWindow, int32_t iKey, int32_t iScancode, int32_t iAction, int32_t iMode);
+    static void _HandleKey(GLFWwindow* iWindow,
+                           int32_t iKey,
+                           int32_t iScancode,
+                           int32_t iAction,
+                           int32_t iMode);
     static void _HandleMouse(GLFWwindow* iWindow, double iPosX, double iPosY);
 };
 

@@ -3,31 +3,31 @@
 // found in the LICENSE file.
 
 #include "main/main.h"
-#include <logger.h>
-#include <filelogger.h>
 #include <consolelogger.h>
+#include <filelogger.h>
+#include <logger.h>
 
 #include "core/enginecontext.h"
+#include "core/image.h"
 #include "core/resourcecache.h"
 #include "core/resourceloader.h"
-#include "core/image.h"
 #include "core/time.h"
 
-#include "graphics/renderwindow.h"
-#include "graphics/viewport.h"
+#include "graphics/batch.h"
 #include "graphics/camera.h"
+#include "graphics/cube.h"
 #include "graphics/light.h"
 #include "graphics/material.h"
-#include "graphics/model.h"
 #include "graphics/mesh.h"
-#include "graphics/scene.h"
-#include "graphics/cube.h"
+#include "graphics/model.h"
 #include "graphics/plane.h"
-#include "graphics/batch.h"
+#include "graphics/renderwindow.h"
+#include "graphics/scene.h"
 #include "graphics/shader.h"
 #include "graphics/shaderprogram.h"
 #include "graphics/skybox.h"
 #include "graphics/technique.h"
+#include "graphics/viewport.h"
 
 #include "input/input.h"
 
@@ -40,27 +40,27 @@
 #include "rendersystems/GL/rendersystemGL.h"
 
 #ifdef DRIVER_PNG
-# include "drivers/png/imagecodec_png.h"
+#include "drivers/png/imagecodec_png.h"
 #endif // DRIVER_PNG
 
 #ifdef DRIVER_JPG
-# include "drivers/jpg/imagecodec_jpg.h"
+#include "drivers/jpg/imagecodec_jpg.h"
 #endif // DRIVER_JPG
 
 #ifdef DRIVER_DDS
-# include "drivers/dds/imagecodec_dds.h"
+#include "drivers/dds/imagecodec_dds.h"
 #endif // DRIVER_DDS
 
 #ifdef DRIVER_TGA
-# include "drivers/tga/imagecodec_tga.h"
+#include "drivers/tga/imagecodec_tga.h"
 #endif // DRIVER_TGA
 
 #ifdef DRIVER_ASSIMP
-# include "drivers/assimp/modelcodec_assimp.h"
+#include "drivers/assimp/modelcodec_assimp.h"
 #endif // DRIVER_ASSIMP
 
 #ifdef DRIVER_PUGIXML
-# include "drivers/xml/serializablecodec_xml.h"
+#include "drivers/xml/serializablecodec_xml.h"
 #endif // DRIVER_PUGIXML
 
 const uint32_t g_Width = 1920;
@@ -157,18 +157,19 @@ Error Main::Run() {
 
     auto button = std::make_shared<Button>(m_pContext);
     button->SetPosition(15.0f, 55.0f);
-    button->SetSize({ 150.0f, 50.0f });
+    button->SetSize({150.0f, 50.0f});
 
     auto window = std::make_shared<Window>(m_pContext);
     window->SetPosition(20.0f, 185.0f);
-    window->SetSize({ 300.0f, 400.0f });
+    window->SetSize({300.0f, 400.0f});
     window->SetHeader("Info");
 
     ui.AddChild(window);
     window->AddChild(label);
     window->AddChild(button);
 
-    // We should be checking for the return values here. Being an example code, we will skip that for now
+    // We should be checking for the return values here. Being an example code, we will skip that
+    // for now
     auto textShaderVert = Shader::Create(m_pContext);
     textShaderVert->Load("./codehero/shaders/text_basic.vert");
     auto textShaderVertInst = textShaderVert->GetInstance({});
@@ -176,7 +177,9 @@ Error Main::Run() {
     textShaderFrag->Load("./codehero/shaders/text_basic.frag");
     auto textShaderFragInst = textShaderFrag->GetInstance({});
     auto textShader = rs->CreateShaderProgram();
-    textShader->Attach(textShaderVert->GetInstance({})).Attach(textShaderFrag->GetInstance({})).Link();
+    textShader->Attach(textShaderVert->GetInstance({}))
+        .Attach(textShaderFrag->GetInstance({}))
+        .Link();
     textShader->Use();
     Matrix4 ortho = Matrix4::MakeProjectionOrtho(0, g_Width, g_Height, 0);
     rs->SetShaderParameter("projection", ortho);
@@ -186,28 +189,32 @@ Error Main::Run() {
     int fps = 0;
 
     std::shared_ptr<Scene> scene =
-        m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load<Scene>("./resources/samples/scene_test1.xml");
+        m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load<Scene>(
+            "./resources/samples/scene_test1.xml");
 
     std::shared_ptr<Node> nanoNode = scene->CreateChild();
-    nanoNode->Translate({ 1.0f, -12.0f, 4.7f });
-    auto nanoMdl = m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/nanosuit/nanosuit.obj");
+    nanoNode->Translate({1.0f, -12.0f, 4.7f});
+    auto nanoMdl = m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load(
+        "./resources/models/nanosuit/nanosuit.obj");
     nanoNode->AddDrawable(nanoMdl);
 
     std::shared_ptr<Node> houseNode = scene->CreateChild();
-    houseNode->Translate({ -15.0f, 0.0f, 5.0f });
+    houseNode->Translate({-15.0f, 0.0f, 5.0f});
     houseNode->SetRotation(Quaternion(0.0f, 180.0f, 0.0f));
-    auto houseMdl =
-        m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/small-house-diorama/Dio.obj");
+    auto houseMdl = m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load(
+        "./resources/models/small-house-diorama/Dio.obj");
     houseNode->AddDrawable(houseMdl);
 
     std::shared_ptr<Node> rockNode = scene->CreateChild();
-    rockNode->Translate({ -2.8f, -12.0f, 3.2f });
-    auto rockMdl = m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/rock/rock.obj");
+    rockNode->Translate({-2.8f, -12.0f, 3.2f});
+    auto rockMdl =
+        m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/rock/rock.obj");
     rockNode->AddDrawable(rockMdl);
 
     std::shared_ptr<Node> planetNode = scene->CreateChild();
-    planetNode->Translate({ 12.8f, 12.0f, 23.2f });
-    auto planetMdl = m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load("./resources/models/planet/planet.obj");
+    planetNode->Translate({12.8f, 12.0f, 23.2f});
+    auto planetMdl = m_pContext->GetSubsystem<ResourceLoader<Model>>()->Load(
+        "./resources/models/planet/planet.obj");
     planetNode->AddDrawable(planetMdl);
 
     auto camera = std::make_shared<Camera>(m_pContext);
@@ -264,13 +271,15 @@ Error Main::Run() {
             cameraNode->Translate(Vector3::Left * 10.0f * timeStep);
         }
 
-        // Use this frame's mouse motion to adjust camera node yaw and pitch. Clamp the pitch between -90 and 90 degrees
+        // Use this frame's mouse motion to adjust camera node yaw and pitch. Clamp the pitch
+        // between -90 and 90 degrees
         Vector2 mouseMove = input->GetMouseMove();
         yaw += 0.1f * mouseMove.x();
         pitch += 0.1f * mouseMove.y();
         pitch = Clamp(pitch, -90.0f, 90.0f);
 
-        // Construct new orientation for the camera scene node from yaw and pitch. Roll is fixed to zero
+        // Construct new orientation for the camera scene node from yaw and pitch. Roll is fixed to
+        // zero
         cameraNode->SetRotation(Quaternion(pitch, yaw, 0.0f));
 
         label->SetText("FPS: " + std::to_string(fps));
@@ -335,7 +344,8 @@ void Main::_LoadDrivers() {
 #endif // DRIVER_ASSIMP
 
 #ifdef DRIVER_PUGIXML
-    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->AddCodec(new SerializableCodecXML(m_pContext));
+    m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->AddCodec(
+        new SerializableCodecXML(m_pContext));
 #endif // DRIVER_PUGIXML
     LOGI << "Drivers loaded..." << std::endl;
 }

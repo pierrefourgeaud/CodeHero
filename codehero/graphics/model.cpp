@@ -16,7 +16,8 @@ Model::~Model() {}
 void Model::RegisterObject(const std::shared_ptr<EngineContext>& iContext) {
     CH_REGISTER_OBJECT(Model);
 
-    CH_OBJECT_ATTRIBUTE_CAST(Model, "Meshes", std::shared_ptr<Serializable>, Mesh, Variant::Value::VVT_SerializablePtr, nullptr, &Model::AddMesh);
+    CH_OBJECT_ATTRIBUTE_CAST(Model, "Meshes", std::shared_ptr<Serializable>, Mesh,
+                             Variant::Value::VVT_SerializablePtr, nullptr, &Model::AddMesh);
 }
 
 std::shared_ptr<Model> Model::Create(const std::shared_ptr<EngineContext>& iContext) {
@@ -28,4 +29,3 @@ void Model::AddMesh(const std::shared_ptr<Mesh>& iMesh) {
 }
 
 } // namespace CodeHero
-

@@ -13,7 +13,8 @@
 
 namespace CodeHero {
 
-// TODO(pierre) We should reflect on this utils. Should we keep it here or put it in a "stringutils" file ?
+// TODO(pierre) We should reflect on this utils. Should we keep it here or put it in a "stringutils"
+// file ?
 std::string Join(const std::map<std::string, std::string>& iInput) {
     std::string result;
     for (const auto& def : iInput) {
@@ -27,7 +28,8 @@ std::string Join(const std::map<std::string, std::string>& iInput) {
 void Shader::RegisterObject(const std::shared_ptr<EngineContext>& iContext) {
     CH_REGISTER_OBJECT(Shader);
 
-    CH_OBJECT_ATTRIBUTE(Shader, "File", std::string, Variant::Value::VVT_String, nullptr, &Shader::Load);
+    CH_OBJECT_ATTRIBUTE(Shader, "File", std::string, Variant::Value::VVT_String, nullptr,
+                        &Shader::Load);
 }
 
 std::shared_ptr<Shader> Shader::Create(const std::shared_ptr<EngineContext>& iContext) {
@@ -60,7 +62,8 @@ Error Shader::Load(const std::string& iFilePath) {
     return Error::OK;
 }
 
-std::shared_ptr<ShaderInstance> Shader::GetInstance(const std::map<std::string, std::string>& iDefines) {
+std::shared_ptr<ShaderInstance> Shader::GetInstance(
+    const std::map<std::string, std::string>& iDefines) {
     CH_ASSERT(m_IsLoaded);
 
     if (!m_IsLoaded) {
@@ -74,7 +77,8 @@ std::shared_ptr<ShaderInstance> Shader::GetInstance(const std::map<std::string, 
         shaderInstance->SetOwner(shared_from_this());
         shaderInstance->SetDefines(std::move(iDefines));
         if (Error::OK != shaderInstance->Compile()) {
-            LOGE << "[Shader]: Failed to compile instance of shader: '" << m_ShaderFilePath << "'." << std::endl;
+            LOGE << "[Shader]: Failed to compile instance of shader: '" << m_ShaderFilePath << "'."
+                 << std::endl;
             return nullptr;
         }
 
@@ -85,4 +89,4 @@ std::shared_ptr<ShaderInstance> Shader::GetInstance(const std::map<std::string, 
     }
 }
 
-}
+} // namespace CodeHero

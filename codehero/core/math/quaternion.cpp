@@ -3,17 +3,17 @@
 // found in the LICENSE file.
 
 #include "core/math/quaternion.h"
-#include "core/math/vector3.h"
+#include <math.h>
 #include "core/math/matrix3.h"
 #include "core/math/utils.h"
-#include <math.h>
+#include "core/math/vector3.h"
 
 namespace CodeHero {
 
 void Quaternion::FromAngleAndAxis(float iAngle, const Vector3& iAxis) {
     Vector3 normAxis = iAxis;
     normAxis.Normalize();
-    
+
     float radians = DegToRad(iAngle);
     float sinAngle = sinf(radians);
     float cosAngle = cosf(radians);
@@ -70,40 +70,39 @@ void Quaternion::FromRotationMatrix(const Matrix3& iMat) {
     float mult = 0.25f / biggestVal;
 
     switch (biggestIndex) {
-    case 0:
-        m_W = biggestVal;
-        m_X = (iMat.Get(1, 2) - iMat.Get(2, 1)) * mult;
-        m_Y = (iMat.Get(2, 0) - iMat.Get(0, 2)) * mult;
-        m_Z = (iMat.Get(0, 1) - iMat.Get(1, 0)) * mult;
-        break;
-    case 1:
-        m_W = (iMat.Get(1, 2) - iMat.Get(2, 1)) * mult;
-        m_X = biggestVal;
-        m_Y = (iMat.Get(0, 1) + iMat.Get(1, 0)) * mult;
-        m_Z = (iMat.Get(2, 0) + iMat.Get(0, 2)) * mult;
-        break;
-    case 2:
-        m_W = (iMat.Get(2, 0) - iMat.Get(0, 2)) * mult;
-        m_X = (iMat.Get(0, 1) + iMat.Get(1, 0)) * mult;
-        m_Y = biggestVal;
-        m_Z = (iMat.Get(1, 2) + iMat.Get(2, 1)) * mult;
-        break;
-    case 3:
-        m_W = (iMat.Get(0, 1) - iMat.Get(1, 0)) * mult;
-        m_X = (iMat.Get(2, 0) + iMat.Get(0, 2)) * mult;
-        m_Y = (iMat.Get(1, 2) + iMat.Get(2, 1)) * mult;
-        m_Z = biggestVal;
-        break;
+        case 0:
+            m_W = biggestVal;
+            m_X = (iMat.Get(1, 2) - iMat.Get(2, 1)) * mult;
+            m_Y = (iMat.Get(2, 0) - iMat.Get(0, 2)) * mult;
+            m_Z = (iMat.Get(0, 1) - iMat.Get(1, 0)) * mult;
+            break;
+        case 1:
+            m_W = (iMat.Get(1, 2) - iMat.Get(2, 1)) * mult;
+            m_X = biggestVal;
+            m_Y = (iMat.Get(0, 1) + iMat.Get(1, 0)) * mult;
+            m_Z = (iMat.Get(2, 0) + iMat.Get(0, 2)) * mult;
+            break;
+        case 2:
+            m_W = (iMat.Get(2, 0) - iMat.Get(0, 2)) * mult;
+            m_X = (iMat.Get(0, 1) + iMat.Get(1, 0)) * mult;
+            m_Y = biggestVal;
+            m_Z = (iMat.Get(1, 2) + iMat.Get(2, 1)) * mult;
+            break;
+        case 3:
+            m_W = (iMat.Get(0, 1) - iMat.Get(1, 0)) * mult;
+            m_X = (iMat.Get(2, 0) + iMat.Get(0, 2)) * mult;
+            m_Y = (iMat.Get(1, 2) + iMat.Get(2, 1)) * mult;
+            m_Z = biggestVal;
+            break;
 
-    default:
-        // Should never reach here - Simply for sanity
-        break;
+        default:
+            // Should never reach here - Simply for sanity
+            break;
     }
 }
 
 void Quaternion::FromAxis(const Vector3& iXAxis, const Vector3& iYAxis, const Vector3& iZAxis) {
-    Matrix3 matrix(iXAxis.x(), iYAxis.x(), iZAxis.x(),
-                   iXAxis.y(), iYAxis.y(), iZAxis.y(),
+    Matrix3 matrix(iXAxis.x(), iYAxis.x(), iZAxis.x(), iXAxis.y(), iYAxis.y(), iZAxis.y(),
                    iXAxis.z(), iYAxis.z(), iZAxis.z());
 
     FromRotationMatrix(matrix);
@@ -114,9 +113,8 @@ void Quaternion::FromLookAt(const Vector3& iDirection, const Vector3& iUp) {
     Vector3 right = (direction).Cross(iUp).Normalize();
     Vector3 up = right.Cross((direction));
 
-    Matrix3 matrix(right.x(), up.x(), direction.x(),
-                   right.y(), up.y(), direction.y(),
-                   right.z(), up.z(), direction.z());
+    Matrix3 matrix(right.x(), up.x(), direction.x(), right.y(), up.y(), direction.y(), right.z(),
+                   up.z(), direction.z());
 
     FromRotationMatrix(matrix);
 }
@@ -132,11 +130,9 @@ Matrix3 Quaternion::RotationMatrix() const {
     float wy(m_W * m_Y);
     float wz(m_W * m_Z);
 
-    return Matrix3(
-        1.0f - 2.0f * (yy + zz), 2.0f * (xy + wz)       , 2.0f * (xz - wy)       ,
-        2.0f * (xy - wz)       , 1.0f - 2.0f * (xx + zz), 2.0f * (yz + wx)       ,
-        2.0f * (xz + wy)       , 2.0f * (yz - wx)       , 1.0f - 2.0f * (xx + yy)
-    );
+    return Matrix3(1.0f - 2.0f * (yy + zz), 2.0f * (xy + wz), 2.0f * (xz - wy), 2.0f * (xy - wz),
+                   1.0f - 2.0f * (xx + zz), 2.0f * (yz + wx), 2.0f * (xz + wy), 2.0f * (yz - wx),
+                   1.0f - 2.0f * (xx + yy));
 }
 
 Quaternion& Quaternion::operator*=(const Quaternion& iRhs) {
@@ -165,12 +161,10 @@ Vector3 Quaternion::operator*(const Vector3& iRhs) const {
 }
 
 Quaternion Quaternion::operator*(const Quaternion& iRhs) const {
-    return Quaternion(
-        m_W * iRhs.m_W - m_X * iRhs.m_X - m_Y * iRhs.m_Y - m_Z * iRhs.m_Z,
-        m_W * iRhs.m_X + m_X * iRhs.m_W + m_Y * iRhs.m_Z - m_Z * iRhs.m_Y,
-        m_W * iRhs.m_Y + m_Y * iRhs.m_W + m_Z * iRhs.m_X - m_X * iRhs.m_Z,
-        m_W * iRhs.m_Z + m_Z * iRhs.m_W + m_X * iRhs.m_Y - m_Y * iRhs.m_X
-    );
+    return Quaternion(m_W * iRhs.m_W - m_X * iRhs.m_X - m_Y * iRhs.m_Y - m_Z * iRhs.m_Z,
+                      m_W * iRhs.m_X + m_X * iRhs.m_W + m_Y * iRhs.m_Z - m_Z * iRhs.m_Y,
+                      m_W * iRhs.m_Y + m_Y * iRhs.m_W + m_Z * iRhs.m_X - m_X * iRhs.m_Z,
+                      m_W * iRhs.m_Z + m_Z * iRhs.m_W + m_X * iRhs.m_Y - m_Y * iRhs.m_X);
 }
 
 Quaternion Quaternion::operator*(float iRhs) const {

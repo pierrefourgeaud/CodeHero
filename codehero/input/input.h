@@ -7,10 +7,10 @@
 
 #include <memory>
 #include <unordered_set>
-#include "input/inputevents.h"
-#include "core/system.h"
 #include "core/math/vector2.h"
+#include "core/system.h"
 #include "core/unordered_set.h"
+#include "input/inputevents.h"
 
 namespace CodeHero {
 
@@ -18,7 +18,7 @@ namespace CodeHero {
 class EngineContext;
 
 class Input : public System {
-public:
+   public:
     OBJECT(Input, System)
 
     Input(const std::shared_ptr<EngineContext>& iContext);
@@ -41,7 +41,7 @@ public:
     Vector2 GetMousePosition() const { return m_MousePosition; }
     Vector2 GetMouseMove() const { return m_MouseMove; }
 
-private:
+   private:
     UnorderedSet<Key> m_KeyPressed;
 
     Vector2 m_MousePosition;

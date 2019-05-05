@@ -7,8 +7,8 @@
 
 #include <glad/glad.h>
 #include <unordered_map>
-#include "graphics/shaderprogram.h"
 #include "core/errors.h"
+#include "graphics/shaderprogram.h"
 
 namespace CodeHero {
 
@@ -18,7 +18,7 @@ struct ShaderParameter {
 };
 
 class ShaderProgramGL : public ShaderProgram {
-public:
+   public:
     ShaderProgramGL(const std::shared_ptr<EngineContext>& iContext);
     ~ShaderProgramGL();
 
@@ -30,12 +30,12 @@ public:
     bool HasParameter(const std::string& iParamName);
     const ShaderParameter& GetParameter(const std::string& iParamName);
 
-private:
+   private:
     void _ParseParameters();
 
     std::unordered_map<std::string, ShaderParameter> m_Parameters;
 };
 
-}  // namespace CodeHero
+} // namespace CodeHero
 
 #endif // CODEHERO_RENDERSYSTEMS_GL_SHADERPROGRAMGL_H_

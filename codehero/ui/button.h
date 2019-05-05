@@ -3,13 +3,13 @@
 // found in the LICENSE file.
 
 #ifndef CODEHERO_UI_BUTTON_H_
-#define CODEHERO_UI_BUTTON_H_ 
+#define CODEHERO_UI_BUTTON_H_
 
-#include "ui/uielement.h"
 #include <memory>
 #include <string>
 #include "core/color.h"
 #include "core/math/vector2.h"
+#include "ui/uielement.h"
 
 namespace CodeHero {
 
@@ -19,7 +19,7 @@ class Font;
 class UIBatch;
 
 class Button : public UIElement {
-public:
+   public:
     explicit Button(std::shared_ptr<EngineContext>& iContext);
 
     void SetText(const std::string& iText);
@@ -29,7 +29,7 @@ public:
 
     void GetBatches(std::vector<UIBatch>& oBatches) override;
 
-private:
+   private:
     Vector2 m_Size;
     std::string m_Text;
 };

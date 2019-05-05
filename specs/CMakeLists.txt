@@ -3,8 +3,6 @@ cmake_minimum_required (VERSION 2.8)
 project (Specs)
 set (TARGET_NAME CodeHero${PROJECT_NAME})
 message (${TARGET_NAME})
-# ---------- Useful variables ----------
-set (SPECS_PATH ${PROJECT_SOURCE_DIR})
 
 FILE(GLOB SPEC_SOURCES
     ${SPECS_PATH}/*.cpp

@@ -13,17 +13,15 @@
 
 namespace CodeHero {
 
-Label::Label(std::shared_ptr<EngineContext>& iContext)
-    : UIElement(iContext) {}
+Label::Label(std::shared_ptr<EngineContext>& iContext) : UIElement(iContext) {}
 
 void Label::SetText(const std::string& iText) {
     m_Text = iText;
 }
 
 void Label::GetBatches(std::vector<UIBatch>& oBatches) {
-    UIDraw::Text(m_pContext, oBatches, m_Text,
-                 m_pStyle->GetDefault().defaultFontFace, m_Position, m_pStyle->GetDefault().fontColor);
+    UIDraw::Text(m_pContext, oBatches, m_Text, m_pStyle->GetDefault().defaultFontFace, m_Position,
+                 m_pStyle->GetDefault().fontColor);
 }
 
 } // namespace CodeHero
-

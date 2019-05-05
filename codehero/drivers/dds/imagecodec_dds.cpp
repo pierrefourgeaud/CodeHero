@@ -3,10 +3,10 @@
 // found in the LICENSE file.
 
 #include "drivers/dds/imagecodec_dds.h"
-#include <map>
-#include "core/image.h"
-#include "core/fileaccess.h"
 #include <logger.h>
+#include <map>
+#include "core/fileaccess.h"
+#include "core/image.h"
 
 struct DDS_PIXELFORMAT {
     uint32_t dwSize;
@@ -77,9 +77,7 @@ std::map<DDSFormat, CodeHero::Image::Format> formatMapping = {
 namespace CodeHero {
 
 bool IsCompressed(DDSFormat iFormat) {
-    return (iFormat == DDS_DXT1 ||
-            iFormat == DDS_DXT3 ||
-            iFormat == DDS_DXT5);
+    return (iFormat == DDS_DXT1 || iFormat == DDS_DXT3 || iFormat == DDS_DXT5);
 }
 
 ImageCodecDDS::ImageCodecDDS(const std::shared_ptr<EngineContext>& iContext)
@@ -118,45 +116,30 @@ std::shared_ptr<Image> ImageCodecDDS::Load(FileAccess& iF, const std::string& iT
     DDSFormat ddsFormat = DDS_MAX;
     if (header.ddspf.dwFlags & DDSPFF_FOURCC) {
         switch (header.ddspf.dwFourCC) {
-        case DDSTCF_FOURCC_DXT1:
-            ddsFormat = DDS_DXT1;
-            break;
-        case DDSTCF_FOURCC_DXT3:
-            ddsFormat = DDS_DXT3;
-            break;
-        case DDSTCF_FOURCC_DXT5:
-            ddsFormat = DDS_DXT5;
-            break;
-        default:
-            LOGE << "DDS: Unknown texture compression '"
-                 << FourCC(header.ddspf.dwFourCC) << "'" << std::endl;
-            return nullptr;
+            case DDSTCF_FOURCC_DXT1: ddsFormat = DDS_DXT1; break;
+            case DDSTCF_FOURCC_DXT3: ddsFormat = DDS_DXT3; break;
+            case DDSTCF_FOURCC_DXT5: ddsFormat = DDS_DXT5; break;
+            default:
+                LOGE << "DDS: Unknown texture compression '" << FourCC(header.ddspf.dwFourCC) << "'"
+                     << std::endl;
+                return nullptr;
         }
     } else if (header.ddspf.dwFlags & DDSPFF_RGB) {
-        if (header.ddspf.dwRGBBitCount == 24 &&
-            header.ddspf.dwRBitMask == 0x00ff0000 &&
-            header.ddspf.dwGBitMask == 0x0000ff00 &&
-            header.ddspf.dwBBitMask == 0x000000ff) {
+        if (header.ddspf.dwRGBBitCount == 24 && header.ddspf.dwRBitMask == 0x00ff0000 &&
+            header.ddspf.dwGBitMask == 0x0000ff00 && header.ddspf.dwBBitMask == 0x000000ff) {
             ddsFormat = DDS_BGR8;
-        } else if (header.ddspf.dwRGBBitCount == 24 &&
-                   header.ddspf.dwRBitMask == 0x000000ff &&
-                   header.ddspf.dwGBitMask == 0x0000ff00 &&
-                   header.ddspf.dwBBitMask == 0x00ff0000) {
+        } else if (header.ddspf.dwRGBBitCount == 24 && header.ddspf.dwRBitMask == 0x000000ff &&
+                   header.ddspf.dwGBitMask == 0x0000ff00 && header.ddspf.dwBBitMask == 0x00ff0000) {
             ddsFormat = DDS_RGB8;
         }
     } else if (header.ddspf.dwFlags & DDSPFF_RGBA) {
-        if (header.ddspf.dwRGBBitCount == 32 &&
-            header.ddspf.dwRBitMask == 0x00ff0000 &&
-            header.ddspf.dwGBitMask == 0x0000ff00 &&
-            header.ddspf.dwBBitMask == 0x000000ff &&
+        if (header.ddspf.dwRGBBitCount == 32 && header.ddspf.dwRBitMask == 0x00ff0000 &&
+            header.ddspf.dwGBitMask == 0x0000ff00 && header.ddspf.dwBBitMask == 0x000000ff &&
             header.ddspf.dwABitMask == 0xff000000) {
             ddsFormat = DDS_BGRA8;
-        }
-        else if (header.ddspf.dwRGBBitCount == 32 &&
-            header.ddspf.dwRBitMask == 0x000000ff &&
-            header.ddspf.dwGBitMask == 0x0000ff00 &&
-            header.ddspf.dwBBitMask == 0x00ff0000 &&
-            header.ddspf.dwABitMask == 0xff000000) {
+        } else if (header.ddspf.dwRGBBitCount == 32 && header.ddspf.dwRBitMask == 0x000000ff &&
+                   header.ddspf.dwGBitMask == 0x0000ff00 && header.ddspf.dwBBitMask == 0x00ff0000 &&
+                   header.ddspf.dwABitMask == 0xff000000) {
             ddsFormat = DDS_RGBA8;
         }
     } else {
@@ -186,4 +169,4 @@ std::shared_ptr<Image> ImageCodecDDS::Load(FileAccess& iF, const std::string& iT
     return image;
 }
 
-}  // namespace CodeHero
+} // namespace CodeHero

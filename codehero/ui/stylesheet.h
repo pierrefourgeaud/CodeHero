@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 #ifndef CODEHERO_UI_STYLESHEET_H_
-#define CODEHERO_UI_STYLESHEET_H_ 
+#define CODEHERO_UI_STYLESHEET_H_
 
 #include <memory>
 #include <string>
@@ -17,7 +17,7 @@ class Font;
 class FontFace;
 
 class Stylesheet {
-public:
+   public:
     struct Style {
         std::shared_ptr<Font> fontFamily;
         uint8_t fontSize;
@@ -35,19 +35,13 @@ public:
     void _Initialize();
 
     // Global getters
-    const Style& GetDefault() const {
-        return m_Default;
-    }
+    const Style& GetDefault() const { return m_Default; }
 
-    const Style& GetHover() const {
-        return m_Hover;
-    }
+    const Style& GetHover() const { return m_Hover; }
 
-    const Style& GetActive() const {
-        return m_Active;
-    }
+    const Style& GetActive() const { return m_Active; }
 
-private:
+   private:
     std::shared_ptr<EngineContext> m_pContext;
 
     // Those are the three style categories supported

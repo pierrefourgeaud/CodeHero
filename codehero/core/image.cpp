@@ -26,23 +26,19 @@ void Image::Create(uint32_t iWidth, uint32_t iHeight, const ImageData& iData, Im
 // statics
 int Image::GetComponentsFromFormat(Image::Format iFmt) {
     switch (iFmt) {
-    case IFMT_Grayscale:
-    case IFMT_IndexedAlpha:
-    case IFMT_Indexed:
-        return 1;
-    case IFMT_GrayscaleAlpha:
-        return 2;
-    case IFMT_DXT1:
-    case IFMT_RGB:
-        return 3;
-    case IFMT_DXT3:
-    case IFMT_DXT5:
-    case IFMT_RGBA:
-        return 4;
-    default:
-        LOGE << "Image::GetComponentsFromFormat: Format not recognized." << std::endl;
-        return -1;
+        case IFMT_Grayscale:
+        case IFMT_IndexedAlpha:
+        case IFMT_Indexed: return 1;
+        case IFMT_GrayscaleAlpha: return 2;
+        case IFMT_DXT1:
+        case IFMT_RGB: return 3;
+        case IFMT_DXT3:
+        case IFMT_DXT5:
+        case IFMT_RGBA: return 4;
+        default:
+            LOGE << "Image::GetComponentsFromFormat: Format not recognized." << std::endl;
+            return -1;
     }
 }
 
-}  // namespace CodeHero
+} // namespace CodeHero

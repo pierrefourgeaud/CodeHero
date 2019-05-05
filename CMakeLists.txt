@@ -35,6 +35,7 @@ set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/out/lib CACHE PATH "Si
 # ---------- Useful variables ----------
 set (SRCS_PATH ${PROJECT_SOURCE_DIR}/codehero)
 set (VENDORS_PATH ${PROJECT_SOURCE_DIR}/vendor)
+set (SPECS_PATH ${PROJECT_SOURCE_DIR}/specs)
 # set (DEPENDENCIES_PATH ${PROJECT_SOURCE_DIR}/Dependencies)
 
 # ---------- Options ----------
@@ -391,5 +392,8 @@ add_executable (${PROJECT_NAME} ${SRCS_PATH}/main.cpp $<TARGET_OBJECTS:main_objs
 target_link_libraries (${PROJECT_NAME} glfw ${GLFW_LIBRARIES} ${ADDITIONAL_LIBRARIES})
 
 if (_CODEHERO_BUILD_TESTS)
-    add_subdirectory (${PROJECT_SOURCE_DIR}/specs)
+    add_subdirectory (${SPECS_PATH})
 endif ()
+
+# Must be included after the sources and tests
+include(cmake/clang-cxx-dev-tools.cmake)

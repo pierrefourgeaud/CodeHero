@@ -16,11 +16,10 @@ class EngineContext;
 class ShaderInstance;
 
 class ShaderProgram : public Object, public GPUObject {
-public:
+   public:
     OBJECT(ShaderProgram, Object)
 
-    ShaderProgram(const std::shared_ptr<EngineContext>& iContext)
-        : Object(iContext) {}
+    ShaderProgram(const std::shared_ptr<EngineContext>& iContext) : Object(iContext) {}
     virtual ~ShaderProgram() {}
 
     virtual ShaderProgram& Attach(const std::shared_ptr<ShaderInstance>& iShader) = 0;
@@ -29,6 +28,6 @@ public:
     virtual void Use() = 0;
 };
 
-}  // namespace CodeHero
+} // namespace CodeHero
 
 #endif // CODEHERO_GRAPHICS_SHADERPROGRAM_H_

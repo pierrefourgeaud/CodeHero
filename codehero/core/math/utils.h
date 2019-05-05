@@ -28,8 +28,7 @@ static inline bool FloatEqu(float iLhs, float iRhs, float iEps = Epsilon()) {
     }
 }
 
-static inline int Clamp(int iValue, int iMin, int iMax)
-{
+static inline int Clamp(int iValue, int iMin, int iMax) {
     if (iValue < iMin) {
         return iMin;
     } else if (iValue > iMax) {
@@ -39,8 +38,7 @@ static inline int Clamp(int iValue, int iMin, int iMax)
     }
 }
 
-static inline float Clamp(float iValue, float iMin, float iMax)
-{
+static inline float Clamp(float iValue, float iMin, float iMax) {
     if (iValue < iMin) {
         return iMin;
     } else if (iValue > iMax) {

@@ -10,7 +10,7 @@
 namespace CodeHero {
 
 class FileSystem {
-public:
+   public:
 #ifdef CH_OS_WINDOWS
     static const char PathSeperator = '\\';
 #else
@@ -24,7 +24,7 @@ public:
 
     static std::string GetExtension(const std::string& iPath);
 
-private:
+   private:
 };
 
 } // namespace CodeHero

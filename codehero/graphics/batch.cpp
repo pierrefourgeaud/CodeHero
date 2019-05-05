@@ -18,10 +18,10 @@ void Batch::Draw(RenderSystem& iRS, const std::shared_ptr<Camera>& iCamera) {
         auto technique = m_pMaterial->GetTechnique();
         auto shaderProgram = technique->GetCachedShaderProgram();
         if (!shaderProgram) {
-            auto vtxShader =
-                technique->GetShader(Shader::T_Vertex)->GetInstance(technique->GetShaderDefines(Shader::T_Vertex));
-            auto fragShader =
-                technique->GetShader(Shader::T_Fragment)->GetInstance(technique->GetShaderDefines(Shader::T_Fragment));
+            auto vtxShader = technique->GetShader(Shader::T_Vertex)
+                                 ->GetInstance(technique->GetShaderDefines(Shader::T_Vertex));
+            auto fragShader = technique->GetShader(Shader::T_Fragment)
+                                  ->GetInstance(technique->GetShaderDefines(Shader::T_Fragment));
             // TODO(pierre) Could be also cached in the RS to avoid recompilation ?
             shaderProgram = iRS.CreateShaderProgram();
             shaderProgram->Attach(vtxShader).Attach(fragShader).Link();
@@ -46,9 +46,11 @@ void Batch::Draw(RenderSystem& iRS, const std::shared_ptr<Camera>& iCamera) {
 
         // TODO(pierre) Shininess should be a variable parameter, not a constant.
         iRS.SetShaderParameter("material.shininess", 32.0f);
-        iRS.SetShaderParameter("material.textureCoordsOffset", m_pMaterial->GetTextureCoordsOffset());
+        iRS.SetShaderParameter("material.textureCoordsOffset",
+                               m_pMaterial->GetTextureCoordsOffset());
     } else {
-        // TODO(pierre) Provide default technique if none was set (or set a default one automatically)
+        // TODO(pierre) Provide default technique if none was set (or set a default one
+        // automatically)
         LOGW << "[Batch::Draw]: Your material does not have a technique, it is very "
              << "unlikely that the object will be rendered." << std::endl;
     }
@@ -62,7 +64,8 @@ void Batch::Draw(RenderSystem& iRS, const std::shared_ptr<Camera>& iCamera) {
         iRS.SetShaderParameter("dirLights", m_pVertexDirLights->data(), m_pVertexDirLights->size());
     }
     if (m_pVertexPointLights && !m_pVertexPointLights->empty()) {
-        iRS.SetShaderParameter("pointLights", m_pVertexPointLights->data(), m_pVertexPointLights->size());
+        iRS.SetShaderParameter("pointLights", m_pVertexPointLights->data(),
+                               m_pVertexPointLights->size());
     }
 
     // Model

@@ -5,8 +5,8 @@
 #ifndef CODEHERO_CORE_TIME_H_
 #define CODEHERO_CORE_TIME_H_
 
-#include "core/system.h"
 #include <chrono>
+#include "core/system.h"
 
 namespace CodeHero {
 
@@ -14,7 +14,7 @@ namespace CodeHero {
 class EngineContext;
 
 class Time : public System {
-public:
+   public:
     OBJECT(Time, System)
 
     Time(const std::shared_ptr<EngineContext>& iContext);
@@ -28,7 +28,7 @@ public:
     uint64_t GetTimeMicroseconds() const;
     void Reset();
 
-private:
+   private:
     std::chrono::steady_clock m_Clock;
     std::chrono::steady_clock::time_point m_StartTime;
 };

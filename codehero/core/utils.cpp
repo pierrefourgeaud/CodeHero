@@ -17,7 +17,8 @@ void ToLowerCase(std::string& oS) {
     // We should not use directly tolower here
     // cf. http://en.cppreference.com/w/cpp/string/byte/tolower
     // Basically, using directly std::tolower is undefined in that case
-    std::transform(oS.begin(), oS.end(), oS.begin(), [](unsigned char c) { return std::tolower(c); });
+    std::transform(oS.begin(), oS.end(), oS.begin(),
+                   [](unsigned char c) { return std::tolower(c); });
 }
 
 std::string LowerCased(const std::string& iS) {
@@ -25,7 +26,8 @@ std::string LowerCased(const std::string& iS) {
     // We should not use directly tolower here
     // cf. http://en.cppreference.com/w/cpp/string/byte/tolower
     // Basically, using directly std::tolower is undefined in that case
-    std::transform(iS.begin(), iS.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
+    std::transform(iS.begin(), iS.end(), s.begin(),
+                   [](unsigned char c) { return std::tolower(c); });
     return s;
 }
 

@@ -14,8 +14,7 @@
 namespace CodeHero {
 
 UI::UI(std::shared_ptr<EngineContext>& iContext)
-    : m_pContext(iContext)
-    , m_RootElement(new UIElement(iContext)) {
+    : m_pContext(iContext), m_RootElement(new UIElement(iContext)) {
     UIDraw::Init();
     m_RootElement->SetStyle(std::make_shared<Stylesheet>(m_pContext));
 }
@@ -33,7 +32,7 @@ void UI::Render() {
     if (!nullTexture) {
         nullTexture = rs->CreateTexture();
         auto img = std::make_shared<Image>(m_pContext);
-        img->Create(1, 1, { 255 }, Image::Format::IFMT_Grayscale);
+        img->Create(1, 1, {255}, Image::Format::IFMT_Grayscale);
         nullTexture->Load(img);
     }
 
@@ -76,4 +75,3 @@ void UI::_GetBatches(std::shared_ptr<UIElement> iElement) {
 }
 
 } // namespace CodeHero
-

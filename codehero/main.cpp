@@ -4,8 +4,8 @@
 
 #include "./main/main.h"
 
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
 
 int main() {
     CodeHero::Main app;

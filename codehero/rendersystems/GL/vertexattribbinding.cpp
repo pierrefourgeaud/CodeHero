@@ -30,17 +30,12 @@ void VertexAttribBindingGL::CreateBinding(const VertexBufferGL& iBuffer) {
     for (uint32_t i = 0; i < VertexBuffer::EL_Max; ++i) {
         uint32_t bit = 1 << i;
         if (iBuffer.IsBitActive(bit)) {
-            glVertexAttribPointer(
-                i,
-                VertexBufferGL::ElementComponents[i],
-                VertexBufferGL::ElementType[i],
-                GL_FALSE,
-                vertexSize,
-                reinterpret_cast<GLvoid*>(iBuffer.GetElementOffset(i)));
+            glVertexAttribPointer(i, VertexBufferGL::ElementComponents[i],
+                                  VertexBufferGL::ElementType[i], GL_FALSE, vertexSize,
+                                  reinterpret_cast<GLvoid*>(iBuffer.GetElementOffset(i)));
             glEnableVertexAttribArray(i);
         }
     }
 }
 
 } // namespace CodeHero
-

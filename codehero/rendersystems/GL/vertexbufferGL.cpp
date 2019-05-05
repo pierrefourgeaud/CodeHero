@@ -2,8 +2,8 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
-#include <glad/glad.h>
 #include "rendersystems/GL/vertexbufferGL.h"
+#include <glad/glad.h>
 #include "rendersystems/GL/vertexattribbinding.h"
 
 namespace CodeHero {
@@ -14,7 +14,7 @@ const uint8_t VertexBufferGL::ElementSize[] = {
     4 * sizeof(GL_FLOAT), // Color
     2 * sizeof(GL_FLOAT), // TexCoord,
     3 * sizeof(GL_FLOAT), // Tangent
-    3 * sizeof(GL_FLOAT) // Bitangent
+    3 * sizeof(GL_FLOAT)  // Bitangent
 };
 
 const uint32_t VertexBufferGL::ElementType[] = {
@@ -23,7 +23,7 @@ const uint32_t VertexBufferGL::ElementType[] = {
     GL_FLOAT, // Color
     GL_FLOAT, // TexCoord
     GL_FLOAT, // Tangent
-    GL_FLOAT // Bitangent
+    GL_FLOAT  // Bitangent
 };
 
 const uint32_t VertexBufferGL::ElementComponents[] = {
@@ -32,11 +32,10 @@ const uint32_t VertexBufferGL::ElementComponents[] = {
     4, // Color
     2, // TexCoord,
     3, // Tangent
-    3 // Bitangent
+    3  // Bitangent
 };
 
-VertexBufferGL::VertexBufferGL()
-    : m_pVAO(new VertexAttribBindingGL) {
+VertexBufferGL::VertexBufferGL() : m_pVAO(new VertexAttribBindingGL) {
     glGenBuffers(1, &_GetGPUObjectHandle()->intHandle);
 }
 
@@ -69,11 +68,8 @@ uint32_t VertexBufferGL::GetComponentsNumber() const {
 void VertexBufferGL::_SetDataImpl() {
     m_pVAO->Bind();
     glBindBuffer(GL_ARRAY_BUFFER, GetGPUObject().intHandle);
-    glBufferData(
-        GL_ARRAY_BUFFER,
-        m_VertexCount * m_VertexSize,
-        m_Data.get(),
-        m_IsDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, m_VertexCount * m_VertexSize, m_Data.get(),
+                 m_IsDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
 
     m_pVAO->CreateBinding(*this);
 }
@@ -95,4 +91,4 @@ void VertexBufferGL::_UpdateSizeImpl() {
     m_VertexSize = offset;
 }
 
-}  // namespace CodeHero
+} // namespace CodeHero

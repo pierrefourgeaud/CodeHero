@@ -12,11 +12,10 @@
 namespace CodeHero {
 
 class ResourceCache : public System {
-public:
+   public:
     OBJECT(ResourceCache, System);
 
-    explicit ResourceCache(const std::shared_ptr<EngineContext>& iContext)
-        : System(iContext) {}
+    explicit ResourceCache(const std::shared_ptr<EngineContext>& iContext) : System(iContext) {}
 
     Error Initialize() override { return Error::OK; }
     Error Cleanup() override { return Error::OK; }
@@ -25,7 +24,7 @@ public:
     std::shared_ptr<Object> Get(const std::string& iResourcePath) const;
     void Set(const std::string& iResourcePath, const std::shared_ptr<Object>& iResource);
 
-private:
+   private:
     std::unordered_map<std::string, std::shared_ptr<Object>> m_Resources;
 };
 

@@ -6,8 +6,7 @@
 
 namespace CodeHero {
 
-UIElement::UIElement(std::shared_ptr<EngineContext>& iContext)
-    : m_pContext(iContext) {}
+UIElement::UIElement(std::shared_ptr<EngineContext>& iContext) : m_pContext(iContext) {}
 
 void UIElement::AddChild(std::shared_ptr<UIElement> iElement) {
     m_Elements.push_back(iElement);
@@ -49,4 +48,3 @@ void UIElement::SetPosition(float iWidth, float iHeight) {
 }
 
 } // namespace CodeHero
-

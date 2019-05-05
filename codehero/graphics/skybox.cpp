@@ -10,15 +10,15 @@
 
 namespace CodeHero {
 
-Skybox::Skybox(const std::shared_ptr<EngineContext>& iContext)
-    : Model(iContext) {}
+Skybox::Skybox(const std::shared_ptr<EngineContext>& iContext) : Model(iContext) {}
 
 Skybox::~Skybox() {}
 
 void Skybox::RegisterObject(const std::shared_ptr<EngineContext>& iContext) {
     CH_REGISTER_OBJECT(Skybox);
 
-    CH_OBJECT_ATTRIBUTE_CAST(Skybox, "Material", std::shared_ptr<Serializable>, Material, Variant::Value::VVT_SerializablePtr, nullptr, &Skybox::Initialize);
+    CH_OBJECT_ATTRIBUTE_CAST(Skybox, "Material", std::shared_ptr<Serializable>, Material,
+                             Variant::Value::VVT_SerializablePtr, nullptr, &Skybox::Initialize);
 }
 
 std::shared_ptr<Skybox> Skybox::Create(const std::shared_ptr<EngineContext>& iContext) {

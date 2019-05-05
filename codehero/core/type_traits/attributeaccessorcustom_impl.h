@@ -13,10 +13,8 @@ namespace CodeHero {
 
 template <class Class, class Type, class GetFn, class SetFn>
 class AttributeAccessorCustomImpl : public AttributeAccessor {
-public:
-    AttributeAccessorCustomImpl(GetFn iGet, SetFn iSet)
-        : m_pGet(iGet)
-        , m_pSet(iSet) {}
+   public:
+    AttributeAccessorCustomImpl(GetFn iGet, SetFn iSet) : m_pGet(iGet), m_pSet(iSet) {}
 
     Variant Get(const Serializable* iPtr) const override {
         CH_ASSERT(iPtr);
@@ -30,7 +28,7 @@ public:
         m_pSet(classPtr, iValue.Get<Type>());
     }
 
-private:
+   private:
     GetFn m_pGet;
     SetFn m_pSet;
 };
@@ -41,9 +39,8 @@ private:
  */
 template <class Class, class Type, class SetFn>
 class AttributeAccessorCustomImpl<Class, Type, std::nullptr_t, SetFn> : public AttributeAccessor {
-public:
-    AttributeAccessorCustomImpl(void*, SetFn iSet)
-        : m_pSet(iSet) {}
+   public:
+    AttributeAccessorCustomImpl(void*, SetFn iSet) : m_pSet(iSet) {}
 
     Variant Get(const Serializable* iPtr) const override {
         CH_ASSERT(iPtr);
@@ -56,12 +53,14 @@ public:
         m_pSet(classPtr, iValue.Get<Type>());
     }
 
-private:
+   private:
     SetFn m_pSet;
 };
 
 template <class Class, class Type, class GetFn, class SetFn>
-std::shared_ptr<AttributeAccessorCustomImpl<Class, Type, GetFn, SetFn>> MakeAccessorCustomImpl(GetFn iGet, SetFn iSet) {
+std::shared_ptr<AttributeAccessorCustomImpl<Class, Type, GetFn, SetFn>> MakeAccessorCustomImpl(
+    GetFn iGet,
+    SetFn iSet) {
     return std::make_shared<AttributeAccessorCustomImpl<Class, Type, GetFn, SetFn>>(iGet, iSet);
 }
 

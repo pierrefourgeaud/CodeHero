@@ -12,82 +12,46 @@ Variant::Variant() {
 }
 
 Variant::~Variant() {
-    using std::string;
-    using std::vector;
     using std::map;
     using std::shared_ptr;
+    using std::string;
+    using std::vector;
     switch (m_Type) {
-    case Value::VVT_String:
-        m_Value.m_String.~string();
-        break;
-    case Value::VVT_Vector2:
-        m_Value.m_Vector2.~Vector2();
-        break;
-    case Value::VVT_Vector3:
-        m_Value.m_Vector3.~Vector3();
-        break;
-    case Value::VVT_Quaternion:
-        m_Value.m_Quaternion.~Quaternion();
-        break;
-    case Value::VVT_Array:
-        m_Value.m_Array.~vector();
-        break;
-    case Value::VVT_HashMap:
-        m_Value.m_HashMap.~map();
-        break;
-    case Value::VVT_SerializablePtr:
-        m_Value.m_SerializablePtr.~shared_ptr();
-        break;
-    default:
-        break;
+        case Value::VVT_String: m_Value.m_String.~string(); break;
+        case Value::VVT_Vector2: m_Value.m_Vector2.~Vector2(); break;
+        case Value::VVT_Vector3: m_Value.m_Vector3.~Vector3(); break;
+        case Value::VVT_Quaternion: m_Value.m_Quaternion.~Quaternion(); break;
+        case Value::VVT_Array: m_Value.m_Array.~vector(); break;
+        case Value::VVT_HashMap: m_Value.m_HashMap.~map(); break;
+        case Value::VVT_SerializablePtr: m_Value.m_SerializablePtr.~shared_ptr(); break;
+        default: break;
     }
 }
 
 Variant::Variant(const Variant& iRhs) {
     m_Type = iRhs.m_Type;
     switch (iRhs.m_Type) {
-    case Value::VVT_Bool:
-        m_Value.m_Bool = iRhs.m_Value.m_Bool;
-        break;
-    case Value::VVT_Int:
-        m_Value.m_Int = iRhs.m_Value.m_Int;
-        break;
-    case Value::VVT_Char:
-        m_Value.m_Char = iRhs.m_Value.m_Char;
-        break;
-    case Value::VVT_Float:
-        m_Value.m_Float = iRhs.m_Value.m_Float;
-        break;
-    case Value::VVT_Double:
-        m_Value.m_Double = iRhs.m_Value.m_Double;
-        break;
-    case Value::VVT_String:
-        m_Value.m_String = iRhs.m_Value.m_String;
-        break;
-    case Value::VVT_Vector2:
-        m_Value.m_Vector2 = iRhs.m_Value.m_Vector2;
-        break;
-    case Value::VVT_Vector3:
-        m_Value.m_Vector3 = iRhs.m_Value.m_Vector3;
-        break;
-    case Value::VVT_Quaternion:
-        m_Value.m_Quaternion = iRhs.m_Value.m_Quaternion;
-        break;
-    case Value::VVT_Array:
-        m_Value.m_Array = iRhs.m_Value.m_Array;
-        break;
-    case Value::VVT_HashMap:
-        m_Value.m_HashMap = iRhs.m_Value.m_HashMap;
-        break;
-    case Value::VVT_SerializablePtr:
-        m_Value.m_SerializablePtr = iRhs.m_Value.m_SerializablePtr;
-        break;
-    default:
-        // Default to int
-        LOGW << "Variant: Attempted to copy variant that wasn't initialized... Default to Int" << std::endl;
-        m_Value.m_Int = 0;
-        m_Type = Value::VVT_Int;
-        break;
+        case Value::VVT_Bool: m_Value.m_Bool = iRhs.m_Value.m_Bool; break;
+        case Value::VVT_Int: m_Value.m_Int = iRhs.m_Value.m_Int; break;
+        case Value::VVT_Char: m_Value.m_Char = iRhs.m_Value.m_Char; break;
+        case Value::VVT_Float: m_Value.m_Float = iRhs.m_Value.m_Float; break;
+        case Value::VVT_Double: m_Value.m_Double = iRhs.m_Value.m_Double; break;
+        case Value::VVT_String: m_Value.m_String = iRhs.m_Value.m_String; break;
+        case Value::VVT_Vector2: m_Value.m_Vector2 = iRhs.m_Value.m_Vector2; break;
+        case Value::VVT_Vector3: m_Value.m_Vector3 = iRhs.m_Value.m_Vector3; break;
+        case Value::VVT_Quaternion: m_Value.m_Quaternion = iRhs.m_Value.m_Quaternion; break;
+        case Value::VVT_Array: m_Value.m_Array = iRhs.m_Value.m_Array; break;
+        case Value::VVT_HashMap: m_Value.m_HashMap = iRhs.m_Value.m_HashMap; break;
+        case Value::VVT_SerializablePtr:
+            m_Value.m_SerializablePtr = iRhs.m_Value.m_SerializablePtr;
+            break;
+        default:
+            // Default to int
+            LOGW << "Variant: Attempted to copy variant that wasn't initialized... Default to Int"
+                 << std::endl;
+            m_Value.m_Int = 0;
+            m_Type = Value::VVT_Int;
+            break;
     }
 }
 
@@ -272,51 +236,63 @@ std::shared_ptr<Serializable> Variant::GetSerializablePtr() const {
     return nullptr;
 }
 
-template <> bool Variant::Get<bool>() const {
+template <>
+bool Variant::Get<bool>() const {
     return GetBool();
 }
 
-template <> int Variant::Get<int>() const {
+template <>
+int Variant::Get<int>() const {
     return GetInt();
 }
 
-template <> char Variant::Get<char>() const {
+template <>
+char Variant::Get<char>() const {
     return GetChar();
 }
 
-template <> float Variant::Get<float>() const {
+template <>
+float Variant::Get<float>() const {
     return GetFloat();
 }
 
-template <> double Variant::Get<double>() const {
+template <>
+double Variant::Get<double>() const {
     return GetDouble();
 }
 
-template <> std::string Variant::Get<std::string>() const {
+template <>
+std::string Variant::Get<std::string>() const {
     return GetString();
 }
 
-template <> Vector2 Variant::Get<Vector2>() const {
+template <>
+Vector2 Variant::Get<Vector2>() const {
     return GetVector2();
 }
 
-template <> Vector3 Variant::Get<Vector3>() const {
+template <>
+Vector3 Variant::Get<Vector3>() const {
     return GetVector3();
 }
 
-template <> Quaternion Variant::Get<Quaternion>() const {
+template <>
+Quaternion Variant::Get<Quaternion>() const {
     return GetQuaternion();
 }
 
-template <> VariantArray Variant::Get<VariantArray>() const {
+template <>
+VariantArray Variant::Get<VariantArray>() const {
     return GetArray();
 }
 
-template <> VariantHashMap Variant::Get<VariantHashMap>() const {
+template <>
+VariantHashMap Variant::Get<VariantHashMap>() const {
     return GetHashMap();
 }
 
-template <> std::shared_ptr<Serializable> Variant::Get<std::shared_ptr<Serializable>>() const {
+template <>
+std::shared_ptr<Serializable> Variant::Get<std::shared_ptr<Serializable>>() const {
     return GetSerializablePtr();
 }
 

@@ -18,7 +18,7 @@ class VertexBuffer;
 class IndexBuffer;
 
 class RenderSystemGL : public RenderSystem {
-public:
+   public:
     RenderSystemGL(std::shared_ptr<EngineContext>& iContext);
     virtual ~RenderSystemGL() {}
 
@@ -33,7 +33,9 @@ public:
     void SetShaderParameter(const std::string& iParam, const Vector2& iVec) final override;
     void SetShaderParameter(const std::string& iParam, const Vector3& iVec) final override;
     void SetShaderParameter(const std::string& iParam, const Matrix4& iMat) final override;
-    void SetShaderParameter(const std::string& iParam, const float* iFloat, const uint32_t iCount) final override;
+    void SetShaderParameter(const std::string& iParam,
+                            const float* iFloat,
+                            const uint32_t iCount) final override;
     void SetVertexBuffer(const VertexBuffer& iBuffer) final override;
     void SetTexture(uint32_t iIndex, const Texture& iTexture) final override;
     void SetViewport(const std::shared_ptr<Viewport>& iViewport) final override;
@@ -44,7 +46,9 @@ public:
     void SetStencilWriteMask(uint32_t iMask) final override;
     void SetStencilOp(StencilOp iPass, StencilOp iFail, StencilOp iDepthFail) final override;
     void SetBlendMode(bool iEnabled, BlendMode iSrcMode, BlendMode iDstMode) final override;
-    void SetCullMode(bool iEnabled, CullFace iFace = CF_Front, bool iIsCounterClockwise = true) final override;
+    void SetCullMode(bool iEnabled,
+                     CullFace iFace = CF_Front,
+                     bool iIsCounterClockwise = true) final override;
 
     void SetVBO(const VertexBuffer& iBuffer) final override;
 

@@ -16,7 +16,8 @@ std::shared_ptr<Object> ResourceCache::Get(const std::string& iResourcePath) con
     return resource != m_Resources.end() ? resource->second : nullptr;
 }
 
-void ResourceCache::Set(const std::string& iResourcePath, const std::shared_ptr<Object>& iResource) {
+void ResourceCache::Set(const std::string& iResourcePath,
+                        const std::shared_ptr<Object>& iResource) {
     // TODO(pierre) Should we do something if the resource already exists ? (at least the key)
     m_Resources[iResourcePath] = iResource;
 }

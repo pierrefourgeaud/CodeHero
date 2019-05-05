@@ -4,18 +4,17 @@
 
 #include "graphics/scene.h"
 #include <logger.h>
+#include <queue>
 #include "core/type_traits/objectdefinition.h"
 #include "graphics/batch.h"
 #include "graphics/light.h"
 #include "graphics/mesh.h"
 #include "graphics/model.h"
 #include "graphics/node.h"
-#include <queue>
 
 namespace CodeHero {
 
-Scene::Scene(const std::shared_ptr<EngineContext>& iContext)
-    : Node(iContext) {
+Scene::Scene(const std::shared_ptr<EngineContext>& iContext) : Node(iContext) {
     m_IsScene = true;
 }
 
@@ -47,31 +46,31 @@ void Scene::PrepareVertexLights() {
     for (size_t i = 0; i < nbLights; ++i) {
         auto& l = m_Lights[i];
         switch (l->GetType()) {
-        case Light::T_Directional: {
-            auto& dir = l->GetDirection();
-            m_VertexLights[Light::T_Directional].push_back(dir.x());
-            m_VertexLights[Light::T_Directional].push_back(dir.y());
-            m_VertexLights[Light::T_Directional].push_back(dir.z());
-            m_VertexLights[Light::T_Directional].push_back(l->GetAmbientIntensity());
-            m_VertexLights[Light::T_Directional].push_back(l->GetDiffuseIntensity());
-            m_VertexLights[Light::T_Directional].push_back(l->GetSpecularIntensity());
-            break;
-        }
-        case Light::T_Point: {
-            auto& pos = l->GetNode()->GetPosition();
-            m_VertexLights[Light::T_Point].push_back(pos.x());
-            m_VertexLights[Light::T_Point].push_back(pos.y());
-            m_VertexLights[Light::T_Point].push_back(pos.z());
-            m_VertexLights[Light::T_Point].push_back(l->GetAmbientIntensity());
-            m_VertexLights[Light::T_Point].push_back(l->GetDiffuseIntensity());
-            m_VertexLights[Light::T_Point].push_back(l->GetSpecularIntensity());
-            m_VertexLights[Light::T_Point].push_back(l->GetConstant());
-            m_VertexLights[Light::T_Point].push_back(l->GetLinear());
-            m_VertexLights[Light::T_Point].push_back(l->GetQuadratic());
-            break;
-        }
-        // TODO(pierre) T_Spot
-        default: break;
+            case Light::T_Directional: {
+                auto& dir = l->GetDirection();
+                m_VertexLights[Light::T_Directional].push_back(dir.x());
+                m_VertexLights[Light::T_Directional].push_back(dir.y());
+                m_VertexLights[Light::T_Directional].push_back(dir.z());
+                m_VertexLights[Light::T_Directional].push_back(l->GetAmbientIntensity());
+                m_VertexLights[Light::T_Directional].push_back(l->GetDiffuseIntensity());
+                m_VertexLights[Light::T_Directional].push_back(l->GetSpecularIntensity());
+                break;
+            }
+            case Light::T_Point: {
+                auto& pos = l->GetNode()->GetPosition();
+                m_VertexLights[Light::T_Point].push_back(pos.x());
+                m_VertexLights[Light::T_Point].push_back(pos.y());
+                m_VertexLights[Light::T_Point].push_back(pos.z());
+                m_VertexLights[Light::T_Point].push_back(l->GetAmbientIntensity());
+                m_VertexLights[Light::T_Point].push_back(l->GetDiffuseIntensity());
+                m_VertexLights[Light::T_Point].push_back(l->GetSpecularIntensity());
+                m_VertexLights[Light::T_Point].push_back(l->GetConstant());
+                m_VertexLights[Light::T_Point].push_back(l->GetLinear());
+                m_VertexLights[Light::T_Point].push_back(l->GetQuadratic());
+                break;
+            }
+            // TODO(pierre) T_Spot
+            default: break;
         }
     }
 }
@@ -99,24 +98,24 @@ std::vector<Batch> Scene::GetBatches() {
         for (size_t i = 0; i < drawablesSize; ++i) {
             auto drawable = drawables[i];
             switch (drawable->GetDrawableType()) {
-            // case Drawable::DT_Light:
-            //     lights.push_back(static_cast<Light*>(component));
-            //     break;
-            case Drawable::DT_Geometry: {
-                Model* model = static_cast<Model*>(drawable.get());
-                size_t nbMeshes = model->GetMeshes().size();
-                for (size_t m = 0; m < nbMeshes; ++m) {
-                    Batch b;
-                    b.SetMaterial(model->GetMeshes()[m]->GetMaterial());
-                    b.SetMesh(model->GetMeshes()[m]);
-                    b.SetWorldTransform(node->GetWorldTransform());
-                    b.SetVertexDirLights(&m_VertexLights[Light::T_Directional]);
-                    b.SetVertexPointLights(&m_VertexLights[Light::T_Point]);
-                    batches.push_back(std::move(b));
+                // case Drawable::DT_Light:
+                //     lights.push_back(static_cast<Light*>(component));
+                //     break;
+                case Drawable::DT_Geometry: {
+                    Model* model = static_cast<Model*>(drawable.get());
+                    size_t nbMeshes = model->GetMeshes().size();
+                    for (size_t m = 0; m < nbMeshes; ++m) {
+                        Batch b;
+                        b.SetMaterial(model->GetMeshes()[m]->GetMaterial());
+                        b.SetMesh(model->GetMeshes()[m]);
+                        b.SetWorldTransform(node->GetWorldTransform());
+                        b.SetVertexDirLights(&m_VertexLights[Light::T_Directional]);
+                        b.SetVertexPointLights(&m_VertexLights[Light::T_Point]);
+                        batches.push_back(std::move(b));
+                    }
+                    break;
                 }
-                break;
-            }
-            default: break;
+                default: break;
             }
         }
     }
@@ -125,4 +124,3 @@ std::vector<Batch> Scene::GetBatches() {
 }
 
 } // namespace CodeHero
-

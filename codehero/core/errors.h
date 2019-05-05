@@ -9,7 +9,7 @@ namespace CodeHero {
 
 enum Error {
     OK,
-    FAILED,  // Generic error
+    FAILED, // Generic error
     ERR_INVALID_PARAMETER,
     ERR_CANT_CREATE,
     ERR_CANT_OPEN,
@@ -22,6 +22,6 @@ enum Error {
     ERR_COMPILATION_FAILED
 };
 
-}  // namespace CodeHero
+} // namespace CodeHero
 
-#endif  // CODEHERO_CORE_ERRORS_H_
+#endif // CODEHERO_CORE_ERRORS_H_

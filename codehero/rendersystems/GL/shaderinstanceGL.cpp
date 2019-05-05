@@ -21,7 +21,8 @@ ShaderInstanceGL::~ShaderInstanceGL() {
 Error ShaderInstanceGL::Compile() {
     auto shader = m_pOwner.lock();
     if (!shader) {
-        LOGE << "[ShaderInstanceGL]: Shader pointer expired. An instance cannot be created." << std::endl;
+        LOGE << "[ShaderInstanceGL]: Shader pointer expired. An instance cannot be created."
+             << std::endl;
         return Error::FAILED;
     }
 
@@ -80,7 +81,8 @@ Error ShaderInstanceGL::_CreateShader(const std::string& iFilePath) {
 
 // The defines shall be placed as early as possible (in case of early use) but must be placed
 // after the `#version ...` statement
-// To achieve that, we split the shader per line and pass all empty lines and the line with #version.
+// To achieve that, we split the shader per line and pass all empty lines and the line with
+// #version.
 Error ShaderInstanceGL::_AddDefinesToCode(std::string& ioCode) {
     if (!m_Defines.empty()) {
         // Split the lines by '\n'
@@ -110,19 +112,23 @@ Error ShaderInstanceGL::_AddDefinesToCode(std::string& ioCode) {
     return Error::OK;
 }
 
-Error ShaderInstanceGL::_ReplaceIncludes(const std::string& iParentFile, const std::string& iShaderCode, std::string& oCode) {
+Error ShaderInstanceGL::_ReplaceIncludes(const std::string& iParentFile,
+                                         const std::string& iShaderCode,
+                                         std::string& oCode) {
     std::string::size_type posInclude = iShaderCode.find("#include ");
     oCode += iShaderCode.substr(0, posInclude);
     while (posInclude != std::string::npos) {
         std::string::size_type startPos = iShaderCode.find("\"", posInclude);
         if (startPos == std::string::npos) {
-            LOGE << "[ShaderInstanceGL]: Replace #includes failed with missing opening '\"'." << std::endl;
+            LOGE << "[ShaderInstanceGL]: Replace #includes failed with missing opening '\"'."
+                 << std::endl;
             return Error::ERR_PARSING_FAILED;
         }
 
         std::string::size_type endPos = iShaderCode.find("\"", startPos + 1);
         if (endPos == std::string::npos) {
-            LOGE << "[ShaderInstanceGL]: Replace #includes failed with missing closing '\"'." << std::endl;
+            LOGE << "[ShaderInstanceGL]: Replace #includes failed with missing closing '\"'."
+                 << std::endl;
             return Error::ERR_PARSING_FAILED;
         }
 
@@ -136,7 +142,8 @@ Error ShaderInstanceGL::_ReplaceIncludes(const std::string& iParentFile, const s
         FileAccess file;
         if (file.Open(filePath, FileAccess::READ) != Error::OK) {
             // TODO(pierre) return proper error
-            LOGE << "[ShaderInstanceGL]: Replace #includes failed with '" << filePath << "' not found'." << std::endl;
+            LOGE << "[ShaderInstanceGL]: Replace #includes failed with '" << filePath
+                 << "' not found'." << std::endl;
             return Error::ERR_FILE_NOT_FOUND;
         }
         std::string content = file.ReadAll();

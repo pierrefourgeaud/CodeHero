@@ -18,15 +18,11 @@ class RenderSystem;
 class Technique;
 class Texture;
 
-enum TextureUnit {
-    TU_Diffuse = 0,
-    TU_Specular,
-    TU_Opacity
-};
+enum TextureUnit { TU_Diffuse = 0, TU_Specular, TU_Opacity };
 using TextureUnitsMaps = UnorderedMap<TextureUnit, std::shared_ptr<Texture>>;
 
 class Material : public Serializable {
-public:
+   public:
     OBJECT(Material, Serializable)
 
     Material(const std::shared_ptr<EngineContext>& iContext);
@@ -37,8 +33,8 @@ public:
 
     // This will probably be replaced by technique when we will be able to dynamically load them
     // and when we will be supporting mulpasses
-    // For the moment this will nake the current shader active and right away assign the shader parameters
-    // for the texture
+    // For the moment this will nake the current shader active and right away assign the shader
+    // parameters for the texture
     void Use(RenderSystem& iRS);
 
     const TextureUnitsMaps& GetTextures() const { return m_Textures; }
@@ -61,11 +57,11 @@ public:
     bool HasTexture(TextureUnit iUnit) const;
     bool HasTechnique() const { return !!m_pTechnique; }
 
-private:
+   private:
     TextureUnitsMaps m_Textures;
     std::shared_ptr<Technique> m_pTechnique;
 
-    Vector2 m_TextureCoordsOffset{ 1, 1 };
+    Vector2 m_TextureCoordsOffset{1, 1};
 
     bool m_CullEnabled = false;
     bool m_DepthTest = true;

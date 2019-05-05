@@ -3,10 +3,10 @@
 // found in the LICENSE file.
 
 #ifndef CODEHERO_GRAPHICS_VIEWPORT_H_
-#define CODEHERO_GRAPHICS_VIEWPORT_H_ 
+#define CODEHERO_GRAPHICS_VIEWPORT_H_
 
-#include "core/typedefs.h"
 #include "core/math/vector2.h"
+#include "core/typedefs.h"
 
 namespace CodeHero {
 
@@ -15,7 +15,7 @@ class Camera;
 class Scene;
 
 class Viewport {
-public:
+   public:
     Viewport(uint32_t iX, uint32_t iY, uint32_t iWidth, uint32_t iHeight);
     Viewport(const IntVector2& iPosition, const IntVector2& iDimension);
     ~Viewport();
@@ -33,7 +33,7 @@ public:
     const std::shared_ptr<Scene>& GetScene() const { return m_pScene; }
     const std::shared_ptr<Camera>& GetCamera() const { return m_pCamera; }
 
-private:
+   private:
     IntVector2 m_Position;
     IntVector2 m_Dimension;
 

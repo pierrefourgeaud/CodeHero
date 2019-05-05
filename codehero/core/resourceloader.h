@@ -8,30 +8,26 @@
 #include <logger.h>
 #include <string>
 #include "core/errors.h"
+#include "core/fileaccess.h"
 #include "core/object.h"
-#include "core/serializable.h"
-#include "core/system.h"
 #include "core/resourcecache.h"
 #include "core/resourcecodec.h"
-#include "core/fileaccess.h"
+#include "core/serializable.h"
+#include "core/system.h"
 
 namespace CodeHero {
 
 template <class T>
 class ResourceLoader : public System {
-    static_assert(
-            std::is_base_of<Object, T>::value,
-            "The instance to be loaded must be of type Object.");
+    static_assert(std::is_base_of<Object, T>::value,
+                  "The instance to be loaded must be of type Object.");
 
-    enum {
-        MAX_CODECS = 8
-    };
+    enum { MAX_CODECS = 8 };
 
-public:
+   public:
     OBJECT_TEMPLATE(ResourceLoader, T, System)
 
-    ResourceLoader(std::shared_ptr<EngineContext>& iContext)
-        : System(iContext) {}
+    ResourceLoader(std::shared_ptr<EngineContext>& iContext) : System(iContext) {}
     virtual ~ResourceLoader() {}
     ResourceLoader(const ResourceLoader&) = delete;
     ResourceLoader& operator=(const ResourceLoader&) = delete;
@@ -39,7 +35,8 @@ public:
     Error Initialize() override { return OK; }
     Error Cleanup() override { return OK; }
 
-    std::shared_ptr<T> Load(const std::string& iFilePath, const std::string& iTypeName = T::GetTypeNameStatic()) const {
+    std::shared_ptr<T> Load(const std::string& iFilePath,
+                            const std::string& iTypeName = T::GetTypeNameStatic()) const {
         auto resourceCache = m_pContext->GetSubsystem<ResourceCache>();
         auto resource = resourceCache->Get(iFilePath);
         if (resource) {
@@ -70,7 +67,8 @@ public:
                 resourceCache->Set(iFilePath, newResource);
                 return newResource;
             } else {
-                LOGE << "[ResourceLoader]: An unexpected error occurred, resource not loaded." << std::endl;
+                LOGE << "[ResourceLoader]: An unexpected error occurred, resource not loaded."
+                     << std::endl;
                 return nullptr;
             }
         }
@@ -91,7 +89,7 @@ public:
         return nullptr;
     }
 
-    bool  AddCodec(ResourceCodec<T>* iCodec) {
+    bool AddCodec(ResourceCodec<T>* iCodec) {
         if (m_CodecsCount == MAX_CODECS) {
             LOGE << "ResourceLoader: Cannot add new codec. Maximum number reached." << std::endl;
             return false;
@@ -108,11 +106,11 @@ public:
         }
     }
 
-private:
+   private:
     ResourceCodec<T>* m_Codecs[MAX_CODECS] = {nullptr};
-    int               m_CodecsCount = 0;
+    int m_CodecsCount = 0;
 };
 
-}  // namespace CodeHero
+} // namespace CodeHero
 
-#endif  // CODEHERO_CORE_RESOURCELOADER_H_
+#endif // CODEHERO_CORE_RESOURCELOADER_H_

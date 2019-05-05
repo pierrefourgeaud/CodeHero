@@ -4,9 +4,4 @@
 
 #include "core/system.h"
 
-namespace CodeHero {
-
-
-
-} // namespace CodeHero
-
+namespace CodeHero {} // namespace CodeHero

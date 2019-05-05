@@ -7,14 +7,13 @@
 
 #include <cstring>
 #include <memory>
-#include "core/typedefs.h"
 #include "core/gpuobject.h"
+#include "core/typedefs.h"
 
 namespace CodeHero {
 
 class VertexBuffer : public GPUObject {
-public:
-
+   public:
     enum : uint32_t {
         EL_Position = 0,
         EL_Normal,
@@ -37,7 +36,10 @@ public:
     VertexBuffer(bool iIsDynamic = false) : m_IsDynamic(iIsDynamic) {}
     virtual ~VertexBuffer() {}
 
-    virtual void SetData(const void* iData, uint32_t iVertexCount, uint32_t iMasks, bool iIsDynamic = false) {
+    virtual void SetData(const void* iData,
+                         uint32_t iVertexCount,
+                         uint32_t iMasks,
+                         bool iIsDynamic = false) {
         m_VertexCount = iVertexCount;
         m_Masks = iMasks;
         m_IsDynamic = iIsDynamic;
@@ -64,8 +66,8 @@ public:
     bool IsBitActive(uint32_t iBit) const { return m_Masks & iBit; }
 
     // Comment in the GL implementation
-    virtual void Use() {};
-    virtual void Unuse() {};
+    virtual void Use(){};
+    virtual void Unuse(){};
 
     uint32_t GetVertexSize() const { return m_VertexSize; }
     uint32_t GetVertexCount() const { return m_VertexCount; }
@@ -73,7 +75,7 @@ public:
 
     virtual uint32_t GetComponentsNumber() const = 0;
 
-protected:
+   protected:
     uint32_t m_VertexCount = 0;
     uint32_t m_VertexSize = 0;
     uint32_t m_Masks = 0;

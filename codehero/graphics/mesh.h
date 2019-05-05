@@ -6,8 +6,8 @@
 #define CODEHERO_GRAPHICS_MESH_H_
 
 #include <memory>
-#include <vector>
 #include <unordered_map>
+#include <vector>
 #include "core/serializable.h"
 
 namespace CodeHero {
@@ -20,7 +20,7 @@ class RenderSystem;
 class Bone;
 
 class Mesh : public Serializable {
-public:
+   public:
     OBJECT(Mesh, Serializable)
 
     Mesh(const std::shared_ptr<EngineContext>& iContext);
@@ -44,7 +44,7 @@ public:
     Bone* GetByName(const std::string& iName);
     size_t BoneSize() const;
 
-private:
+   private:
     std::shared_ptr<VertexBuffer> m_pVertices;
     std::shared_ptr<IndexBuffer> m_pIndices;
     std::shared_ptr<Material> m_pMaterial;

@@ -27,16 +27,16 @@ bool TypeInfo::IsA(const std::shared_ptr<TypeInfo>& iOther) const {
  */
 std::unordered_map<std::string, std::shared_ptr<ObjectDefinition>> Object::m_Definitions;
 
-Object::Object(const std::shared_ptr<EngineContext>& iContext)
-    : m_pContext(iContext) {}
+Object::Object(const std::shared_ptr<EngineContext>& iContext) : m_pContext(iContext) {}
 
 bool Object::IsInstanceOf(const std::shared_ptr<TypeInfo>& iType) const {
     return GetTypeInfo()->IsA(iType);
 }
 
 // static
-std::shared_ptr<ObjectDefinition> Object::CreateDefinition(const std::shared_ptr<EngineContext>& iContext,
-                                                           const std::string& iName) {
+std::shared_ptr<ObjectDefinition> Object::CreateDefinition(
+    const std::shared_ptr<EngineContext>& iContext,
+    const std::string& iName) {
     auto def = std::make_shared<ObjectDefinition>(iContext, iName);
     m_Definitions[iName] = def;
     return def;

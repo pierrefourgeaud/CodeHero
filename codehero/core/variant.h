@@ -5,13 +5,13 @@
 #ifndef CODEHERO_CORE_VARIANT_H_
 #define CODEHERO_CORE_VARIANT_H_
 
+#include <map>
 #include <memory>
 #include <string>
-#include <map>
 #include <vector>
+#include "core/math/quaternion.h"
 #include "core/math/vector2.h"
 #include "core/math/vector3.h"
-#include "core/math/quaternion.h"
 
 namespace CodeHero {
 
@@ -26,7 +26,7 @@ using VariantHashMap = std::map<std::string, std::string>;
 using VariantArray = std::vector<std::string>;
 
 class Variant {
-public:
+   public:
     union Value {
         enum Type {
             VVT_None = 0,
@@ -98,38 +98,47 @@ public:
     std::shared_ptr<Serializable> GetSerializablePtr() const;
 
     // Base template method
-    template <class T> T Get() const;
+    template <class T>
+    T Get() const;
 
     Value& GetValue() { return m_Value; }
     const Value& GetValue() const { return m_Value; }
     Value::Type GetType() const { return m_Type; }
 
-    bool IsNone() const {
-        return m_Type == Value::Type::VVT_None;
-    }
+    bool IsNone() const { return m_Type == Value::Type::VVT_None; }
 
-    bool IsMapType() const {
-        return m_Type == Value::Type::VVT_HashMap;
-    }
+    bool IsMapType() const { return m_Type == Value::Type::VVT_HashMap; }
 
-private:
+   private:
     Value m_Value;
     Value::Type m_Type;
 };
 
 // Specialization of template <class T> T Get() const;
-template <> bool Variant::Get<bool>() const;
-template <> int Variant::Get<int>() const;
-template <> char Variant::Get<char>() const;
-template <> float Variant::Get<float>() const;
-template <> double Variant::Get<double>() const;
-template <> std::string Variant::Get<std::string>() const;
-template <> Vector2 Variant::Get<Vector2>() const;
-template <> Vector3 Variant::Get<Vector3>() const;
-template <> Quaternion Variant::Get<Quaternion>() const;
-template <> VariantArray Variant::Get<VariantArray>() const;
-template <> VariantHashMap Variant::Get<VariantHashMap>() const;
-template <> std::shared_ptr<Serializable> Variant::Get<std::shared_ptr<Serializable>>() const;
+template <>
+bool Variant::Get<bool>() const;
+template <>
+int Variant::Get<int>() const;
+template <>
+char Variant::Get<char>() const;
+template <>
+float Variant::Get<float>() const;
+template <>
+double Variant::Get<double>() const;
+template <>
+std::string Variant::Get<std::string>() const;
+template <>
+Vector2 Variant::Get<Vector2>() const;
+template <>
+Vector3 Variant::Get<Vector3>() const;
+template <>
+Quaternion Variant::Get<Quaternion>() const;
+template <>
+VariantArray Variant::Get<VariantArray>() const;
+template <>
+VariantHashMap Variant::Get<VariantHashMap>() const;
+template <>
+std::shared_ptr<Serializable> Variant::Get<std::shared_ptr<Serializable>>() const;
 
 } // namespace CodeHero
 

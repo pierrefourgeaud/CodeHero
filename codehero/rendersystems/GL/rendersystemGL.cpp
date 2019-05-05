@@ -2,68 +2,40 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 #include <logger.h>
 #include "core/math/matrix4.h"
 #include "core/math/vector3.h"
 #include "graphics/viewport.h"
+#include "rendersystems/GL/indexbufferGL.h"
 #include "rendersystems/GL/rendersystemGL.h"
 #include "rendersystems/GL/renderwindowGL.h"
 #include "rendersystems/GL/shaderinstanceGL.h"
 #include "rendersystems/GL/shaderprogramGL.h"
 #include "rendersystems/GL/textureGL.h"
-#include "rendersystems/GL/indexbufferGL.h"
 #include "rendersystems/GL/vertexbufferGL.h"
 
 namespace CodeHero {
 
-static const uint32_t glComparison[] = {
-    GL_ALWAYS,
-    GL_EQUAL,
-    GL_NOTEQUAL,
-    GL_LESS,
-    GL_LEQUAL,
-    GL_GREATER,
-    GL_GEQUAL
-};
+static const uint32_t glComparison[] = {GL_ALWAYS, GL_EQUAL,   GL_NOTEQUAL, GL_LESS,
+                                        GL_LEQUAL, GL_GREATER, GL_GEQUAL};
 
-static const uint32_t glStencilOps[] = {
-    GL_KEEP,
-    GL_ZERO,
-    GL_REPLACE,
-    GL_INCR,
-    GL_INCR_WRAP,
-    GL_DECR,
-    GL_DECR_WRAP,
-    GL_INVERT
-};
+static const uint32_t glStencilOps[] = {GL_KEEP,      GL_ZERO, GL_REPLACE,   GL_INCR,
+                                        GL_INCR_WRAP, GL_DECR, GL_DECR_WRAP, GL_INVERT};
 
-static const uint32_t glBlendMode[] = {
-    GL_ZERO,
-    GL_ONE,
-    GL_SRC_COLOR,
-    GL_ONE_MINUS_SRC_COLOR,
-    GL_DST_COLOR,
-    GL_ONE_MINUS_DST_COLOR,
-    GL_SRC_ALPHA,
-    GL_ONE_MINUS_SRC_ALPHA,
-    GL_DST_ALPHA,
-    GL_ONE_MINUS_DST_ALPHA,
-    GL_CONSTANT_COLOR,
-    GL_ONE_MINUS_CONSTANT_COLOR,
-    GL_CONSTANT_ALPHA,
-    GL_ONE_MINUS_CONSTANT_ALPHA
-};
+static const uint32_t glBlendMode[] = {GL_ZERO,           GL_ONE,
+                                       GL_SRC_COLOR,      GL_ONE_MINUS_SRC_COLOR,
+                                       GL_DST_COLOR,      GL_ONE_MINUS_DST_COLOR,
+                                       GL_SRC_ALPHA,      GL_ONE_MINUS_SRC_ALPHA,
+                                       GL_DST_ALPHA,      GL_ONE_MINUS_DST_ALPHA,
+                                       GL_CONSTANT_COLOR, GL_ONE_MINUS_CONSTANT_COLOR,
+                                       GL_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA};
 
-static const uint32_t glCullFaces[] = {
-    GL_FRONT,
-    GL_BACK
-};
+static const uint32_t glCullFaces[] = {GL_FRONT, GL_BACK};
 
-RenderSystemGL::RenderSystemGL(std::shared_ptr<EngineContext>& iContext)
-    : RenderSystem(iContext) {}
+RenderSystemGL::RenderSystemGL(std::shared_ptr<EngineContext>& iContext) : RenderSystem(iContext) {}
 
 Error RenderSystemGL::Initialize() {
     glfwInit();
@@ -120,13 +92,9 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Vector2
             const ShaderParameter& info = shader->GetParameter(iParam);
 
             switch (info.type) {
-            case GL_FLOAT:
-                glUniform1fv(info.location, 1, iVec.Data());
-                break;
-            case GL_FLOAT_VEC2:
-                glUniform2fv(info.location, 1, iVec.Data());
-                break;
-            default: break;
+                case GL_FLOAT: glUniform1fv(info.location, 1, iVec.Data()); break;
+                case GL_FLOAT_VEC2: glUniform2fv(info.location, 1, iVec.Data()); break;
+                default: break;
             }
         }
     }
@@ -139,16 +107,10 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Vector3
             const ShaderParameter& info = shader->GetParameter(iParam);
 
             switch (info.type) {
-            case GL_FLOAT:
-                glUniform1fv(info.location, 1, iVec.Data());
-                break;
-            case GL_FLOAT_VEC2:
-                glUniform2fv(info.location, 1, iVec.Data());
-                break;
-            case GL_FLOAT_VEC3:
-                glUniform3fv(info.location, 1, iVec.Data());
-                break;
-            default: break;
+                case GL_FLOAT: glUniform1fv(info.location, 1, iVec.Data()); break;
+                case GL_FLOAT_VEC2: glUniform2fv(info.location, 1, iVec.Data()); break;
+                case GL_FLOAT_VEC3: glUniform3fv(info.location, 1, iVec.Data()); break;
+                default: break;
             }
         }
     }
@@ -165,35 +127,29 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Matrix4
     }
 }
 
-void RenderSystemGL::SetShaderParameter(const std::string& iParam, const float* iFloat, const uint32_t iCount) {
+void RenderSystemGL::SetShaderParameter(const std::string& iParam,
+                                        const float* iFloat,
+                                        const uint32_t iCount) {
     if (GetShaderProgramInUse()) {
         ShaderProgramGL* shader = static_cast<ShaderProgramGL*>(GetShaderProgramInUse());
         if (shader->HasParameter(iParam)) {
             const ShaderParameter& info = shader->GetParameter(iParam);
 
             switch (info.type) {
-            case GL_FLOAT:
-                glUniform1fv(info.location, iCount, iFloat);
-                break;
-            case GL_FLOAT_VEC2:
-                glUniform2fv(info.location, iCount / 2, iFloat);
-                break;
-            case GL_FLOAT_VEC3:
-                glUniform3fv(info.location, iCount / 3, iFloat);
-                break;
-            case GL_FLOAT_VEC4:
-                glUniform4fv(info.location, iCount / 4, iFloat);
-                break;
-            case GL_FLOAT_MAT3x2:
-                glUniformMatrix3x2fv(info.location, iCount / 6, GL_FALSE, iFloat);
-                break;
-            case GL_FLOAT_MAT2x3:
-                glUniformMatrix2x3fv(info.location, iCount / 6, GL_FALSE, iFloat);
-                break;
-            case GL_FLOAT_MAT3:
-                glUniformMatrix3fv(info.location, iCount / 9, GL_FALSE, iFloat);
-                break;
-            default: break;
+                case GL_FLOAT: glUniform1fv(info.location, iCount, iFloat); break;
+                case GL_FLOAT_VEC2: glUniform2fv(info.location, iCount / 2, iFloat); break;
+                case GL_FLOAT_VEC3: glUniform3fv(info.location, iCount / 3, iFloat); break;
+                case GL_FLOAT_VEC4: glUniform4fv(info.location, iCount / 4, iFloat); break;
+                case GL_FLOAT_MAT3x2:
+                    glUniformMatrix3x2fv(info.location, iCount / 6, GL_FALSE, iFloat);
+                    break;
+                case GL_FLOAT_MAT2x3:
+                    glUniformMatrix2x3fv(info.location, iCount / 6, GL_FALSE, iFloat);
+                    break;
+                case GL_FLOAT_MAT3:
+                    glUniformMatrix3fv(info.location, iCount / 9, GL_FALSE, iFloat);
+                    break;
+                default: break;
             }
         }
     }
@@ -208,12 +164,9 @@ void RenderSystemGL::SetVertexBuffer(const VertexBuffer& iBuffer) {
         uint32_t bit = 1 << i;
         if (iBuffer.IsBitActive(bit)) {
             glVertexAttribPointer(
-                i,
-                VertexBufferGL::ElementComponents[i],
-                VertexBufferGL::ElementType[i],
+                i, VertexBufferGL::ElementComponents[i], VertexBufferGL::ElementType[i],
                 GL_FALSE, // ?
-                vertexSize,
-                reinterpret_cast<GLvoid*>(iBuffer.GetElementOffset(i)));
+                vertexSize, reinterpret_cast<GLvoid*>(iBuffer.GetElementOffset(i)));
             glEnableVertexAttribArray(i);
         }
     }
@@ -235,10 +188,8 @@ void RenderSystemGL::SetViewport(const std::shared_ptr<Viewport>& iViewport) {
     RenderSystem::SetViewport(iViewport);
 
     Vector2 scalling = GetPixelScalling();
-    glViewport(iViewport->x() * scalling.x(),
-               iViewport->y() * scalling.y(),
-               iViewport->width() * scalling.x(),
-               iViewport->height() * scalling.y());
+    glViewport(iViewport->x() * scalling.x(), iViewport->y() * scalling.y(),
+               iViewport->width() * scalling.x(), iViewport->height() * scalling.y());
 }
 
 void RenderSystemGL::SetDepthMode(Comparison iCmp) {
@@ -286,7 +237,9 @@ void RenderSystemGL::SetBlendMode(bool iEnabled, BlendMode iSrcMode, BlendMode i
     // TODO(pierre) Should we do something for the glBlendEquation and the glBlendFuncSeparate ?
 }
 
-void RenderSystemGL::SetCullMode(bool iEnabled, CullFace iFace /* = CF_Front */, bool iIsCounterClockwise /* = true */) {
+void RenderSystemGL::SetCullMode(bool iEnabled,
+                                 CullFace iFace /* = CF_Front */,
+                                 bool iIsCounterClockwise /* = true */) {
     // TODO(pierre) Should we cache the values ?
     if (iEnabled) {
         glEnable(GL_CULL_FACE);
@@ -337,4 +290,4 @@ IndexBuffer* RenderSystemGL::CreateIndexBuffer() {
     return new IndexBufferGL;
 }
 
-} // CodeHero
+} // namespace CodeHero

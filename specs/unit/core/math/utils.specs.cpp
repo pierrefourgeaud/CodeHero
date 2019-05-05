@@ -11,9 +11,8 @@ using namespace CodeHero;
 
 go_bandit([]() {
     describe("::DegToRad", [] {
-        it("should convert degree to radian", [] {
-            AssertThat(DegToRad(180.0f), Equals((float)PI));
-        });
+        it("should convert degree to radian",
+           [] { AssertThat(DegToRad(180.0f), Equals((float)PI)); });
     });
 
     describe("::Clamp", []() {

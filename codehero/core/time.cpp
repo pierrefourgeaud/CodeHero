@@ -6,9 +6,7 @@
 
 namespace CodeHero {
 
-Time::Time(const std::shared_ptr<EngineContext>& iContext)
-    : System(iContext)
-{}
+Time::Time(const std::shared_ptr<EngineContext>& iContext) : System(iContext) {}
 
 Time::~Time() {}
 

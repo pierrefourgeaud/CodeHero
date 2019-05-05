@@ -8,8 +8,7 @@
 
 namespace CodeHero {
 
-Button::Button(std::shared_ptr<EngineContext>& iContext)
-    : UIElement(iContext) {}
+Button::Button(std::shared_ptr<EngineContext>& iContext) : UIElement(iContext) {}
 
 void Button::SetText(const std::string& iText) {
     m_Text = iText;
@@ -28,10 +27,10 @@ void Button::GetBatches(std::vector<UIBatch>& oBatches) {
     float y = m_Position.y();
     float w = m_Size.x();
     float h = m_Size.y();
-    Vector2 p1(x,     y);
+    Vector2 p1(x, y);
     Vector2 p2(x + w, y);
     Vector2 p3(x + w, y + h);
-    Vector2 p4(x,     y + h);
+    Vector2 p4(x, y + h);
 
     std::vector<Vector2> points;
     float radius = 10;
@@ -46,4 +45,3 @@ void Button::GetBatches(std::vector<UIBatch>& oBatches) {
 }
 
 } // namespace CodeHero
-

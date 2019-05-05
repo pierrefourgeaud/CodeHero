@@ -7,8 +7,8 @@
 
 #include <map>
 #include <memory>
-#include "core/typedefs.h"
 #include "core/texture.h"
+#include "core/typedefs.h"
 
 namespace CodeHero {
 
@@ -25,7 +25,7 @@ struct FontFaceGlyph {
 };
 
 class FontFace {
-public:
+   public:
     FontFace(Font& iFont);
     virtual ~FontFace() {}
 
@@ -34,7 +34,7 @@ public:
     float GetAscender() const { return m_Ascender; }
     float GetMaxHeight() const { return m_MaxHeight; }
 
-protected:
+   protected:
     Font& m_rFont;
     std::map<uint32_t, FontFaceGlyph> m_Glyphs;
 

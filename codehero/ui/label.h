@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 #ifndef CODEHERO_UI_LABEL_H_
-#define CODEHERO_UI_LABEL_H_ 
+#define CODEHERO_UI_LABEL_H_
 
 #include <memory>
 #include <string>
@@ -18,14 +18,14 @@ class Font;
 class UIBatch;
 
 class Label : public UIElement {
-public:
+   public:
     explicit Label(std::shared_ptr<EngineContext>& iContext);
 
     void SetText(const std::string& iText);
 
     void GetBatches(std::vector<UIBatch>& oBatches) override;
 
-private:
+   private:
     std::string m_Text;
 };
 

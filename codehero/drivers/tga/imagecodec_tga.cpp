@@ -3,10 +3,10 @@
 // found in the LICENSE file.
 
 #include "imagecodec_tga.h"
-#include <vector>
-#include "core/image.h"
-#include "core/fileaccess.h"
 #include <logger.h>
+#include <vector>
+#include "core/fileaccess.h"
+#include "core/image.h"
 
 // Inspired from GODOT Game Engine TGA Codec
 
@@ -84,7 +84,8 @@ std::shared_ptr<Image> ImageCodecTGA::Load(FileAccess& iF, const std::string& iT
     tgaHeader.pixelDepth = iF.Read8();
     tgaHeader.imageDescriptor = iF.Read8();
 
-    bool isEncoded = (tgaHeader.type == TGAT_RLEIndexed || tgaHeader.type == TGAT_RLERGB || tgaHeader.type == TGAT_RLEMonochrome);
+    bool isEncoded = (tgaHeader.type == TGAT_RLEIndexed || tgaHeader.type == TGAT_RLERGB ||
+                      tgaHeader.type == TGAT_RLEMonochrome);
     bool hasColorMap = (tgaHeader.type == TGAT_RLEIndexed || tgaHeader.type == TGAT_Indexed);
     bool isMonochrome = (tgaHeader.type == TGAT_RLEMonochrome || tgaHeader.type == TGAT_Monochrome);
 
@@ -94,7 +95,8 @@ std::shared_ptr<Image> ImageCodecTGA::Load(FileAccess& iF, const std::string& iT
     }
 
     if (hasColorMap) {
-        if (tgaHeader.colorMapLength > 256 || (tgaHeader.colorMapDepth != 24) || tgaHeader.colorMapType != 1) {
+        if (tgaHeader.colorMapLength > 256 || (tgaHeader.colorMapDepth != 24) ||
+            tgaHeader.colorMapType != 1) {
             LOGE << "ImageCodecTGA: Wrong color map..." << std::endl;
             return nullptr;
         }
@@ -106,8 +108,8 @@ std::shared_ptr<Image> ImageCodecTGA::Load(FileAccess& iF, const std::string& iT
     }
 
     if (tgaHeader.width <= 0 || tgaHeader.height <= 0) {
-        LOGE << "ImageCodecTGA: Image size not detected properly: width: " << tgaHeader.width << " height: "
-             << tgaHeader.height << std::endl;
+        LOGE << "ImageCodecTGA: Image size not detected properly: width: " << tgaHeader.width
+             << " height: " << tgaHeader.height << std::endl;
         return nullptr;
     }
 
@@ -242,7 +244,7 @@ std::shared_ptr<Image> ImageCodecTGA::_ConvertToImage(const uint8_t* iBuffer,
 
                     imageData[((y * width) + x)] = shade;
 
-                        x += xStep;
+                    x += xStep;
                     i += 1;
                 }
                 x = xStart;
@@ -263,8 +265,8 @@ std::shared_ptr<Image> ImageCodecTGA::_ConvertToImage(const uint8_t* iBuffer,
                         g = (iPalette[(index * 3) + 1]);
                         b = (iPalette[(index * 3) + 2]);
                     } else {
-                        LOGE << "ImageCodecTGA: Wrong color depth: " << iHeader.colorMapDepth << ", expected 24."
-                             << std::endl;
+                        LOGE << "ImageCodecTGA: Wrong color depth: " << iHeader.colorMapDepth
+                             << ", expected 24." << std::endl;
                         return nullptr;
                     }
 
@@ -272,7 +274,7 @@ std::shared_ptr<Image> ImageCodecTGA::_ConvertToImage(const uint8_t* iBuffer,
                     imageData[((y * width) + x) * 3 + 1] = g;
                     imageData[((y * width) + x) * 3 + 2] = b;
 
-                        x += xStep;
+                    x += xStep;
                     i += 1;
                 }
                 x = xStart;
@@ -292,7 +294,7 @@ std::shared_ptr<Image> ImageCodecTGA::_ConvertToImage(const uint8_t* iBuffer,
                 imageData[((y * width) + x) * 3 + 1] = g;
                 imageData[((y * width) + x) * 3 + 2] = b;
 
-                    x += xStep;
+                x += xStep;
                 i += 3;
             }
             x = xStart;
@@ -312,7 +314,7 @@ std::shared_ptr<Image> ImageCodecTGA::_ConvertToImage(const uint8_t* iBuffer,
                 imageData[((y * width) + x) * 4 + 2] = b;
                 imageData[((y * width) + x) * 4 + 3] = a;
 
-                    x += xStep;
+                x += xStep;
                 i += 4;
             }
             x = xStart;
@@ -326,4 +328,4 @@ std::shared_ptr<Image> ImageCodecTGA::_ConvertToImage(const uint8_t* iBuffer,
     return image;
 }
 
-}  // namespace CodeHero
+} // namespace CodeHero

@@ -23,7 +23,7 @@ class Attribute {
 };
 
 class Serializable : public Object {
-public:
+   public:
     OBJECT(Serializable, Object)
 
     Serializable(const std::shared_ptr<EngineContext>& iContext);
@@ -36,10 +36,10 @@ public:
 
     static void RegisterSerializable(const std::string& iName, const Builder& iBuilder);
 
-private:
+   private:
     static std::unordered_map<std::string, Builder> m_Builders;
 };
 
-}  // namespace CodeHero
+} // namespace CodeHero
 
-#endif  // CODEHERO_CORE_SERIALIZABLE_H_
+#endif // CODEHERO_CORE_SERIALIZABLE_H_

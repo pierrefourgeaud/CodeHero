@@ -16,19 +16,19 @@ class FileAccess;
 class IOStream : public Assimp::IOStream {
     friend class IOSystem;
 
-public:
+   public:
     ~IOStream();
     size_t Read(void* oBuffer, size_t iSize, size_t iCount) override;
     size_t Write(const void* iBuffer, size_t iSize, size_t iCount) override;
     aiReturn Seek(size_t iOffset, aiOrigin iOrigin) override;
     size_t Tell() const override;
     size_t FileSize() const override;
-    void Flush () override;
+    void Flush() override;
 
-protected:
+   protected:
     IOStream(FileAccess* iFile, bool iTransferOwnership);
 
-private:
+   private:
     // There is no ownership here.
     // Limitation from the API (at the moment) makes it not possible to
     // user smart pointer here hence the raw pointer...
@@ -38,7 +38,7 @@ private:
 };
 
 class IOSystem : public Assimp::IOSystem {
-public:
+   public:
     IOSystem();
     explicit IOSystem(FileAccess* iFile);
     ~IOSystem();
@@ -48,7 +48,7 @@ public:
     IOStream* Open(const char* iFile, const char* iMode = "rb") override;
     void Close(Assimp::IOStream* iFile) override;
 
-private:
+   private:
     // There is no ownership here. Cannot use shared_ptr at the moment (or weak_ptr in that case)
     FileAccess* m_pFileAccess = nullptr;
 };

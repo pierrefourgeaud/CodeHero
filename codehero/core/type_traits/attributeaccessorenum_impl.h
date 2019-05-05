@@ -13,15 +13,15 @@ namespace CodeHero {
 
 template <class Class, class Type, class GetFn, class SetFn>
 class AttributeAccessorEnumImpl : public AttributeAccessor {
-public:
+   public:
     using FromStringFn = std::function<Type(const std::string&)>;
     using ToStringFn = std::function<std::string(Type)>;
 
-    AttributeAccessorEnumImpl(GetFn iGet, SetFn iSet, FromStringFn iFromString, ToStringFn iToString)
-        : m_pGet(iGet)
-        , m_pSet(iSet)
-        , m_pFromString(iFromString)
-        , m_pToString(iToString) {}
+    AttributeAccessorEnumImpl(GetFn iGet,
+                              SetFn iSet,
+                              FromStringFn iFromString,
+                              ToStringFn iToString)
+        : m_pGet(iGet), m_pSet(iSet), m_pFromString(iFromString), m_pToString(iToString) {}
 
     Variant Get(const Serializable* iPtr) const override {
         CH_ASSERT(iPtr);
@@ -35,7 +35,7 @@ public:
         (classPtr->*m_pSet)(m_pFromString(iValue.GetString()));
     }
 
-private:
+   private:
     GetFn m_pGet;
     SetFn m_pSet;
     FromStringFn m_pFromString;
@@ -44,12 +44,11 @@ private:
 
 template <class Class, class Type, class SetFn>
 class AttributeAccessorEnumImpl<Class, Type, std::nullptr_t, SetFn> : public AttributeAccessor {
-public:
+   public:
     using FromStringFn = std::function<Type(const std::string&)>;
 
     AttributeAccessorEnumImpl(void*, SetFn iSet, const FromStringFn& iFromString, void*)
-        : m_pSet(iSet)
-        , m_pFromString(iFromString) {}
+        : m_pSet(iSet), m_pFromString(iFromString) {}
 
     Variant Get(const Serializable* iPtr) const override {
         CH_ASSERT(iPtr);
@@ -62,18 +61,19 @@ public:
         (classPtr->*m_pSet)(m_pFromString(iValue.Get<Type>()));
     }
 
-private:
+   private:
     SetFn m_pSet;
     FromStringFn m_pFromString;
 };
 
 template <class Class, class Type, class GetFn, class SetFn>
-std::shared_ptr<AttributeAccessorEnumImpl<Class, Type, GetFn, SetFn>>
-    MakeAccessorEnumImpl(GetFn iGet,
-                         SetFn iSet,
-                         const std::function<Type(const std::string&)>& iFromString,
-                         const std::function<std::string(Type)>& iToString) {
-    return std::make_shared<AttributeAccessorEnumImpl<Class, Type, GetFn, SetFn>>(iGet, iSet, iFromString, iToString);
+std::shared_ptr<AttributeAccessorEnumImpl<Class, Type, GetFn, SetFn>> MakeAccessorEnumImpl(
+    GetFn iGet,
+    SetFn iSet,
+    const std::function<Type(const std::string&)>& iFromString,
+    const std::function<std::string(Type)>& iToString) {
+    return std::make_shared<AttributeAccessorEnumImpl<Class, Type, GetFn, SetFn>>(
+        iGet, iSet, iFromString, iToString);
 }
 
 } // namespace CodeHero

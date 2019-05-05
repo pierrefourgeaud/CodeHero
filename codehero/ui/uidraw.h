@@ -19,7 +19,7 @@ class Color;
 class FontFace;
 
 class UIDraw {
-public:
+   public:
     static void Init();
 
     // Get batches from path
@@ -38,14 +38,14 @@ public:
                      const std::shared_ptr<FontFace>& iFontFace,
                      const Vector2& iPosition,
                      const Color& iColor);
-    
-    static void GetPointListArc(std::vector<Vector2>& oPoints, 
+
+    static void GetPointListArc(std::vector<Vector2>& oPoints,
                                 const Vector2& iCenter,
                                 float iRadius,
                                 int iMin,
                                 int iMax);
 
-private:
+   private:
     UIDraw() = delete;
     ~UIDraw() = delete;
     UIDraw(const UIDraw&) = delete;

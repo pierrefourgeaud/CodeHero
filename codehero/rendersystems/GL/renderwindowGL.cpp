@@ -1,13 +1,12 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include "rendersystems/GL/renderwindowGL.h"
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 #include "graphics/rendersystem.h"
 #include "input/input.h"
 
 namespace CodeHero {
 
-RenderWindowGL::RenderWindowGL(RenderSystem& iRenderSystem)
-    : RenderWindow(iRenderSystem) {
+RenderWindowGL::RenderWindowGL(RenderSystem& iRenderSystem) : RenderWindow(iRenderSystem) {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 }
 
@@ -27,8 +26,7 @@ Error RenderWindowGL::Create(const int iWidth, const int iHeight) {
     int width = iWidth;
     int height = iHeight;
     glfwGetFramebufferSize(m_pWindow, &width, &height);
-    m_rRenderSystem.SetPixelScalling(
-            (float)width / (float)iWidth, (float)height / (float)iHeight);
+    m_rRenderSystem.SetPixelScalling((float)width / (float)iWidth, (float)height / (float)iHeight);
 
     // Setup OpenGL options
     glEnable(GL_DEPTH_TEST);
@@ -63,7 +61,11 @@ void RenderWindowGL::SwapBuffers() {
 }
 
 // static
-void RenderWindowGL::_HandleKey(GLFWwindow* iWindow, int32_t iKey, int32_t iScancode, int32_t iAction, int32_t iMode) {
+void RenderWindowGL::_HandleKey(GLFWwindow* iWindow,
+                                int32_t iKey,
+                                int32_t iScancode,
+                                int32_t iAction,
+                                int32_t iMode) {
     (void)iScancode;
     (void)iMode;
     RenderWindowGL* me = static_cast<RenderWindowGL*>(glfwGetWindowUserPointer(iWindow));

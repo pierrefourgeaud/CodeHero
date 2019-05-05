@@ -16,7 +16,7 @@ class FileAccess;
 struct TGAHeader;
 
 class ImageCodecTGA : public ResourceCodec<Image> {
-public:
+   public:
     OBJECT(ImageCodecTGA, ResourceCodec<Image>)
 
     ImageCodecTGA(const std::shared_ptr<EngineContext>& iContext);
@@ -24,7 +24,7 @@ public:
 
     std::shared_ptr<Image> Load(FileAccess& iF, const std::string& iTypeName) override;
 
-private:
+   private:
     void _DecodeTGARle(const std::vector<uint8_t>& iCompressedBuffer,
                        size_t iPixelSize,
                        std::vector<uint8_t>& oUncompressedBuffer,
@@ -35,6 +35,6 @@ private:
                                            bool iIsMonochrome);
 };
 
-}  // namespace CodeHero
+} // namespace CodeHero
 
 #endif // CODEHERO_DRIVERS_TGA_IMAGECODEC_TGA_H_

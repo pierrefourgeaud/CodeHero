@@ -42,8 +42,7 @@ Vector2 Vector2::Normalized() const {
 }
 
 bool Vector2::operator==(const Vector2& iRhs) const {
-    return FloatEqu(x(), iRhs.x()) &&
-           FloatEqu(y(), iRhs.y());
+    return FloatEqu(x(), iRhs.x()) && FloatEqu(y(), iRhs.y());
 }
 
 // IntVector2
@@ -80,4 +79,3 @@ IntVector2 IntVector2::Normalized() const {
 }
 
 } // namespace CodeHero
-

@@ -19,13 +19,14 @@ Error FileAccess::Open(const std::string& iFilename, Flags iFlags) {
 
     std::string modeString;
     switch (iFlags) {
-    case READ:       modeString = "rb"; break;
-    case WRITE:      modeString = "wb"; break;
-    case READ_WRITE: modeString = "rb+"; break;
-    default: return ERR_INVALID_PARAMETER;
+        case READ: modeString = "rb"; break;
+        case WRITE: modeString = "wb"; break;
+        case READ_WRITE: modeString = "rb+"; break;
+        default: return ERR_INVALID_PARAMETER;
     };
 
-    LOGD2 << "[FileAccess::Open]: Opening " << iFilename << " with mode " << modeString << std::endl;
+    LOGD2 << "[FileAccess::Open]: Opening " << iFilename << " with mode " << modeString
+          << std::endl;
 
     m_pFile = std::fopen(iFilename.c_str(), modeString.c_str());
     m_Name = iFilename;
@@ -34,7 +35,9 @@ Error FileAccess::Open(const std::string& iFilename, Flags iFlags) {
 }
 
 void FileAccess::Close() {
-    if (!IsOpen()) { return; }
+    if (!IsOpen()) {
+        return;
+    }
 
     LOGD2 << "[FileAccess::Close]: Closing " << m_Name << "." << std::endl;
 
@@ -108,14 +111,18 @@ bool FileAccess::IsEOF() const {
 }
 
 Error FileAccess::SeekTop() {
-    if (!IsOpen()) { return ERR_NO_FILE_OPENED; }
+    if (!IsOpen()) {
+        return ERR_NO_FILE_OPENED;
+    }
 
     std::rewind(m_pFile);
     return OK;
 }
 
 Error FileAccess::Seek(int64_t iPosition) {
-    if (!IsOpen()) { return ERR_NO_FILE_OPENED; }
+    if (!IsOpen()) {
+        return ERR_NO_FILE_OPENED;
+    }
 
     if (std::fseek(m_pFile, iPosition, SEEK_SET) != 0) {
         return FAILED;
@@ -125,7 +132,9 @@ Error FileAccess::Seek(int64_t iPosition) {
 }
 
 Error FileAccess::SeekEnd() {
-    if (!IsOpen()) { return ERR_NO_FILE_OPENED; }
+    if (!IsOpen()) {
+        return ERR_NO_FILE_OPENED;
+    }
 
     if (std::fseek(m_pFile, 0, SEEK_END) != 0) {
         return FAILED;
@@ -173,18 +182,22 @@ bool FileAccess::Exists(const std::string& iFilename) {
     FILE* fp;
     fp = fopen(iFilename.c_str(), "rb");
 
-    if (fp == nullptr) { return false; }
+    if (fp == nullptr) {
+        return false;
+    }
 
     fclose(fp);
     return true;
 }
 
 void FileAccess::_CheckErrors() {
-    if (!IsOpen()) { return; }
+    if (!IsOpen()) {
+        return;
+    }
 
     if (feof(m_pFile)) {
         m_LastError = ERR_FILE_EOF;
     }
 }
 
-}  // namespace CodeHero
+} // namespace CodeHero

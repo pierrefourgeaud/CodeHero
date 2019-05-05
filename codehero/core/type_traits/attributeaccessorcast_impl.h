@@ -22,10 +22,8 @@ namespace CodeHero {
 // TODO(pierre) This is error prone - We should try to find a better way to achieve this
 template <class Class, class Type, class CastTo, class GetFn, class SetFn>
 class AttributeAccessorCastImpl : public AttributeAccessor {
-public:
-    AttributeAccessorCastImpl(GetFn iGet, SetFn iSet)
-        : m_pGet(iGet)
-        , m_pSet(iSet) {}
+   public:
+    AttributeAccessorCastImpl(GetFn iGet, SetFn iSet) : m_pGet(iGet), m_pSet(iSet) {}
 
     Variant Get(const Serializable* iPtr) const override {
         CH_ASSERT(iPtr);
@@ -40,16 +38,16 @@ public:
         (classPtr->*m_pSet)(std::static_pointer_cast<CastTo>(iValue.Get<Type>()));
     }
 
-private:
+   private:
     GetFn m_pGet;
     SetFn m_pSet;
 };
 
 template <class Class, class Type, class CastTo, class SetFn>
-class AttributeAccessorCastImpl<Class, Type, CastTo, std::nullptr_t, SetFn> : public AttributeAccessor {
-public:
-    AttributeAccessorCastImpl(void*, SetFn iSet)
-        : m_pSet(iSet) {}
+class AttributeAccessorCastImpl<Class, Type, CastTo, std::nullptr_t, SetFn>
+    : public AttributeAccessor {
+   public:
+    AttributeAccessorCastImpl(void*, SetFn iSet) : m_pSet(iSet) {}
 
     Variant Get(const Serializable* iPtr) const override {
         CH_ASSERT(iPtr);
@@ -63,13 +61,16 @@ public:
         (classPtr->*m_pSet)(std::static_pointer_cast<CastTo>(iValue.Get<Type>()));
     }
 
-private:
+   private:
     SetFn m_pSet;
 };
 
 template <class Class, class Type, class CastTo, class GetFn, class SetFn>
-std::shared_ptr<AttributeAccessorCastImpl<Class, Type, CastTo, GetFn, SetFn>> MakeAccessorCastImpl(GetFn iGet, SetFn iSet) {
-    return std::make_shared<AttributeAccessorCastImpl<Class, Type, CastTo, GetFn, SetFn>>(iGet, iSet);
+std::shared_ptr<AttributeAccessorCastImpl<Class, Type, CastTo, GetFn, SetFn>> MakeAccessorCastImpl(
+    GetFn iGet,
+    SetFn iSet) {
+    return std::make_shared<AttributeAccessorCastImpl<Class, Type, CastTo, GetFn, SetFn>>(iGet,
+                                                                                          iSet);
 }
 
 } // namespace CodeHero

@@ -14,17 +14,17 @@ namespace CodeHero {
 using ImageData = std::vector<uint8_t>;
 
 class Image : public Object {
-public:
+   public:
     OBJECT(Image, Object)
 
     enum Format {
-        IFMT_Luminance, // one byte
-        IFMT_Grayscale, // one byte per pixel, 0-255
-        IFMT_Intensity, // one byte per pixel, 0-255
+        IFMT_Luminance,      // one byte
+        IFMT_Grayscale,      // one byte per pixel, 0-255
+        IFMT_Intensity,      // one byte per pixel, 0-255
         IFMT_GrayscaleAlpha, // two bytes per pixel, 0-255. alpha 0-255
-        IFMT_RGB, // one byte R, one byte G, one byte B
-        IFMT_RGBA, // one byte R, one byte G, one byte B, one byte A
-        IFMT_Indexed, // index byte 0-256, and after image end, 256*3 bytes of palette
+        IFMT_RGB,            // one byte R, one byte G, one byte B
+        IFMT_RGBA,           // one byte R, one byte G, one byte B, one byte A
+        IFMT_Indexed,        // index byte 0-256, and after image end, 256*3 bytes of palette
         IFMT_IndexedAlpha, // index byte 0-256, and after image end, 256*4 bytes of palette (alpha)
         IFMT_DXT1,
         IFMT_DXT3,
@@ -47,13 +47,13 @@ public:
 
     uint8_t* GetRawData() { return m_Data.empty() ? nullptr : &m_Data[0]; }
 
-private:
+   private:
     ImageData m_Data;
     uint32_t m_Width = 0;
     uint32_t m_Height = 0;
     Format m_Fmt;
 };
 
-}  // namespace CodeHero
+} // namespace CodeHero
 
-#endif  // CODEHERO_CORE_IMAGE_H_
+#endif // CODEHERO_CORE_IMAGE_H_

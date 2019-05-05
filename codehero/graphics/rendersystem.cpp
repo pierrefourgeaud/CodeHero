@@ -2,9 +2,9 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
+#include "graphics/rendersystem.h"
 #include <logger.h>
 #include "graphics/batch.h"
-#include "graphics/rendersystem.h"
 #include "graphics/scene.h"
 #include "graphics/viewport.h"
 
@@ -40,4 +40,3 @@ void RenderSystem::Render() {
 }
 
 } // namespace CodeHero
-

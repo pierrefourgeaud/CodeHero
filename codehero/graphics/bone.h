@@ -14,7 +14,7 @@ namespace CodeHero {
 // Forward declaration
 
 class Bone {
-public:
+   public:
     struct WeightPerVertex {
         WeightPerVertex(float iWeight, uint32_t iVertexID)
             : m_Weight(iWeight), m_VertexID(iVertexID) {}
@@ -25,16 +25,20 @@ public:
     void SetName(const std::string& iName) { m_Name = iName; }
     const std::string& GetName() const { return m_Name; }
 
-    void SetVerticesWeight(const std::vector<WeightPerVertex>& iVerticesWeight) { m_VerticesWeight = iVerticesWeight; }
+    void SetVerticesWeight(const std::vector<WeightPerVertex>& iVerticesWeight) {
+        m_VerticesWeight = iVerticesWeight;
+    }
     const std::vector<WeightPerVertex>& GetVerticesWeight() const { return m_VerticesWeight; }
 
-    void AddWeightPerVertex(const WeightPerVertex& iWeightPerVertex) { m_VerticesWeight.push_back(iWeightPerVertex); }
+    void AddWeightPerVertex(const WeightPerVertex& iWeightPerVertex) {
+        m_VerticesWeight.push_back(iWeightPerVertex);
+    }
     // TODO(pierre) What should we do as Getters ? GetPerVertexID ? GetPerIndex ?
 
     void SetOffsetMatrix(const Matrix4& iOffsetMatrix) { m_OffsetMatrix = iOffsetMatrix; }
     const Matrix4& GetOffsetMatrix() const { return m_OffsetMatrix; }
 
-private:
+   private:
     std::string m_Name;
     Matrix4 m_OffsetMatrix;
 

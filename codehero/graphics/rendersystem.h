@@ -76,17 +76,13 @@ enum BlendMode {
     BM_OneMinusConstantAlpha
 };
 
-enum CullFace {
-    CF_Front = 0,
-    CF_Back
-};
+enum CullFace { CF_Front = 0, CF_Back };
 
 class RenderSystem : public System {
-public:
+   public:
     OBJECT(RenderSystem, System)
 
-    RenderSystem(const std::shared_ptr<EngineContext>& iContext)
-        : System(iContext) {}
+    RenderSystem(const std::shared_ptr<EngineContext>& iContext) : System(iContext) {}
     virtual ~RenderSystem() {}
 
     virtual void PollEvents() = 0;
@@ -102,10 +98,14 @@ public:
     virtual void SetShaderParameter(const std::string& iParam, const Vector2& iVec) = 0;
     virtual void SetShaderParameter(const std::string& iParam, const Vector3& iVec) = 0;
     virtual void SetShaderParameter(const std::string& iParam, const Matrix4& iMat) = 0;
-    virtual void SetShaderParameter(const std::string& iParam, const float* iFloat, const uint32_t iCount) = 0;
+    virtual void SetShaderParameter(const std::string& iParam,
+                                    const float* iFloat,
+                                    const uint32_t iCount) = 0;
     virtual void SetVertexBuffer(const VertexBuffer& iBuffer) = 0;
     virtual void SetTexture(uint32_t iIndex, const Texture& iTexture) = 0;
-    virtual void SetViewport(const std::shared_ptr<Viewport>& iViewport) { m_pActiveViewport = iViewport; };
+    virtual void SetViewport(const std::shared_ptr<Viewport>& iViewport) {
+        m_pActiveViewport = iViewport;
+    };
     virtual void SetDepthMode(Comparison iCmp) = 0;
     virtual void SetDepthTest(bool iEnabled) = 0;
     virtual void SetStencilTest(bool iEnabled) = 0;
@@ -113,7 +113,9 @@ public:
     virtual void SetStencilWriteMask(uint32_t iMask) = 0;
     virtual void SetStencilOp(StencilOp iPass, StencilOp iFail, StencilOp iDepthFail) = 0;
     virtual void SetBlendMode(bool iEnabled, BlendMode iSrcMode, BlendMode iDstMode) = 0;
-    virtual void SetCullMode(bool iEnabled, CullFace iFace = CF_Front, bool iIsCounterClockwise = true) = 0;
+    virtual void SetCullMode(bool iEnabled,
+                             CullFace iFace = CF_Front,
+                             bool iIsCounterClockwise = true) = 0;
 
     virtual void SetVBO(const VertexBuffer& iBuffer) = 0;
 
@@ -125,8 +127,8 @@ public:
     Vector2 GetPixelScalling() const { return m_PixelScalling; }
 
     virtual void Draw(PrimitiveType iType, uint32_t iVertexStart, uint32_t iVertexCount) = 0;
-    // TODO(pierre) We might need to use indexStart at one point, in that case a good solution with the
-    // overloading will have to be found.
+    // TODO(pierre) We might need to use indexStart at one point, in that case a good solution with
+    // the overloading will have to be found.
     virtual void Draw(PrimitiveType iType, uint32_t iIndexCount) = 0;
 
     void Render();
@@ -144,13 +146,15 @@ public:
     virtual VertexBuffer* CreateVertexBuffer() = 0;
     virtual IndexBuffer* CreateIndexBuffer() = 0;
 
-protected:
-    void _SetTextureManager(TextureManager* iTextureManager) { m_pTextureManager = iTextureManager; }
+   protected:
+    void _SetTextureManager(TextureManager* iTextureManager) {
+        m_pTextureManager = iTextureManager;
+    }
 
     uint32_t m_BoundVBO = 0;
     std::shared_ptr<RenderWindow> m_pWindow;
 
-private:
+   private:
     TextureManager* m_pTextureManager = nullptr;
 
     ShaderProgram* m_pShaderProgramInUse = nullptr;

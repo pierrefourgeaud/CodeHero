@@ -13,20 +13,15 @@ namespace CodeHero {
 class AttributeAccessor;
 
 class AttributeInfo {
-public:
-    explicit AttributeInfo(bool iIsNullAttribute = false)
-        : m_IsNullAttribute(iIsNullAttribute) {}
+   public:
+    explicit AttributeInfo(bool iIsNullAttribute = false) : m_IsNullAttribute(iIsNullAttribute) {}
     ~AttributeInfo() {}
 
     bool IsNull() const { return m_IsNullAttribute; }
 
-    void SetType(Variant::Value::Type iType) {
-        m_Type = iType;
-    }
+    void SetType(Variant::Value::Type iType) { m_Type = iType; }
 
-    void SetName(const std::string& iName) {
-        m_Name = iName;
-    }
+    void SetName(const std::string& iName) { m_Name = iName; }
 
     void SetAccessor(const std::shared_ptr<AttributeAccessor>& iAccessor) {
         m_pAccessor = iAccessor;
@@ -36,7 +31,7 @@ public:
     const std::string& GetName() const { return m_Name; }
     const std::shared_ptr<AttributeAccessor>& GetAccessor() const { return m_pAccessor; }
 
-private:
+   private:
     bool m_IsNullAttribute;
     Variant::Value::Type m_Type;
     std::string m_Name;

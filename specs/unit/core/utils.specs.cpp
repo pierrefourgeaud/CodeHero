@@ -16,9 +16,8 @@ go_bandit([]() {
             AssertThat(StartsWith("This is a test", "This is a test"), IsTrue());
         });
 
-        it("should return true if the prefix is empty", [] {
-            AssertThat(StartsWith("This is a test", ""), IsTrue());
-        });
+        it("should return true if the prefix is empty",
+           [] { AssertThat(StartsWith("This is a test", ""), IsTrue()); });
 
         it("should return false if the prefix doesn't match the start of the string", [] {
             AssertThat(StartsWith("This is a test", "Wrong"), IsFalse());
@@ -33,9 +32,8 @@ go_bandit([]() {
             AssertThat(EndsWith("This is a test", "This is a test"), IsTrue());
         });
 
-        it("should return true if suffix is empty", [] {
-            AssertThat(EndsWith("This is a test", ""), IsTrue());
-        });
+        it("should return true if suffix is empty",
+           [] { AssertThat(EndsWith("This is a test", ""), IsTrue()); });
 
         it("should return false if the suffix doesn't match the end of the string", [] {
             AssertThat(EndsWith("This is a test", "wrong"), IsFalse());

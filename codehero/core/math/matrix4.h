@@ -20,20 +20,44 @@ class Quaternion;
  * @brief Matrix 44f
  */
 class Matrix4 {
-public:
+   public:
     Matrix4() { ToIdentity(); }
-    Matrix4(float m00, float m01, float m02, float m03,
-            float m10, float m11, float m12, float m13,
-            float m20, float m21, float m22, float m23,
-            float m30, float m31, float m32, float m33);
+    Matrix4(float m00,
+            float m01,
+            float m02,
+            float m03,
+            float m10,
+            float m11,
+            float m12,
+            float m13,
+            float m20,
+            float m21,
+            float m22,
+            float m23,
+            float m30,
+            float m31,
+            float m32,
+            float m33);
     explicit Matrix4(const Matrix3& iMat3);
     Matrix4(const Vector3& iPosition, const Quaternion& iRotation, const Vector3& iScale);
 
     void ToIdentity() {
-        m[0][0] = 1.0f; m[0][1] = 0.0f; m[0][2] = 0.0f; m[0][3] = 0.0f;
-        m[1][0] = 0.0f; m[1][1] = 1.0f; m[1][2] = 0.0f; m[1][3] = 0.0f;
-        m[2][0] = 0.0f; m[2][1] = 0.0f; m[2][2] = 1.0f; m[2][3] = 0.0f;
-        m[3][0] = 0.0f; m[3][1] = 0.0f; m[3][2] = 0.0f; m[3][3] = 1.0f;
+        m[0][0] = 1.0f;
+        m[0][1] = 0.0f;
+        m[0][2] = 0.0f;
+        m[0][3] = 0.0f;
+        m[1][0] = 0.0f;
+        m[1][1] = 1.0f;
+        m[1][2] = 0.0f;
+        m[1][3] = 0.0f;
+        m[2][0] = 0.0f;
+        m[2][1] = 0.0f;
+        m[2][2] = 1.0f;
+        m[2][3] = 0.0f;
+        m[3][0] = 0.0f;
+        m[3][1] = 0.0f;
+        m[3][2] = 0.0f;
+        m[3][3] = 1.0f;
     }
 
     void Set(unsigned int iX, unsigned int iY, float iValue);
@@ -55,13 +79,18 @@ public:
     const float* Data() const { return _m; }
 
     // Factory
-    static Matrix4 MakeProjectionOrtho(float iLeft, float iRight, float iBottom, float iTop, float iNear, float iFar);
+    static Matrix4 MakeProjectionOrtho(float iLeft,
+                                       float iRight,
+                                       float iBottom,
+                                       float iTop,
+                                       float iNear,
+                                       float iFar);
     static Matrix4 MakeProjectionOrtho(float iLeft, float iRight, float iBottom, float iTop);
     static Matrix4 MakeProjectionPerspective(float iFov, float iAspect, float iNear, float iFar);
 
     static Matrix4 Zero;
 
-private:
+   private:
     union {
         float m[4][4];
         float _m[16];

@@ -8,8 +8,7 @@ namespace CodeHero {
 
 std::unordered_map<std::string, Builder> Serializable::m_Builders;
 
-Serializable::Serializable(const std::shared_ptr<EngineContext>& iContext)
-    : Object(iContext) {}
+Serializable::Serializable(const std::shared_ptr<EngineContext>& iContext) : Object(iContext) {}
 
 Serializable::~Serializable() {}
 

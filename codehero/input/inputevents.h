@@ -60,9 +60,9 @@ enum Key {
     K_LEFT_BRACKET = GLFW_KEY_LEFT_BRACKET, /* [ */
     K_BACKSLASH = GLFW_KEY_BACKSLASH,
     K_RIGHT_BRACKET = GLFW_KEY_RIGHT_BRACKET, /* ] */
-    K_BACKQUOTE = GLFW_KEY_GRAVE_ACCENT, /* ` */
-    K_WORLD_1 = GLFW_KEY_WORLD_1, /* non-US #1 */
-    K_WORLD_2 = GLFW_KEY_WORLD_2, /* non-US #2 */
+    K_BACKQUOTE = GLFW_KEY_GRAVE_ACCENT,      /* ` */
+    K_WORLD_1 = GLFW_KEY_WORLD_1,             /* non-US #1 */
+    K_WORLD_2 = GLFW_KEY_WORLD_2,             /* non-US #2 */
     K_ESC = GLFW_KEY_ESCAPE,
     K_ENTER = GLFW_KEY_ENTER,
     K_TAB = GLFW_KEY_TAB,
@@ -135,11 +135,7 @@ enum Key {
     K_KP_MENU = GLFW_KEY_MENU
 };
 
-enum KeyEvent {
-    KE_PRESS = GLFW_PRESS,
-    KE_RELEASE = GLFW_RELEASE,
-    KE_REPEAT = GLFW_REPEAT
-};
+enum KeyEvent { KE_PRESS = GLFW_PRESS, KE_RELEASE = GLFW_RELEASE, KE_REPEAT = GLFW_REPEAT };
 
 } // namespace CodeHero
 

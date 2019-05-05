@@ -22,9 +22,7 @@ Vector4::Vector4(const float iVec[4]) {
 }
 
 bool Vector4::operator==(const Vector4& iRhs) const {
-    return FloatEqu(x(), iRhs.x()) &&
-           FloatEqu(y(), iRhs.y()) &&
-           FloatEqu(z(), iRhs.z()) &&
+    return FloatEqu(x(), iRhs.x()) && FloatEqu(y(), iRhs.y()) && FloatEqu(z(), iRhs.z()) &&
            FloatEqu(w(), iRhs.w());
 }
 

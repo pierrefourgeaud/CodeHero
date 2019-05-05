@@ -8,7 +8,7 @@
 namespace CodeHero {
 
 class Vector3 {
-public:
+   public:
     Vector3() { ToIdentity(); } // Create Identity vector
     Vector3(float iX, float iY, float iZ);
 
@@ -53,7 +53,7 @@ public:
     static const Vector3 Right;
     static const Vector3 Left;
 
-private:
+   private:
     float m_Vec[3] = {0};
 };
 

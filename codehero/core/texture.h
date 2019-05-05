@@ -17,12 +17,7 @@ namespace CodeHero {
 // Forward declaration
 class EngineContext;
 
-enum TextureCoordinate {
-    TC_U = 0,
-    TC_V,
-    TC_W,
-    TC_MaxCoords
-};
+enum TextureCoordinate { TC_U = 0, TC_V, TC_W, TC_MaxCoords };
 
 enum TextureWrapMode {
     TWM_Repeat = 0,
@@ -38,8 +33,7 @@ static const std::map<std::string, TextureWrapMode> textureWrapModeFromString = 
     {"TWM_MirroredRepeat", TWM_MirroredRepeat},
     {"TWM_ClampEdge", TWM_ClampEdge},
     {"TWM_MirroredClampEdge", TWM_MirroredClampEdge},
-    {"TWM_ClampBorder", TWM_ClampBorder}
-};
+    {"TWM_ClampBorder", TWM_ClampBorder}};
 
 enum TextureFace : uint32_t {
     TF_Main2D = 0, // Used for 2D textures
@@ -59,14 +53,10 @@ static const uint32_t numberTextureFaces[] = {
 };
 
 class Texture : public Serializable, public GPUObject {
-public:
+   public:
     OBJECT(Texture, Serializable)
 
-    enum Type {
-        T_2D = 0,
-        T_Cube,
-        T_Max
-    };
+    enum Type { T_2D = 0, T_Cube, T_Max };
 
     Texture(std::shared_ptr<EngineContext>& iContext);
     virtual ~Texture();
@@ -88,18 +78,20 @@ public:
     void SetType(Type iType);
     Type GetType() const { return m_Type; }
 
-protected:
+   protected:
     Type m_Type = T_2D;
-    std::array<TextureWrapMode, TC_MaxCoords> m_WrapCoordinates{ TextureWrapMode::TWM_Repeat };
+    std::array<TextureWrapMode, TC_MaxCoords> m_WrapCoordinates{TextureWrapMode::TWM_Repeat};
 
     virtual bool _CreateImpl() = 0;
 
-    const std::shared_ptr<Image>& _GetImage(TextureFace iFace = TF_Main2D) const { return m_Images[iFace]; }
+    const std::shared_ptr<Image>& _GetImage(TextureFace iFace = TF_Main2D) const {
+        return m_Images[iFace];
+    }
 
-private:
+   private:
     std::vector<std::shared_ptr<Image>> m_Images;
 };
 
-}  // namespace CodeHero
+} // namespace CodeHero
 
-#endif  // CODEHERO_CORE_TEXTURE_H_
+#endif // CODEHERO_CORE_TEXTURE_H_

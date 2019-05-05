@@ -3,8 +3,8 @@
 // found in the LICENSE file.
 
 #include <bandit/bandit.h>
-#include "core/math/utils.h"
 #include "core/math/quaternion.h"
+#include "core/math/utils.h"
 
 using namespace bandit;
 using namespace snowhouse;

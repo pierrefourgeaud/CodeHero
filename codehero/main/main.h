@@ -6,8 +6,8 @@
 #define CODEHERO_MAIN_MAIN_H_
 
 #include <memory>
-#include "core/typedefs.h"
 #include "core/errors.h"
+#include "core/typedefs.h"
 
 // Forward declaration
 class ILogListener;
@@ -18,14 +18,14 @@ namespace CodeHero {
 class EngineContext;
 
 class Main {
-public:
+   public:
     Main();
     ~Main();
 
     Error Start();
     Error Run();
 
-private:
+   private:
     void _Initialize();
     void _Cleanup();
 
@@ -38,6 +38,6 @@ private:
     std::shared_ptr<EngineContext> m_pContext;
 };
 
-}  // namespace CodeHero
+} // namespace CodeHero
 
-#endif  // CODEHERO_MAIN_MAIN_H_
+#endif // CODEHERO_MAIN_MAIN_H_

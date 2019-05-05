@@ -2,13 +2,13 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
+#include "rendersystems/GL/shaderprogramGL.h"
 #include <exception>
 #include <string>
 #include "core/assert.h"
 #include "core/enginecontext.h"
-#include "graphics/shaderinstance.h"
 #include "graphics/rendersystem.h"
-#include "rendersystems/GL/shaderprogramGL.h"
+#include "graphics/shaderinstance.h"
 
 namespace CodeHero {
 
@@ -78,7 +78,8 @@ void ShaderProgramGL::_ParseParameters() {
         unsigned int type;
         int count;
 
-        glGetActiveUniform(GetGPUObject().intHandle, (GLuint)i, MAX_PARAMETER_NAME_LENGTH, 0, &count, &type, uniformName);
+        glGetActiveUniform(GetGPUObject().intHandle, (GLuint)i, MAX_PARAMETER_NAME_LENGTH, 0,
+                           &count, &type, uniformName);
         int location = glGetUniformLocation(GetGPUObject().intHandle, uniformName);
         // We need to do some processing here if needed for array
         std::string name(uniformName);
@@ -92,4 +93,4 @@ void ShaderProgramGL::_ParseParameters() {
     }
 }
 
-}  // namespace CodeHero
+} // namespace CodeHero

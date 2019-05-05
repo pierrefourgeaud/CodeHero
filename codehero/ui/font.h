@@ -15,14 +15,10 @@ namespace CodeHero {
 class FontFace;
 class EngineContext;
 
-enum class FontType : int32_t {
-    FT_FreeType,
-    FT_BitMap,
-    FT_None
-};
+enum class FontType : int32_t { FT_FreeType, FT_BitMap, FT_None };
 
 class Font {
-public:
+   public:
     Font(std::shared_ptr<EngineContext>& iContext, const std::string& iName);
     ~Font() {}
 
@@ -33,7 +29,7 @@ public:
 
     std::shared_ptr<EngineContext> GetContext() { return m_pContext; }
 
-private:
+   private:
     std::shared_ptr<EngineContext> m_pContext;
     std::string m_Name;
     std::shared_ptr<uint8_t> m_pFont;

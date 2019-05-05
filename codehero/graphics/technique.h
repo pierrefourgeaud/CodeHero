@@ -18,11 +18,10 @@ class ShaderProgram;
 class Technique : public Serializable {
     using ShaderDefines = std::map<std::string, std::string>;
 
-public:
+   public:
     OBJECT(Technique, Serializable)
 
-    Technique(const std::shared_ptr<EngineContext>& iContext)
-            : Serializable(iContext) {}
+    Technique(const std::shared_ptr<EngineContext>& iContext) : Serializable(iContext) {}
     virtual ~Technique() {}
 
     static void RegisterObject(const std::shared_ptr<EngineContext>& iContext);
@@ -37,16 +36,17 @@ public:
     void SetCachedShaderProgram(const std::shared_ptr<ShaderProgram>& iProgram);
     std::shared_ptr<ShaderProgram> GetCachedShaderProgram() const { return m_pCachedShaderProgram; }
 
-private:
+   private:
     std::shared_ptr<Shader> m_pVtxShader;
     std::shared_ptr<Shader> m_pFragShader;
     ShaderDefines m_VtxShaderDefines;
     ShaderDefines m_FragShaderDefines;
 
-    // Cached shaderProgram: This is computer on the first rendering this technique will be used for.
+    // Cached shaderProgram: This is computer on the first rendering this technique will be used
+    // for.
     std::shared_ptr<ShaderProgram> m_pCachedShaderProgram;
 };
 
-}  // namespace CodeHero
+} // namespace CodeHero
 
 #endif // CODEHERO_GRAPHICS_TECHNIQUE_H_

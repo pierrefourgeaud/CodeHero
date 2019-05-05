@@ -5,11 +5,13 @@
 #ifndef CODEHERO_CORE_ASSERT_H_
 #define CODEHERO_CORE_ASSERT_H_
 
-#include <cassert>
 #include <logger.h>
+#include <cassert>
 
-#define CH_ASSERT(cond) \
-    if (! (cond)) { LOGE << "Assertion failed: " << #cond << std::endl; } \
+#define CH_ASSERT(cond)                                     \
+    if (!(cond)) {                                          \
+        LOGE << "Assertion failed: " << #cond << std::endl; \
+    }                                                       \
     assert(cond);
 
 #endif // CODEHERO_CORE_ASSERT_H_

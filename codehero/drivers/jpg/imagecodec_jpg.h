@@ -14,16 +14,17 @@ class Image;
 class FileAccess;
 
 class ImageCodecJPG : public ResourceCodec<Image> {
-public:
+   public:
     OBJECT(ImageCodeJPG, ResourceCodec<Image>)
 
     ImageCodecJPG(const std::shared_ptr<EngineContext>& iContext);
     ~ImageCodecJPG();
 
     std::shared_ptr<Image> Load(FileAccess& iF, const std::string& iTypeName) override;
-private:
+
+   private:
 };
 
-}  // namespace CodeHero
+} // namespace CodeHero
 
-#endif  // CODEHERO_DRIVERS_JPG_IMAGECODEC_JPG_H_
+#endif // CODEHERO_DRIVERS_JPG_IMAGECODEC_JPG_H_

@@ -3,10 +3,10 @@
 // found in the LICENSE file.
 
 #ifndef CODEHERO_GRAPHICS_LIGHT_H_
-#define CODEHERO_GRAPHICS_LIGHT_H_ 
+#define CODEHERO_GRAPHICS_LIGHT_H_
 
-#include "graphics/drawable.h"
 #include "core/math/vector3.h"
+#include "graphics/drawable.h"
 
 namespace CodeHero {
 
@@ -16,12 +16,8 @@ namespace CodeHero {
 // - Diffuse lighting
 // - Specular lighting
 class Light : public Drawable {
-public:
-    enum Type {
-        T_Point,
-        T_Directional,
-        T_Spot
-    };
+   public:
+    enum Type { T_Point, T_Directional, T_Spot };
 
     OBJECT(Light, Drawable)
 
@@ -56,7 +52,7 @@ public:
     float GetQuadratic() const;
     // End Getter/Setter
 
-private:
+   private:
     Type m_LightType;
 
     // Directional lights only

@@ -27,12 +27,8 @@ void IndexBufferGL::_SetDataImpl(const void* iData) {
     Use();
 
     // TODO(pierre) The sizeof should be more abstracted
-    glBufferData(
-            GL_ELEMENT_ARRAY_BUFFER,
-            m_IndexSize * sizeof(unsigned int),
-            iData,
-            m_IsDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_IndexSize * sizeof(unsigned int), iData,
+                 m_IsDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
 }
 
 } // namespace CodeHero
-

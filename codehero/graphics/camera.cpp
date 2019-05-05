@@ -3,14 +3,13 @@
 // found in the LICENSE file.
 
 #include "graphics/camera.h"
-#include "graphics/node.h"
-#include "core/math/matrix3.h"
 #include "core/assert.h"
+#include "core/math/matrix3.h"
+#include "graphics/node.h"
 
 namespace CodeHero {
 
-Camera::Camera(const std::shared_ptr<EngineContext>& iContext)
-    : Drawable(iContext, DT_Camera) {}
+Camera::Camera(const std::shared_ptr<EngineContext>& iContext) : Drawable(iContext, DT_Camera) {}
 
 Camera::~Camera() {}
 
@@ -45,7 +44,8 @@ const Matrix4& Camera::GetView() {
 
 const Matrix4& Camera::GetProjection() {
     if (m_ProjectionDirty) {
-        m_Projection = Matrix4::MakeProjectionPerspective(m_Fov, m_AspectRatio, m_NearClip, m_FarClip);
+        m_Projection =
+            Matrix4::MakeProjectionPerspective(m_Fov, m_AspectRatio, m_NearClip, m_FarClip);
         m_ProjectionDirty = false;
     }
 

@@ -2,13 +2,13 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
-#include <jpgd.h>
 #include "imagecodec_jpg.h"
+#include <jpgd.h>
+#include <logger.h>
 #include <cstring>
 #include <vector>
-#include "core/image.h"
 #include "core/fileaccess.h"
-#include <logger.h>
+#include "core/image.h"
 
 namespace CodeHero {
 
@@ -80,4 +80,4 @@ std::shared_ptr<Image> ImageCodecJPG::Load(FileAccess& iF, const std::string& iT
     return image;
 }
 
-}  // namespace CodeHero
+} // namespace CodeHero

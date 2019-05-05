@@ -14,12 +14,8 @@
 namespace CodeHero {
 
 class FileAccess {
-public:
-    enum Flags {
-        READ,
-        WRITE,
-        READ_WRITE
-    };
+   public:
+    enum Flags { READ, WRITE, READ_WRITE };
 
     FileAccess();
     virtual ~FileAccess();
@@ -51,7 +47,7 @@ public:
     // Statics
     static bool Exists(const std::string& iFilename);
 
-private:
+   private:
     FILE* m_pFile = nullptr;
     std::string m_Name;
     Error m_LastError = OK;
@@ -61,6 +57,6 @@ private:
     void _CheckErrors();
 };
 
-}  // namespace CodeHero
+} // namespace CodeHero
 
-#endif  // CODEHERO_CORE_FILEACCESS_H_
+#endif // CODEHERO_CORE_FILEACCESS_H_

@@ -3,27 +3,30 @@
 // found in the LICENSE file.
 
 #include "graphics/node.h"
+#include "core/assert.h"
 #include "core/type_traits/attributeaccessor.h"
 #include "core/type_traits/objectdefinition.h"
 #include "graphics/drawable.h"
 #include "graphics/light.h"
 #include "graphics/scene.h"
-#include "core/assert.h"
 
 namespace CodeHero {
 
-Node::Node(const std::shared_ptr<EngineContext>& iContext)
-    : Serializable(iContext) {
-}
+Node::Node(const std::shared_ptr<EngineContext>& iContext) : Serializable(iContext) {}
 
 void Node::RegisterObject(const std::shared_ptr<EngineContext>& iContext) {
     CH_REGISTER_OBJECT(Node);
 
-    CH_OBJECT_ATTRIBUTE_CAST(Node, "Node", std::shared_ptr<Serializable>, Node, Variant::Value::VVT_SerializablePtr, nullptr, &Node::AddChild);
-    CH_OBJECT_ATTRIBUTE_CAST(Node, "Components", std::shared_ptr<Serializable>, Drawable, Variant::Value::VVT_SerializablePtr, nullptr, &Node::AddDrawable);
-    CH_OBJECT_ATTRIBUTE(Node, "Position", Vector3, Variant::Value::VVT_Vector3, &Node::GetPosition, &Node::SetPosition);
-    CH_OBJECT_ATTRIBUTE(Node, "Rotation", Quaternion, Variant::Value::VVT_Quaternion, &Node::GetRotation, &Node::SetRotation);
-    CH_OBJECT_ATTRIBUTE(Node, "Scale", Vector3, Variant::Value::VVT_Vector3, &Node::GetScale, static_cast<void(Node::*)(const Vector3&)>(&Node::SetScale));
+    CH_OBJECT_ATTRIBUTE_CAST(Node, "Node", std::shared_ptr<Serializable>, Node,
+                             Variant::Value::VVT_SerializablePtr, nullptr, &Node::AddChild);
+    CH_OBJECT_ATTRIBUTE_CAST(Node, "Components", std::shared_ptr<Serializable>, Drawable,
+                             Variant::Value::VVT_SerializablePtr, nullptr, &Node::AddDrawable);
+    CH_OBJECT_ATTRIBUTE(Node, "Position", Vector3, Variant::Value::VVT_Vector3, &Node::GetPosition,
+                        &Node::SetPosition);
+    CH_OBJECT_ATTRIBUTE(Node, "Rotation", Quaternion, Variant::Value::VVT_Quaternion,
+                        &Node::GetRotation, &Node::SetRotation);
+    CH_OBJECT_ATTRIBUTE(Node, "Scale", Vector3, Variant::Value::VVT_Vector3, &Node::GetScale,
+                        static_cast<void (Node::*)(const Vector3&)>(&Node::SetScale));
 }
 
 std::shared_ptr<Node> Node::Create(const std::shared_ptr<EngineContext>& iContext) {
@@ -83,7 +86,8 @@ void Node::AddChild(const std::shared_ptr<Node>& iChild) {
     } else {
         // TODO(pierre) This is virtually safe. A Node without scene is a scene.
         //              BUT: We can safely assume that we could create a node without parent.
-        //              THEN: Disallowing creation of Node unless via CreateChild would be a fair solution.
+        //              THEN: Disallowing creation of Node unless via CreateChild would be a fair
+        //              solution.
         std::shared_ptr<Scene> s = std::static_pointer_cast<Scene>(shared_from_this());
         iChild->SetScene(s);
     }
@@ -135,22 +139,18 @@ void Node::SetRotation(const Quaternion& iRotation) {
 
 void Node::Translate(const Vector3& iDelta, TransformSpace iSpace /*= TS_Local*/) {
     switch (iSpace) {
-    case TS_Local:
-        m_Position += m_Rotation * iDelta;
-        break;
+        case TS_Local: m_Position += m_Rotation * iDelta; break;
 
-    case TS_Parent:
-        m_Position += iDelta;
-        break;
+        case TS_Parent: m_Position += iDelta; break;
 
-    case TS_World:
-        // TODO(pierre) To add when we have the GetWorldTransform available from Node
-        //              for the parent.
-        break;
+        case TS_World:
+            // TODO(pierre) To add when we have the GetWorldTransform available from Node
+            //              for the parent.
+            break;
 
-    default:
-        // Will never reach here
-        break;
+        default:
+            // Will never reach here
+            break;
     }
 
     MarkDirty();
@@ -158,22 +158,18 @@ void Node::Translate(const Vector3& iDelta, TransformSpace iSpace /*= TS_Local*/
 
 void Node::Rotate(const Quaternion& iDelta, TransformSpace iSpace /*= TS_Local*/) {
     switch (iSpace) {
-    case TS_Local:
-        m_Rotation = (m_Rotation * iDelta).Normalized();
-        break;
+        case TS_Local: m_Rotation = (m_Rotation * iDelta).Normalized(); break;
 
-    case TS_Parent:
-        m_Rotation = (iDelta * m_Rotation).Normalized();
-        break;
+        case TS_Parent: m_Rotation = (iDelta * m_Rotation).Normalized(); break;
 
-    case TS_World:
-        // TODO(pierre) To add when we have the GetWorldTransform available from Node
-        //              for the parent.
-        break;
+        case TS_World:
+            // TODO(pierre) To add when we have the GetWorldTransform available from Node
+            //              for the parent.
+            break;
 
-    default:
-        // Will never reach here
-        break;
+        default:
+            // Will never reach here
+            break;
     }
 
     MarkDirty();
@@ -205,4 +201,3 @@ Matrix4 Node::GetWorldTransform() {
 }
 
 } // namespace CodeHero
-

@@ -16,12 +16,13 @@ static std::string TypeToString(Texture::Type iType) {
     CH_ASSERT(iType < Texture::Type::T_Max);
 
     switch (iType) {
-    case Texture::Type::T_2D: return "T_2D";
-    case Texture::Type::T_Cube: return "T_Cube";
-    default:
-        LOGE << "[Texture]: Failed to convert enum type, it seems that the enum is not valid..." << std::endl;
-        CH_ASSERT(false);
-        return "T_2D";
+        case Texture::Type::T_2D: return "T_2D";
+        case Texture::Type::T_Cube: return "T_Cube";
+        default:
+            LOGE << "[Texture]: Failed to convert enum type, it seems that the enum is not valid..."
+                 << std::endl;
+            CH_ASSERT(false);
+            return "T_2D";
     }
 }
 
@@ -32,13 +33,13 @@ static Texture::Type TypeFromString(const std::string& iEnumValue) {
         return Texture::Type::T_Cube;
     }
 
-    LOGE << "[Texture]: Failed to apply type, '" << iEnumValue << "' is invalid. Ignored." << std::endl;
+    LOGE << "[Texture]: Failed to apply type, '" << iEnumValue << "' is invalid. Ignored."
+         << std::endl;
     CH_ASSERT(false);
     return Texture::Type::T_2D;
 }
 
-Texture::Texture(std::shared_ptr<EngineContext>& iContext)
-    : Serializable(iContext) {
+Texture::Texture(std::shared_ptr<EngineContext>& iContext) : Serializable(iContext) {
     m_Images.resize(numberTextureFaces[m_Type]);
 }
 
@@ -47,27 +48,37 @@ Texture::~Texture() {}
 void Texture::RegisterObject(const std::shared_ptr<EngineContext>& iContext) {
     CH_REGISTER_OBJECT(Texture);
 
-    CH_OBJECT_ATTRIBUTE_ENUM(Texture, "Type", Texture::Type, &Texture::GetType, &Texture::SetType, TypeFromString, TypeToString);
-    CH_OBJECT_ATTRIBUTE(Texture, "Faces", VariantArray, Variant::Value::VVT_Array, nullptr, static_cast<bool(Texture::*)(const std::vector<std::string>&)>(&Texture::Load));
+    CH_OBJECT_ATTRIBUTE_ENUM(Texture, "Type", Texture::Type, &Texture::GetType, &Texture::SetType,
+                             TypeFromString, TypeToString);
+    CH_OBJECT_ATTRIBUTE(
+        Texture, "Faces", VariantArray, Variant::Value::VVT_Array, nullptr,
+        static_cast<bool (Texture::*)(const std::vector<std::string>&)>(&Texture::Load));
 
     auto setWrapMode = [](Texture* iPtr, TextureCoordinate iTC, const std::string& iEnumValue) {
         auto enumValue = textureWrapModeFromString.find(iEnumValue);
         if (enumValue == textureWrapModeFromString.end()) {
-            LOGE << "[Texture]: Failed to apply WrapMode, '" << iEnumValue << "' invalid. Ignored." << std::endl;
+            LOGE << "[Texture]: Failed to apply WrapMode, '" << iEnumValue << "' invalid. Ignored."
+                 << std::endl;
             return;
         }
 
         iPtr->SetWrapMode(iTC, enumValue->second);
     };
-    CH_OBJECT_ATTRIBUTE_CUSTOM(Texture, "WrapMode U", std::string, Variant::Value::VVT_String, nullptr, [setWrapMode] (Texture* iPtr, const std::string& iEnumValue) {
-        setWrapMode(iPtr, TextureCoordinate::TC_U, iEnumValue);
-    });
-    CH_OBJECT_ATTRIBUTE_CUSTOM(Texture, "WrapMode V", std::string, Variant::Value::VVT_String, nullptr, [setWrapMode] (Texture* iPtr, const std::string& iEnumValue) {
-        setWrapMode(iPtr, TextureCoordinate::TC_V, iEnumValue);
-    });
-    CH_OBJECT_ATTRIBUTE_CUSTOM(Texture, "WrapMode W", std::string, Variant::Value::VVT_String, nullptr, [setWrapMode] (Texture* iPtr, const std::string& iEnumValue) {
-        setWrapMode(iPtr, TextureCoordinate::TC_W, iEnumValue);
-    });
+    CH_OBJECT_ATTRIBUTE_CUSTOM(Texture, "WrapMode U", std::string, Variant::Value::VVT_String,
+                               nullptr,
+                               [setWrapMode](Texture* iPtr, const std::string& iEnumValue) {
+                                   setWrapMode(iPtr, TextureCoordinate::TC_U, iEnumValue);
+                               });
+    CH_OBJECT_ATTRIBUTE_CUSTOM(Texture, "WrapMode V", std::string, Variant::Value::VVT_String,
+                               nullptr,
+                               [setWrapMode](Texture* iPtr, const std::string& iEnumValue) {
+                                   setWrapMode(iPtr, TextureCoordinate::TC_V, iEnumValue);
+                               });
+    CH_OBJECT_ATTRIBUTE_CUSTOM(Texture, "WrapMode W", std::string, Variant::Value::VVT_String,
+                               nullptr,
+                               [setWrapMode](Texture* iPtr, const std::string& iEnumValue) {
+                                   setWrapMode(iPtr, TextureCoordinate::TC_W, iEnumValue);
+                               });
 }
 
 std::shared_ptr<Texture> Texture::Create(const std::shared_ptr<EngineContext>& iContext) {

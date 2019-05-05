@@ -11,7 +11,7 @@
 namespace CodeHero {
 
 class System : public Object {
-public:
+   public:
     OBJECT(System, Object);
 
     System(const std::shared_ptr<EngineContext>& iContext) : Object(iContext) {}
@@ -19,7 +19,8 @@ public:
 
     virtual Error Initialize() = 0;
     virtual Error Cleanup() = 0;
-private:
+
+   private:
 };
 
 } // namespace CodeHero

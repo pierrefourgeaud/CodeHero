@@ -2,8 +2,8 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
-#include <math.h>
 #include "./core/math/vector3.h"
+#include <math.h>
 #include "./core/math/utils.h"
 
 namespace CodeHero {
@@ -22,9 +22,7 @@ Vector3::Vector3(float iX, float iY, float iZ) {
 }
 
 float Vector3::Length() const {
-    return sqrtf((x() * x()) +
-                 (y() * y()) +
-                 (z() * z()));
+    return sqrtf((x() * x()) + (y() * y()) + (z() * z()));
 }
 
 Vector3& Vector3::Normalize() {
@@ -63,33 +61,19 @@ float Vector3::Dot(const Vector3& iVector) const {
 }
 
 bool Vector3::operator==(const Vector3& iRhs) const {
-    return FloatEqu(x(), iRhs.x()) &&
-           FloatEqu(y(), iRhs.y()) &&
-           FloatEqu(z(), iRhs.z());
+    return FloatEqu(x(), iRhs.x()) && FloatEqu(y(), iRhs.y()) && FloatEqu(z(), iRhs.z());
 }
 
 Vector3 Vector3::operator+(const Vector3& iRhs) const {
-    return {
-        x() + iRhs.x(),
-        y() + iRhs.y(),
-        z() + iRhs.z()
-    };
+    return {x() + iRhs.x(), y() + iRhs.y(), z() + iRhs.z()};
 }
 
 Vector3 Vector3::operator-(const Vector3& iRhs) const {
-    return {
-        x() - iRhs.x(),
-        y() - iRhs.y(),
-        z() - iRhs.z()
-    };
+    return {x() - iRhs.x(), y() - iRhs.y(), z() - iRhs.z()};
 }
 
 Vector3 Vector3::operator*(const float iScalar) const {
-    return {
-        x() * iScalar,
-        y() * iScalar,
-        z() * iScalar
-    };
+    return {x() * iScalar, y() * iScalar, z() * iScalar};
 }
 
 Vector3& Vector3::operator*=(const Vector3& iRhs) {

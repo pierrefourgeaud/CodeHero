@@ -15,15 +15,17 @@ namespace CodeHero {
 class System;
 
 class EngineContext {
-public:
+   public:
     void RegisterSubsystem(System* iSystem);
 
     template <class T>
-    T* GetSubsystem() { return static_cast<T*>(GetSubsystem(T::GetTypeNameStatic())); }
+    T* GetSubsystem() {
+        return static_cast<T*>(GetSubsystem(T::GetTypeNameStatic()));
+    }
 
     System* GetSubsystem(const std::string& iSystemName);
 
-private:
+   private:
     std::unordered_map<std::string, std::unique_ptr<System>> m_SubSystems;
 };
 

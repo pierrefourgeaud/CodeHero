@@ -18,16 +18,12 @@ class EngineContext;
 class ShaderInstance;
 
 class Shader : public Serializable, public std::enable_shared_from_this<Shader> {
-public:
-    enum Type : uint8_t {
-        T_Vertex = 0,
-        T_Fragment
-    };
+   public:
+    enum Type : uint8_t { T_Vertex = 0, T_Fragment };
 
     OBJECT(Shader, Serializable)
 
-    Shader(const std::shared_ptr<EngineContext>& iContext)
-        : Serializable(iContext) {}
+    Shader(const std::shared_ptr<EngineContext>& iContext) : Serializable(iContext) {}
     virtual ~Shader() {}
 
     static void RegisterObject(const std::shared_ptr<EngineContext>& iContext);
@@ -41,7 +37,7 @@ public:
     const std::string& GetShaderCode() const { return m_ShaderCode; }
     std::shared_ptr<ShaderInstance> GetInstance(const std::map<std::string, std::string>& iDefines);
 
-private:
+   private:
     Type m_Type;
     bool m_IsLoaded = false;
     std::string m_ShaderFilePath;
@@ -50,6 +46,6 @@ private:
     std::unordered_map<std::string, std::shared_ptr<ShaderInstance>> m_Instances;
 };
 
-}  // namespace CodeHero
+} // namespace CodeHero
 
 #endif // CODEHERO_GRAPHICS_SHADER_H_

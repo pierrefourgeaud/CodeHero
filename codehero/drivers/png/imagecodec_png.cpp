@@ -2,12 +2,12 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
-#include <png.h>
 #include "imagecodec_png.h"
-#include <vector>
-#include "core/image.h"
-#include "core/fileaccess.h"
 #include <logger.h>
+#include <png.h>
+#include <vector>
+#include "core/fileaccess.h"
+#include "core/image.h"
 
 namespace CodeHero {
 
@@ -40,10 +40,8 @@ std::shared_ptr<Image> ImageCodecPNG::Load(FileAccess& iF, const std::string& iT
     png_structp png;
     png_infop info;
 
-    png = png_create_read_struct(
-                PNG_LIBPNG_VER_STRING,
-                (png_voidp)0,
-                PngErrorFunction, PngWarnFunction);
+    png = png_create_read_struct(PNG_LIBPNG_VER_STRING, (png_voidp)0, PngErrorFunction,
+                                 PngWarnFunction);
 
     if (png == nullptr) {
         LOGE << "ImageCodecPNG: Could not create read structure." << std::endl;
@@ -63,7 +61,7 @@ std::shared_ptr<Image> ImageCodecPNG::Load(FileAccess& iF, const std::string& iT
         return nullptr;
     }
 
-    png_set_read_fn(png, (void *)&iF, PngReadFunction);
+    png_set_read_fn(png, (void*)&iF, PngReadFunction);
 
     png_read_info(png, info);
 
@@ -72,7 +70,7 @@ std::shared_ptr<Image> ImageCodecPNG::Load(FileAccess& iF, const std::string& iT
 
     png_get_IHDR(png, info, &width, &height, &depth, &color, nullptr, nullptr, nullptr);
 
-    if (depth < 8) { //only bit dept 8 per channel is handled
+    if (depth < 8) { // only bit dept 8 per channel is handled
         png_set_packing(png);
     } else if (depth > 8) {
         png_set_strip_16(png);
@@ -91,25 +89,25 @@ std::shared_ptr<Image> ImageCodecPNG::Load(FileAccess& iF, const std::string& iT
 
     Image::Format fmt;
     switch (color) {
-    case PNG_COLOR_TYPE_GRAY:       fmt = Image::IFMT_Grayscale; break;
-    case PNG_COLOR_TYPE_GRAY_ALPHA: fmt = Image::IFMT_GrayscaleAlpha; break;
-    case PNG_COLOR_TYPE_RGB:        fmt = Image::IFMT_RGB; break;
-    case PNG_COLOR_TYPE_RGB_ALPHA:  fmt = Image::IFMT_RGBA; break;
-    case PNG_COLOR_TYPE_PALETTE: {
-        int ntrans = 0;
-        png_get_tRNS(png, info, nullptr, &ntrans, nullptr);
+        case PNG_COLOR_TYPE_GRAY: fmt = Image::IFMT_Grayscale; break;
+        case PNG_COLOR_TYPE_GRAY_ALPHA: fmt = Image::IFMT_GrayscaleAlpha; break;
+        case PNG_COLOR_TYPE_RGB: fmt = Image::IFMT_RGB; break;
+        case PNG_COLOR_TYPE_RGB_ALPHA: fmt = Image::IFMT_RGBA; break;
+        case PNG_COLOR_TYPE_PALETTE: {
+            int ntrans = 0;
+            png_get_tRNS(png, info, nullptr, &ntrans, nullptr);
 
-        fmt = ntrans > 0 ? Image::IFMT_IndexedAlpha : Image::IFMT_Indexed;
-        palette_components = ntrans > 0 ? 4 : 3;
+            fmt = ntrans > 0 ? Image::IFMT_IndexedAlpha : Image::IFMT_Indexed;
+            palette_components = ntrans > 0 ? 4 : 3;
 
-        png_colorp colors;
-        png_get_PLTE(png, info, &colors, &palette_colors);
+            png_colorp colors;
+            png_get_PLTE(png, info, &colors, &palette_colors);
 
         } break;
-    default:
-        LOGE << "ImageCodecPNG: Invalid PNG type." << std::endl;
-        png_destroy_read_struct(&png, &info, nullptr);
-        return nullptr;
+        default:
+            LOGE << "ImageCodecPNG: Invalid PNG type." << std::endl;
+            png_destroy_read_struct(&png, &info, nullptr);
+            return nullptr;
     }
     components = Image::GetComponentsFromFormat(fmt);
 
@@ -130,10 +128,10 @@ std::shared_ptr<Image> ImageCodecPNG::Load(FileAccess& iF, const std::string& iT
     auto image = std::make_shared<Image>(m_pContext);
     image->Create(width, height, dest, fmt);
 
-    delete [] rows;
+    delete[] rows;
     png_destroy_read_struct(&png, &info, nullptr);
 
     return image;
 }
 
-}  // namespace CodeHero
+} // namespace CodeHero

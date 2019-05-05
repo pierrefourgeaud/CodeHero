@@ -7,11 +7,12 @@
 
 #include <unordered_map>
 
-namespace CodeHero
-{
+namespace CodeHero {
 
 template <class Key>
-using HashType = typename std::conditional<std::is_enum<Key>::value, std::hash<typename std::underlying_type<Key>::type>, std::hash<Key>>::type;
+using HashType = typename std::conditional<std::is_enum<Key>::value,
+                                           std::hash<typename std::underlying_type<Key>::type>,
+                                           std::hash<Key>>::type;
 template <class K, class V>
 using UnorderedMap = std::unordered_map<K, V, HashType<K>>;
 

@@ -7,13 +7,13 @@
 
 namespace CodeHero {
 
-Stylesheet::Stylesheet(const std::shared_ptr<EngineContext>& iContext)
-    : m_pContext(iContext) {
+Stylesheet::Stylesheet(const std::shared_ptr<EngineContext>& iContext) : m_pContext(iContext) {
     _Initialize();
 }
 
 void Stylesheet::_Initialize() {
-    m_Default.fontFamily = std::make_shared<Font>(m_pContext, "./resources/fonts/Montserrat-Regular.ttf");
+    m_Default.fontFamily =
+        std::make_shared<Font>(m_pContext, "./resources/fonts/Montserrat-Regular.ttf");
     m_Default.fontSize = 20;
     m_Default.fontColor = Color::White;
     m_Default.backgroundColor = {0.145f, 0.1725f, 0.247f, 1.0f};

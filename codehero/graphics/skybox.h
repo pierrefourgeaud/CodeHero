@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 #ifndef CODEHERO_GRAPHICS_SKYBOX_H_
-#define CODEHERO_GRAPHICS_SKYBOX_H_ 
+#define CODEHERO_GRAPHICS_SKYBOX_H_
 
 #include "graphics/model.h"
 
@@ -13,7 +13,7 @@ namespace CodeHero {
 class Material;
 
 class Skybox : public Model {
-public:
+   public:
     OBJECT(Skybox, Model);
 
     Skybox(const std::shared_ptr<EngineContext>& iContext);

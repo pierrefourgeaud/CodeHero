@@ -11,22 +11,29 @@
 namespace CodeHero {
 
 Light::Light(const std::shared_ptr<EngineContext>& iContext, Type iType)
-    : Drawable(iContext, Drawable::DrawableType::DT_Light)
-    , m_LightType(iType) {}
+    : Drawable(iContext, Drawable::DrawableType::DT_Light), m_LightType(iType) {}
 
 // This method is static
 // This is put at the top because it is really important and informative
 void Light::RegisterObject(const std::shared_ptr<EngineContext>& iContext) {
     CH_REGISTER_OBJECT(Light);
 
-    CH_OBJECT_ATTRIBUTE(Light, "Type", std::string, Variant::Value::VVT_String, &Light::GetTypeString, &Light::SetTypeString);
-    CH_OBJECT_ATTRIBUTE(Light, "Direction", Vector3, Variant::Value::VVT_Vector3, &Light::GetDirection, &Light::SetDirection);
-    CH_OBJECT_ATTRIBUTE(Light, "Ambient Intensity", float, Variant::Value::VVT_Float, &Light::GetAmbientIntensity, &Light::SetAmbientIntensity);
-    CH_OBJECT_ATTRIBUTE(Light, "Diffuse Intensity", float, Variant::Value::VVT_Float, &Light::GetDiffuseIntensity, &Light::SetDiffuseIntensity);
-    CH_OBJECT_ATTRIBUTE(Light, "Specular Intensity", float, Variant::Value::VVT_Float, &Light::GetSpecularIntensity, &Light::SetSpecularIntensity);
-    CH_OBJECT_ATTRIBUTE(Light, "Linear", float, Variant::Value::VVT_Float, &Light::GetLinear, &Light::SetLinear);
-    CH_OBJECT_ATTRIBUTE(Light, "Constant", float, Variant::Value::VVT_Float, &Light::GetConstant, &Light::SetConstant);
-    CH_OBJECT_ATTRIBUTE(Light, "Quadratic", float, Variant::Value::VVT_Float, &Light::GetQuadratic, &Light::SetQuadratic);
+    CH_OBJECT_ATTRIBUTE(Light, "Type", std::string, Variant::Value::VVT_String,
+                        &Light::GetTypeString, &Light::SetTypeString);
+    CH_OBJECT_ATTRIBUTE(Light, "Direction", Vector3, Variant::Value::VVT_Vector3,
+                        &Light::GetDirection, &Light::SetDirection);
+    CH_OBJECT_ATTRIBUTE(Light, "Ambient Intensity", float, Variant::Value::VVT_Float,
+                        &Light::GetAmbientIntensity, &Light::SetAmbientIntensity);
+    CH_OBJECT_ATTRIBUTE(Light, "Diffuse Intensity", float, Variant::Value::VVT_Float,
+                        &Light::GetDiffuseIntensity, &Light::SetDiffuseIntensity);
+    CH_OBJECT_ATTRIBUTE(Light, "Specular Intensity", float, Variant::Value::VVT_Float,
+                        &Light::GetSpecularIntensity, &Light::SetSpecularIntensity);
+    CH_OBJECT_ATTRIBUTE(Light, "Linear", float, Variant::Value::VVT_Float, &Light::GetLinear,
+                        &Light::SetLinear);
+    CH_OBJECT_ATTRIBUTE(Light, "Constant", float, Variant::Value::VVT_Float, &Light::GetConstant,
+                        &Light::SetConstant);
+    CH_OBJECT_ATTRIBUTE(Light, "Quadratic", float, Variant::Value::VVT_Float, &Light::GetQuadratic,
+                        &Light::SetQuadratic);
 }
 
 std::shared_ptr<Light> Light::Create(const std::shared_ptr<EngineContext>& iContext) {
@@ -48,12 +55,10 @@ void Light::SetTypeString(const std::string& iType) {
 
 std::string Light::GetTypeString() const {
     switch (m_LightType) {
-    case T_Directional: return "T_Directional";
-    case T_Point: return "T_Point";
-    case T_Spot: return "T_Spot";
-    default:
-        CH_ASSERT(false);
-        return "";
+        case T_Directional: return "T_Directional";
+        case T_Point: return "T_Point";
+        case T_Spot: return "T_Spot";
+        default: CH_ASSERT(false); return "";
     }
 }
 

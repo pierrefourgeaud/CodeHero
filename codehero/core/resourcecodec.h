@@ -8,8 +8,8 @@
 #include <string>
 #include <vector>
 #include "core/errors.h"
-#include "core/utils.h"
 #include "core/object.h"
+#include "core/utils.h"
 
 namespace CodeHero {
 
@@ -18,7 +18,7 @@ class FileAccess;
 
 template <class T>
 class ResourceCodec : public Object {
-public:
+   public:
     OBJECT_TEMPLATE(ResourceCodec, T, Object)
 
     ResourceCodec(const std::shared_ptr<EngineContext>& iContext) : Object(iContext) {}
@@ -38,15 +38,13 @@ public:
 
     virtual std::shared_ptr<T> Load(FileAccess& iF, const std::string& iTypeName) = 0;
 
-protected:
-    void _AddExtension(const std::string& iExtension) {
-        m_Extensions.push_back(iExtension);
-    }
+   protected:
+    void _AddExtension(const std::string& iExtension) { m_Extensions.push_back(iExtension); }
 
-private:
+   private:
     std::vector<std::string> m_Extensions;
 };
 
-}  // namespace CodeHero
+} // namespace CodeHero
 
-#endif  // CODEHERO_CORE_RESOURCECODEC_H_
+#endif // CODEHERO_CORE_RESOURCECODEC_H_

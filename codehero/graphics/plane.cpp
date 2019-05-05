@@ -9,27 +9,25 @@
 
 namespace CodeHero {
 
-Plane::Plane(const std::shared_ptr<EngineContext>& iContext)
-    : Mesh(iContext) {
-    float vertices[] = {
-        // Positions        // Normals         // Texture Coords
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
-         0.5f, -0.5f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f,
-         0.5f,  0.5f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
-         0.5f,  0.5f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
-        -0.5f,  0.5f, 0.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f,
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f
-    };
+Plane::Plane(const std::shared_ptr<EngineContext>& iContext) : Mesh(iContext) {
+    float vertices[] = {// Positions        // Normals         // Texture Coords
+                        -0.5f, -0.5f, 0.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f,  0.5f, -0.5f,
+                        0.0f,  0.0f,  0.0f,  -1.0f, 0.0f, 1.0f,  0.5f, 0.5f,  0.0f, 0.0f,
+                        0.0f,  -1.0f, 0.0f,  0.0f,  0.5f, 0.5f,  0.0f, 0.0f,  0.0f, -1.0f,
+                        0.0f,  0.0f,  -0.5f, 0.5f,  0.0f, 0.0f,  0.0f, -1.0f, 1.0f, 0.0f,
+                        -0.5f, -0.5f, 0.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f};
 
-    std::shared_ptr<VertexBuffer> buffer(iContext->GetSubsystem<RenderSystem>()->CreateVertexBuffer());
-    buffer->SetData(vertices, 6, VertexBuffer::MASK_Position | VertexBuffer::MASK_Normal | VertexBuffer::MASK_TexCoord);
+    std::shared_ptr<VertexBuffer> buffer(
+        iContext->GetSubsystem<RenderSystem>()->CreateVertexBuffer());
+    buffer->SetData(
+        vertices, 6,
+        VertexBuffer::MASK_Position | VertexBuffer::MASK_Normal | VertexBuffer::MASK_TexCoord);
     buffer->Unuse();
 
     AddVertexBuffer(buffer);
 }
 
-Plane::~Plane() {
-}
+Plane::~Plane() {}
 
 void Plane::RegisterObject(const std::shared_ptr<EngineContext>& iContext) {
     CH_REGISTER_OBJECT(Plane);
@@ -40,4 +38,3 @@ std::shared_ptr<Plane> Plane::Create(const std::shared_ptr<EngineContext>& iCont
 }
 
 } // namespace CodeHero
-

@@ -14,7 +14,7 @@ namespace CodeHero {
 class TextureManager;
 
 class TextureManagerGL : public TextureManager {
-public:
+   public:
     virtual ~TextureManagerGL() {}
 };
 

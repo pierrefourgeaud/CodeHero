@@ -3,21 +3,19 @@
 // found in the LICENSE file.
 
 #include "ui/fontface_freetype.h"
-#include "ui/font.h"
-#include "core/image.h"
-#include "core/enginecontext.h"
-#include "graphics/rendersystem.h"
+#include <ft2build.h>
 #include <cmath>
 #include <cstdint>
-#include <ft2build.h>
+#include "core/enginecontext.h"
+#include "core/image.h"
+#include "graphics/rendersystem.h"
+#include "ui/font.h"
 #include FT_FREETYPE_H
 #include <logger.h>
 
 namespace CodeHero {
 
-FontFaceFreeType::FontFaceFreeType(Font& iFont, uint32_t iSize)
-    : FontFace(iFont)
-    ,  m_Size(iSize) {
+FontFaceFreeType::FontFaceFreeType(Font& iFont, uint32_t iSize) : FontFace(iFont), m_Size(iSize) {
     _Load();
 }
 
@@ -43,7 +41,8 @@ void FontFaceFreeType::_Load() {
 
     {
         m_Ascender = std::floor((face->size->metrics.ascender >> 6) + 0.5f); // / 64
-        m_MaxHeight = std::floor(((face->size->metrics.ascender - face->size->metrics.descender) >> 6) + 0.5f);
+        m_MaxHeight = std::floor(
+            ((face->size->metrics.ascender - face->size->metrics.descender) >> 6) + 0.5f);
         // List all glyph
         uint32_t numGlyphs = static_cast<uint32_t>(face->num_glyphs);
         std::vector<uint32_t> charCodes(numGlyphs, 0);
@@ -79,7 +78,8 @@ void FontFaceFreeType::_Load() {
                 image->Create(fontGlyph.width, fontGlyph.height);
                 uint8_t* dest = image->GetRawData();
                 memcpy(dest, face->glyph->bitmap.buffer, image->GetSize());
-                fontGlyph.texture = m_rFont.GetContext()->GetSubsystem<RenderSystem>()->CreateTexture();
+                fontGlyph.texture =
+                    m_rFont.GetContext()->GetSubsystem<RenderSystem>()->CreateTexture();
                 fontGlyph.texture->Load(image);
                 m_Glyphs[charCode] = std::move(fontGlyph);
             }

@@ -11,17 +11,17 @@
 namespace CodeHero {
 
 class TextureGL : public Texture {
-public:
+   public:
     TextureGL(std::shared_ptr<EngineContext>& iContext);
     ~TextureGL();
 
     void Bind(int32_t iUnit = -1) final override;
     void Unbind() final override;
 
-protected:
+   protected:
     bool _CreateImpl() override;
 
-private:
+   private:
     GLenum _GetGLFormat(const Image::Format iFormat);
     void _GenerateTexture2D();
     void _GenerateTextureCubeMap();

@@ -13,14 +13,14 @@ class GPUObject {
         void* ptrHandle;
     };
 
-public:
+   public:
     ObjectHandle GetGPUObject() const { return m_Object; }
 
-protected:
+   protected:
     void _SetGPUObject(unsigned int iObject) { m_Object = {iObject}; }
     ObjectHandle* _GetGPUObjectHandle() { return &m_Object; }
 
-private:
+   private:
     ObjectHandle m_Object = {0};
 };
 

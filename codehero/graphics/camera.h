@@ -3,16 +3,16 @@
 // found in the LICENSE file.
 
 #ifndef CODEHERO_GRAPHICS_CAMERA_H_
-#define CODEHERO_GRAPHICS_CAMERA_H_ 
+#define CODEHERO_GRAPHICS_CAMERA_H_
 
-#include "core/math/vector3.h"
 #include "core/math/matrix4.h"
+#include "core/math/vector3.h"
 #include "graphics/drawable.h"
 
 namespace CodeHero {
 
 class Camera : public Drawable {
-public:
+   public:
     OBJECT(Camera, Drawable)
 
     Camera(const std::shared_ptr<EngineContext>& iContext);
@@ -26,7 +26,7 @@ public:
     const Matrix4& GetView();
     const Matrix4& GetProjection();
 
-private:
+   private:
     // Cached view matrix
     Matrix4 m_View;
     // Cached project matrix

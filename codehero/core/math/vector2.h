@@ -3,14 +3,14 @@
 // found in the LICENSE file.
 
 #ifndef CODEHERO_CORE_MATH_VECTOR2_H_
-#define CODEHERO_CORE_MATH_VECTOR2_H_ 
+#define CODEHERO_CORE_MATH_VECTOR2_H_
 
 #include "core/typedefs.h"
 
 namespace CodeHero {
 
 class Vector2 {
-public:
+   public:
     Vector2() {}
     Vector2(float iX, float iY);
     ~Vector2() {}
@@ -39,20 +39,18 @@ public:
         return Vector2(m_Vec[0] + iRhs.m_Vec[0], m_Vec[1] + iRhs.m_Vec[1]);
     }
 
-    Vector2 operator+(float iRhs) const {
-        return Vector2(m_Vec[0] + iRhs, m_Vec[1] + iRhs);
-    }
+    Vector2 operator+(float iRhs) const { return Vector2(m_Vec[0] + iRhs, m_Vec[1] + iRhs); }
 
     Vector2 operator*(const float iScalar) const {
         return Vector2(m_Vec[0] * iScalar, m_Vec[1] * iScalar);
     }
 
-private:
+   private:
     float m_Vec[2] = {0};
 };
 
 class IntVector2 {
-public:
+   public:
     IntVector2() {}
     IntVector2(int32_t iX, int32_t iY);
     ~IntVector2() {}
@@ -72,7 +70,7 @@ public:
         return IntVector2(m_Vec[0] - iRhs.m_Vec[0], m_Vec[1] - iRhs.m_Vec[1]);
     }
 
-private:
+   private:
     int32_t m_Vec[2] = {0};
 };
 

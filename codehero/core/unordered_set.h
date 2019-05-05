@@ -7,11 +7,12 @@
 
 #include <unordered_set>
 
-namespace CodeHero
-{
+namespace CodeHero {
 
 template <class Key>
-using HashType = typename std::conditional<std::is_enum<Key>::value, std::hash<typename std::underlying_type<Key>::type>, std::hash<Key>>::type;
+using HashType = typename std::conditional<std::is_enum<Key>::value,
+                                           std::hash<typename std::underlying_type<Key>::type>,
+                                           std::hash<Key>>::type;
 template <class K>
 using UnorderedSet = std::unordered_set<K, HashType<K>>;
 

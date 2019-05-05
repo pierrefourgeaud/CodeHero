@@ -11,10 +11,9 @@ void UIBatch::SetTexture(std::shared_ptr<Texture> iTexture) {
     m_pTexture = iTexture;
 }
 
-void UIBatch::SetVertexBuffer(
-    std::shared_ptr<VertexBuffer> iVertexBuffer,
-    uint32_t iStart/* = 0*/,
-    uint32_t iCount/* = 0*/) {
+void UIBatch::SetVertexBuffer(std::shared_ptr<VertexBuffer> iVertexBuffer,
+                              uint32_t iStart /* = 0*/,
+                              uint32_t iCount /* = 0*/) {
     m_Start = iStart;
     m_Count = iCount == 0 ? iVertexBuffer->GetVertexSize() : iCount;
     m_pVertexBuffer = iVertexBuffer;
@@ -25,4 +24,3 @@ void UIBatch::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& iIndexBuffer) {
 }
 
 } // namespace CodeHero
-

@@ -3,15 +3,15 @@
 // found in the LICENSE file.
 
 #ifndef CODEHERO_GRAPHICS_CUBE_H_
-#define CODEHERO_GRAPHICS_CUBE_H_ 
+#define CODEHERO_GRAPHICS_CUBE_H_
 
-#include "graphics/mesh.h"
 #include "core/enginecontext.h"
+#include "graphics/mesh.h"
 
 namespace CodeHero {
 
 class Cube : public Mesh {
-public:
+   public:
     OBJECT(Cube, Mesh)
 
     Cube(const std::shared_ptr<EngineContext>& iContext);

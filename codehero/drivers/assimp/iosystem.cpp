@@ -12,9 +12,7 @@ namespace CodeHero {
  * IOStream
  */
 IOStream::IOStream(FileAccess* iFileAccess, bool iTransferOwnership)
-    : m_pFileAccess(iFileAccess)
-    , m_HasOwnership(iTransferOwnership) {
-}
+    : m_pFileAccess(iFileAccess), m_HasOwnership(iTransferOwnership) {}
 
 IOStream::~IOStream() {
     if (m_HasOwnership) {
@@ -34,14 +32,13 @@ size_t IOStream::Write(const void* iBuffer, size_t iSize, size_t iCount) {
     (void)iSize;
     (void)iCount;
 #ifdef _MSC_VER
-    __pragma(warning(push))
-    __pragma(warning(disable:4127))
+    __pragma(warning(push)) __pragma(warning(disable : 4127))
 #endif
-    CH_ASSERT(false && "Should be implemented.");
+        CH_ASSERT(false && "Should be implemented.");
 #ifdef _MSC_VER
     __pragma(warning(pop))
 #endif
-    return 0;
+        return 0;
 }
 
 aiReturn IOStream::Seek(size_t iOffset, aiOrigin iOrigin) {
@@ -71,12 +68,11 @@ size_t IOStream::FileSize() const {
     return m_pFileAccess->GetSize();
 }
 
-void IOStream::Flush () {
+void IOStream::Flush() {
 #ifdef _MSC_VER
-    __pragma(warning(push))
-    __pragma(warning(disable:4127))
+    __pragma(warning(push)) __pragma(warning(disable : 4127))
 #endif
-    CH_ASSERT(false && "Should be implemented.");
+        CH_ASSERT(false && "Should be implemented.");
 #ifdef _MSC_VER
     __pragma(warning(pop))
 #endif
@@ -87,8 +83,7 @@ void IOStream::Flush () {
  */
 IOSystem::IOSystem() {}
 
-IOSystem::IOSystem(FileAccess* iFile)
-    : m_pFileAccess(iFile) {}
+IOSystem::IOSystem(FileAccess* iFile) : m_pFileAccess(iFile) {}
 
 IOSystem::~IOSystem() {}
 
@@ -97,7 +92,7 @@ bool IOSystem::Exists(const char* iFile) const {
     return FileAccess::Exists(iFile);
 }
 
-IOStream* IOSystem::Open(const char* iFile, const char* iMode/* = "rb"*/) {
+IOStream* IOSystem::Open(const char* iFile, const char* iMode /* = "rb"*/) {
     CH_ASSERT(iFile != nullptr && iMode != nullptr);
 
     // TODO(pierre) Do for the other modes ?

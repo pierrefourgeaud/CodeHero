@@ -13,7 +13,7 @@ namespace CodeHero {
 class VertexBufferGL;
 
 class VertexAttribBindingGL : public GPUObject {
-public:
+   public:
     VertexAttribBindingGL();
     ~VertexAttribBindingGL();
 

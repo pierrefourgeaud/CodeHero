@@ -9,40 +9,35 @@
 
 namespace CodeHero {
 
-Input::Input(const std::shared_ptr<EngineContext>& iContext)
-    : System(iContext)
-{}
+Input::Input(const std::shared_ptr<EngineContext>& iContext) : System(iContext) {}
 
-Input::~Input() {
-}
+Input::~Input() {}
 
 Error Input::Initialize() {
     RenderSystem* rs = m_pContext->GetSubsystem<RenderSystem>();
 
-    // TODO(pierre) I don't like that we have to use the RenderSystem/Window to set some options on the mouse...
-    rs->GetWindow()->SetMouseVisible(false, true); // This should be overridable (Add a Input->SetMouseMode(...))
+    // TODO(pierre) I don't like that we have to use the RenderSystem/Window to set some options on
+    // the mouse...
+    rs->GetWindow()->SetMouseVisible(
+        false, true); // This should be overridable (Add a Input->SetMouseMode(...))
     return OK;
 }
 
 void Input::HandleKey(Key iKey, KeyEvent iAction) {
     switch (iAction) {
-    case KeyEvent::KE_PRESS:
-        m_KeyPressed.insert(iKey);
-        break;
-    case KeyEvent::KE_RELEASE:
-        m_KeyPressed.erase(iKey);
-        break;
-    case KeyEvent::KE_REPEAT: {
-        auto key = m_KeyPressed.find(iKey);
-        if (key == m_KeyPressed.end()) {
-            // Here we noticed that we have a key pressed not in our set, we should add it...
-            m_KeyPressed.insert(iKey);
+        case KeyEvent::KE_PRESS: m_KeyPressed.insert(iKey); break;
+        case KeyEvent::KE_RELEASE: m_KeyPressed.erase(iKey); break;
+        case KeyEvent::KE_REPEAT: {
+            auto key = m_KeyPressed.find(iKey);
+            if (key == m_KeyPressed.end()) {
+                // Here we noticed that we have a key pressed not in our set, we should add it...
+                m_KeyPressed.insert(iKey);
+            }
+            break;
         }
-        break;
-    }
-    default:
-        // Should never be here
-        break;
+        default:
+            // Should never be here
+            break;
     }
 }
 

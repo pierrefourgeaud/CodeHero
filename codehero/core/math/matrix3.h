@@ -15,24 +15,36 @@ class Vector3;
 class Quaternion;
 
 /**
-* @brief Matrix 33f
-*
-* Used for rotation and scaling
-*/
+ * @brief Matrix 33f
+ *
+ * Used for rotation and scaling
+ */
 class Matrix3 {
     friend class Matrix4;
 
-public:
+   public:
     Matrix3() { ToIdentity(); }
-    Matrix3(float m00, float m01, float m02,
-            float m10, float m11, float m12,
-            float m20, float m21, float m22);
+    Matrix3(float m00,
+            float m01,
+            float m02,
+            float m10,
+            float m11,
+            float m12,
+            float m20,
+            float m21,
+            float m22);
     Matrix3(const Quaternion& iQuat) { FromQuaternion(iQuat); }
 
     void ToIdentity() {
-        m[0][0] = 1.0f; m[0][1] = 0.0f; m[0][2] = 0.0f;
-        m[1][0] = 0.0f; m[1][1] = 1.0f; m[1][2] = 0.0f;
-        m[2][0] = 0.0f; m[2][1] = 0.0f; m[2][2] = 1.0f;
+        m[0][0] = 1.0f;
+        m[0][1] = 0.0f;
+        m[0][2] = 0.0f;
+        m[1][0] = 0.0f;
+        m[1][1] = 1.0f;
+        m[1][2] = 0.0f;
+        m[2][0] = 0.0f;
+        m[2][1] = 0.0f;
+        m[2][2] = 1.0f;
     }
 
     void Set(unsigned int iX, unsigned int iY, float iValue);
@@ -60,7 +72,7 @@ public:
 
     // TODO(pierre) Make From/To methods (ToQuat, FromAxisAngle, ToAxisAngle, ...)
 
-private:
+   private:
     union {
         float _m[9];
         float m[3][3];

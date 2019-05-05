@@ -10,25 +10,22 @@
 
 namespace CodeHero {
 
-template<typename T>
-std::shared_ptr<T> MakeSharedArray(size_t size)
-{
+template <typename T>
+std::shared_ptr<T> MakeSharedArray(size_t size) {
     return std::shared_ptr<T>(new T[size], std::default_delete<T[]>());
 }
 
-template<typename T>
-std::unique_ptr<T> MakeUniqueArray(size_t size)
-{
+template <typename T>
+std::unique_ptr<T> MakeUniqueArray(size_t size) {
     return std::unique_ptr<T>(new T[size], std::default_delete<T[]>());
 }
 
-#if defined(_WIN32) || defined(_WIN64) || \
-    defined(__WIN32__) || defined(__TOS_WIN__) || \
+#if defined(_WIN32) || defined(_WIN64) || defined(__WIN32__) || defined(__TOS_WIN__) || \
     defined(__WINDOWS__)
-#   undef CH_OS_WINDOWS
-#   define CH_OS_WINDOWS 1
+#undef CH_OS_WINDOWS
+#define CH_OS_WINDOWS 1
 #endif
 
-}  // namespace CodeHero
+} // namespace CodeHero
 
-#endif  // CODEHERO_CORE_TYPEDEFS_H_
+#endif // CODEHERO_CORE_TYPEDEFS_H_

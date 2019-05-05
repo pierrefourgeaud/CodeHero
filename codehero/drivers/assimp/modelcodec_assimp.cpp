@@ -3,10 +3,10 @@
 // found in the LICENSE file.
 
 #include "drivers/assimp/modelcodec_assimp.h"
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
 #include <logger.h>
 #include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
 #include "core/enginecontext.h"
 #include "core/fileaccess.h"
 #include "core/resourceloader.h"
@@ -35,7 +35,8 @@ std::shared_ptr<Model> ModelCodecAssimp::Load(FileAccess& iF, const std::string&
     (void)iTypeName;
     Assimp::Importer import;
     import.SetIOHandler(new IOSystem(&iF));
-    const aiScene* scene = import.ReadFile(iF.GetName(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_ConvertToLeftHanded);
+    const aiScene* scene = import.ReadFile(
+        iF.GetName(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_ConvertToLeftHanded);
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         LOGE << "[ModelCodecAssimp]: " << import.GetErrorString() << std::endl;
@@ -64,7 +65,8 @@ void ModelCodecAssimp::_ProcessNode(aiNode* iNode, const aiScene* iScene, Model&
 std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh, const aiScene* iScene) {
     auto mesh = std::make_shared<Mesh>(m_pContext);
 
-    std::shared_ptr<VertexBuffer> vertex(m_pContext->GetSubsystem<RenderSystem>()->CreateVertexBuffer());
+    std::shared_ptr<VertexBuffer> vertex(
+        m_pContext->GetSubsystem<RenderSystem>()->CreateVertexBuffer());
     // Set data first with nullptr in order to get the size of a vertex calculated from the mask
     uint32_t mask = VertexBuffer::MASK_Position;
     if (iMesh->mNormals) {
@@ -117,7 +119,8 @@ std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh, const aiScen
             indices.push_back(face.mIndices[j]);
         }
     }
-    std::shared_ptr<IndexBuffer> indexBuffer(m_pContext->GetSubsystem<RenderSystem>()->CreateIndexBuffer());
+    std::shared_ptr<IndexBuffer> indexBuffer(
+        m_pContext->GetSubsystem<RenderSystem>()->CreateIndexBuffer());
     indexBuffer->SetData(&indices[0], indices.size());
 
     aiMaterial* aMaterial = iScene->mMaterials[iMesh->mMaterialIndex];
@@ -149,8 +152,8 @@ std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh, const aiScen
         techniqueName += "Opacity";
     }
 
-    auto technique = m_pContext->GetSubsystem<ResourceLoader<Serializable>>()
-        ->Load<Technique>("./resources/samples/technique_" + techniqueName + ".xml");
+    auto technique = m_pContext->GetSubsystem<ResourceLoader<Serializable>>()->Load<Technique>(
+        "./resources/samples/technique_" + techniqueName + ".xml");
     material->SetTechnique(technique);
 
     mesh->AddVertexBuffer(vertex);
@@ -166,16 +169,28 @@ std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh, const aiScen
 
         aiMatrix4x4* offset = &bone->mOffsetMatrix;
         newBone.SetOffsetMatrix({
-            offset->a1, offset->a2, offset->a3, offset->a4,
-            offset->b1, offset->b2, offset->b3, offset->b4,
-            offset->c1, offset->c2, offset->c3, offset->c4,
-            offset->d1, offset->d2, offset->d3, offset->d4,
+            offset->a1,
+            offset->a2,
+            offset->a3,
+            offset->a4,
+            offset->b1,
+            offset->b2,
+            offset->b3,
+            offset->b4,
+            offset->c1,
+            offset->c2,
+            offset->c3,
+            offset->c4,
+            offset->d1,
+            offset->d2,
+            offset->d3,
+            offset->d4,
         });
 
         // WeightsPerVertex
         for (uint32_t j = 0; j < bone->mNumWeights; ++j) {
             aiVertexWeight* vw = &bone->mWeights[j];
-            newBone.AddWeightPerVertex({ vw->mWeight, vw->mVertexId });
+            newBone.AddWeightPerVertex({vw->mWeight, vw->mVertexId});
         }
 
         mesh->AddBone(std::move(newBone));
@@ -184,11 +199,12 @@ std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh, const aiScen
     return mesh;
 }
 
-std::shared_ptr<Texture> ModelCodecAssimp::_LoadMaterialTextures(aiMaterial* iMat, aiTextureType iType) {
+std::shared_ptr<Texture> ModelCodecAssimp::_LoadMaterialTextures(aiMaterial* iMat,
+                                                                 aiTextureType iType) {
     std::shared_ptr<Texture> texture;
     RenderSystem* rs = m_pContext->GetSubsystem<RenderSystem>();
-    // We load only one textures of each type as the engine does not support more... We will have to see
-    // what to do here
+    // We load only one textures of each type as the engine does not support more... We will have to
+    // see what to do here
     for (uint32_t i = 0; i < iMat->GetTextureCount(iType) && i < 1; ++i) {
         aiString str;
         iMat->GetTexture(static_cast<aiTextureType>(iType), i, &str);
@@ -207,4 +223,3 @@ std::shared_ptr<Texture> ModelCodecAssimp::_LoadMaterialTextures(aiMaterial* iMa
 }
 
 } // namespace CodeHero
-

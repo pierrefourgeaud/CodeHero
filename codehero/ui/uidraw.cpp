@@ -20,7 +20,7 @@ void UIDraw::Init() {
     size_t vtxSize = m_CircleVertex.size();
     for (size_t i = 0; i < vtxSize; ++i) {
         const float a = static_cast<float>(i) / static_cast<float>(vtxSize) * 2 * PI;
-        m_CircleVertex[i] = { std::cos(a), std::sin(a) };
+        m_CircleVertex[i] = {std::cos(a), std::sin(a)};
     }
 }
 
@@ -73,8 +73,11 @@ void UIDraw::PathStroke(const std::shared_ptr<EngineContext>& iContext,
     }
 
     const size_t numVertex = numPoints * 3;
-    std::shared_ptr<VertexBuffer> buffer(iContext->GetSubsystem<RenderSystem>()->CreateVertexBuffer());
-    buffer->SetData(nullptr, numVertex, VertexBuffer::MASK_Position | VertexBuffer::MASK_Color | VertexBuffer::MASK_TexCoord, true);
+    std::shared_ptr<VertexBuffer> buffer(
+        iContext->GetSubsystem<RenderSystem>()->CreateVertexBuffer());
+    buffer->SetData(
+        nullptr, numVertex,
+        VertexBuffer::MASK_Position | VertexBuffer::MASK_Color | VertexBuffer::MASK_TexCoord, true);
 
     float r = iColor.r();
     float g = iColor.g();
@@ -82,7 +85,7 @@ void UIDraw::PathStroke(const std::shared_ptr<EngineContext>& iContext,
     float a = iColor.a();
     for (size_t i = 0; i < numPoints; ++i) {
         float vertices[3][9] = {
-            {iPoints[i].x(),         iPoints[i].y(),         0.0f, r, g, b, a, 0.5f, 0.5f},
+            {iPoints[i].x(), iPoints[i].y(), 0.0f, r, g, b, a, 0.5f, 0.5f},
             {tempVtx[i * 2 + 0].x(), tempVtx[i * 2 + 0].y(), 0.0f, r, g, b, a, 0.5f, 0.5f},
             {tempVtx[i * 2 + 1].x(), tempVtx[i * 2 + 1].y(), 0.0f, r, g, b, a, 0.5f, 0.5f},
         };
@@ -90,7 +93,8 @@ void UIDraw::PathStroke(const std::shared_ptr<EngineContext>& iContext,
     }
     buffer->Unuse();
 
-    std::shared_ptr<IndexBuffer> indexBuffer(iContext->GetSubsystem<RenderSystem>()->CreateIndexBuffer());
+    std::shared_ptr<IndexBuffer> indexBuffer(
+        iContext->GetSubsystem<RenderSystem>()->CreateIndexBuffer());
     indexBuffer->SetData(&indices[0], indices.size());
 
     UIBatch batch;
@@ -130,13 +134,16 @@ void UIDraw::PathFill(const std::shared_ptr<EngineContext>& iContext,
         ids += 3;
     }
 
-    std::shared_ptr<VertexBuffer> buffer(iContext->GetSubsystem<RenderSystem>()->CreateVertexBuffer());
-    buffer->SetData(nullptr, numVertex, VertexBuffer::MASK_Position | VertexBuffer::MASK_Color | VertexBuffer::MASK_TexCoord, true);
+    std::shared_ptr<VertexBuffer> buffer(
+        iContext->GetSubsystem<RenderSystem>()->CreateVertexBuffer());
+    buffer->SetData(
+        nullptr, numVertex,
+        VertexBuffer::MASK_Position | VertexBuffer::MASK_Color | VertexBuffer::MASK_TexCoord, true);
 
     for (size_t i2 = 0, i = numPoints - 1; i2 < numPoints; i = i2++) {
         auto dm = (normals[i] + normals[i2]) * 0.5f;
         auto dmr2 = dm.x() * dm.x() + dm.y() * dm.y();
-        if (dmr2 > 0.000001f)  {
+        if (dmr2 > 0.000001f) {
             float scale = 1.0f / dmr2;
             scale = (std::min)(100.0f, scale);
             dm = dm * scale;
@@ -150,16 +157,17 @@ void UIDraw::PathFill(const std::shared_ptr<EngineContext>& iContext,
         buffer->SetSubData(vertices, i2 * 2, 2);
 
         indices[ids + 0] = 0 + (i2 << 1);
-        indices[ids + 1] = 0 + (i  << 1);
-        indices[ids + 2] = 1 + (i  << 1);
-        indices[ids + 3] = 1 + (i  << 1);
+        indices[ids + 1] = 0 + (i << 1);
+        indices[ids + 2] = 1 + (i << 1);
+        indices[ids + 3] = 1 + (i << 1);
         indices[ids + 4] = 1 + (i2 << 1);
         indices[ids + 5] = 0 + (i2 << 1);
         ids += 6;
     }
     buffer->Unuse();
 
-    std::shared_ptr<IndexBuffer> indexBuffer(iContext->GetSubsystem<RenderSystem>()->CreateIndexBuffer());
+    std::shared_ptr<IndexBuffer> indexBuffer(
+        iContext->GetSubsystem<RenderSystem>()->CreateIndexBuffer());
     indexBuffer->SetData(&indices[0], indices.size());
 
     UIBatch batch;
@@ -179,8 +187,12 @@ void UIDraw::Text(const std::shared_ptr<EngineContext>& iContext,
 
     if (!iText.empty() && iFontFace) {
         std::string::size_type size = iText.size();
-        std::shared_ptr<VertexBuffer> buffer(iContext->GetSubsystem<RenderSystem>()->CreateVertexBuffer());
-        buffer->SetData(nullptr, 6 * size, VertexBuffer::MASK_Position | VertexBuffer::MASK_Color | VertexBuffer::MASK_TexCoord, true);
+        std::shared_ptr<VertexBuffer> buffer(
+            iContext->GetSubsystem<RenderSystem>()->CreateVertexBuffer());
+        buffer->SetData(
+            nullptr, 6 * size,
+            VertexBuffer::MASK_Position | VertexBuffer::MASK_Color | VertexBuffer::MASK_TexCoord,
+            true);
         float x = iPosition.x();
         float r = iColor.r();
         float g = iColor.g();
@@ -195,15 +207,13 @@ void UIDraw::Text(const std::shared_ptr<EngineContext>& iContext,
             float w = ch.width;
             float h = ch.height;
             // Update VBO for each character
-            float vertices[6][9] = {
-                { xpos,     ypos,     0.0, r, g, b, a, 0.0, 0.0 },
-                { xpos + w, ypos,     0.0, r, g, b, a, 1.0, 0.0 },
-                { xpos,     ypos + h, 0.0, r, g, b, a, 0.0, 1.0 },
+            float vertices[6][9] = {{xpos, ypos, 0.0, r, g, b, a, 0.0, 0.0},
+                                    {xpos + w, ypos, 0.0, r, g, b, a, 1.0, 0.0},
+                                    {xpos, ypos + h, 0.0, r, g, b, a, 0.0, 1.0},
 
-                { xpos + w, ypos,     0.0, r, g, b, a, 1.0, 0.0 },
-                { xpos + w, ypos + h, 0.0, r, g, b, a, 1.0, 1.0 },
-                { xpos,     ypos + h, 0.0, r, g, b, a, 0.0, 1.0 }
-            };
+                                    {xpos + w, ypos, 0.0, r, g, b, a, 1.0, 0.0},
+                                    {xpos + w, ypos + h, 0.0, r, g, b, a, 1.0, 1.0},
+                                    {xpos, ypos + h, 0.0, r, g, b, a, 0.0, 1.0}};
 
             buffer->SetSubData(vertices, i * 6, 6);
             buffer->Unuse();
@@ -213,12 +223,13 @@ void UIDraw::Text(const std::shared_ptr<EngineContext>& iContext,
             batch.SetTexture(ch.texture);
             oBatches.push_back(batch);
 
-            x += (ch.advanceX >> 6); // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
+            x += (ch.advanceX >> 6); // Bitshift by 6 to get value in pixels (2^6 = 64 (divide
+                                     // amount of 1/64th pixels by 64 to get amount of pixels))
         }
     }
 }
 
-void UIDraw::GetPointListArc(std::vector<Vector2>& oPoints, 
+void UIDraw::GetPointListArc(std::vector<Vector2>& oPoints,
                              const Vector2& iCenter,
                              float iRadius,
                              int iMin,
