@@ -121,7 +121,7 @@ std::vector<Batch> Scene::GetBatches() {
         }
     }
 
-    return std::move(batches);
+    return batches;
 }
 
 } // namespace CodeHero

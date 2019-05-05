@@ -181,7 +181,7 @@ std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh, const aiScen
         mesh->AddBone(std::move(newBone));
     }
 
-    return std::move(mesh);
+    return mesh;
 }
 
 std::shared_ptr<Texture> ModelCodecAssimp::_LoadMaterialTextures(aiMaterial* iMat, aiTextureType iType) {

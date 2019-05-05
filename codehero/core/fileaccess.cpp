@@ -91,7 +91,7 @@ std::string FileAccess::ReadAll() {
 
     std::string out(size, '\0');
     Read((uint8_t*)&out[0], size);
-    return std::move(out);
+    return out;
 }
 
 int32_t FileAccess::GetPos() {

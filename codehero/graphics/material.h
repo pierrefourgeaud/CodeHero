@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include "core/math/vector2.h"
 #include "core/serializable.h"
+#include "core/unordered_map.h"
 
 namespace CodeHero {
 
@@ -22,7 +23,7 @@ enum TextureUnit {
     TU_Specular,
     TU_Opacity
 };
-using TextureUnitsMaps = std::unordered_map<TextureUnit, std::shared_ptr<Texture>>;
+using TextureUnitsMaps = UnorderedMap<TextureUnit, std::shared_ptr<Texture>>;
 
 class Material : public Serializable {
 public:

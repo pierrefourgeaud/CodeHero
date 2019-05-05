@@ -20,8 +20,8 @@ public:
     Time(const std::shared_ptr<EngineContext>& iContext);
     ~Time();
 
-    Error Initialize();
-    Error Cleanup() { return OK; }
+    Error Initialize() override;
+    Error Cleanup() override { return OK; }
 
     uint64_t GetTime() const;
     uint64_t GetTimeMilliseconds() const;

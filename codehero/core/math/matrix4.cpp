@@ -180,7 +180,7 @@ Matrix4 Matrix4::MakeProjectionPerspective(float iFov, float iAspect, float iNea
     result.m[2][2] = (iFar + iNear) / (iFar - iNear);
     result.m[3][2] = -(2.0f * iFar * iNear) / (iFar - iNear);
 
-    return std::move(result);
+    return result;
 }
 
 } // namespace CodeHero

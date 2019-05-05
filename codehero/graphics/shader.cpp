@@ -21,7 +21,7 @@ std::string Join(const std::map<std::string, std::string>& iInput) {
         result += def.second;
     }
 
-    return std::move(result);
+    return result;
 }
 
 void Shader::RegisterObject(const std::shared_ptr<EngineContext>& iContext) {

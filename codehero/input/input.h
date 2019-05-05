@@ -10,6 +10,7 @@
 #include "input/inputevents.h"
 #include "core/system.h"
 #include "core/math/vector2.h"
+#include "core/unordered_set.h"
 
 namespace CodeHero {
 
@@ -23,8 +24,8 @@ public:
     Input(const std::shared_ptr<EngineContext>& iContext);
     ~Input();
 
-    Error Initialize();
-    Error Cleanup() { return OK; }
+    Error Initialize() override;
+    Error Cleanup() override { return OK; }
 
     void Update();
     void EndFrame();
@@ -41,7 +42,7 @@ public:
     Vector2 GetMouseMove() const { return m_MouseMove; }
 
 private:
-    std::unordered_set<Key> m_KeyPressed;
+    UnorderedSet<Key> m_KeyPressed;
 
     Vector2 m_MousePosition;
     Vector2 m_LastMousePosition;

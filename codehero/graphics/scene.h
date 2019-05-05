@@ -10,6 +10,7 @@
 #include <vector>
 #include "graphics/light.h"
 #include "graphics/node.h"
+#include "core/unordered_map.h"
 
 namespace CodeHero {
 
@@ -41,13 +42,13 @@ public:
     //    - We should use a worker queue to retrieve the batches
     std::vector<Batch> GetBatches();
 
-    const std::unordered_map<Light::Type, std::vector<float>>& GetVertexLights() const { return m_VertexLights; }
+    const UnorderedMap<Light::Type, std::vector<float>>& GetVertexLights() const { return m_VertexLights; }
 
 private:
     std::vector<std::shared_ptr<Light>> m_Lights;
 
     // Cached vertex lights
-    std::unordered_map<Light::Type, std::vector<float>> m_VertexLights;
+    UnorderedMap<Light::Type, std::vector<float>> m_VertexLights;
 };
 
 } // namespace CodeHero

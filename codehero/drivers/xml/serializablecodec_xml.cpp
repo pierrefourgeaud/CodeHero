@@ -105,7 +105,7 @@ VariantArray ParseArray(const pugi::xml_object_range<pugi::xml_node_iterator>& i
         }
     }
 
-    return std::move(res);
+    return res;
 }
 
 VariantHashMap ParseHashMap(const pugi::xml_object_range<pugi::xml_node_iterator>& iChildren) {
@@ -122,7 +122,7 @@ VariantHashMap ParseHashMap(const pugi::xml_object_range<pugi::xml_node_iterator
         }
     }
 
-    return std::move(res);
+    return res;
 }
 
 SerializableCodecXML::SerializableCodecXML(const std::shared_ptr<EngineContext>& iContext)

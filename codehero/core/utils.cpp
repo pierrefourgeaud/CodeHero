@@ -26,7 +26,7 @@ std::string LowerCased(const std::string& iS) {
     // cf. http://en.cppreference.com/w/cpp/string/byte/tolower
     // Basically, using directly std::tolower is undefined in that case
     std::transform(iS.begin(), iS.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
-    return std::move(s);
+    return s;
 }
 
 std::string Join(const std::vector<std::string>& iA, char iDelim /* = ' '*/) {
