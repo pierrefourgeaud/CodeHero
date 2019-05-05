@@ -6,6 +6,7 @@
 #define CODEHERO_RENDERSYSTEMS_GL_TEXTUREGL_H_
 
 #include <glad/glad.h>
+
 #include "core/texture.h"
 
 namespace CodeHero {

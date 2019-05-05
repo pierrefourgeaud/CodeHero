@@ -3,8 +3,10 @@
 // found in the LICENSE file.
 
 #include "rendersystems/GL/vertexattribbinding.h"
-#include <glad/glad.h>
+
 #include "rendersystems/GL/vertexbufferGL.h"
+
+#include <glad/glad.h>
 
 namespace CodeHero {
 

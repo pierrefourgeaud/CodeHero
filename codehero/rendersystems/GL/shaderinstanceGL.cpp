@@ -3,11 +3,13 @@
 // found in the LICENSE file.
 
 #include "rendersystems/GL/shaderinstanceGL.h"
-#include <glad/glad.h>
+
 #include <logger.h>
 #include "core/fileaccess.h"
 #include "core/utils.h"
 #include "graphics/shader.h"
+
+#include <glad/glad.h>
 
 namespace CodeHero {
 

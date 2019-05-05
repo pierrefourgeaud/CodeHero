@@ -2,20 +2,26 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
-#include <GLFW/glfw3.h>
+// Note: This must stay up there because of Windows.h. First it has to up
+// from glfw because they redefine APIENTRY and on top of rendersystemGL
+// because of CreateWindow being defined as a macro :upside_down_face:...
+// (rendersystem.h `undef` CreateWindow, I am not sure it is the best but...)
 #include <glad/glad.h>
+
+#include "rendersystems/GL/rendersystemGL.h"
 
 #include <logger.h>
 #include "core/math/matrix4.h"
 #include "core/math/vector3.h"
 #include "graphics/viewport.h"
 #include "rendersystems/GL/indexbufferGL.h"
-#include "rendersystems/GL/rendersystemGL.h"
 #include "rendersystems/GL/renderwindowGL.h"
 #include "rendersystems/GL/shaderinstanceGL.h"
 #include "rendersystems/GL/shaderprogramGL.h"
 #include "rendersystems/GL/textureGL.h"
 #include "rendersystems/GL/vertexbufferGL.h"
+
+#include <GLFW/glfw3.h>
 
 namespace CodeHero {
 

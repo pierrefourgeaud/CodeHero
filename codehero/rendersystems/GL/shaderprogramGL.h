@@ -7,6 +7,7 @@
 
 #include <glad/glad.h>
 #include <unordered_map>
+
 #include "core/errors.h"
 #include "graphics/shaderprogram.h"
 

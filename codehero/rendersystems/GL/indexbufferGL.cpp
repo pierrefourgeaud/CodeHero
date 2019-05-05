@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "rendersystems/GL/indexbufferGL.h"
+
 #include <glad/glad.h>
 
 namespace CodeHero {

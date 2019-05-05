@@ -1,7 +1,9 @@
 #include "rendersystems/GL/textureGL.h"
-#include <glad/glad.h>
+
 #include "core/assert.h"
 #include "core/image.h"
+
+#include <glad/glad.h>
 
 namespace CodeHero {
 

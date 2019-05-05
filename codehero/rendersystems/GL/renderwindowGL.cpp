@@ -1,8 +1,11 @@
 #include "rendersystems/GL/renderwindowGL.h"
-#include <GLFW/glfw3.h>
-#include <glad/glad.h>
+
 #include "graphics/rendersystem.h"
 #include "input/input.h"
+
+#include <glad/glad.h>
+
+#include <GLFW/glfw3.h>
 
 namespace CodeHero {
 
