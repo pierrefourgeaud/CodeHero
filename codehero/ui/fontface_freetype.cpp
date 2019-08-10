@@ -80,6 +80,10 @@ void FontFaceFreeType::_Load() {
                 memcpy(dest, face->glyph->bitmap.buffer, image->GetSize());
                 fontGlyph.texture =
                     m_rFont.GetContext()->GetSubsystem<RenderSystem>()->CreateTexture();
+                fontGlyph.texture->SetWrapMode(TextureCoordinate::TC_U,
+                                               TextureWrapMode::TWM_ClampEdge);
+                fontGlyph.texture->SetWrapMode(TextureCoordinate::TC_V,
+                                               TextureWrapMode::TWM_ClampEdge);
                 fontGlyph.texture->Load(image);
                 m_Glyphs[charCode] = std::move(fontGlyph);
             }
