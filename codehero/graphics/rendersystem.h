@@ -106,8 +106,9 @@ class RenderSystem : public System {
     virtual void SetViewport(const std::shared_ptr<Viewport>& iViewport) {
         m_pActiveViewport = iViewport;
     };
-    virtual void SetDepthMode(Comparison iCmp) = 0;
     virtual void SetDepthTest(bool iEnabled) = 0;
+    virtual void SetDepthMode(Comparison iCmp) = 0;
+    virtual void SetDepthMask(bool iEnabled) = 0;
     virtual void SetStencilTest(bool iEnabled) = 0;
     virtual void SetStencilMode(Comparison iMode, uint32_t iRef, uint32_t iMask) = 0;
     virtual void SetStencilWriteMask(uint32_t iMask) = 0;
@@ -116,6 +117,7 @@ class RenderSystem : public System {
     virtual void SetCullMode(bool iEnabled,
                              CullFace iFace = CF_Front,
                              bool iIsCounterClockwise = true) = 0;
+    virtual void SetScissorTest(bool iEnabled) = 0;
 
     virtual void SetVBO(const VertexBuffer& iBuffer) = 0;
 

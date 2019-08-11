@@ -36,6 +36,11 @@ void UI::Render() {
         nullTexture->Load(img);
     }
 
+    rs->SetBlendMode(true, BM_SrcAlpha, BM_OneMinusSrcAlpha);
+    rs->SetDepthTest(false);
+    rs->SetCullMode(false);
+    rs->SetScissorTest(true);
+
     size_t size = m_Batches.size();
     for (size_t i = 0; i < size; ++i) {
         UIBatch& batch = m_Batches[i];
@@ -69,8 +74,8 @@ void UI::_GetBatches(std::shared_ptr<UIElement> iElement) {
 
     // Going through the UI tree using a DFS algorithm
     for (size_t i = 0; i < size; ++i) {
-        _GetBatches(children[i]);
         children[i]->GetBatches(m_Batches);
+        _GetBatches(children[i]);
     }
 }
 

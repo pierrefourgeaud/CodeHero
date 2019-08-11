@@ -39,8 +39,9 @@ class RenderSystemGL : public RenderSystem {
     void SetVertexBuffer(const VertexBuffer& iBuffer) final override;
     void SetTexture(uint32_t iIndex, const Texture& iTexture) final override;
     void SetViewport(const std::shared_ptr<Viewport>& iViewport) final override;
-    void SetDepthMode(Comparison iCmp) final override;
     void SetDepthTest(bool iEnabled) final override;
+    void SetDepthMode(Comparison iCmp) final override;
+    void SetDepthMask(bool iEnabled) final override;
     void SetStencilTest(bool iEnabled) final override;
     void SetStencilMode(Comparison iMode, uint32_t iRef, uint32_t iMask) final override;
     void SetStencilWriteMask(uint32_t iMask) final override;
@@ -49,6 +50,7 @@ class RenderSystemGL : public RenderSystem {
     void SetCullMode(bool iEnabled,
                      CullFace iFace = CF_Front,
                      bool iIsCounterClockwise = true) final override;
+    void SetScissorTest(bool iEnabled) final override;
 
     void SetVBO(const VertexBuffer& iBuffer) final override;
 

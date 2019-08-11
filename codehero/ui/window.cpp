@@ -54,17 +54,17 @@ void Window::GetBatches(std::vector<UIBatch>& oBatches) {
         const float topH = std::floor((headerHeight - fa->GetMaxHeight()) / 2.0f + 0.5f);
 
         // Header
-        UIDraw::Text(m_pContext, oBatches, m_HeaderText, fa, {x + 15.0f, y + topH},
-                     m_pStyle->GetDefault().fontColor);
-        UIDraw::PathStroke(m_pContext, oBatches, {p1b, p2b, p2, p1},
-                           m_pStyle->GetDefault().borderColor);
         UIDraw::PathFill(m_pContext, oBatches, {p1b, p2b, p2, p1},
                          m_pStyle->GetDefault().backgroundColor);
+        UIDraw::PathStroke(m_pContext, oBatches, {p1b, p2b, p2, p1},
+                           m_pStyle->GetDefault().borderColor);
+        UIDraw::Text(m_pContext, oBatches, m_HeaderText, fa, {x + 15.0f, y + topH},
+                     m_pStyle->GetDefault().fontColor);
     }
     // Body
-    UIDraw::PathStroke(m_pContext, oBatches, {p1, p2, p3, p4}, m_pStyle->GetDefault().borderColor);
     UIDraw::PathFill(m_pContext, oBatches, {p1, p2, p3, p4},
                      m_pStyle->GetDefault().backgroundColor);
+    UIDraw::PathStroke(m_pContext, oBatches, {p1, p2, p3, p4}, m_pStyle->GetDefault().borderColor);
 }
 
 } // namespace CodeHero

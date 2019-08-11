@@ -73,7 +73,10 @@ void Batch::Draw(RenderSystem& iRS, const std::shared_ptr<Camera>& iCamera) {
 
     // Params
     iRS.SetCullMode(m_pMaterial->GetCullEnabled());
+    // TODO(pierre) For now both are enabled at the same time,
+    // in the future we might want to differentiate them.
     iRS.SetDepthTest(m_pMaterial->GetDepthTest());
+    iRS.SetDepthMask(m_pMaterial->GetDepthTest());
 
     m_pMesh->Draw(iRS);
 }

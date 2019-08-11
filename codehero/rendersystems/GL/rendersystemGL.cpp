@@ -205,12 +205,21 @@ void RenderSystemGL::SetViewport(const std::shared_ptr<Viewport>& iViewport) {
                           iViewport->width() * scalling.x(), iViewport->height() * scalling.y()));
 }
 
+void RenderSystemGL::SetDepthTest(bool iEnabled) {
+    // TODO(pierre) Maybe cache the value of enabled?
+    if (iEnabled) {
+        CH_GL_CALL(glEnable(GL_DEPTH_TEST));
+    } else {
+        CH_GL_CALL(glDisable(GL_DEPTH_TEST));
+    }
+}
+
 void RenderSystemGL::SetDepthMode(Comparison iCmp) {
     // TODO(pierre) Cache the cmp mode
     CH_GL_CALL(glDepthFunc(glComparison[iCmp]));
 }
 
-void RenderSystemGL::SetDepthTest(bool iEnabled) {
+void RenderSystemGL::SetDepthMask(bool iEnabled) {
     // TODO(pierre) Maybe cache the value of the depth mask.
     CH_GL_CALL(glDepthMask(iEnabled ? GL_TRUE : GL_FALSE));
 }
@@ -260,6 +269,15 @@ void RenderSystemGL::SetCullMode(bool iEnabled,
         CH_GL_CALL(glFrontFace(iIsCounterClockwise ? GL_CCW : GL_CW));
     } else {
         CH_GL_CALL(glDisable(GL_CULL_FACE));
+    }
+}
+
+void RenderSystemGL::SetScissorTest(bool iEnabled) {
+    // TODO(pierre) Maybe we should cache the value of enable ?
+    if (iEnabled) {
+        CH_GL_CALL(glEnable(GL_SCISSOR_TEST));
+    } else {
+        CH_GL_CALL(glDisable(GL_SCISSOR_TEST));
     }
 }
 
