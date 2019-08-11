@@ -2,6 +2,7 @@
 
 #include "graphics/rendersystem.h"
 #include "input/input.h"
+#include "rendersystems/GL/utils.h"
 
 #include <glad/glad.h>
 
@@ -32,7 +33,7 @@ Error RenderWindowGL::Create(const int iWidth, const int iHeight) {
     m_rRenderSystem.SetPixelScalling((float)width / (float)iWidth, (float)height / (float)iHeight);
 
     // Setup OpenGL options
-    glEnable(GL_DEPTH_TEST);
+    CH_GL_CALL(glEnable(GL_DEPTH_TEST));
 
     glfwSetWindowUserPointer(m_pWindow, (void*)this);
     glfwSetKeyCallback(m_pWindow, RenderWindowGL::_HandleKey);

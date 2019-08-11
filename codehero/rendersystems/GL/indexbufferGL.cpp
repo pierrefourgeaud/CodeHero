@@ -6,30 +6,32 @@
 
 #include <glad/glad.h>
 
+#include "rendersystems/GL/utils.h"
+
 namespace CodeHero {
 
 IndexBufferGL::IndexBufferGL() {
-    glGenBuffers(1, &_GetGPUObjectHandle()->intHandle);
+    CH_GL_CALL(glGenBuffers(1, &_GetGPUObjectHandle()->intHandle));
 }
 
 IndexBufferGL::~IndexBufferGL() {
-    glDeleteBuffers(1, &_GetGPUObjectHandle()->intHandle);
+    CH_GL_CALL(glDeleteBuffers(1, &_GetGPUObjectHandle()->intHandle));
 }
 
 void IndexBufferGL::Use() {
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GetGPUObject().intHandle);
+    CH_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GetGPUObject().intHandle));
 }
 
 void IndexBufferGL::Unuse() {
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    CH_GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 }
 
 void IndexBufferGL::_SetDataImpl(const void* iData) {
     Use();
 
     // TODO(pierre) The sizeof should be more abstracted
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_IndexSize * sizeof(unsigned int), iData,
-                 m_IsDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+    CH_GL_CALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_IndexSize * sizeof(unsigned int), iData,
+                            m_IsDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW));
 }
 
 } // namespace CodeHero

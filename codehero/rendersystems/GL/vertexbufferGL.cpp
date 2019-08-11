@@ -4,6 +4,7 @@
 
 #include "rendersystems/GL/vertexbufferGL.h"
 
+#include "rendersystems/GL/utils.h"
 #include "rendersystems/GL/vertexattribbinding.h"
 
 #include <glad/glad.h>
@@ -38,11 +39,11 @@ const uint32_t VertexBufferGL::ElementComponents[] = {
 };
 
 VertexBufferGL::VertexBufferGL() : m_pVAO(new VertexAttribBindingGL) {
-    glGenBuffers(1, &_GetGPUObjectHandle()->intHandle);
+    CH_GL_CALL(glGenBuffers(1, &_GetGPUObjectHandle()->intHandle));
 }
 
 VertexBufferGL::~VertexBufferGL() {
-    glDeleteBuffers(1, &_GetGPUObjectHandle()->intHandle);
+    CH_GL_CALL(glDeleteBuffers(1, &_GetGPUObjectHandle()->intHandle));
 }
 
 // Not sure of that...
@@ -69,17 +70,17 @@ uint32_t VertexBufferGL::GetComponentsNumber() const {
 
 void VertexBufferGL::_SetDataImpl() {
     m_pVAO->Bind();
-    glBindBuffer(GL_ARRAY_BUFFER, GetGPUObject().intHandle);
-    glBufferData(GL_ARRAY_BUFFER, m_VertexCount * m_VertexSize, m_Data.get(),
-                 m_IsDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+    CH_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, GetGPUObject().intHandle));
+    CH_GL_CALL(glBufferData(GL_ARRAY_BUFFER, m_VertexCount * m_VertexSize, m_Data.get(),
+                            m_IsDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW));
 
     m_pVAO->CreateBinding(*this);
 }
 
 void VertexBufferGL::_SetSubDataImpl(uint32_t iStart, uint32_t iSize, const void* iData) {
     m_pVAO->Bind();
-    glBindBuffer(GL_ARRAY_BUFFER, GetGPUObject().intHandle);
-    glBufferSubData(GL_ARRAY_BUFFER, iStart, iSize, iData);
+    CH_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, GetGPUObject().intHandle));
+    CH_GL_CALL(glBufferSubData(GL_ARRAY_BUFFER, iStart, iSize, iData));
 }
 
 void VertexBufferGL::_UpdateSizeImpl() {

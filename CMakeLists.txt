@@ -24,6 +24,10 @@ set (VENDORS_PATH ${PROJECT_SOURCE_DIR}/vendor)
 set (SPECS_PATH ${PROJECT_SOURCE_DIR}/specs)
 # set (DEPENDENCIES_PATH ${PROJECT_SOURCE_DIR}/Dependencies)
 
+# Just get the size of the sources path at compile time
+string(LENGTH "${SRCS_PATH}/" SOURCE_PATH_SIZE)
+add_definitions("-DSOURCE_PATH_SIZE=${SOURCE_PATH_SIZE}")
+
 # ---------- Options ----------
 option (_CODEHERO_DRIVER_PNG "Enable PNG driver" ON)
 option (_CODEHERO_DRIVER_JPG "Enable JPG driver" ON)
@@ -53,6 +57,7 @@ message ("")
 # ---------- Build type flags ----------
 if (_CODEHERO_BUILD_DEBUG)
     add_definitions (-DBUILD_DEBUG)
+    add_definitions (-DCH_GL_CHECK_ERROR)
     set (CMAKE_BUILD_TYPE Debug)
     if (APPLE)
         set(CMAKE_MACOSX_RPATH 1)
@@ -148,6 +153,7 @@ set (SOURCES
      ${SRCS_PATH}/rendersystems/GL/renderwindowGL.cpp
      ${SRCS_PATH}/rendersystems/GL/texturemanagerGL.cpp
      ${SRCS_PATH}/rendersystems/GL/textureGL.cpp
+     ${SRCS_PATH}/rendersystems/GL/utils.cpp
      ${SRCS_PATH}/rendersystems/GL/vertexattribbinding.cpp
      ${SRCS_PATH}/rendersystems/GL/vertexbufferGL.cpp
      ${SRCS_PATH}/rendersystems/GL/indexbufferGL.cpp
@@ -233,6 +239,7 @@ set (HEADERS
      ${SRCS_PATH}/rendersystems/GL/renderwindowGL.h
      ${SRCS_PATH}/rendersystems/GL/texturemanagerGL.h
      ${SRCS_PATH}/rendersystems/GL/textureGL.h
+     ${SRCS_PATH}/rendersystems/GL/utils.h
      ${SRCS_PATH}/rendersystems/GL/vertexattribbinding.h
      ${SRCS_PATH}/rendersystems/GL/vertexbufferGL.h
      ${SRCS_PATH}/rendersystems/GL/indexbufferGL.h

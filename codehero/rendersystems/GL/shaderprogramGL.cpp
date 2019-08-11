@@ -3,42 +3,47 @@
 // found in the LICENSE file.
 
 #include "rendersystems/GL/shaderprogramGL.h"
+
 #include <exception>
 #include <string>
+
 #include "core/assert.h"
 #include "core/enginecontext.h"
 #include "graphics/rendersystem.h"
 #include "graphics/shaderinstance.h"
+#include "rendersystems/GL/utils.h"
 
 namespace CodeHero {
 
 ShaderProgramGL::ShaderProgramGL(const std::shared_ptr<EngineContext>& iContext)
     : ShaderProgram(iContext) {
-    _SetGPUObject(glCreateProgram());
+    unsigned int id;
+    CH_GL_CALL_RET(id, glCreateProgram());
+    _SetGPUObject(id);
 }
 
 ShaderProgramGL::~ShaderProgramGL() {
-    glDeleteProgram(GetGPUObject().intHandle);
+    CH_GL_CALL(glDeleteProgram(GetGPUObject().intHandle));
 }
 
 ShaderProgram& ShaderProgramGL::Attach(const std::shared_ptr<ShaderInstance>& iShader) {
     CH_ASSERT(iShader != nullptr);
 
     if (iShader->IsCompiled()) {
-        glAttachShader(GetGPUObject().intHandle, iShader->GetGPUObject().intHandle);
+        CH_GL_CALL(glAttachShader(GetGPUObject().intHandle, iShader->GetGPUObject().intHandle));
     }
 
     return *this;
 }
 
 ShaderProgram& ShaderProgramGL::Link() {
-    glLinkProgram(GetGPUObject().intHandle);
+    CH_GL_CALL(glLinkProgram(GetGPUObject().intHandle));
 
     GLint success;
-    glGetProgramiv(GetGPUObject().intHandle, GL_LINK_STATUS, &success);
+    CH_GL_CALL(glGetProgramiv(GetGPUObject().intHandle, GL_LINK_STATUS, &success));
     if (success == 0) {
         GLchar infoLog[512];
-        glGetProgramInfoLog(GetGPUObject().intHandle, 512, nullptr, infoLog);
+        CH_GL_CALL(glGetProgramInfoLog(GetGPUObject().intHandle, 512, nullptr, infoLog));
         LOGE << "[ShaderProgramGL]: Link failed with " << infoLog << std::endl;
     }
 
@@ -48,7 +53,7 @@ ShaderProgram& ShaderProgramGL::Link() {
 }
 
 void ShaderProgramGL::Use() {
-    glUseProgram(GetGPUObject().intHandle);
+    CH_GL_CALL(glUseProgram(GetGPUObject().intHandle));
 
     m_pContext->GetSubsystem<RenderSystem>()->SetShaderProgramInUse(this);
 }
@@ -71,15 +76,15 @@ void ShaderProgramGL::_ParseParameters() {
     char uniformName[MAX_PARAMETER_NAME_LENGTH];
     int uniformCount;
 
-    glUseProgram(GetGPUObject().intHandle);
-    glGetProgramiv(GetGPUObject().intHandle, GL_ACTIVE_UNIFORMS, &uniformCount);
+    CH_GL_CALL(glUseProgram(GetGPUObject().intHandle));
+    CH_GL_CALL(glGetProgramiv(GetGPUObject().intHandle, GL_ACTIVE_UNIFORMS, &uniformCount));
 
     for (int i = 0; i < uniformCount; ++i) {
         unsigned int type;
         int count;
 
-        glGetActiveUniform(GetGPUObject().intHandle, (GLuint)i, MAX_PARAMETER_NAME_LENGTH, 0,
-                           &count, &type, uniformName);
+        CH_GL_CALL(glGetActiveUniform(GetGPUObject().intHandle, (GLuint)i,
+                                      MAX_PARAMETER_NAME_LENGTH, 0, &count, &type, uniformName));
         int location = glGetUniformLocation(GetGPUObject().intHandle, uniformName);
         // We need to do some processing here if needed for array
         std::string name(uniformName);

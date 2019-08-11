@@ -19,6 +19,7 @@
 #include "rendersystems/GL/shaderinstanceGL.h"
 #include "rendersystems/GL/shaderprogramGL.h"
 #include "rendersystems/GL/textureGL.h"
+#include "rendersystems/GL/utils.h"
 #include "rendersystems/GL/vertexbufferGL.h"
 
 #include <GLFW/glfw3.h>
@@ -65,8 +66,8 @@ Error RenderSystemGL::Cleanup() {
 
 void RenderSystemGL::ClearFrameBuffer() {
     // Background Fill Color
-    glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    CH_GL_CALL(glClearColor(0.25f, 0.25f, 0.25f, 1.0f));
+    CH_GL_CALL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 }
 
 void RenderSystemGL::SetShaderParameter(const std::string& iParam, int32_t iValue) {
@@ -75,7 +76,7 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, int32_t iValu
         if (shader->HasParameter(iParam)) {
             const ShaderParameter& info = shader->GetParameter(iParam);
 
-            glUniform1i(info.location, iValue);
+            CH_GL_CALL(glUniform1i(info.location, iValue));
         }
     }
 }
@@ -86,7 +87,7 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, float iValue)
         if (shader->HasParameter(iParam)) {
             const ShaderParameter& info = shader->GetParameter(iParam);
 
-            glUniform1f(info.location, iValue);
+            CH_GL_CALL(glUniform1f(info.location, iValue));
         }
     }
 }
@@ -98,8 +99,8 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Vector2
             const ShaderParameter& info = shader->GetParameter(iParam);
 
             switch (info.type) {
-                case GL_FLOAT: glUniform1fv(info.location, 1, iVec.Data()); break;
-                case GL_FLOAT_VEC2: glUniform2fv(info.location, 1, iVec.Data()); break;
+                case GL_FLOAT: CH_GL_CALL(glUniform1fv(info.location, 1, iVec.Data())); break;
+                case GL_FLOAT_VEC2: CH_GL_CALL(glUniform2fv(info.location, 1, iVec.Data())); break;
                 default: break;
             }
         }
@@ -113,9 +114,9 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Vector3
             const ShaderParameter& info = shader->GetParameter(iParam);
 
             switch (info.type) {
-                case GL_FLOAT: glUniform1fv(info.location, 1, iVec.Data()); break;
-                case GL_FLOAT_VEC2: glUniform2fv(info.location, 1, iVec.Data()); break;
-                case GL_FLOAT_VEC3: glUniform3fv(info.location, 1, iVec.Data()); break;
+                case GL_FLOAT: CH_GL_CALL(glUniform1fv(info.location, 1, iVec.Data())); break;
+                case GL_FLOAT_VEC2: CH_GL_CALL(glUniform2fv(info.location, 1, iVec.Data())); break;
+                case GL_FLOAT_VEC3: CH_GL_CALL(glUniform3fv(info.location, 1, iVec.Data())); break;
                 default: break;
             }
         }
@@ -128,7 +129,7 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Matrix4
         if (shader->HasParameter(iParam)) {
             const ShaderParameter& info = shader->GetParameter(iParam);
 
-            glUniformMatrix4fv(info.location, 1, GL_FALSE, iMat.Data());
+            CH_GL_CALL(glUniformMatrix4fv(info.location, 1, GL_FALSE, iMat.Data()));
         }
     }
 }
@@ -142,18 +143,24 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam,
             const ShaderParameter& info = shader->GetParameter(iParam);
 
             switch (info.type) {
-                case GL_FLOAT: glUniform1fv(info.location, iCount, iFloat); break;
-                case GL_FLOAT_VEC2: glUniform2fv(info.location, iCount / 2, iFloat); break;
-                case GL_FLOAT_VEC3: glUniform3fv(info.location, iCount / 3, iFloat); break;
-                case GL_FLOAT_VEC4: glUniform4fv(info.location, iCount / 4, iFloat); break;
+                case GL_FLOAT: CH_GL_CALL(glUniform1fv(info.location, iCount, iFloat)); break;
+                case GL_FLOAT_VEC2:
+                    CH_GL_CALL(glUniform2fv(info.location, iCount / 2, iFloat));
+                    break;
+                case GL_FLOAT_VEC3:
+                    CH_GL_CALL(glUniform3fv(info.location, iCount / 3, iFloat));
+                    break;
+                case GL_FLOAT_VEC4:
+                    CH_GL_CALL(glUniform4fv(info.location, iCount / 4, iFloat));
+                    break;
                 case GL_FLOAT_MAT3x2:
-                    glUniformMatrix3x2fv(info.location, iCount / 6, GL_FALSE, iFloat);
+                    CH_GL_CALL(glUniformMatrix3x2fv(info.location, iCount / 6, GL_FALSE, iFloat));
                     break;
                 case GL_FLOAT_MAT2x3:
-                    glUniformMatrix2x3fv(info.location, iCount / 6, GL_FALSE, iFloat);
+                    CH_GL_CALL(glUniformMatrix2x3fv(info.location, iCount / 6, GL_FALSE, iFloat));
                     break;
                 case GL_FLOAT_MAT3:
-                    glUniformMatrix3fv(info.location, iCount / 9, GL_FALSE, iFloat);
+                    CH_GL_CALL(glUniformMatrix3fv(info.location, iCount / 9, GL_FALSE, iFloat));
                     break;
                 default: break;
             }
@@ -169,23 +176,23 @@ void RenderSystemGL::SetVertexBuffer(const VertexBuffer& iBuffer) {
     for (uint32_t i = 0; i < VertexBuffer::EL_Max; ++i) {
         uint32_t bit = 1 << i;
         if (iBuffer.IsBitActive(bit)) {
-            glVertexAttribPointer(
+            CH_GL_CALL(glVertexAttribPointer(
                 i, VertexBufferGL::ElementComponents[i], VertexBufferGL::ElementType[i],
                 GL_FALSE, // ?
-                vertexSize, reinterpret_cast<GLvoid*>(iBuffer.GetElementOffset(i)));
-            glEnableVertexAttribArray(i);
+                vertexSize, reinterpret_cast<GLvoid*>(iBuffer.GetElementOffset(i))));
+            CH_GL_CALL(glEnableVertexAttribArray(i));
         }
     }
 }
 
 void RenderSystemGL::SetTexture(uint32_t iIndex, const Texture& iTexture) {
-    glActiveTexture(GL_TEXTURE0 + iIndex);
-    glBindTexture(GL_TEXTURE_2D, iTexture.GetGPUObject().intHandle);
+    CH_GL_CALL(glActiveTexture(GL_TEXTURE0 + iIndex));
+    CH_GL_CALL(glBindTexture(GL_TEXTURE_2D, iTexture.GetGPUObject().intHandle));
 }
 
 void RenderSystemGL::SetVBO(const VertexBuffer& iBuffer) {
     if (m_BoundVBO != iBuffer.GetGPUObject().intHandle) {
-        glBindBuffer(GL_ARRAY_BUFFER, iBuffer.GetGPUObject().intHandle);
+        CH_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, iBuffer.GetGPUObject().intHandle));
         m_BoundVBO = iBuffer.GetGPUObject().intHandle;
     }
 }
@@ -194,51 +201,51 @@ void RenderSystemGL::SetViewport(const std::shared_ptr<Viewport>& iViewport) {
     RenderSystem::SetViewport(iViewport);
 
     Vector2 scalling = GetPixelScalling();
-    glViewport(iViewport->x() * scalling.x(), iViewport->y() * scalling.y(),
-               iViewport->width() * scalling.x(), iViewport->height() * scalling.y());
+    CH_GL_CALL(glViewport(iViewport->x() * scalling.x(), iViewport->y() * scalling.y(),
+                          iViewport->width() * scalling.x(), iViewport->height() * scalling.y()));
 }
 
 void RenderSystemGL::SetDepthMode(Comparison iCmp) {
     // TODO(pierre) Cache the cmp mode
-    glDepthFunc(glComparison[iCmp]);
+    CH_GL_CALL(glDepthFunc(glComparison[iCmp]));
 }
 
 void RenderSystemGL::SetDepthTest(bool iEnabled) {
     // TODO(pierre) Maybe cache the value of the depth mask.
-    glDepthMask(iEnabled ? GL_TRUE : GL_FALSE);
+    CH_GL_CALL(glDepthMask(iEnabled ? GL_TRUE : GL_FALSE));
 }
 
 void RenderSystemGL::SetStencilTest(bool iEnabled) {
     // TODO(pierre) Maybe we should cache the value of enable ?
     if (iEnabled) {
-        glEnable(GL_STENCIL_TEST);
+        CH_GL_CALL(glEnable(GL_STENCIL_TEST));
     } else {
-        glDisable(GL_STENCIL_TEST);
+        CH_GL_CALL(glDisable(GL_STENCIL_TEST));
     }
 }
 
 void RenderSystemGL::SetStencilMode(Comparison iMode, uint32_t iRef, uint32_t iMask) {
     // TODO(pierre) We should probably cache again the 3 args
-    glStencilFunc(glComparison[iMode], iRef, iMask);
+    CH_GL_CALL(glStencilFunc(glComparison[iMode], iRef, iMask));
 }
 
 void RenderSystemGL::SetStencilWriteMask(uint32_t iMask) {
     // TODO(pierre) We should probably cache again the 3 args
-    glStencilMask(iMask);
+    CH_GL_CALL(glStencilMask(iMask));
 }
 
 void RenderSystemGL::SetStencilOp(StencilOp iPass, StencilOp iFail, StencilOp iDepthFail) {
     // TODO(pierre) We should probably cache the 3 pass args
-    glStencilOp(glStencilOps[iFail], glStencilOps[iDepthFail], glStencilOps[iPass]);
+    CH_GL_CALL(glStencilOp(glStencilOps[iFail], glStencilOps[iDepthFail], glStencilOps[iPass]));
 }
 
 void RenderSystemGL::SetBlendMode(bool iEnabled, BlendMode iSrcMode, BlendMode iDstMode) {
     // TODO(pierre) We should probably cache the enable/disable and the modes ?
     if (iEnabled) {
-        glEnable(GL_BLEND);
-        glBlendFunc(glBlendMode[iSrcMode], glBlendMode[iDstMode]);
+        CH_GL_CALL(glEnable(GL_BLEND));
+        CH_GL_CALL(glBlendFunc(glBlendMode[iSrcMode], glBlendMode[iDstMode]));
     } else {
-        glDisable(GL_BLEND);
+        CH_GL_CALL(glDisable(GL_BLEND));
     }
     // TODO(pierre) Should we do something for the glBlendEquation and the glBlendFuncSeparate ?
 }
@@ -248,20 +255,20 @@ void RenderSystemGL::SetCullMode(bool iEnabled,
                                  bool iIsCounterClockwise /* = true */) {
     // TODO(pierre) Should we cache the values ?
     if (iEnabled) {
-        glEnable(GL_CULL_FACE);
-        glCullFace(glCullFaces[iFace]);
-        glFrontFace(iIsCounterClockwise ? GL_CCW : GL_CW);
+        CH_GL_CALL(glEnable(GL_CULL_FACE));
+        CH_GL_CALL(glCullFace(glCullFaces[iFace]));
+        CH_GL_CALL(glFrontFace(iIsCounterClockwise ? GL_CCW : GL_CW));
     } else {
-        glDisable(GL_CULL_FACE);
+        CH_GL_CALL(glDisable(GL_CULL_FACE));
     }
 }
 
 void RenderSystemGL::Draw(PrimitiveType iType, uint32_t iVertexStart, uint32_t iVertexCount) {
-    glDrawArrays(iType, iVertexStart, iVertexCount);
+    CH_GL_CALL(glDrawArrays(iType, iVertexStart, iVertexCount));
 }
 
 void RenderSystemGL::Draw(PrimitiveType iType, uint32_t iIndexCount) {
-    glDrawElements(iType, iIndexCount, GL_UNSIGNED_INT, 0);
+    CH_GL_CALL(glDrawElements(iType, iIndexCount, GL_UNSIGNED_INT, 0));
 }
 
 // Factory

@@ -8,6 +8,7 @@
 #include "core/fileaccess.h"
 #include "core/utils.h"
 #include "graphics/shader.h"
+#include "rendersystems/GL/utils.h"
 
 #include <glad/glad.h>
 
@@ -17,7 +18,7 @@ ShaderInstanceGL::ShaderInstanceGL(const std::shared_ptr<EngineContext>& iContex
     : ShaderInstance(iContext) {}
 
 ShaderInstanceGL::~ShaderInstanceGL() {
-    glDeleteShader(GetGPUObject().intHandle);
+    CH_GL_CALL(glDeleteShader(GetGPUObject().intHandle));
 }
 
 Error ShaderInstanceGL::Compile() {
@@ -64,13 +65,13 @@ Error ShaderInstanceGL::_CreateShader(const std::string& iFilePath) {
     auto ext = iFilePath.substr(index + 1);
     GLuint shader = 0;
     if (ext == "comp") {
-        shader = glCreateShader(GL_COMPUTE_SHADER);
+        CH_GL_CALL_RET(shader, glCreateShader(GL_COMPUTE_SHADER));
     } else if (ext == "frag") {
-        shader = glCreateShader(GL_FRAGMENT_SHADER);
+        CH_GL_CALL_RET(shader, glCreateShader(GL_FRAGMENT_SHADER));
     } else if (ext == "geom") {
-        shader = glCreateShader(GL_GEOMETRY_SHADER);
+        CH_GL_CALL_RET(shader, glCreateShader(GL_GEOMETRY_SHADER));
     } else if (ext == "vert") {
-        shader = glCreateShader(GL_VERTEX_SHADER);
+        CH_GL_CALL_RET(shader, glCreateShader(GL_VERTEX_SHADER));
     }
 
     if (shader != 0) {
@@ -165,14 +166,14 @@ Error ShaderInstanceGL::_ReplaceIncludes(const std::string& iParentFile,
 Error ShaderInstanceGL::_CompileShader(const std::string& iShaderCode) {
     const GLchar* shaderCode = iShaderCode.c_str();
 
-    glShaderSource(GetGPUObject().intHandle, 1, &shaderCode, nullptr);
-    glCompileShader(GetGPUObject().intHandle);
+    CH_GL_CALL(glShaderSource(GetGPUObject().intHandle, 1, &shaderCode, nullptr));
+    CH_GL_CALL(glCompileShader(GetGPUObject().intHandle));
 
     GLint success;
-    glGetShaderiv(GetGPUObject().intHandle, GL_COMPILE_STATUS, &success);
+    CH_GL_CALL(glGetShaderiv(GetGPUObject().intHandle, GL_COMPILE_STATUS, &success));
     if (success == 0) {
         GLchar infoLog[512];
-        glGetShaderInfoLog(GetGPUObject().intHandle, 512, nullptr, infoLog);
+        CH_GL_CALL(glGetShaderInfoLog(GetGPUObject().intHandle, 512, nullptr, infoLog));
         LOGE << "[ShaderInstanceGL]: Compilation failed with " << infoLog << std::endl;
         return Error::ERR_COMPILATION_FAILED;
     }
