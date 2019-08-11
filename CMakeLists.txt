@@ -13,20 +13,6 @@ else ()
     set (CMAKE_CXX_FLAGS "-std=c++11")
 endif (${MSVC})
 
-# ---------- Build type flags ----------
-if (BUILD_DEBUG)
-    add_definitions (-DBUILD_DEBUG)
-    set (CMAKE_BUILD_TYPE Debug)
-    if (APPLE)
-        set(CMAKE_MACOSX_RPATH 1)
-    endif ()
-else ()
-    set (CMAKE_BUILD_TYPE RelWithDebInfo)
-    if (APPLE)
-        set(CMAKE_MACOSX_RPATH 0)
-    endif ()
-endif ()
-
 # ---------- Setup the executable output directory ----------
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/out/bin CACHE PATH "Single directory for all executables.")
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/out/lib CACHE PATH "Single directory for all executables.")
@@ -47,6 +33,7 @@ option (_CODEHERO_DRIVER_FREETYPE "Enable FreeType driver" ON)
 option (_CODEHERO_DRIVER_ASSIMP "Enable Assimp driver" ON)
 option (_CODEHERO_DRIVER_PUGIXML "Enable PugiXML driver" ON)
 option (_CODEHERO_BUILD_TESTS "Build the unit tests" OFF)
+option (_CODEHERO_BUILD_DEBUG "Build in debug configuration" OFF)
 
 ##### Options overview #####
 message ("*** Configure options:")
@@ -57,10 +44,25 @@ message ("DRIVER_TGA: " ${_CODEHERO_DRIVER_TGA})
 message ("DRIVER_ASSIMP: " ${_CODEHERO_DRIVER_ASSIMP})
 message ("DRIVER_PUGIXML: " ${_CODEHERO_DRIVER_PUGIXML})
 message ("BUILD_TESTS: " ${_CODEHERO_BUILD_TESTS})
+message ("BUILD_DEBUG: " ${_CODEHERO_BUILD_DEBUG})
 message ("DRIVER_FREETYPE: " ${_CODEHERO_DRIVER_FREETYPE})
 message ("VENDORS_PATH: " ${VENDORS_PATH})
 message ("")
 #####
+
+# ---------- Build type flags ----------
+if (_CODEHERO_BUILD_DEBUG)
+    add_definitions (-DBUILD_DEBUG)
+    set (CMAKE_BUILD_TYPE Debug)
+    if (APPLE)
+        set(CMAKE_MACOSX_RPATH 1)
+    endif ()
+else ()
+    set (CMAKE_BUILD_TYPE RelWithDebInfo)
+    if (APPLE)
+        set(CMAKE_MACOSX_RPATH 0)
+    endif ()
+endif ()
 
 # ---------- GLFW ----------
 option (GLFW_BUILD_DOCS OFF)
