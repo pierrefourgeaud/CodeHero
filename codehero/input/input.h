@@ -22,7 +22,7 @@ public:
     OBJECT(Input, System)
 
     explicit Input(const std::shared_ptr<EngineContext>& iContext);
-    ~Input();
+    ~Input() override;
 
     Error Initialize() override;
     Error Cleanup() override { return OK; }

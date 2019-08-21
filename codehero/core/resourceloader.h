@@ -28,7 +28,7 @@ public:
     OBJECT_TEMPLATE(ResourceLoader, T, System)
 
     explicit ResourceLoader(std::shared_ptr<EngineContext>& iContext) : System(iContext) {}
-    virtual ~ResourceLoader() {}
+    ~ResourceLoader() override {}
     ResourceLoader(const ResourceLoader&) = delete;
     ResourceLoader& operator=(const ResourceLoader&) = delete;
 

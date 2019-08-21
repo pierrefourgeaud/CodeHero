@@ -18,7 +18,7 @@ public:
     OBJECT(Time, System)
 
     explicit Time(const std::shared_ptr<EngineContext>& iContext);
-    ~Time();
+    ~Time() override;
 
     Error Initialize() override;
     Error Cleanup() override { return OK; }

@@ -84,7 +84,7 @@ public:
     OBJECT(RenderSystem, System)
 
     explicit RenderSystem(const std::shared_ptr<EngineContext>& iContext) : System(iContext) {}
-    virtual ~RenderSystem() {}
+    ~RenderSystem() override {}
 
     virtual void PollEvents() = 0;
     virtual void ClearFrameBuffer() = 0;
