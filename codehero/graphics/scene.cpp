@@ -7,6 +7,7 @@
 #include <queue>
 #include "core/type_traits/objectdefinition.h"
 #include "graphics/batch.h"
+#include "graphics/camera.h"
 #include "graphics/light.h"
 #include "graphics/mesh.h"
 #include "graphics/model.h"
@@ -75,12 +76,13 @@ void Scene::PrepareVertexLights() {
     }
 }
 
-std::vector<Batch> Scene::GetBatches() {
+std::vector<Batch> Scene::GetBatches(const std::shared_ptr<Camera>& iCamera) {
     std::queue<Node*> m_NodesToProcess;
     m_NodesToProcess.push(this);
 
     std::vector<Batch> batches;
 
+    auto cameraPos = iCamera->GetNode()->GetWorldTransform().Translation();
     while (!m_NodesToProcess.empty()) {
         Node* node = m_NodesToProcess.front();
         m_NodesToProcess.pop();
@@ -104,11 +106,22 @@ std::vector<Batch> Scene::GetBatches() {
                 case Drawable::DT_Geometry: {
                     Model* model = static_cast<Model*>(drawable.get());
                     size_t nbMeshes = model->GetMeshes().size();
+                    auto worldTransform = node->GetWorldTransform();
                     for (size_t m = 0; m < nbMeshes; ++m) {
                         Batch b;
                         b.SetMaterial(model->GetMeshes()[m]->GetMaterial());
                         b.SetMesh(model->GetMeshes()[m]);
                         b.SetWorldTransform(node->GetWorldTransform());
+                        // TODO(pierre) This should probably be moved later. I guess
+                        // the get batches should be done only once but the scene
+                        // could be rendered multiple times from different cameras...
+                        auto center = b.GetMesh()->GetCenter();
+                        float distance = 0.0f;
+                        // Skybox should have a distance to camera of 0.0f
+                        if (model->GetTypeName() != "Skybox") {
+                            distance = ((worldTransform * center) - cameraPos).Length();
+                        }
+                        b.SetDistanceFromCamera(distance);
                         b.SetVertexDirLights(&m_VertexLights[Light::T_Directional]);
                         b.SetVertexPointLights(&m_VertexLights[Light::T_Point]);
                         batches.push_back(std::move(b));

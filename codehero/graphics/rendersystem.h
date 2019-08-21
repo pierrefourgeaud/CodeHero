@@ -24,6 +24,7 @@ class Vector3;
 class IndexBuffer;
 class VertexBuffer;
 class Viewport;
+class Color;
 
 enum PrimitiveType {
     PT_Points = 0,
@@ -98,6 +99,7 @@ class RenderSystem : public System {
     virtual void SetShaderParameter(const std::string& iParam, const Vector2& iVec) = 0;
     virtual void SetShaderParameter(const std::string& iParam, const Vector3& iVec) = 0;
     virtual void SetShaderParameter(const std::string& iParam, const Matrix4& iMat) = 0;
+    virtual void SetShaderParameter(const std::string& iParam, const Color& iColor) = 0;
     virtual void SetShaderParameter(const std::string& iParam,
                                     const float* iFloat,
                                     const uint32_t iCount) = 0;

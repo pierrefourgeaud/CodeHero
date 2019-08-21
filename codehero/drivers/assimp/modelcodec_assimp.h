@@ -33,7 +33,7 @@ class ModelCodecAssimp : public ResourceCodec<Model> {
 
    private:
     void _ProcessNode(aiNode* iNode, const aiScene* iScene, Model& oModel);
-    std::shared_ptr<Mesh> _ProcessMesh(aiMesh* iMesh, const aiScene* iScene);
+    std::shared_ptr<Mesh> _ProcessMesh(aiMesh* iMesh, const aiScene* iScene, aiNode* iNode);
     std::shared_ptr<Texture> _LoadMaterialTextures(aiMaterial* iMat, aiTextureType iType);
 
     std::string m_ModelDirectory;

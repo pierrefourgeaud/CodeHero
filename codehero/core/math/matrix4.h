@@ -71,8 +71,11 @@ class Matrix4 {
 
     void SetRotation(const Matrix3& iRotation);
 
+    Vector3 Translation() const;
+
     Matrix4 operator*(const Matrix4& iValue) const;
     Vector4 operator*(const Vector4& iVector) const;
+    Vector3 operator*(const Vector3& iVector) const;
 
     bool operator==(const Matrix4& iRhs) const;
 

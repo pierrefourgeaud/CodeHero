@@ -8,6 +8,7 @@
 #include <map>
 #include <string>
 #include "core/serializable.h"
+#include "graphics/rendersystem.h"
 #include "graphics/shader.h"
 
 namespace CodeHero {
@@ -33,6 +34,13 @@ class Technique : public Serializable {
     const ShaderDefines& GetShaderDefines(const Shader::Type& iShaderType) const;
     void SetShaderDefines(const Shader::Type& iShaderType, const ShaderDefines& iDefines);
 
+    void SetBlendModes(bool iBlendEnabled,
+                       const std::string& iSrcMode,
+                       const std::string& iDstMode);
+    bool IsBlendEnabled() const { return m_BlendEnabled; }
+    BlendMode GetSrcBlendMode() const { return m_SrcMode; }
+    BlendMode GetDstBlendMode() const { return m_DstMode; }
+
     void SetCachedShaderProgram(const std::shared_ptr<ShaderProgram>& iProgram);
     std::shared_ptr<ShaderProgram> GetCachedShaderProgram() const { return m_pCachedShaderProgram; }
 
@@ -41,6 +49,10 @@ class Technique : public Serializable {
     std::shared_ptr<Shader> m_pFragShader;
     ShaderDefines m_VtxShaderDefines;
     ShaderDefines m_FragShaderDefines;
+
+    bool m_BlendEnabled = false;
+    BlendMode m_SrcMode;
+    BlendMode m_DstMode;
 
     // Cached shaderProgram: This is computer on the first rendering this technique will be used
     // for.

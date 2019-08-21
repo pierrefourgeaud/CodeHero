@@ -16,6 +16,9 @@ namespace CodeHero {
 void Batch::Draw(RenderSystem& iRS, const std::shared_ptr<Camera>& iCamera) {
     if (m_pMaterial->HasTechnique()) {
         auto technique = m_pMaterial->GetTechnique();
+        iRS.SetBlendMode(technique->IsBlendEnabled(), technique->GetSrcBlendMode(),
+                         technique->GetDstBlendMode());
+
         auto shaderProgram = technique->GetCachedShaderProgram();
         if (!shaderProgram) {
             auto vtxShader = technique->GetShader(Shader::T_Vertex)
@@ -48,6 +51,7 @@ void Batch::Draw(RenderSystem& iRS, const std::shared_ptr<Camera>& iCamera) {
         iRS.SetShaderParameter("material.shininess", 32.0f);
         iRS.SetShaderParameter("material.textureCoordsOffset",
                                m_pMaterial->GetTextureCoordsOffset());
+        iRS.SetShaderParameter("material.diffuseColor", m_pMaterial->GetDiffuseColor());
     } else {
         // TODO(pierre) Provide default technique if none was set (or set a default one
         // automatically)
@@ -91,6 +95,10 @@ void Batch::SetMesh(const std::shared_ptr<Mesh>& iMesh) {
 
 void Batch::SetWorldTransform(const Matrix4& iWorldTransform) {
     m_WorldTransform = iWorldTransform;
+}
+
+void Batch::SetDistanceFromCamera(const float& iDistanceFromCamera) {
+    m_DistanceFromCamera = iDistanceFromCamera;
 }
 
 void Batch::SetVertexDirLights(std::vector<float>* iVertex) {

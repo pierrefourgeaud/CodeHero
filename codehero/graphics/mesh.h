@@ -8,7 +8,9 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
+
 #include "core/serializable.h"
+#include "graphics/boundingbox.h"
 
 namespace CodeHero {
 
@@ -44,11 +46,21 @@ class Mesh : public Serializable {
     Bone* GetByName(const std::string& iName);
     size_t BoneSize() const;
 
+    // TODO(pierre) Most likely to remove
+    void SetBoundingBox(const BoundingBox& iBox) { m_BoundingBox = iBox; }
+    const BoundingBox& GetBoundingBox() const { return m_BoundingBox; }
+    void SetCenter(const Vector3& iCenter) { m_Center = iCenter; }
+    const Vector3& GetCenter() const { return m_Center; }
+
    private:
     std::shared_ptr<VertexBuffer> m_pVertices;
     std::shared_ptr<IndexBuffer> m_pIndices;
     std::shared_ptr<Material> m_pMaterial;
     std::vector<Bone> m_Bones;
+
+    // TODO(pierre) Most likely to remove too
+    BoundingBox m_BoundingBox;
+    Vector3 m_Center;
 };
 
 } // namespace CodeHero

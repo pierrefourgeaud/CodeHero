@@ -33,6 +33,7 @@ class RenderSystemGL : public RenderSystem {
     void SetShaderParameter(const std::string& iParam, const Vector2& iVec) final override;
     void SetShaderParameter(const std::string& iParam, const Vector3& iVec) final override;
     void SetShaderParameter(const std::string& iParam, const Matrix4& iMat) final override;
+    void SetShaderParameter(const std::string& iParam, const Color& iColor) final override;
     void SetShaderParameter(const std::string& iParam,
                             const float* iFloat,
                             const uint32_t iCount) final override;

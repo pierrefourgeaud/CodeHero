@@ -24,17 +24,20 @@ class Batch {
     void SetMaterial(const std::shared_ptr<Material>& iMaterial);
     void SetMesh(const std::shared_ptr<Mesh>& iMesh);
     void SetWorldTransform(const Matrix4& iWorldTransform);
+    void SetDistanceFromCamera(const float& iDistanceFromCamera);
     void SetVertexDirLights(std::vector<float>* iVertex);
     void SetVertexPointLights(std::vector<float>* iVertex);
 
     std::shared_ptr<Material> GetMaterial() const { return m_pMaterial; }
     std::shared_ptr<Mesh> GetMesh() const { return m_pMesh; }
     const Matrix4& GetWorldTransform() const { return m_WorldTransform; }
+    float GetDistanceFromCamera() const { return m_DistanceFromCamera; }
 
    private:
     std::shared_ptr<Material> m_pMaterial;
     std::shared_ptr<Mesh> m_pMesh;
     Matrix4 m_WorldTransform;
+    float m_DistanceFromCamera;
 
     // WeakPtrs here. The lights are guarantied to outlive the batch
     std::vector<float>* m_pVertexDirLights = nullptr;

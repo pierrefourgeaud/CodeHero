@@ -11,6 +11,7 @@
 #include "rendersystems/GL/rendersystemGL.h"
 
 #include <logger.h>
+#include "core/color.h"
 #include "core/math/matrix4.h"
 #include "core/math/vector3.h"
 #include "graphics/viewport.h"
@@ -77,6 +78,9 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, int32_t iValu
             const ShaderParameter& info = shader->GetParameter(iParam);
 
             CH_GL_CALL(glUniform1i(info.location, iValue));
+        } else {
+            LOGD2 << "[RenderSystemGL]: Failed to find shader parameter `" << iParam << "`."
+                  << std::endl;
         }
     }
 }
@@ -88,6 +92,9 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, float iValue)
             const ShaderParameter& info = shader->GetParameter(iParam);
 
             CH_GL_CALL(glUniform1f(info.location, iValue));
+        } else {
+            LOGD2 << "[RenderSystemGL]: Failed to find shader parameter `" << iParam << "`."
+                  << std::endl;
         }
     }
 }
@@ -103,6 +110,9 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Vector2
                 case GL_FLOAT_VEC2: CH_GL_CALL(glUniform2fv(info.location, 1, iVec.Data())); break;
                 default: break;
             }
+        } else {
+            LOGD2 << "[RenderSystemGL]: Failed to find shader parameter `" << iParam << "`."
+                  << std::endl;
         }
     }
 }
@@ -119,6 +129,9 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Vector3
                 case GL_FLOAT_VEC3: CH_GL_CALL(glUniform3fv(info.location, 1, iVec.Data())); break;
                 default: break;
             }
+        } else {
+            LOGD2 << "[RenderSystemGL]: Failed to find shader parameter `" << iParam << "`."
+                  << std::endl;
         }
     }
 }
@@ -130,6 +143,23 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Matrix4
             const ShaderParameter& info = shader->GetParameter(iParam);
 
             CH_GL_CALL(glUniformMatrix4fv(info.location, 1, GL_FALSE, iMat.Data()));
+        } else {
+            LOGD2 << "[RenderSystemGL]: Failed to find shader parameter `" << iParam << "`."
+                  << std::endl;
+        }
+    }
+}
+
+void RenderSystemGL::SetShaderParameter(const std::string& iParam, const Color& iColor) {
+    if (GetShaderProgramInUse()) {
+        ShaderProgramGL* shader = static_cast<ShaderProgramGL*>(GetShaderProgramInUse());
+        if (shader->HasParameter(iParam)) {
+            const ShaderParameter& info = shader->GetParameter(iParam);
+
+            CH_GL_CALL(glUniform4fv(info.location, 1, iColor.Data()));
+        } else {
+            LOGD2 << "[RenderSystemGL]: Failed to find shader parameter `" << iParam << "`."
+                  << std::endl;
         }
     }
 }
@@ -164,6 +194,9 @@ void RenderSystemGL::SetShaderParameter(const std::string& iParam,
                     break;
                 default: break;
             }
+        } else {
+            LOGD2 << "[RenderSystemGL]: Failed to find shader parameter `" << iParam << "`."
+                  << std::endl;
         }
     }
 }

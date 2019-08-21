@@ -19,6 +19,7 @@ struct Material {
     sampler2D opacity;
     float shininess;
     vec2 textureCoordsOffset;
+    vec4 diffuseColor;
 };
 
 // [0] = ambient, [1] = diffuse, [2] = specular intensities
@@ -37,24 +38,14 @@ uniform PointLight pointLights[NB_POINT_LIGHTS];
 #endif
 uniform Material material;
 
-vec4 CalcLightBase(BaseLight light, vec3 lightDir, vec3 normal, vec3 viewDir) {
+vec4 CalcLightBase(BaseLight light, vec3 lightDir, vec3 normal, vec3 viewDir, vec4 diffTex) {
     // Diffuse shading
     float diff = max(dot(normal, lightDir), 0.0);
     // Specular shading
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     // Combine results
-    #ifdef DIFFUSEMAP
-        vec4 diffTex = texture(material.diffuse, GetTexCoords(material.textureCoordsOffset));
-        #ifdef ALPHAMASK
-            if (diffTex.a < 0.01) {
-                discard;
-            }
-        #endif
-    #else
-        // TODO(pierre): We should support diffuse color when loading material
-        vec4 diffTex = vec4(1.0, 1.0, 1.0, 1.0);
-    #endif
+    
     vec4 ambient = light[0] * diffTex;
     vec4 diffuse = light[1] * diff * diffTex;
 
@@ -69,15 +60,15 @@ vec4 CalcLightBase(BaseLight light, vec3 lightDir, vec3 normal, vec3 viewDir) {
 }
 
 // Calculates the color when using a directional light.
-vec4 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
+vec4 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec4 diffTex)
 {
-    return CalcLightBase(light[1], normalize(-light[0]), normal, viewDir);
+    return CalcLightBase(light[1], normalize(-light[0]), normal, viewDir, diffTex);
 }
 
 // Calculates the color when using a point light.
-vec4 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
+vec4 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec4 diffTex)
 {
-    vec4 color = CalcLightBase(light[1], normalize(light[0] - fragPos), normal, viewDir);
+    vec4 color = CalcLightBase(light[1], normalize(light[0] - fragPos), normal, viewDir, diffTex);
     // Attenuation
     float distance = length(light[0] - fragPos);
     float attenuation = (light[2][0] + light[2][1] * distance + light[2][2] * (distance * distance));

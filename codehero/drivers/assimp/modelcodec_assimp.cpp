@@ -3,16 +3,20 @@
 // found in the LICENSE file.
 
 #include "drivers/assimp/modelcodec_assimp.h"
+
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 #include <logger.h>
 #include <assimp/Importer.hpp>
+
 #include "core/enginecontext.h"
 #include "core/fileaccess.h"
+#include "core/math/utils.h"
 #include "core/resourceloader.h"
 #include "core/texture.h"
 #include "drivers/assimp/iosystem.h"
 #include "graphics/bone.h"
+#include "graphics/boundingbox.h"
 #include "graphics/indexbuffer.h"
 #include "graphics/material.h"
 #include "graphics/mesh.h"
@@ -22,6 +26,23 @@
 #include "graphics/vertexbuffer.h"
 
 namespace CodeHero {
+
+// Found example to navigate the transform here:
+// http://sir-kimmi.de/assimp/lib_html/data.html#hierarchy
+aiMatrix4x4 GetMeshTransform(aiNode* iNode, aiNode* iRootNode) {
+    if (iNode == iRootNode) {
+        return {}; // Identity matrix
+    } else {
+        aiMatrix4x4 transform = iNode->mTransformation;
+        while (iNode && iNode != iRootNode) {
+            iNode = iNode->mParent;
+            if (iNode) {
+                transform = iNode->mTransformation * transform;
+            }
+        }
+        return transform;
+    }
+}
 
 ModelCodecAssimp::ModelCodecAssimp(const std::shared_ptr<EngineContext>& iContext)
     : ResourceCodec<Model>(iContext) {
@@ -53,7 +74,7 @@ void ModelCodecAssimp::_ProcessNode(aiNode* iNode, const aiScene* iScene, Model&
     // Process all the node's meshes (if any)
     for (uint32_t i = 0; i < iNode->mNumMeshes; ++i) {
         aiMesh* mesh = iScene->mMeshes[iNode->mMeshes[i]];
-        oModel.AddMesh(_ProcessMesh(mesh, iScene));
+        oModel.AddMesh(_ProcessMesh(mesh, iScene, iNode));
     }
 
     // Then do the same for each of its children
@@ -62,7 +83,9 @@ void ModelCodecAssimp::_ProcessNode(aiNode* iNode, const aiScene* iScene, Model&
     }
 }
 
-std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh, const aiScene* iScene) {
+std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh,
+                                                     const aiScene* iScene,
+                                                     aiNode* iNode) {
     auto mesh = std::make_shared<Mesh>(m_pContext);
 
     std::shared_ptr<VertexBuffer> vertex(
@@ -85,7 +108,9 @@ std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh, const aiScen
     size_t vertexSize = vertex->GetComponentsNumber();
     std::vector<float> vertexData(iMesh->mNumVertices * vertexSize);
     size_t dest = 0;
+    BoundingBox box;
     for (uint32_t i = 0; i < iMesh->mNumVertices; ++i) {
+        box.Merge(Vector3(iMesh->mVertices[i].x, iMesh->mVertices[i].y, iMesh->mVertices[i].z));
         vertexData[dest++] = iMesh->mVertices[i].x;
         vertexData[dest++] = iMesh->mVertices[i].y;
         vertexData[dest++] = iMesh->mVertices[i].z;
@@ -110,15 +135,31 @@ std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh, const aiScen
         }
     }
     vertex->SetSubData(&vertexData[0], 0, iMesh->mNumVertices);
+    mesh->SetBoundingBox(box);
+
+    // Translate the ai transform matrix into a CodeHero transform matrix
+    aiVector3D pos, scale;
+    aiQuaternion rot;
+    auto transform = GetMeshTransform(iNode, iScene->mRootNode);
+    transform.Decompose(scale, rot, pos);
+    Matrix4 meshTransform(Vector3(pos.x, pos.y, pos.z), Quaternion(rot.w, rot.x, rot.y, rot.z),
+                          Vector3(scale.x, scale.y, scale.z));
+
     // Process indices
+    Vector3 meshCenter;
     std::vector<uint32_t> indices;
     for (uint32_t i = 0; i < iMesh->mNumFaces; ++i) {
         aiFace face = iMesh->mFaces[i];
         // Retrieve all indices of the face and store them in the indices vector
         for (uint32_t j = 0; j < face.mNumIndices; ++j) {
             indices.push_back(face.mIndices[j]);
+
+            aiVector3D& mVertices = iMesh->mVertices[iMesh->mFaces[i].mIndices[j]];
+            meshCenter += meshTransform * Vector3(mVertices.x, mVertices.y, mVertices.z);
         }
     }
+    meshCenter /= indices.size();
+    mesh->SetCenter(meshCenter);
     std::shared_ptr<IndexBuffer> indexBuffer(
         m_pContext->GetSubsystem<RenderSystem>()->CreateIndexBuffer());
     indexBuffer->SetData(&indices[0], indices.size());
@@ -143,6 +184,31 @@ std::shared_ptr<Mesh> ModelCodecAssimp::_ProcessMesh(aiMesh* iMesh, const aiScen
         if (specular) {
             techniqueName += "Specular";
         }
+    }
+
+    Color diffuseColor = Color::White;
+    aiColor3D colorVal;
+    if (aMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, colorVal) == AI_SUCCESS) {
+        diffuseColor = Color(colorVal.r, colorVal.g, colorVal.b);
+    }
+
+    float floatVal;
+    bool hasAlpha = false;
+    if (aMaterial->Get(AI_MATKEY_OPACITY, floatVal) == AI_SUCCESS) {
+        if (floatVal < Epsilon()) {
+            floatVal = 1.0f;
+        }
+
+        if (floatVal < 1.0f) {
+            hasAlpha = true;
+        }
+
+        diffuseColor.a(floatVal);
+    }
+    material->SetDiffuseColor(diffuseColor);
+
+    if (hasAlpha) {
+        techniqueName += "Alpha";
     }
 
     // TODO(pierre) I am not completely sure this can be standalone. Can this one be

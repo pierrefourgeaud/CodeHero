@@ -38,10 +38,9 @@ class Scene : public Node {
 
     // TODO(pierre) There is optimization that should be done here
     //    - We can use a good data structure to help localization of object, and by default not
-    //    process the too far/
-    //      not visible ones
+    //    process the too far/not visible ones
     //    - We should use a worker queue to retrieve the batches
-    std::vector<Batch> GetBatches();
+    std::vector<Batch> GetBatches(const std::shared_ptr<Camera>& iCamera);
 
     const UnorderedMap<Light::Type, std::vector<float>>& GetVertexLights() const {
         return m_VertexLights;

@@ -163,6 +163,10 @@ void Matrix4::SetRotation(const Matrix3& iMat3) {
     m[3][3] = 1.0f;
 }
 
+Vector3 Matrix4::Translation() const {
+    return Vector3(m[3][0], m[3][1], m[3][2]);
+}
+
 Matrix4 Matrix4::operator*(const Matrix4& iValue) const {
     Matrix4 mat;
 
@@ -184,6 +188,19 @@ Vector4 Matrix4::operator*(const Vector4& iVector) const {
                 iVector.w() * m[2][3],
             iVector.x() * m[3][0] + iVector.y() * m[3][1] + iVector.z() * m[3][2] +
                 iVector.w() * m[3][3]};
+}
+
+Vector3 Matrix4::operator*(const Vector3& iVector) const {
+    float inverseW =
+        1.0f / (iVector.x() * m[3][0] + iVector.y() * m[3][1] + iVector.z() * m[3][2] + m[3][3]);
+
+    return Vector3(
+        (iVector.x() * m[0][0] + iVector.y() * m[0][1] + iVector.z() * m[0][2] + m[0][3]) *
+            inverseW,
+        (iVector.x() * m[1][0] + iVector.y() * m[1][1] + iVector.z() * m[1][2] + m[1][3]) *
+            inverseW,
+        (iVector.x() * m[2][0] + iVector.y() * m[2][1] + iVector.z() * m[2][2] + m[2][3]) *
+            inverseW);
 }
 
 bool Matrix4::operator==(const Matrix4& iRhs) const {

@@ -3,11 +3,31 @@
 // found in the LICENSE file.
 
 #include "graphics/technique.h"
+
+#include <map>
+
 #include "core/assert.h"
 #include "core/type_traits/attributeaccessor.h"
 #include "core/type_traits/objectdefinition.h"
+#include "core/utils.h"
 
 namespace CodeHero {
+
+std::map<std::string, BlendMode> blendNamesMapping = {
+    {"zero", BM_Zero},
+    {"one", BM_One},
+    {"srccolor", BM_SrcColor},
+    {"oneminussrccolor", BM_OneMinusSrcColor},
+    {"dstcolor", BM_DstColor},
+    {"oneminusdstcolor", BM_OneMinusDstColor},
+    {"srcalpha", BM_SrcAlpha},
+    {"oneminussrcalpha", BM_OneMinusSrcAlpha},
+    {"dstalpha", BM_DstAlpha},
+    {"oneminusdstalpha", BM_OneMinusDstAlpha},
+    {"constantcolor", BM_ConstantColor},
+    {"oneminusconstantcolor", BM_OneMinusConstantColor},
+    {"constantalpha", BM_ConstantAlpha},
+    {"oneminusconstantalpha", BM_OneMinusConstantAlpha}};
 
 void Technique::RegisterObject(const std::shared_ptr<EngineContext>& iContext) {
     CH_REGISTER_OBJECT(Technique);
@@ -32,6 +52,18 @@ void Technique::RegisterObject(const std::shared_ptr<EngineContext>& iContext) {
                                [](Technique* iPtr, const VariantHashMap& iDefines) {
                                    iPtr->SetShaderDefines(Shader::T_Fragment, iDefines);
                                });
+
+    CH_OBJECT_ATTRIBUTE_CUSTOM(
+        Technique, "BlendModes", std::string, Variant::Value::VVT_String, nullptr,
+        [](Technique* iPtr, const std::string& iBlendModes) {
+            auto modes = Split(iBlendModes);
+            if (modes.size() != 2) {
+                LOGW << "[Technique]: Failed to load blend modes, not 2 were provided.";
+                return;
+            }
+
+            iPtr->SetBlendModes(true, modes[0], modes[1]);
+        });
 }
 
 std::shared_ptr<Technique> Technique::Create(const std::shared_ptr<EngineContext>& iContext) {
@@ -95,6 +127,27 @@ void Technique::SetShaderDefines(const Shader::Type& iShaderType, const ShaderDe
 
     if (m_pCachedShaderProgram) {
         m_pCachedShaderProgram.reset();
+    }
+}
+
+void Technique::SetBlendModes(bool iBlendEnabled,
+                              const std::string& iSrcMode,
+                              const std::string& iDstMode) {
+    m_BlendEnabled = iBlendEnabled;
+    if (iBlendEnabled) {
+        if (blendNamesMapping.find(iSrcMode) == blendNamesMapping.end()) {
+            LOGW << "[Technique::SetBlendModes] SrcMode `" << iSrcMode << "` not found."
+                 << std::endl;
+            return;
+        }
+
+        if (blendNamesMapping.find(iDstMode) == blendNamesMapping.end()) {
+            LOGW << "[Technique::SetBlendModes] DstMode `" << iDstMode << "` not found."
+                 << std::endl;
+            return;
+        }
+        m_SrcMode = blendNamesMapping[iSrcMode];
+        m_DstMode = blendNamesMapping[iDstMode];
     }
 }
 

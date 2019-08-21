@@ -63,8 +63,8 @@
 #include "drivers/xml/serializablecodec_xml.h"
 #endif // DRIVER_PUGIXML
 
-const uint32_t g_Width = 1920;
-const uint32_t g_Height = 1260;
+const uint32_t g_Width = 1280;
+const uint32_t g_Height = 800;
 
 namespace CodeHero {
 
@@ -147,7 +147,6 @@ Error Main::Run() {
     Time* time = m_pContext->GetSubsystem<Time>();
 
     RenderSystem* rs = m_pContext->GetSubsystem<RenderSystem>();
-    rs->SetBlendMode(true, BM_SrcAlpha, BM_OneMinusSrcAlpha);
     rs->SetCullMode(true);
 
     std::shared_ptr<RenderWindow> mainWindow = rs->GetWindow();
@@ -304,7 +303,7 @@ Error Main::Run() {
 }
 
 void Main::_Initialize() {
-    SimpleLogger::ReportingLevel() = ELogLevel::Debug2;
+    SimpleLogger::ReportingLevel() = ELogLevel::Debug1;
 
     m_pFileLogger.reset(new FileLogger());
     SimpleLogger::AddListener(m_pFileLogger.get());

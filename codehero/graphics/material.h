@@ -7,6 +7,8 @@
 
 #include <memory>
 #include <unordered_map>
+
+#include "core/color.h"
 #include "core/math/vector2.h"
 #include "core/serializable.h"
 #include "core/unordered_map.h"
@@ -43,6 +45,7 @@ class Material : public Serializable {
     bool GetCullEnabled() const { return m_CullEnabled; }
     bool GetDepthTest() const { return m_DepthTest; }
     const Vector2& GetTextureCoordsOffset() const { return m_TextureCoordsOffset; }
+    const Color& GetDiffuseColor() const { return m_DiffuseColor; }
 
     void SetTextures(const TextureUnitsMaps& iTextures);
     void SetTexture(TextureUnit iUnit, const std::shared_ptr<Texture>& iTexture);
@@ -53,6 +56,8 @@ class Material : public Serializable {
 
     void SetCullEnabled(bool iEnabled) { m_CullEnabled = iEnabled; }
     void SetDepthTest(bool iEnabled) { m_DepthTest = iEnabled; }
+
+    void SetDiffuseColor(const Color& iColor) { m_DiffuseColor = iColor; }
 
     bool HasTexture(TextureUnit iUnit) const;
     bool HasTechnique() const { return !!m_pTechnique; }
@@ -65,6 +70,8 @@ class Material : public Serializable {
 
     bool m_CullEnabled = false;
     bool m_DepthTest = true;
+
+    Color m_DiffuseColor = Color::White;
 };
 
 } // namespace CodeHero

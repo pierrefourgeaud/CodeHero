@@ -98,4 +98,12 @@ Vector3& Vector3::operator+=(const Vector3& iRhs) {
     return *this;
 }
 
+Vector3& Vector3::operator/=(float iValue) {
+    float invVal = 1.0f / iValue;
+    m_Vec[0] *= invVal;
+    m_Vec[1] *= invVal;
+    m_Vec[2] *= invVal;
+    return *this;
+}
+
 } // namespace CodeHero

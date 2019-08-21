@@ -42,6 +42,7 @@ class Vector3 {
     Vector3& operator*=(const Vector3& iRhs);
     Vector3& operator*=(const float iScalar);
     Vector3& operator+=(const Vector3& iRhs);
+    Vector3& operator/=(float iValue);
     Vector3 operator-() const { return Vector3(-m_Vec[0], -m_Vec[1], -m_Vec[2]); }
 
     const float* Data() const { return m_Vec; }

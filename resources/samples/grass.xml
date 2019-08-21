@@ -2,7 +2,7 @@
   <attribute name="Meshes">
     <Plane>
       <Material>
-        <Technique path="./resources/samples/technique_Diffuse.xml" />
+        <Technique path="./resources/samples/technique_DiffuseAlpha.xml" />
         <attribute name="Texture Diffuse">
           <Texture>
             <attribute name="WrapMode U" value="TWM_ClampEdge" />

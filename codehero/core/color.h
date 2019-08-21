@@ -18,6 +18,13 @@ class Color {
     float b() const { return m_Rgba[2]; }
     float a() const { return m_Rgba[3]; }
 
+    void r(float iComponent) { m_Rgba[0] = iComponent; }
+    void g(float iComponent) { m_Rgba[1] = iComponent; }
+    void b(float iComponent) { m_Rgba[2] = iComponent; }
+    void a(float iComponent) { m_Rgba[3] = iComponent; }
+
+    const float* Data() const { return m_Rgba; }
+
     static const Color Black;
     static const Color White;
     static const Color Red;
