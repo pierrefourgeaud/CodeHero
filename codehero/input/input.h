@@ -21,7 +21,7 @@ class Input : public System {
 public:
     OBJECT(Input, System)
 
-    Input(const std::shared_ptr<EngineContext>& iContext);
+    explicit Input(const std::shared_ptr<EngineContext>& iContext);
     ~Input();
 
     Error Initialize() override;

@@ -27,7 +27,7 @@ class ResourceLoader : public System {
 public:
     OBJECT_TEMPLATE(ResourceLoader, T, System)
 
-    ResourceLoader(std::shared_ptr<EngineContext>& iContext) : System(iContext) {}
+    explicit ResourceLoader(std::shared_ptr<EngineContext>& iContext) : System(iContext) {}
     virtual ~ResourceLoader() {}
     ResourceLoader(const ResourceLoader&) = delete;
     ResourceLoader& operator=(const ResourceLoader&) = delete;

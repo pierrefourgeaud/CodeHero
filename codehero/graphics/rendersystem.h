@@ -83,7 +83,7 @@ class RenderSystem : public System {
 public:
     OBJECT(RenderSystem, System)
 
-    RenderSystem(const std::shared_ptr<EngineContext>& iContext) : System(iContext) {}
+    explicit RenderSystem(const std::shared_ptr<EngineContext>& iContext) : System(iContext) {}
     virtual ~RenderSystem() {}
 
     virtual void PollEvents() = 0;

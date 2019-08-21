@@ -14,7 +14,7 @@ class System : public Object {
 public:
     OBJECT(System, Object);
 
-    System(const std::shared_ptr<EngineContext>& iContext) : Object(iContext) {}
+    explicit System(const std::shared_ptr<EngineContext>& iContext) : Object(iContext) {}
     virtual ~System() {}
 
     virtual Error Initialize() = 0;

@@ -17,7 +17,7 @@ class Time : public System {
 public:
     OBJECT(Time, System)
 
-    Time(const std::shared_ptr<EngineContext>& iContext);
+    explicit Time(const std::shared_ptr<EngineContext>& iContext);
     ~Time();
 
     Error Initialize() override;
