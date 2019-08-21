@@ -127,6 +127,7 @@ set (SOURCES
      # Graphics
      ${SRCS_PATH}/graphics/bone.cpp
      ${SRCS_PATH}/graphics/batch.cpp
+     ${SRCS_PATH}/graphics/boundingbox.cpp
      ${SRCS_PATH}/graphics/camera.cpp
      ${SRCS_PATH}/graphics/cube.cpp
      ${SRCS_PATH}/graphics/drawable.cpp
@@ -211,6 +212,7 @@ set (HEADERS
      # Graphics
      ${SRCS_PATH}/graphics/batch.h
      ${SRCS_PATH}/graphics/bone.h
+     ${SRCS_PATH}/graphics/boundingbox.h
      ${SRCS_PATH}/graphics/camera.h
      ${SRCS_PATH}/graphics/cube.h
      ${SRCS_PATH}/graphics/drawable.h
