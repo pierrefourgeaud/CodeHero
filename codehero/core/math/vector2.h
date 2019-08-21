@@ -10,7 +10,7 @@
 namespace CodeHero {
 
 class Vector2 {
-   public:
+public:
     Vector2() {}
     Vector2(float iX, float iY);
     ~Vector2() {}
@@ -45,12 +45,12 @@ class Vector2 {
         return Vector2(m_Vec[0] * iScalar, m_Vec[1] * iScalar);
     }
 
-   private:
+private:
     float m_Vec[2] = {0};
 };
 
 class IntVector2 {
-   public:
+public:
     IntVector2() {}
     IntVector2(int32_t iX, int32_t iY);
     ~IntVector2() {}
@@ -70,7 +70,7 @@ class IntVector2 {
         return IntVector2(m_Vec[0] - iRhs.m_Vec[0], m_Vec[1] - iRhs.m_Vec[1]);
     }
 
-   private:
+private:
     int32_t m_Vec[2] = {0};
 };
 

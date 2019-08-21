@@ -12,7 +12,7 @@
 namespace CodeHero {
 
 class Camera : public Drawable {
-   public:
+public:
     OBJECT(Camera, Drawable)
 
     Camera(const std::shared_ptr<EngineContext>& iContext);
@@ -26,7 +26,7 @@ class Camera : public Drawable {
     const Matrix4& GetView();
     const Matrix4& GetProjection();
 
-   private:
+private:
     // Cached view matrix
     Matrix4 m_View;
     // Cached project matrix

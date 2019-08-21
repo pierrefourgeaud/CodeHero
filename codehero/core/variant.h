@@ -26,7 +26,7 @@ using VariantHashMap = std::map<std::string, std::string>;
 using VariantArray = std::vector<std::string>;
 
 class Variant {
-   public:
+public:
     union Value {
         enum Type {
             VVT_None = 0,
@@ -109,7 +109,7 @@ class Variant {
 
     bool IsMapType() const { return m_Type == Value::Type::VVT_HashMap; }
 
-   private:
+private:
     Value m_Value;
     Value::Type m_Type;
 };

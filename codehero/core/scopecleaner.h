@@ -11,11 +11,11 @@ namespace CodeHero {
 
 template <class T>
 class ScopeCleaner {
-   public:
+public:
     ScopeCleaner(T&& iAction) : m_Action(std::move(iAction)) {}
     ~ScopeCleaner() { m_Action(); }
 
-   private:
+private:
     T m_Action;
 };
 

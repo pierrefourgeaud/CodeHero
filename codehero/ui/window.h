@@ -19,7 +19,7 @@ class Font;
 class UIBatch;
 
 class Window : public UIElement {
-   public:
+public:
     enum Flags { F_NoFlags = 0x0, F_NoHeader = 0x1 };
 
     explicit Window(std::shared_ptr<EngineContext>& iContext);
@@ -34,7 +34,7 @@ class Window : public UIElement {
 
     Vector2 GetLayoutPosition() const override;
 
-   private:
+private:
     Vector2 m_Size;
     std::string m_HeaderText;
     Flags m_Flags = F_NoFlags;

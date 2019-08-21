@@ -12,13 +12,13 @@
 namespace CodeHero {
 
 class ShaderInstanceGL : public ShaderInstance {
-   public:
+public:
     explicit ShaderInstanceGL(const std::shared_ptr<EngineContext>& iContext);
     ~ShaderInstanceGL() override;
 
     Error Compile() override;
 
-   private:
+private:
     // Compilation methods
     Error _CreateShader(const std::string& iFilePath);
     Error _AddDefinesToCode(std::string& ioCode);

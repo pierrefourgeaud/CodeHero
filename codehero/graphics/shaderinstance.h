@@ -16,7 +16,7 @@ namespace CodeHero {
 class Shader;
 
 class ShaderInstance : public Serializable, public GPUObject {
-   public:
+public:
     OBJECT(ShaderInstance, Serializable)
 
     explicit ShaderInstance(const std::shared_ptr<EngineContext>& iContext)
@@ -30,7 +30,7 @@ class ShaderInstance : public Serializable, public GPUObject {
 
     bool IsCompiled() const { return m_IsCompiled; }
 
-   protected:
+protected:
     bool m_IsCompiled = false;
 
     std::weak_ptr<Shader> m_pOwner;

@@ -16,7 +16,7 @@ namespace CodeHero {
 // - Diffuse lighting
 // - Specular lighting
 class Light : public Drawable {
-   public:
+public:
     enum Type { T_Point, T_Directional, T_Spot };
 
     OBJECT(Light, Drawable)
@@ -52,7 +52,7 @@ class Light : public Drawable {
     float GetQuadratic() const;
     // End Getter/Setter
 
-   private:
+private:
     Type m_LightType;
 
     // Directional lights only

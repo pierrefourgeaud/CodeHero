@@ -18,7 +18,7 @@ class EngineContext;
 class ShaderInstance;
 
 class Shader : public Serializable, public std::enable_shared_from_this<Shader> {
-   public:
+public:
     enum Type : uint8_t { T_Vertex = 0, T_Fragment };
 
     OBJECT(Shader, Serializable)
@@ -37,7 +37,7 @@ class Shader : public Serializable, public std::enable_shared_from_this<Shader> 
     const std::string& GetShaderCode() const { return m_ShaderCode; }
     std::shared_ptr<ShaderInstance> GetInstance(const std::map<std::string, std::string>& iDefines);
 
-   private:
+private:
     Type m_Type;
     bool m_IsLoaded = false;
     std::string m_ShaderFilePath;

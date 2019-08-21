@@ -14,7 +14,7 @@ class VertexBuffer;
 class IndexBuffer;
 
 class UIBatch {
-   public:
+public:
     void SetTexture(std::shared_ptr<Texture> iTexture);
     void SetVertexBuffer(std::shared_ptr<VertexBuffer> iVertexBuffer,
                          uint32_t iStart = 0,
@@ -27,7 +27,7 @@ class UIBatch {
     uint32_t GetStart() const { return m_Start; }
     uint32_t GetCount() const { return m_Count; }
 
-   private:
+private:
     std::shared_ptr<Texture> m_pTexture;
     std::shared_ptr<VertexBuffer> m_pVertexBuffer;
     std::shared_ptr<IndexBuffer> m_pIndexBuffer;

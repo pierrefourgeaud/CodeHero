@@ -19,7 +19,7 @@ class Font;
 class UIBatch;
 
 class Button : public UIElement {
-   public:
+public:
     explicit Button(std::shared_ptr<EngineContext>& iContext);
 
     void SetText(const std::string& iText);
@@ -29,7 +29,7 @@ class Button : public UIElement {
 
     void GetBatches(std::vector<UIBatch>& oBatches) override;
 
-   private:
+private:
     Vector2 m_Size;
     std::string m_Text;
 };

@@ -25,7 +25,7 @@ struct FontFaceGlyph {
 };
 
 class FontFace {
-   public:
+public:
     FontFace(Font& iFont);
     virtual ~FontFace() {}
 
@@ -34,7 +34,7 @@ class FontFace {
     float GetAscender() const { return m_Ascender; }
     float GetMaxHeight() const { return m_MaxHeight; }
 
-   protected:
+protected:
     Font& m_rFont;
     std::map<uint32_t, FontFaceGlyph> m_Glyphs;
 

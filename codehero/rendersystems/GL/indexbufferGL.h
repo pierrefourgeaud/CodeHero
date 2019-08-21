@@ -10,14 +10,14 @@
 namespace CodeHero {
 
 class IndexBufferGL : public IndexBuffer {
-   public:
+public:
     IndexBufferGL();
     ~IndexBufferGL();
 
     void Use() override;
     void Unuse() override;
 
-   protected:
+protected:
     void _SetDataImpl(const void* iData) override;
 };
 

@@ -12,7 +12,7 @@ class Serializable;
 class Variant;
 
 class AttributeAccessor {
-   public:
+public:
     virtual ~AttributeAccessor() {}
 
     virtual Variant Get(const Serializable* iPtr) const = 0;

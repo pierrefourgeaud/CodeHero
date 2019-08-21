@@ -14,7 +14,7 @@ class Image;
 class FileAccess;
 
 class ImageCodecDDS : public ResourceCodec<Image> {
-   public:
+public:
     OBJECT(ImageCodeDDS, ResourceCodec<Image>)
 
     ImageCodecDDS(const std::shared_ptr<EngineContext>& iContext);
@@ -22,7 +22,7 @@ class ImageCodecDDS : public ResourceCodec<Image> {
 
     std::shared_ptr<Image> Load(FileAccess& iF, const std::string& iTypeName) override;
 
-   private:
+private:
 };
 
 } // namespace CodeHero

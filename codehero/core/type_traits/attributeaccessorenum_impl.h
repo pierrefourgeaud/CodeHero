@@ -13,7 +13,7 @@ namespace CodeHero {
 
 template <class Class, class Type, class GetFn, class SetFn>
 class AttributeAccessorEnumImpl : public AttributeAccessor {
-   public:
+public:
     using FromStringFn = std::function<Type(const std::string&)>;
     using ToStringFn = std::function<std::string(Type)>;
 
@@ -35,7 +35,7 @@ class AttributeAccessorEnumImpl : public AttributeAccessor {
         (classPtr->*m_pSet)(m_pFromString(iValue.GetString()));
     }
 
-   private:
+private:
     GetFn m_pGet;
     SetFn m_pSet;
     FromStringFn m_pFromString;
@@ -44,7 +44,7 @@ class AttributeAccessorEnumImpl : public AttributeAccessor {
 
 template <class Class, class Type, class SetFn>
 class AttributeAccessorEnumImpl<Class, Type, std::nullptr_t, SetFn> : public AttributeAccessor {
-   public:
+public:
     using FromStringFn = std::function<Type(const std::string&)>;
 
     AttributeAccessorEnumImpl(void*, SetFn iSet, const FromStringFn& iFromString, void*)
@@ -61,7 +61,7 @@ class AttributeAccessorEnumImpl<Class, Type, std::nullptr_t, SetFn> : public Att
         (classPtr->*m_pSet)(m_pFromString(iValue.Get<Type>()));
     }
 
-   private:
+private:
     SetFn m_pSet;
     FromStringFn m_pFromString;
 };

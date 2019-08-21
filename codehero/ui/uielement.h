@@ -16,7 +16,7 @@ class EngineContext;
 class Stylesheet;
 
 class UIElement : public std::enable_shared_from_this<UIElement> {
-   public:
+public:
     explicit UIElement(std::shared_ptr<EngineContext>& iContext);
     virtual ~UIElement() {}
 
@@ -42,13 +42,13 @@ class UIElement : public std::enable_shared_from_this<UIElement> {
     // from the element position (i.e. Window that have a header)
     virtual Vector2 GetLayoutPosition() const { return m_Position; }
 
-   protected:
+protected:
     std::shared_ptr<EngineContext> m_pContext;
     Vector2 m_Position;
 
     std::shared_ptr<Stylesheet> m_pStyle;
 
-   private:
+private:
     std::shared_ptr<UIElement> m_pParent;
     std::vector<std::shared_ptr<UIElement>> m_Elements;
 };

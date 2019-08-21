@@ -15,7 +15,7 @@ namespace CodeHero {
 class Mesh;
 
 class Model : public Drawable {
-   public:
+public:
     OBJECT(Model, Drawable)
 
     explicit Model(const std::shared_ptr<EngineContext>& iContext);
@@ -27,7 +27,7 @@ class Model : public Drawable {
     void AddMesh(const std::shared_ptr<Mesh>& iMesh);
     const std::vector<std::shared_ptr<Mesh>>& GetMeshes() const { return m_Meshes; }
 
-   protected:
+protected:
     std::vector<std::shared_ptr<Mesh>> m_Meshes;
 };
 

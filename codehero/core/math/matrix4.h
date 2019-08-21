@@ -20,7 +20,7 @@ class Quaternion;
  * @brief Matrix 44f
  */
 class Matrix4 {
-   public:
+public:
     Matrix4() { ToIdentity(); }
     Matrix4(float m00,
             float m01,
@@ -93,7 +93,7 @@ class Matrix4 {
 
     static Matrix4 Zero;
 
-   private:
+private:
     union {
         float m[4][4];
         float _m[16];

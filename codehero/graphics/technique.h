@@ -19,7 +19,7 @@ class ShaderProgram;
 class Technique : public Serializable {
     using ShaderDefines = std::map<std::string, std::string>;
 
-   public:
+public:
     OBJECT(Technique, Serializable)
 
     Technique(const std::shared_ptr<EngineContext>& iContext) : Serializable(iContext) {}
@@ -44,7 +44,7 @@ class Technique : public Serializable {
     void SetCachedShaderProgram(const std::shared_ptr<ShaderProgram>& iProgram);
     std::shared_ptr<ShaderProgram> GetCachedShaderProgram() const { return m_pCachedShaderProgram; }
 
-   private:
+private:
     std::shared_ptr<Shader> m_pVtxShader;
     std::shared_ptr<Shader> m_pFragShader;
     ShaderDefines m_VtxShaderDefines;

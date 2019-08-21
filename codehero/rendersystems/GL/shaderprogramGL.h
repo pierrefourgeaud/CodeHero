@@ -19,7 +19,7 @@ struct ShaderParameter {
 };
 
 class ShaderProgramGL : public ShaderProgram {
-   public:
+public:
     ShaderProgramGL(const std::shared_ptr<EngineContext>& iContext);
     ~ShaderProgramGL();
 
@@ -31,7 +31,7 @@ class ShaderProgramGL : public ShaderProgram {
     bool HasParameter(const std::string& iParamName);
     const ShaderParameter& GetParameter(const std::string& iParamName);
 
-   private:
+private:
     void _ParseParameters();
 
     std::unordered_map<std::string, ShaderParameter> m_Parameters;

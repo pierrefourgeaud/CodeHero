@@ -24,7 +24,7 @@ class ResourceLoader : public System {
 
     enum { MAX_CODECS = 8 };
 
-   public:
+public:
     OBJECT_TEMPLATE(ResourceLoader, T, System)
 
     ResourceLoader(std::shared_ptr<EngineContext>& iContext) : System(iContext) {}
@@ -106,7 +106,7 @@ class ResourceLoader : public System {
         }
     }
 
-   private:
+private:
     ResourceCodec<T>* m_Codecs[MAX_CODECS] = {nullptr};
     int m_CodecsCount = 0;
 };

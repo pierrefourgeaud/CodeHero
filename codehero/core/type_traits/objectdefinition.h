@@ -25,7 +25,7 @@ using ObjectFactory = std::function<std::shared_ptr<Object>(const std::shared_pt
 // TODO(pierre) To reflect on the fact that TypeDefinition might be more appropriate
 //              This is not of direct importance
 class ObjectDefinition {
-   public:
+public:
     ObjectDefinition(const std::shared_ptr<EngineContext>& iContext, const std::string& iName);
     ~ObjectDefinition();
 
@@ -47,7 +47,7 @@ class ObjectDefinition {
         return attrib;
     }
 
-   private:
+private:
     std::shared_ptr<EngineContext> m_pContext;
     std::string m_Name;
     ObjectFactory m_pFactory = nullptr;

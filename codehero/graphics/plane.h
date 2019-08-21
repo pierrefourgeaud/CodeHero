@@ -11,7 +11,7 @@
 namespace CodeHero {
 
 class Plane : public Mesh {
-   public:
+public:
     OBJECT(Plane, Mesh)
 
     Plane(const std::shared_ptr<EngineContext>& iContext);

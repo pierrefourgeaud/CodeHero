@@ -16,14 +16,14 @@ class EngineContext;
 class UIBatch;
 
 class UI {
-   public:
+public:
     explicit UI(std::shared_ptr<EngineContext>& iContext);
 
     void Update();
     void Render();
     void AddChild(std::shared_ptr<UIElement> iElement);
 
-   private:
+private:
     std::shared_ptr<EngineContext> m_pContext;
 
     std::shared_ptr<UIElement> m_RootElement;

@@ -22,7 +22,7 @@ class EngineContext;
 enum TransformSpace { TS_Local = 0, TS_Parent, TS_World };
 
 class Node : public Serializable, public std::enable_shared_from_this<Node> {
-   public:
+public:
     OBJECT(Node, Serializable);
 
     Node(const std::shared_ptr<EngineContext>& iContext);
@@ -74,13 +74,13 @@ class Node : public Serializable, public std::enable_shared_from_this<Node> {
 
     bool IsScene() const { return m_IsScene; }
 
-   protected:
+protected:
     // We cannot use m_pScene == nullptr for this purpose because
     // a node might be created but it does not require to be IN a scene
     // before being used
     bool m_IsScene = false;
 
-   private:
+private:
     std::shared_ptr<Node> m_pParent;
     std::shared_ptr<Scene> m_pScene;
     std::vector<std::shared_ptr<Drawable>> m_Drawables;

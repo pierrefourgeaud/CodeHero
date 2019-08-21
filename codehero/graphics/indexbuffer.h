@@ -11,7 +11,7 @@
 namespace CodeHero {
 
 class IndexBuffer : public GPUObject {
-   public:
+public:
     explicit IndexBuffer(bool iIsDynamic = false) : m_IsDynamic(iIsDynamic) {}
     virtual ~IndexBuffer() {}
 
@@ -22,7 +22,7 @@ class IndexBuffer : public GPUObject {
 
     uint32_t GetSize() const { return m_IndexSize; }
 
-   protected:
+protected:
     uint32_t m_IndexSize = 0;
     bool m_IsDynamic = false;
 

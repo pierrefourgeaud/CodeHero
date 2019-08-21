@@ -8,7 +8,7 @@
 namespace CodeHero {
 
 class Color {
-   public:
+public:
     Color();
     Color(float iR, float iG, float iB, float iA = 1.0f);
     ~Color();
@@ -31,7 +31,7 @@ class Color {
     static const Color Green;
     static const Color Blue;
 
-   private:
+private:
     float m_Rgba[4] = {0};
 };
 

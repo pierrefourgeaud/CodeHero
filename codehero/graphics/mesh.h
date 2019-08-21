@@ -22,7 +22,7 @@ class RenderSystem;
 class Bone;
 
 class Mesh : public Serializable {
-   public:
+public:
     OBJECT(Mesh, Serializable)
 
     Mesh(const std::shared_ptr<EngineContext>& iContext);
@@ -52,7 +52,7 @@ class Mesh : public Serializable {
     void SetCenter(const Vector3& iCenter) { m_Center = iCenter; }
     const Vector3& GetCenter() const { return m_Center; }
 
-   private:
+private:
     std::shared_ptr<VertexBuffer> m_pVertices;
     std::shared_ptr<IndexBuffer> m_pIndices;
     std::shared_ptr<Material> m_pMaterial;

@@ -25,13 +25,13 @@ class Model;
 class Texture;
 
 class ModelCodecAssimp : public ResourceCodec<Model> {
-   public:
+public:
     OBJECT(ModelCodecAssimp, ResourceCodec<Model>)
     ModelCodecAssimp(const std::shared_ptr<EngineContext>& iContext);
 
     std::shared_ptr<Model> Load(FileAccess& iF, const std::string& iTypeName) override;
 
-   private:
+private:
     void _ProcessNode(aiNode* iNode, const aiScene* iScene, Model& oModel);
     std::shared_ptr<Mesh> _ProcessMesh(aiMesh* iMesh, const aiScene* iScene, aiNode* iNode);
     std::shared_ptr<Texture> _LoadMaterialTextures(aiMaterial* iMat, aiTextureType iType);

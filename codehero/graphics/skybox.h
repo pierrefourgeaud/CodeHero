@@ -13,7 +13,7 @@ namespace CodeHero {
 class Material;
 
 class Skybox : public Model {
-   public:
+public:
     OBJECT(Skybox, Model);
 
     Skybox(const std::shared_ptr<EngineContext>& iContext);

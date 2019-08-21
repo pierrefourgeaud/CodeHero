@@ -17,7 +17,7 @@ class Font;
 class FontFace;
 
 class Stylesheet {
-   public:
+public:
     struct Style {
         std::shared_ptr<Font> fontFamily;
         uint8_t fontSize;
@@ -41,7 +41,7 @@ class Stylesheet {
 
     const Style& GetActive() const { return m_Active; }
 
-   private:
+private:
     std::shared_ptr<EngineContext> m_pContext;
 
     // Those are the three style categories supported

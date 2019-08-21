@@ -19,7 +19,7 @@ class ObjectDefinition;
 class AttributeInfo;
 
 class SerializableCodecXML : public ResourceCodec<Serializable> {
-   public:
+public:
     OBJECT(SerializableCodecXML, ResourceCodec<Serializable>)
 
     SerializableCodecXML(const std::shared_ptr<EngineContext>& iContext);
@@ -27,7 +27,7 @@ class SerializableCodecXML : public ResourceCodec<Serializable> {
 
     std::shared_ptr<Serializable> Load(FileAccess& iF, const std::string& iTypeName) override;
 
-   private:
+private:
     std::shared_ptr<Serializable> _Load(const std::shared_ptr<ObjectDefinition>& iDefinition,
                                         const pugi::xml_node& iNode) const;
     Error _ParseCollection(const pugi::xml_object_range<pugi::xml_node_iterator>& iChildren,

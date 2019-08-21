@@ -53,7 +53,7 @@ static const uint32_t numberTextureFaces[] = {
 };
 
 class Texture : public Serializable, public GPUObject {
-   public:
+public:
     OBJECT(Texture, Serializable)
 
     enum Type { T_2D = 0, T_Cube, T_Max };
@@ -78,7 +78,7 @@ class Texture : public Serializable, public GPUObject {
     void SetType(Type iType);
     Type GetType() const { return m_Type; }
 
-   protected:
+protected:
     Type m_Type = T_2D;
     std::array<TextureWrapMode, TC_MaxCoords> m_WrapCoordinates{TextureWrapMode::TWM_Repeat};
 
@@ -88,7 +88,7 @@ class Texture : public Serializable, public GPUObject {
         return m_Images[iFace];
     }
 
-   private:
+private:
     std::vector<std::shared_ptr<Image>> m_Images;
 };
 

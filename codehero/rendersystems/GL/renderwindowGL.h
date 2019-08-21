@@ -14,7 +14,7 @@ struct GLFWwindow;
 namespace CodeHero {
 
 class RenderWindowGL : public RenderWindow {
-   public:
+public:
     explicit RenderWindowGL(RenderSystem& iRenderSystem);
     virtual ~RenderWindowGL() {}
 
@@ -28,7 +28,7 @@ class RenderWindowGL : public RenderWindow {
     bool ShouldClose() const override;
     void SwapBuffers() override;
 
-   private:
+private:
     GLFWwindow* m_pWindow = nullptr;
 
     static void _HandleKey(GLFWwindow* iWindow,

@@ -22,7 +22,7 @@ class Camera;
 // It will inerit everything everything for the node
 // But with extra properties
 class Scene : public Node {
-   public:
+public:
     OBJECT(Scene, Node);
 
     Scene(const std::shared_ptr<EngineContext>& iContext);
@@ -46,7 +46,7 @@ class Scene : public Node {
         return m_VertexLights;
     }
 
-   private:
+private:
     std::vector<std::shared_ptr<Light>> m_Lights;
 
     // Cached vertex lights

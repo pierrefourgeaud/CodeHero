@@ -24,7 +24,7 @@ enum TextureUnit { TU_Diffuse = 0, TU_Specular, TU_Opacity };
 using TextureUnitsMaps = UnorderedMap<TextureUnit, std::shared_ptr<Texture>>;
 
 class Material : public Serializable {
-   public:
+public:
     OBJECT(Material, Serializable)
 
     Material(const std::shared_ptr<EngineContext>& iContext);
@@ -62,7 +62,7 @@ class Material : public Serializable {
     bool HasTexture(TextureUnit iUnit) const;
     bool HasTechnique() const { return !!m_pTechnique; }
 
-   private:
+private:
     TextureUnitsMaps m_Textures;
     std::shared_ptr<Technique> m_pTechnique;
 

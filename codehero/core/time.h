@@ -14,7 +14,7 @@ namespace CodeHero {
 class EngineContext;
 
 class Time : public System {
-   public:
+public:
     OBJECT(Time, System)
 
     Time(const std::shared_ptr<EngineContext>& iContext);
@@ -28,7 +28,7 @@ class Time : public System {
     uint64_t GetTimeMicroseconds() const;
     void Reset();
 
-   private:
+private:
     std::chrono::steady_clock m_Clock;
     std::chrono::steady_clock::time_point m_StartTime;
 };

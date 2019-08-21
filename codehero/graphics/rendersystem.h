@@ -80,7 +80,7 @@ enum BlendMode {
 enum CullFace { CF_Front = 0, CF_Back };
 
 class RenderSystem : public System {
-   public:
+public:
     OBJECT(RenderSystem, System)
 
     RenderSystem(const std::shared_ptr<EngineContext>& iContext) : System(iContext) {}
@@ -150,7 +150,7 @@ class RenderSystem : public System {
     virtual VertexBuffer* CreateVertexBuffer() = 0;
     virtual IndexBuffer* CreateIndexBuffer() = 0;
 
-   protected:
+protected:
     void _SetTextureManager(TextureManager* iTextureManager) {
         m_pTextureManager = iTextureManager;
     }
@@ -158,7 +158,7 @@ class RenderSystem : public System {
     uint32_t m_BoundVBO = 0;
     std::shared_ptr<RenderWindow> m_pWindow;
 
-   private:
+private:
     TextureManager* m_pTextureManager = nullptr;
 
     ShaderProgram* m_pShaderProgramInUse = nullptr;

@@ -19,7 +19,7 @@ class Color;
 class FontFace;
 
 class UIDraw {
-   public:
+public:
     static void Init();
 
     // Get batches from path
@@ -45,7 +45,7 @@ class UIDraw {
                                 int iMin,
                                 int iMax);
 
-   private:
+private:
     UIDraw() = delete;
     ~UIDraw() = delete;
     UIDraw(const UIDraw&) = delete;

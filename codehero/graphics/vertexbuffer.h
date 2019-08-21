@@ -13,7 +13,7 @@
 namespace CodeHero {
 
 class VertexBuffer : public GPUObject {
-   public:
+public:
     enum : uint32_t {
         EL_Position = 0,
         EL_Normal,
@@ -75,7 +75,7 @@ class VertexBuffer : public GPUObject {
 
     virtual uint32_t GetComponentsNumber() const = 0;
 
-   protected:
+protected:
     uint32_t m_VertexCount = 0;
     uint32_t m_VertexSize = 0;
     uint32_t m_Masks = 0;

@@ -14,7 +14,7 @@ namespace CodeHero {
 class VertexAttribBindingGL;
 
 class VertexBufferGL : public VertexBuffer {
-   public:
+public:
     VertexBufferGL();
     ~VertexBufferGL();
 
@@ -27,12 +27,12 @@ class VertexBufferGL : public VertexBuffer {
 
     uint32_t GetComponentsNumber() const override;
 
-   protected:
+protected:
     void _SetDataImpl() final override;
     void _SetSubDataImpl(uint32_t iStart, uint32_t iSize, const void* iData) final override;
     void _UpdateSizeImpl() final override;
 
-   private:
+private:
     std::unique_ptr<VertexAttribBindingGL> m_pVAO;
 };
 

@@ -18,14 +18,14 @@ namespace CodeHero {
 class EngineContext;
 
 class Main {
-   public:
+public:
     Main();
     ~Main();
 
     Error Start();
     Error Run();
 
-   private:
+private:
     void _Initialize();
     void _Cleanup();
 

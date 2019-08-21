@@ -26,7 +26,7 @@ class ObjectDefinition;
  *   - Usage in scripting
  */
 class TypeInfo {
-   public:
+public:
     TypeInfo(const std::string& iTypeName, const std::shared_ptr<TypeInfo>& iBaseTypeInfo)
         : m_TypeName(iTypeName), m_BaseTypeInfo(iBaseTypeInfo) {}
 
@@ -35,13 +35,13 @@ class TypeInfo {
 
     bool IsA(const std::shared_ptr<TypeInfo>& iOther) const;
 
-   private:
+private:
     const std::string m_TypeName;
     const std::shared_ptr<TypeInfo> m_BaseTypeInfo;
 };
 
 class Object {
-   public:
+public:
     virtual ~Object() {}
 
     Object(const std::shared_ptr<EngineContext>& iContext);
@@ -61,7 +61,7 @@ class Object {
         const std::string& iName);
     static std::shared_ptr<ObjectDefinition> GetDefinition(const std::string& iName);
 
-   protected:
+protected:
     std::shared_ptr<EngineContext> m_pContext;
 
     static std::unordered_map<std::string, std::shared_ptr<ObjectDefinition>> m_Definitions;

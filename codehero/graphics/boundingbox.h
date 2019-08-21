@@ -10,7 +10,7 @@
 namespace CodeHero {
 
 class BoundingBox {
-   public:
+public:
     BoundingBox();
     ~BoundingBox();
 
@@ -19,7 +19,7 @@ class BoundingBox {
     // Return the center of the box
     Vector3 Center() const;
 
-   private:
+private:
     Vector3 m_Min;
     Vector3 m_Max;
 };

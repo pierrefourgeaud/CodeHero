@@ -15,7 +15,7 @@ class RenderSystem;
 class Input;
 
 class RenderWindow {
-   public:
+public:
     explicit RenderWindow(RenderSystem& iRenderSystem) : m_rRenderSystem(iRenderSystem) {}
     virtual ~RenderWindow() {}
 
@@ -29,7 +29,7 @@ class RenderWindow {
     // TODO(pierre) Should be changed to either reference or shared_ptr !
     void SetInputHandler(Input* iInputHandler) { m_pInputHandler = iInputHandler; }
 
-   protected:
+protected:
     RenderSystem& m_rRenderSystem;
     Input* m_pInputHandler;
 };

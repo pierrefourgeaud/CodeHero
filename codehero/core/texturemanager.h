@@ -10,7 +10,7 @@
 namespace CodeHero {
 
 class TextureManager {
-   public:
+public:
     virtual ~TextureManager() {}
 };
 

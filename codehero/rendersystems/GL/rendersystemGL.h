@@ -18,7 +18,7 @@ class VertexBuffer;
 class IndexBuffer;
 
 class RenderSystemGL : public RenderSystem {
-   public:
+public:
     RenderSystemGL(std::shared_ptr<EngineContext>& iContext);
     virtual ~RenderSystemGL() {}
 

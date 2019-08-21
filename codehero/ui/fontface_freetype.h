@@ -10,11 +10,11 @@
 namespace CodeHero {
 
 class FontFaceFreeType : public FontFace {
-   public:
+public:
     FontFaceFreeType(Font& iFont, uint32_t iSize);
     ~FontFaceFreeType();
 
-   private:
+private:
     uint32_t m_Size;
 
     void _Load();

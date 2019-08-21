@@ -13,7 +13,7 @@ namespace CodeHero {
 
 template <class Class, class Type, class GetFn, class SetFn>
 class AttributeAccessorImpl : public AttributeAccessor {
-   public:
+public:
     AttributeAccessorImpl(GetFn iGet, SetFn iSet) : m_pGet(iGet), m_pSet(iSet) {}
 
     Variant Get(const Serializable* iPtr) const override {
@@ -28,7 +28,7 @@ class AttributeAccessorImpl : public AttributeAccessor {
         (classPtr->*m_pSet)(iValue.Get<Type>());
     }
 
-   private:
+private:
     GetFn m_pGet;
     SetFn m_pSet;
 };
@@ -39,7 +39,7 @@ class AttributeAccessorImpl : public AttributeAccessor {
  */
 template <class Class, class Type, class SetFn>
 class AttributeAccessorImpl<Class, Type, std::nullptr_t, SetFn> : public AttributeAccessor {
-   public:
+public:
     AttributeAccessorImpl(void*, SetFn iSet) : m_pSet(iSet) {}
 
     Variant Get(const Serializable* iPtr) const override {
@@ -53,7 +53,7 @@ class AttributeAccessorImpl<Class, Type, std::nullptr_t, SetFn> : public Attribu
         (classPtr->*m_pSet)(iValue.Get<Type>());
     }
 
-   private:
+private:
     SetFn m_pSet;
 };
 

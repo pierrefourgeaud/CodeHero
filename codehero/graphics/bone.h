@@ -14,7 +14,7 @@ namespace CodeHero {
 // Forward declaration
 
 class Bone {
-   public:
+public:
     struct WeightPerVertex {
         WeightPerVertex(float iWeight, uint32_t iVertexID)
             : m_Weight(iWeight), m_VertexID(iVertexID) {}
@@ -38,7 +38,7 @@ class Bone {
     void SetOffsetMatrix(const Matrix4& iOffsetMatrix) { m_OffsetMatrix = iOffsetMatrix; }
     const Matrix4& GetOffsetMatrix() const { return m_OffsetMatrix; }
 
-   private:
+private:
     std::string m_Name;
     Matrix4 m_OffsetMatrix;
 

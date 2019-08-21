@@ -13,7 +13,7 @@ namespace CodeHero {
 class AttributeAccessor;
 
 class AttributeInfo {
-   public:
+public:
     explicit AttributeInfo(bool iIsNullAttribute = false) : m_IsNullAttribute(iIsNullAttribute) {}
     ~AttributeInfo() {}
 
@@ -31,7 +31,7 @@ class AttributeInfo {
     const std::string& GetName() const { return m_Name; }
     const std::shared_ptr<AttributeAccessor>& GetAccessor() const { return m_pAccessor; }
 
-   private:
+private:
     bool m_IsNullAttribute;
     Variant::Value::Type m_Type;
     std::string m_Name;

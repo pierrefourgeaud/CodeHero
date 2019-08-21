@@ -14,7 +14,7 @@ namespace CodeHero {
 using ImageData = std::vector<uint8_t>;
 
 class Image : public Object {
-   public:
+public:
     OBJECT(Image, Object)
 
     enum Format {
@@ -47,7 +47,7 @@ class Image : public Object {
 
     uint8_t* GetRawData() { return m_Data.empty() ? nullptr : &m_Data[0]; }
 
-   private:
+private:
     ImageData m_Data;
     uint32_t m_Width = 0;
     uint32_t m_Height = 0;

@@ -22,7 +22,7 @@ class Quaternion;
 class Matrix3 {
     friend class Matrix4;
 
-   public:
+public:
     Matrix3() { ToIdentity(); }
     Matrix3(float m00,
             float m01,
@@ -72,7 +72,7 @@ class Matrix3 {
 
     // TODO(pierre) Make From/To methods (ToQuat, FromAxisAngle, ToAxisAngle, ...)
 
-   private:
+private:
     union {
         float _m[9];
         float m[3][3];

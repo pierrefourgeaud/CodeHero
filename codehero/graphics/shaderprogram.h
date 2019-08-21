@@ -16,7 +16,7 @@ class EngineContext;
 class ShaderInstance;
 
 class ShaderProgram : public Object, public GPUObject {
-   public:
+public:
     OBJECT(ShaderProgram, Object)
 
     ShaderProgram(const std::shared_ptr<EngineContext>& iContext) : Object(iContext) {}

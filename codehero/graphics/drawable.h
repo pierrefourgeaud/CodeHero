@@ -13,7 +13,7 @@ namespace CodeHero {
 class Node;
 
 class Drawable : public Serializable {
-   public:
+public:
     OBJECT(Drawable, Serializable);
 
     enum DrawableType {
@@ -33,12 +33,12 @@ class Drawable : public Serializable {
     std::shared_ptr<Node> GetNode();
     void SetIsDirty(bool iIsDirty) { m_IsDirty = iIsDirty; }
 
-   protected:
+protected:
     std::weak_ptr<Node> m_pNode;
 
     bool m_IsDirty;
 
-   private:
+private:
     DrawableType m_Type;
 };
 

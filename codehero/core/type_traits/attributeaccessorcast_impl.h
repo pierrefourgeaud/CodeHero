@@ -22,7 +22,7 @@ namespace CodeHero {
 // TODO(pierre) This is error prone - We should try to find a better way to achieve this
 template <class Class, class Type, class CastTo, class GetFn, class SetFn>
 class AttributeAccessorCastImpl : public AttributeAccessor {
-   public:
+public:
     AttributeAccessorCastImpl(GetFn iGet, SetFn iSet) : m_pGet(iGet), m_pSet(iSet) {}
 
     Variant Get(const Serializable* iPtr) const override {
@@ -38,7 +38,7 @@ class AttributeAccessorCastImpl : public AttributeAccessor {
         (classPtr->*m_pSet)(std::static_pointer_cast<CastTo>(iValue.Get<Type>()));
     }
 
-   private:
+private:
     GetFn m_pGet;
     SetFn m_pSet;
 };
@@ -46,7 +46,7 @@ class AttributeAccessorCastImpl : public AttributeAccessor {
 template <class Class, class Type, class CastTo, class SetFn>
 class AttributeAccessorCastImpl<Class, Type, CastTo, std::nullptr_t, SetFn>
     : public AttributeAccessor {
-   public:
+public:
     AttributeAccessorCastImpl(void*, SetFn iSet) : m_pSet(iSet) {}
 
     Variant Get(const Serializable* iPtr) const override {
@@ -61,7 +61,7 @@ class AttributeAccessorCastImpl<Class, Type, CastTo, std::nullptr_t, SetFn>
         (classPtr->*m_pSet)(std::static_pointer_cast<CastTo>(iValue.Get<Type>()));
     }
 
-   private:
+private:
     SetFn m_pSet;
 };
 

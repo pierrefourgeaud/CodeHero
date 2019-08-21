@@ -14,7 +14,7 @@ class Vector3;
 class Matrix3;
 
 class Quaternion {
-   public:
+public:
     Quaternion() : m_W(1.0f), m_X(0.0f), m_Y(0.0f), m_Z(0.0f) {} // identity quaternion
 
     Quaternion(const Quaternion& iRhs)
@@ -94,7 +94,7 @@ class Quaternion {
 
     Matrix3 RotationMatrix() const;
 
-   private:
+private:
     // Quaternion data - Should stay at the end of the class declaration
     //                   because of the Data() accessor
     float m_W;

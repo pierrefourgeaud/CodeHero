@@ -18,7 +18,7 @@ class Mesh;
 class RenderSystem;
 
 class Batch {
-   public:
+public:
     void Draw(RenderSystem& iRS, const std::shared_ptr<Camera>& iCamera);
 
     void SetMaterial(const std::shared_ptr<Material>& iMaterial);
@@ -33,7 +33,7 @@ class Batch {
     const Matrix4& GetWorldTransform() const { return m_WorldTransform; }
     float GetDistanceFromCamera() const { return m_DistanceFromCamera; }
 
-   private:
+private:
     std::shared_ptr<Material> m_pMaterial;
     std::shared_ptr<Mesh> m_pMesh;
     Matrix4 m_WorldTransform;

@@ -23,7 +23,7 @@ class Attribute {
 };
 
 class Serializable : public Object {
-   public:
+public:
     OBJECT(Serializable, Object)
 
     Serializable(const std::shared_ptr<EngineContext>& iContext);
@@ -36,7 +36,7 @@ class Serializable : public Object {
 
     static void RegisterSerializable(const std::string& iName, const Builder& iBuilder);
 
-   private:
+private:
     static std::unordered_map<std::string, Builder> m_Builders;
 };
 
