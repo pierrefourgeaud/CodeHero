@@ -7,9 +7,10 @@ BasedOnStyle: Chromium
 # 'int>>' if the file already contains at least one such instance.)
 Standard: Cpp11
 
-AccessModifierOffset: -4
+AccessModifierOffset: -3
 AllowShortCaseLabelsOnASingleLine: true
 ColumnLimit: 100
+FixNamespaceComments: true
 IndentWidth: 4
 PointerAlignment: Left
 SpacesBeforeTrailingComments: 1

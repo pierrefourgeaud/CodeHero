@@ -1,7 +1,0 @@
-<Light>
-  <attribute name="Type" value="T_Directional" />
-  <attribute name="Direction" value="-0.2 -1.0 0.3" />
-  <attribute name="Ambient Intensity" value="0.45" />
-  <attribute name="Diffuse Intensity" value="0.8" />
-  <attribute name="Specular Intensity" value="0.5" />
-</Light>

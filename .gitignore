@@ -11,3 +11,4 @@ cmake-build-debug
 tags
 .vim-template*
 *.swp
+vendor/zlib/zconf.h.included

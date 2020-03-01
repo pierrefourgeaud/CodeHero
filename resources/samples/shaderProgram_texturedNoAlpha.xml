@@ -1,6 +1,0 @@
-<ShaderProgram>
-  <Shader>
-    <attribute name="File" value="./codehero/shaders/textured.vert" />
-  </Shader>
-  <Shader path="./resources/samples/shader_texturedFragNoAlpha.xml" />
-</ShaderProgram>

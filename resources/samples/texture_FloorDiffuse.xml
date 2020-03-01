@@ -1,5 +1,0 @@
-<Texture>
-  <attribute name="Faces">
-    <subattribute value="./resources/images/floor_diffuse.PNG" />
-  </attribute>
-</Texture>
