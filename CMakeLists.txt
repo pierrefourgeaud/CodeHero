@@ -36,6 +36,16 @@ message ("VENDORS_PATH: " ${VENDORS_PATH})
 message ("")
 #####
 
+# ---------- GLFW ----------
+option (GLFW_BUILD_DOCS OFF)
+option (GLFW_BUILD_EXAMPLES OFF)
+option (GLFW_BUILD_TESTS OFF)
+add_subdirectory (${VENDORS_PATH}/glfw)
+
+file (GLOB VENDORS_SOURCES ${VENDORS_PATH}/glad/src/glad.c)
+
+source_group ("Vendors" FILES ${VENDORS_SOURCES})
+
 set (SOURCES
      ${SRCS_PATH}/codehero/CodeHero.cpp
 )
@@ -46,6 +56,8 @@ set (HEADERS
 
 include_directories (
   ${SRCS_PATH}
+  ${VENDORS_PATH}/glad/include/
+  ${VENDORS_PATH}/glfw/include/
   ${VENDORS_PATH}/simplelogger/includes
 )
 
@@ -60,7 +72,8 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CODEHERO_CXX_FLAGS}")
 # ---------- Executables -----------
 add_library (main_objs OBJECT ${INCLUDES} ${SOURCES} ${HEADERS})
 
-add_definitions (-DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
+add_definitions (-DGLFW_INCLUDE_NONE
+                 -DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
 
 link_directories (
     ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
@@ -68,7 +81,7 @@ link_directories (
 
 add_executable (${PROJECT_NAME} ${SRCS_PATH}/main.cpp $<TARGET_OBJECTS:main_objs>)
 
-target_link_libraries (${PROJECT_NAME} ${ADDITIONAL_LIBRARIES})
+target_link_libraries (${PROJECT_NAME} glfw ${GLFW_LIBRARIES} ${ADDITIONAL_LIBRARIES})
 
 # Must be included after the sources and tests
 include(cmake/clang-cxx-dev-tools.cmake)
