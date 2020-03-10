@@ -5,13 +5,18 @@ project (CodeHero)
 # ---------- C++ 11 flags ----------
 if (${MSVC})
     set (CMAKE_CXX_FLAGS "/EHs")
-    add_definitions (-D_CRT_SECURE_NO_WARNINGS)
+    add_definitions (-D_CRT_SECURE_NO_WARNINGS -DUNICODE)
     set (CODEHERO_CXX_FLAGS "/W4 /WX /wd4244 /wd4611")
 elseif (APPLE)
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++")
 else ()
     set (CMAKE_CXX_FLAGS "-std=c++11")
 endif (${MSVC})
+
+# ---------- Platform specific defines ----------
+if (WIN32)
+    add_definitions(-DPLATFORM_WINDOWS)
+endif ()
 
 # ---------- Setup the executable output directory ----------
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/out/bin CACHE PATH "Single directory for all executables.")
@@ -36,32 +41,32 @@ message ("VENDORS_PATH: " ${VENDORS_PATH})
 message ("")
 #####
 
-# ---------- GLFW ----------
-option (GLFW_BUILD_DOCS OFF)
-option (GLFW_BUILD_EXAMPLES OFF)
-option (GLFW_BUILD_TESTS OFF)
-add_subdirectory (${VENDORS_PATH}/glfw)
-
-file (GLOB VENDORS_SOURCES ${VENDORS_PATH}/glad/src/glad.c)
-
-source_group ("Vendors" FILES ${VENDORS_SOURCES})
-
 set (SOURCES
      ${SRCS_PATH}/codehero/CodeHero.cpp
+
+     # Core
+     ${SRCS_PATH}/core/ModuleManager.cpp
+     ${SRCS_PATH}/core/platform/common/CommonSharedLibraryHandler.cpp
+     ${SRCS_PATH}/core/platform/windows/SharedLibraryHandler.cpp
 )
 
 set (HEADERS
      ${SRCS_PATH}/codehero/CodeHero.h
+
+     # Core
+     ${SRCS_PATH}/core/ModuleManager.h
+     ${SRCS_PATH}/core/HAL/SharedLibraryHandler.h
+     ${SRCS_PATH}/core/logger/ILogListener.h
+     ${SRCS_PATH}/core/logger/Logger.h
+     ${SRCS_PATH}/core/logger/WConsoleLogger.h
+     ${SRCS_PATH}/core/platform/common/CommonSharedLibraryHandler.h
+     ${SRCS_PATH}/core/platform/windows/SharedLibraryHandler.h
+     ${SRCS_PATH}/core/TypeDefs.h
 )
 
 include_directories (
   ${SRCS_PATH}
-  ${VENDORS_PATH}/glad/include/
-  ${VENDORS_PATH}/glfw/include/
-  ${VENDORS_PATH}/simplelogger/includes
 )
-
-# -
 
 # ---------- Flags ----------
 set (COMMON_RELEASE_FLAGS "-g -O3 -fstack-protector -fvisibility=hidden -W -Wall -Wpointer-arith -Wformat -Wreturn-type -Wsign-compare -Wmultichar -Wformat-nonliteral -Winit-self -Wuninitialized -Wno-deprecated -Wformat-security -Werror")
@@ -72,8 +77,7 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CODEHERO_CXX_FLAGS}")
 # ---------- Executables -----------
 add_library (main_objs OBJECT ${INCLUDES} ${SOURCES} ${HEADERS})
 
-add_definitions (-DGLFW_INCLUDE_NONE
-                 -DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
+add_definitions (-DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
 
 link_directories (
     ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
@@ -81,7 +85,11 @@ link_directories (
 
 add_executable (${PROJECT_NAME} ${SRCS_PATH}/main.cpp $<TARGET_OBJECTS:main_objs>)
 
-target_link_libraries (${PROJECT_NAME} glfw ${GLFW_LIBRARIES} ${ADDITIONAL_LIBRARIES})
+target_link_libraries (${PROJECT_NAME} ${ADDITIONAL_LIBRARIES})
+
+# Modules
+add_subdirectory (${SRCS_PATH}/renderer/GL)
+add_dependencies (${PROJECT_NAME} CodeHero.Renderer.OpenGL)
 
 # Must be included after the sources and tests
 include(cmake/clang-cxx-dev-tools.cmake)
