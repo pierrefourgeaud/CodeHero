@@ -15,17 +15,17 @@ set (RENDERER_PATH ${SRCS_PATH}/renderer)
 set (SOURCES
      ${RENDERER_PATH}/GL/RendererGL.cpp
      ${RENDERER_PATH}/GL/RendererGLModule.cpp
+     ${RENDERER_PATH}/GL/Utils.cpp
+     ${RENDERER_PATH}/GL/WindowGL.cpp
 )
 
 set (HEADERS
      ${RENDERER_PATH}/Renderer.h
+     ${RENDERER_PATH}/Window.h
      ${RENDERER_PATH}/GL/RendererGL.h
      ${RENDERER_PATH}/GL/RendererGLModule.h
-
-     # Core
-     ${SRCS_PATH}/core/logger/Logger.h
-     ${SRCS_PATH}/core/TypeDefs.h
-
+     ${RENDERER_PATH}/GL/Utils.h
+     ${RENDERER_PATH}/GL/WindowGL.h
 )
 
 include_directories (
@@ -39,10 +39,11 @@ include_directories (
 add_library (${PROJECT_NAME} SHARED ${INCLUDES} ${SOURCES} ${HEADERS})
 
 add_definitions (-DGLFW_INCLUDE_NONE
-                 -DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
+                 -DMODULE_NAME="Renderer.OpenGL")
 
 link_directories (
     ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
 )
 
-target_link_libraries (${PROJECT_NAME} glfw ${GLFW_LIBRARIES} ${GLAD_LIBRARIES} ${ADDITIONAL_LIBRARIES})
+target_link_libraries (${PROJECT_NAME} glfw ${GLFW_LIBRARIES} ${GLAD_LIBRARIES} CodeHero.Core)
+add_dependencies (${PROJECT_NAME} CodeHero.Dummy)

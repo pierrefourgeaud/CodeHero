@@ -15,7 +15,7 @@ endif (${MSVC})
 
 # ---------- Platform specific defines ----------
 if (WIN32)
-    add_definitions(-DPLATFORM_WINDOWS)
+    add_definitions (-DPLATFORM_WINDOWS -DWIN32_LEAN_AND_MEAN)
 endif ()
 
 # ---------- Setup the executable output directory ----------
@@ -41,27 +41,8 @@ message ("VENDORS_PATH: " ${VENDORS_PATH})
 message ("")
 #####
 
-set (SOURCES
-     ${SRCS_PATH}/codehero/CodeHero.cpp
-
-     # Core
-     ${SRCS_PATH}/core/ModuleManager.cpp
-     ${SRCS_PATH}/core/platform/common/CommonSharedLibraryHandler.cpp
-     ${SRCS_PATH}/core/platform/windows/SharedLibraryHandler.cpp
-)
-
-set (HEADERS
-     ${SRCS_PATH}/codehero/CodeHero.h
-
-     # Core
-     ${SRCS_PATH}/core/ModuleManager.h
-     ${SRCS_PATH}/core/HAL/SharedLibraryHandler.h
-     ${SRCS_PATH}/core/logger/ILogListener.h
-     ${SRCS_PATH}/core/logger/Logger.h
-     ${SRCS_PATH}/core/logger/WConsoleLogger.h
-     ${SRCS_PATH}/core/platform/common/CommonSharedLibraryHandler.h
-     ${SRCS_PATH}/core/platform/windows/SharedLibraryHandler.h
-     ${SRCS_PATH}/core/TypeDefs.h
+set (ADDITIONAL_LIBRARIES
+    CodeHero.Engine
 )
 
 include_directories (
@@ -75,21 +56,20 @@ set (CMAKE_CXX_FLAGS_RELWITHDEBINFO  "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} ${COMMON
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CODEHERO_CXX_FLAGS}")
 
 # ---------- Executables -----------
-add_library (main_objs OBJECT ${INCLUDES} ${SOURCES} ${HEADERS})
-
 add_definitions (-DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
 
 link_directories (
     ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
 )
 
-add_executable (${PROJECT_NAME} ${SRCS_PATH}/main.cpp $<TARGET_OBJECTS:main_objs>)
-
+add_executable (${PROJECT_NAME} ${SRCS_PATH}/main.cpp)
 target_link_libraries (${PROJECT_NAME} ${ADDITIONAL_LIBRARIES})
 
 # Modules
+add_subdirectory (${SRCS_PATH}/core)
+add_subdirectory (${SRCS_PATH}/engine)
+add_subdirectory (${SRCS_PATH}/dummy)
 add_subdirectory (${SRCS_PATH}/renderer/GL)
-add_dependencies (${PROJECT_NAME} CodeHero.Renderer.OpenGL)
 
 # Must be included after the sources and tests
 include(cmake/clang-cxx-dev-tools.cmake)

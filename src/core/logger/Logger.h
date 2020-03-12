@@ -9,7 +9,6 @@
 #include <chrono>
 #include <sstream>
 #include <string>
-#include <vector>
 
 #ifdef PLATFORM_WINDOWS
 #include <windows.h>
@@ -17,8 +16,9 @@
 #include <sys/time.h>
 #endif // WIN32
 
+#include "core/CoreAPI.h"
 #include "core/Macros.h"
-#include "core/TypeDefs.h"
+#include "core/String.h"
 #include "core/logger/ILogListener.h"
 
 namespace CodeHero {
@@ -32,7 +32,7 @@ enum class ELogLevel { Fatal, Error, Warning, Info, Debug, Debug1, Debug2 };
 #define _LOG(level)                               \
     if (level > SimpleLogger::ReportingLevel()) { \
     } else                                        \
-        SimpleLogger().Get(level)
+        SimpleLogger().Get(level, TEXT(MODULE_NAME))
 #endif
 
 #define LOGF _LOG(ELogLevel::Fatal)
@@ -69,59 +69,25 @@ class SimpleLogger {
 
     virtual ~SimpleLogger() { _NotifyListeners(); }
 
-    std::wostringstream& Get(ELogLevel iLevel = ELogLevel::Info) {
+    std::wostringstream& Get(ELogLevel iLevel = ELogLevel::Info,
+                             const String& moduleName = TEXT("")) {
         m_Os << NowTime();
         String level = SimpleLogger::ToString(iLevel);
         m_Os << " " << level << ":";
         if (level.size() < 7) {
             m_Os << "\t";
         }
-        m_Os << " ";
-        m_Os << SimpleLogger::PrefixModule();
+        m_Os << " [" << moduleName << "] ";
         m_Level = iLevel;
         return m_Os;
     }
 
-    static bool AddListener(ILogListener* iListener) {
-        std::vector<ILogListener*>::iterator tmp =
-            std::find(Listeners().begin(), Listeners().end(), iListener);
-
-        // Return false if the listener is already in the vector. This is not expected
-        // but there is nothing really wrong either.
-        if (tmp != Listeners().end()) {
-            return false;
-        }
-
-        Listeners().push_back(iListener);
-        return true;
-    }
-
-    static bool RemoveListener(ILogListener* iListener) {
-        std::vector<ILogListener*>::iterator tmp =
-            std::find(Listeners().begin(), Listeners().end(), iListener);
-
-        // Return false if the listener could not be found
-        if (tmp == Listeners().end()) {
-            return false;
-        } else {
-            Listeners().erase(std::remove(Listeners().begin(), Listeners().end(), iListener));
-            return true;
-        }
-    }
-
-    static inline std::vector<ILogListener*>& Listeners() {
-        static std::vector<ILogListener*> listeners;
-        return listeners;
-    }
+    static bool AddListener(ILogListener* iListener);
+    static bool RemoveListener(ILogListener* iListener);
 
     static inline ELogLevel& ReportingLevel() {
         static ELogLevel reportingLevel = ELogLevel::Info;
         return reportingLevel;
-    }
-
-    static inline String& PrefixModule() {
-        static String prefix;
-        return prefix;
     }
 
     static inline String ToString(ELogLevel iLevel) {
@@ -157,13 +123,7 @@ class SimpleLogger {
     std::wostringstream m_Os;
     ELogLevel m_Level = ELogLevel::Info;
 
-    bool _NotifyListeners() {
-        String tmp = m_Os.str();
-        std::for_each(Listeners().begin(), Listeners().end(), Notifier(tmp, m_Level));
-
-        // Return false if there are no listeners in the vector
-        return (Listeners().size() > 0);
-    }
+    bool CORE_API _NotifyListeners();
 };
 
 inline String NowTime() {
@@ -190,13 +150,5 @@ inline String NowTime() {
 
     return result;
 }
-
-#define DECLARE_LOG_MODULE(moduleName) std::unique_ptr<CodeHero::WConsoleLogger> cl;
-
-#define DEFINE_LOG_MODULE(ModuleName)                                       \
-    CodeHero::SimpleLogger::ReportingLevel() = CodeHero::ELogLevel::Debug1; \
-    CodeHero::SimpleLogger::PrefixModule() = TEXT("["## #ModuleName##"] "); \
-    cl.reset(new CodeHero::WConsoleLogger());                               \
-    CodeHero::SimpleLogger::AddListener(cl.get());
 
 } // namespace CodeHero

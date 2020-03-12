@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "core/TypeDefs.h"
+#include "core/String.h"
 
 namespace CodeHero {
 

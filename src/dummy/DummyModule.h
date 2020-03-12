@@ -6,13 +6,13 @@
 
 #include "core/HAL/Platform.h"
 
+#include "core/Module.h"
+
 namespace CodeHero {
 
-class Module {
+class DummyModule : public Module {
  public:
+    virtual void Dummy();
 };
-
-#define IMPLEMENT_MODULE(ModuleClass) \
-    extern "C" SHLIBEXPORT ModuleClass* InitializeModule() { return new ModuleClass(); }
 
 } // namespace CodeHero

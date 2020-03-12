@@ -2,17 +2,16 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
-#pragma once
+#include "dummy/DummyModule.h"
+
+#include "core/logger/Logger.h"
 
 namespace CodeHero {
 
-class CodeHero {
- public:
-    CodeHero();
-    ~CodeHero();
+IMPLEMENT_MODULE(DummyModule)
 
-    bool Start();
-    bool Run();
-};
+void DummyModule::Dummy() {
+    LOGI << "DUMMY";
+}
 
 } // namespace CodeHero

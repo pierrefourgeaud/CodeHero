@@ -10,7 +10,12 @@ namespace CodeHero {
 
 class RendererGL : public Renderer {
  public:
+    bool Initialize() override;
+    bool Cleanup() override;
+    void PollEvents() override;
     void Draw() override;
+
+    std::shared_ptr<Window> CreateWindow(uint32_t iWidth, uint32_t iHeight) override;
 };
 
 } // namespace CodeHero

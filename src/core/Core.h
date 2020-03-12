@@ -4,6 +4,11 @@
 
 #pragma once
 
-#include <cstdint>
+#include "core/CoreAPI.h"
 
-namespace CodeHero {} // namespace CodeHero
+namespace CodeHero {
+
+CORE_API void CoreInitialize();
+CORE_API void CoreTearDown();
+
+} // namespace CodeHero

@@ -2,41 +2,30 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
-#include "codehero/CodeHero.h"
-
-#include "core/ModuleManager.h"
+#include "engine/EngineLoop.h"
 
 #include <cstdlib>
 #include <iostream>
 
-#include "core/logger/Logger.h"
-#include "core/logger/WConsoleLogger.h"
-
-#include "renderer/GL/RendererGLModule.h"
-#include "renderer/Renderer.h"
-
 int main() {
-    CodeHero::SimpleLogger::ReportingLevel() = CodeHero::ELogLevel::Debug1;
-    std::unique_ptr<CodeHero::WConsoleLogger> cl(new CodeHero::WConsoleLogger());
-    CodeHero::SimpleLogger::AddListener(cl.get());
-
-    CodeHero::CodeHero app;
-
-    auto mgr = std::make_unique<CodeHero::ModuleManager>();
-    auto rendererModule =
-        mgr->LoadModuleType<CodeHero::RendererGLModule>(TEXT("CodeHero.Renderer.OpenGL"));
-    auto r = rendererModule->CreateRenderer();
-    r->Draw();
-
-    if (!app.Start()) {
-        std::cerr << "Error during the startup process... Quitting..." << std::endl;
+    CodeHero::EngineLoop engineLoop;
+    if (!engineLoop.PreInit()) {
+        std::cerr << "Error during the startup process. Quitting." << std::endl;
         return EXIT_FAILURE;
     }
 
-    if (!app.Run()) {
-        std::cerr << "Error during runtime process... Quitting..." << std::endl;
+    if (!engineLoop.Init()) {
+        std::cerr << "EngineLoop failed to initialize. Quitting.";
         return EXIT_FAILURE;
     }
+
+    while (!engineLoop.ExitEngineRequested()) {
+        engineLoop.Tick();
+    }
+
+    // TODO(pierre) This should probably be in a cleanup guard so whatever
+    // exit path we choose, we are sure to cleanup after us.
+    engineLoop.Cleanup();
 
     return EXIT_SUCCESS;
 }
