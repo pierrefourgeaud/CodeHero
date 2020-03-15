@@ -36,6 +36,7 @@ bool EngineLoop::Init() {
     }
 
     m_pWindow = m_pRenderer->CreateWindow(800, 600);
+    m_pRenderer->SetViewport(0, 0, 800, 600);
 
     return true;
 }

@@ -20,6 +20,10 @@ class Renderer {
     virtual void PollEvents() = 0;
     virtual void Draw() = 0;
 
+    // TODO(pierre) We most likely want to create a wrapper object for the Viewport so it can
+    // be used in other places than the renderer if required.
+    virtual void SetViewport(uint32_t iX, uint32_t iY, uint32_t iWidth, uint32_t iHeight) = 0;
+
     // Factory methods
 #if defined(PLATFORM_WINDOWS)
 #if defined(CreateWindow)

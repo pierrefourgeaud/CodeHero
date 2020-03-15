@@ -5,6 +5,7 @@
 #include "renderer/GL/RendererGL.h"
 
 #include "core/logger/Logger.h"
+#include "renderer/GL/Utils.h"
 #include "renderer/GL/WindowGL.h"
 
 // GLFW/GLAD header should be included at the end to avoid macro redefinition
@@ -46,6 +47,10 @@ void RendererGL::PollEvents() {
 
 void RendererGL::Draw() {
     LOGI << "RendererGL::Draw for the win.";
+}
+
+void RendererGL::SetViewport(uint32_t iX, uint32_t iY, uint32_t iWidth, uint32_t iHeight) {
+    GL_CALL(glViewport(iX, iY, iWidth, iHeight));
 }
 
 std::shared_ptr<Window> RendererGL::CreateWindow(uint32_t iWidth, uint32_t iHeight) {

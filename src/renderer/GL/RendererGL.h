@@ -15,6 +15,8 @@ class RendererGL : public Renderer {
     void PollEvents() override;
     void Draw() override;
 
+    void SetViewport(uint32_t iX, uint32_t iY, uint32_t iWidth, uint32_t iHeight) override;
+
     std::shared_ptr<Window> CreateWindow(uint32_t iWidth, uint32_t iHeight) override;
 };
 
