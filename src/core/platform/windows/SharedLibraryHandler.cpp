@@ -19,10 +19,10 @@ CommonSharedLibraryHandler::ShLibHandle SharedLibraryHandler::GetLibraryHandle(
     HINSTANCE hinstLib = LoadLibrary(fullFilename.c_str());
 
     if (hinstLib) {
-        LOGD1 << "GetLibraryHandle loaded " << fullFilename;
+        LOGD2 << "GetLibraryHandle loaded " << fullFilename;
         return hinstLib;
     } else {
-        LOGF << "Failed to load " << fullFilename << ", GetLastError=" << GetLastError();
+        LOGE << "Failed to load " << fullFilename << ", GetLastError=" << GetLastError();
         return nullptr;
     }
 }
@@ -33,10 +33,11 @@ CommonSharedLibraryHandler::ShLibExport SharedLibraryHandler::GetLibraryExport(
     CommonSharedLibraryHandler::ShLibExport func =
         GetProcAddress(static_cast<HMODULE>(iHandle), iExport.c_str());
     if (func) {
-        LOGD1 << "GetLibraryExport loaded ";
+        LOGD2 << "GetLibraryExport loaded " << CastANSIToString(iExport);
         return func;
     } else {
-        LOGF << "Failed to load, GetLastError=" << GetLastError();
+        LOGD2 << "Failed to load '" << CastANSIToString(iExport)
+              << "', GetLastError=" << GetLastError();
         return nullptr;
     }
 }

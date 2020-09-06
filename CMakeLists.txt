@@ -15,7 +15,7 @@ endif (${MSVC})
 
 # ---------- Platform specific defines ----------
 if (WIN32)
-    add_definitions (-DPLATFORM_WINDOWS -DWIN32_LEAN_AND_MEAN)
+    add_definitions (-DPLATFORM_WINDOWS -DWIN32_LEAN_AND_MEAN=1)
 endif ()
 
 # ---------- Setup the executable output directory ----------
@@ -67,8 +67,9 @@ target_link_libraries (${PROJECT_NAME} ${ADDITIONAL_LIBRARIES})
 
 # Modules
 add_subdirectory (${SRCS_PATH}/core)
-add_subdirectory (${SRCS_PATH}/engine)
 add_subdirectory (${SRCS_PATH}/dummy)
+add_subdirectory (${SRCS_PATH}/engine)
+add_subdirectory (${SRCS_PATH}/platform)
 add_subdirectory (${SRCS_PATH}/renderer/GL)
 
 # Must be included after the sources and tests

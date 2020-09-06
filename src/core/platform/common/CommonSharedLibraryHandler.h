@@ -4,11 +4,12 @@
 
 #pragma once
 
+#include "core/CoreAPI.h"
 #include "core/String.h"
 
 namespace CodeHero {
 
-class CommonSharedLibraryHandler {
+class CORE_API CommonSharedLibraryHandler {
  public:
     using ShLibHandle = void*;
     using ShLibExport = void*;

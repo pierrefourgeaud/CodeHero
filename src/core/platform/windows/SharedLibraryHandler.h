@@ -4,11 +4,12 @@
 
 #pragma once
 
+#include "core/CoreAPI.h"
 #include "core/platform/common/CommonSharedLibraryHandler.h"
 
 namespace CodeHero {
 
-class SharedLibraryHandler : public CommonSharedLibraryHandler {
+class CORE_API SharedLibraryHandler : public CommonSharedLibraryHandler {
  public:
     static CommonSharedLibraryHandler::ShLibHandle GetLibraryHandle(const String& iName);
     static CommonSharedLibraryHandler::ShLibExport GetLibraryExport(

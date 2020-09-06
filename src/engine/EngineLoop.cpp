@@ -7,8 +7,11 @@
 #include "core/Core.h"
 #include "core/ModuleManager.h"
 #include "core/logger/Logger.h"
+#include "platform/IPlatformWindow.h"
+#include "platform/PlatformModule.h"
+#include "platform/PlatformWindowParams.h"
+#include "renderer/IRendererModule.h"
 #include "renderer/Renderer.h"
-#include "renderer/RendererModule.h"
 #include "renderer/Window.h"
 
 namespace CodeHero {
@@ -24,7 +27,7 @@ bool EngineLoop::PreInit() {
 
 bool EngineLoop::Init() {
     auto rendererModule =
-        ModuleManager::Get()->LoadModuleType<RendererModule>(TEXT("CodeHero.Renderer.OpenGL"));
+        ModuleManager::Get()->LoadModuleType<IRendererModule>(TEXT("CodeHero.Renderer.OpenGL"));
     if (!rendererModule) {
         return false;
     }
@@ -35,7 +38,7 @@ bool EngineLoop::Init() {
         return false;
     }
 
-    m_pWindow = m_pRenderer->CreateWindow(800, 600);
+    m_pWindow = m_pRenderer->MakeWindow(800, 600);
     m_pRenderer->SetViewport(0, 0, 800, 600);
 
     return true;

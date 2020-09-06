@@ -4,13 +4,11 @@
 
 #pragma once
 
-#include "core/HAL/Platform.h"
-
-#include "core/Module.h"
+#include "core/IModule.h"
 
 namespace CodeHero {
 
-class DummyModule : public Module {
+class DummyModule : public IModule {
  public:
     virtual void Dummy();
 };

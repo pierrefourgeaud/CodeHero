@@ -22,9 +22,10 @@ set (HEADERS
     ${CORE_PATH}/platform/windows/SharedLibraryHandler.h
     ${CORE_PATH}/Core.h
     ${CORE_PATH}/CoreAPI.h
+    ${CORE_PATH}/IModule.h
     ${CORE_PATH}/Macros.h
-    ${CORE_PATH}/Module.h
     ${CORE_PATH}/ModuleManager.h
+    ${CORE_PATH}/ScopeCleaner.h
     ${CORE_PATH}/String.h
     ${CORE_PATH}/TypeDefs.h
 )

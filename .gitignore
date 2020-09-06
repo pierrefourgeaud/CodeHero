@@ -2,6 +2,7 @@
 *~
 .DS_Store
 .vscode/
+.vs/
 .idea/
 build/
 out/

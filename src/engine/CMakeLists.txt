@@ -27,4 +27,4 @@ link_directories (
 )
 
 target_link_libraries (${PROJECT_NAME} CodeHero.Core)
-add_dependencies (${PROJECT_NAME} CodeHero.Renderer.OpenGL)
+add_dependencies (${PROJECT_NAME} CodeHero.Platform CodeHero.Renderer.OpenGL)
